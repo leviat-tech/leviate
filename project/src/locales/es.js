@@ -1,0 +1,28 @@
+const phrases = {
+  please_select_one: 'Por favor, seleccione uno',
+  item_specification: 'especificación del artículo',
+  detail: 'detalle',
+  galvanization: 'galvanización',
+  ral_color: 'color ral',
+  komo_x: 'komo x',
+  komo_cert: 'certificado de komo',
+  edge_stone: 'piedra de borde',
+  height: 'altura',
+  bracket: 'soporte',
+  type: 'tipo',
+  fixing: 'fijación',
+  filling_plate: 'plato de llenado',
+  select_load_class: 'seleccionar clase de carga',
+  material: 'material',
+  load: 'carga',
+  class: 'clase',
+  adjustability: 'adaptabilidad',
+  galvanizing: 'galvanizado',
+  plate: 'plato',
+  load_class: 'clase de carga',
+  fixing_type: 'tipo de fijación',
+  drilling_depth_anchor: 'ancla de profundidad de perforación',
+  color: 'color',
+};
+
+export default phrases;

@@ -1,0 +1,11 @@
+<svg aria-hidden="true" focusable="false" data-icon="gridline-horizontal" class="svg-inline" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0)">
+<rect x="14.25" y="0.75" width="13.5" height="13.5" transform="rotate(90 14.25 0.75)" stroke="black" stroke-width="1.5"/>
+<path d="M14.5 7.5L0.25 7.5" stroke="black" stroke-width="1.5" stroke-dasharray="2 2"/>
+</g>
+<defs>
+<clipPath id="clip0">
+<rect width="15" height="15" fill="white" transform="translate(15) rotate(90)"/>
+</clipPath>
+</defs>
+</svg>
