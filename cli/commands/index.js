@@ -2,7 +2,8 @@ const commands = {
   init: () => import('./init.js'),
   update: () => import('./update.js'),
   checkdeps: commandInDevelopment('Checks for unused dependencies'),
-  checkurls: commandInDevelopment('Checks for hardcoded urls')
+  checkurls: commandInDevelopment('Checks for hardcoded urls'),
+  checklang: commandInDevelopment('Checks for hardcoded language strings')
 }
 
 function commandInDevelopment(msg) {
@@ -48,7 +49,7 @@ export default async function processCommand(name, options) {
  * @param options
  */
 function runCommand(commandModule, options) {
-  commandModule.run();
+  commandModule.run(options);
 }
 
 /**
@@ -56,8 +57,9 @@ function runCommand(commandModule, options) {
  */
 function printPossibleCommands() {
   console.log('Possible commands:\n')
-  Object.values(commands).map(async commandLoader => {
+  Object.entries(commands).forEach(async ([commandStr, commandLoader]) => {
     const commandConfig = await commandLoader();
-    console.log('hac ' + commandConfig.default.usage)
+    const usage = commandConfig.default.usage || commandStr
+    console.log('leviate ' + usage)
   })
 }

@@ -1,8 +1,69 @@
+import path from 'path';
+import fs from 'fs-extra';
+import { prompt } from 'enquirer';
+import packageJSON from '../../template/project/package';
+
+
+const questions = [
+  {
+    type: 'input',
+    name: 'packageName',
+    message: 'Package name:',
+    validate(value, state, item, index) {
+      if (value === '') {
+        return 'You must specify a package name'
+      }
+      return true;
+    }
+  },
+  {
+    type: 'input',
+    name: 'url',
+    message: 'Repository URL'
+  }
+]
+
+
 export default {
   name: 'init',
   description: 'Initialise a host app project in the given directory, or CWD if none given',
   usage: 'init <dir>',
-  async run(options) {
-    console.log(options)
+  async run(options = []) {
+    const dir = options[0];
+    const src = path.resolve(__dirname + '../../../template');
+    console.log(src)
+    const cwd = (process.env.NODE_ENV === 'test') ? process.cwd() + '/.cwd' : process.cwd();
+    const dest = dir ? `${cwd}/${dir}` : cwd;
+
+    if (dir && fs.pathExistsSync(dest)) {
+      console.log('Cannot create new project in a non empty folder');
+      return false;
+    }
+
+    fs.copySync(src, dest)
+
+    const { packageName, url } = dir ? { packageName: dir } :await prompt(questions);
+    const name = packageName.toLowerCase().replace(/\W+/g, '-');
+    const title = name[0].toUpperCase() + name.slice(1).replace(/-(\w)/g, (a, b) => ' ' + b.toUpperCase());
+
+    const packagePath = `${dest}/project/package.json`
+    packageJSON.name = name;
+    if (url) packageJSON.repository = { type: 'git', url }
+    fs.writeFileSync(packagePath, JSON.stringify(packageJSON, null, '  '));
+
+    const titlePlaceholder = '{{ TITLE }}';
+    const indexPath = `${dest}/project/index.html`
+    await replaceInFile(indexPath, titlePlaceholder, title);
+
+    const readmePath = `${dest}/README.md`;
+    await replaceInFile(readmePath, titlePlaceholder, name);
+
+    return true;
   }
+}
+
+async function replaceInFile(filePath, toReplace, replacement) {
+  const contents = await fs.readFileSync(filePath, 'utf8');
+  const compiled = contents.replace(toReplace, replacement);
+  fs.writeFileSync(filePath, compiled);
 }
