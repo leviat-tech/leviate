@@ -31,11 +31,11 @@ export default {
   async run(options = []) {
     const dir = options[0];
     const src = path.resolve(__dirname + '../../../template');
-    console.log(src)
     const cwd = (process.env.NODE_ENV === 'test') ? process.cwd() + '/.cwd' : process.cwd();
     const dest = dir ? `${cwd}/${dir}` : cwd;
 
-    if (dir && fs.pathExistsSync(dest)) {
+    const isDestEmpty = !fs.pathExistsSync(dest) || fs.readdirSync(dest).length === 0;
+    if (!isDestEmpty) {
       console.log('Cannot create new project in a non empty folder');
       return false;
     }
