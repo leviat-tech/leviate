@@ -7,6 +7,7 @@ import { createSvgPlugin } from 'vite-plugin-vue2-svg';
 const config = {
   resolve: {
     alias: {
+      '@core': `${path.resolve(__dirname, 'core')}`,
       '~': `${path.resolve(__dirname)}`,
       '@': `${path.resolve(__dirname, 'src')}`,
     },
