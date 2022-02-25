@@ -1,5 +1,5 @@
 import schema from '@/schema/sample-schema';
-import BaseModel from './BaseModel';
+import BaseModel from '@core/BaseModel';
 
 
 export default class SampleModel extends BaseModel {
