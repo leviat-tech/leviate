@@ -5,7 +5,7 @@ import get from 'lodash/get';
 import last from 'lodash/last';
 
 
-class KModel extends Model {
+class BaseModel extends Model {
   static parameterFields(defaults) {
     return Object.entries(defaults).reduce((attrs, [k, v]) => ({
       ...attrs,
@@ -75,4 +75,4 @@ class KModel extends Model {
 
 }
 
-export default KModel;
+export default BaseModel;

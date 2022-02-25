@@ -7,7 +7,7 @@ const templates = {
 };
 
 const state = {
-  types: {}, // does everything need to be nested into "types"?
+  types: {}, // TODO: does everything need to be nested into "types"?
 };
 
 const mutations = make.mutations(state);

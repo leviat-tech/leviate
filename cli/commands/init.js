@@ -46,7 +46,9 @@ export default {
       return false;
     }
 
-    fs.copySync(src, dest)
+    fs.copySync(src, dest, {
+      filter: (src, dest) => !/node_modules/.test(src)
+    });
 
     logger.log(`Initialising project in ${dest}`);
 
