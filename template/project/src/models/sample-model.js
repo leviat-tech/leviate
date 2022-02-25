@@ -1,8 +1,8 @@
 import schema from '@/schema/sample-schema';
-import KModel from './k-model';
+import BaseModel from './BaseModel';
 
 
-export default class SampleModel extends KModel {
+export default class SampleModel extends BaseModel {
   static entity = 'sample-model'
 
   static schema = schema
@@ -12,8 +12,6 @@ export default class SampleModel extends KModel {
       ...this.baseFields,
       ...this.parameterFields(this.schema.default()),
       panel_id: this.attr(null),
-      // TODO
-      // shape: this.hasOne('loadbearing_shapes', 'loadbearing_layer_id'),
     };
   }
 }
