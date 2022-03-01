@@ -1,18 +1,18 @@
 import Vue from 'vue';
-import KSearch from './k-search.vue';
-import KLabel from './inputs/k-label.vue';
-import KParameter from './inputs/k-parameter.vue';
-import KInputGroup from './inputs/k-input-group.vue';
+import Search from './search.vue';
+import FormLabel from './inputs/form-label.vue';
+import Parameter from './inputs/parameter.vue';
+import InputGroup from './inputs/input-group.vue';
 
 
 function globalize() {
   // input widgets
-  Vue.component(KSearch.name, KSearch);
+  Vue.component(Search.name, Search);
 
   // inputs
-  Vue.component(KLabel.name, KLabel);
-  Vue.component(KInputGroup.name, KInputGroup);
-  Vue.component(KParameter.name, KParameter);
+  Vue.component(FormLabel.name, FormLabel);
+  Vue.component(InputGroup.name, InputGroup);
+  Vue.component(Parameter.name, Parameter);
 }
 
 export default globalize;

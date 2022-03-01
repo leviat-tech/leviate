@@ -5,8 +5,8 @@
 
 <template>
   <c-form-section>
-    <k-input-group :label="$l('Input')">
-      <k-parameter
+    <input-group :label="$l('Input')">
+      <parameter
         v-find="'fixingsystem.designcode'"
         :errors="errors['fixingsystem.designcode']"
       >
@@ -14,8 +14,8 @@
           :value="1"
           @input="console.log($event)"
         />
-      </k-parameter>
-    </k-input-group>
+      </parameter>
+    </input-group>
   </c-form-section>
 </template>
 
@@ -23,11 +23,11 @@
 <script>
 import { call, get } from 'vuex-pathify';
 import debounce from 'lodash/debounce';
-import KInputGroup from '../ui/inputs/k-input-group.vue';
-import SettingsIcon from '@/assets/icons/cog.svg';
+import SettingsIcon from '@core/assets/icons/cog.svg';
+import nputGroup from '../ui/inputs/input-group.vue';
 
 export default {
-  components: { SettingsIcon, KInputGroup },
+  components: { SettingsIcon, nputGroup },
   name: 'SampleForm',
   props: {
     instance: {

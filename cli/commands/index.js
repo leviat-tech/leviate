@@ -1,6 +1,6 @@
 const commands = {
-  init: () => import('./init.js'),
-  update: () => import('./update.js'),
+  init: () => import('./init'),
+  sync: () => import('./sync'),
   checkdeps: commandInDevelopment('Checks for unused dependencies'),
   checkurls: commandInDevelopment('Checks for hardcoded urls'),
   checklang: commandInDevelopment('Checks for hardcoded language strings')
