@@ -92,20 +92,11 @@
 
 <script>
 import { sync, get, call } from 'vuex-pathify';
-import PointerPlusIcon from '@/assets/icons/pointer-plus.svg';
-import PointerMinusIcon from '@/assets/icons/pointer-minus.svg';
-import ZoomToFitIcon from '@/assets/icons/zoom-to-fit.svg';
-import SearchPlusIcon from '@/assets/icons/search-plus.svg';
-import HoleIcon from '@/assets/icons/hole.svg';
-import ThickeningIcon from '@/assets/icons/thickening.svg';
-import GridlineVerticalIcon from '@/assets/icons/gridline-vertical.svg';
-import GridlineHorizontalIcon from '@/assets/icons/gridline-horizontal.svg';
-import AnchorIcon from '@/assets/icons/anchor.svg';
-import LayerSelector from '@/components/layout/toolbar/layer-selector.vue';
-import LayerGroupIcon from '@/assets/icons/layer-group.svg';
-import PanelSelector from '@/components/layout/toolbar/panel-selector.vue';
-import FeatureSelector from '@/components/layout/toolbar/feature-selector.vue';
-import PolygonIcon from '@/assets/icons/polygon.svg';
+import LayerGroupIcon from '@core/assets/icons/layer-group.svg';
+import PointerPlusIcon from '@core/assets/icons/pointer-plus.svg';
+import PointerMinusIcon from '@core/assets/icons/pointer-minus.svg';
+import ZoomToFitIcon from '@core/assets/icons/zoom-to-fit.svg';
+import SearchPlusIcon from '@core/assets/icons/search-plus.svg';
 
 export default {
   name: 'viewport-toolbar',
@@ -114,16 +105,7 @@ export default {
     PointerPlusIcon,
     PointerMinusIcon,
     SearchPlusIcon,
-    HoleIcon,
-    ThickeningIcon,
-    GridlineVerticalIcon,
-    GridlineHorizontalIcon,
-    AnchorIcon,
     LayerGroupIcon,
-    PolygonIcon,
-    LayerSelector,
-    PanelSelector,
-    FeatureSelector,
   },
   data() {
     return {
@@ -150,7 +132,6 @@ export default {
           { type: 'gridlines', text: 'Sorry, something went wrong on gridline generation. Pease try with another grid spacing' },
           { root: true },
         );
-        return;
       }
     },
     zoomToFit() {

@@ -1,7 +1,7 @@
 <style scoped lang="scss">
   @import '@/assets/styles/variables.scss';
-  @import '@/assets/styles/buttons.scss';
-  @import '@/assets/styles/inputs.scss';
+  @import '@core/assets/styles/buttons.scss';
+  @import '@core/assets/styles/inputs.scss';
 
   .document-settings {
     max-height: 90vh;
@@ -37,7 +37,7 @@ import { get } from 'vuex-pathify';
 import overviewDocument from '@/components/documents/overview-document.vue';
 
 export default {
-  name: 'k-tool-export',
+  name: 'tool-export',
   components: {
     overviewDocument,
   },

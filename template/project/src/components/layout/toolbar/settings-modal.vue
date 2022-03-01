@@ -1,7 +1,7 @@
 <style scoped lang="scss">
   @import '@/assets/styles/variables.scss';
-  @import '@/assets/styles/buttons.scss';
-  @import '@/assets/styles/inputs.scss';
+  @import '@core/assets/styles/buttons.scss';
+  @import '@core/assets/styles/inputs.scss';
 </style>
 
 
@@ -62,7 +62,7 @@ import { get, sync } from 'vuex-pathify';
 
 
 export default {
-  name: 'k-tool-settings',
+  name: 'tool-settings',
   data: () => ({
     localConfigName: '',
     localClientNotes: '',
