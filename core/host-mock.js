@@ -43,6 +43,7 @@ const mockApi = {
     const translation = locales.en[phrase] || options.default;
     if (translation === undefined) {
       console.error(`Unable to translate ${phrase}`);
+      return `{{ ${phrase} }}`
     }
     return options?.capitalize
       ? capitalize(translation)
