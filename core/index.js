@@ -13,22 +13,37 @@ import routes from '@/routes';
 import projectStoreConfig from '@/store';
 import models from '@/models';
 
+Vue.config.productionTip = false;
 
-async function installPlugins(_Vue, { endpoints }) {
-  _Vue.config.productionTip = false;
+async function installPlugins(_Vue, { endpoints, plugins, globalConfig }) {
+  plugins?.forEach(plugin => loadPlugin(_Vue, plugin));
 
   _Vue.use(HostPlugin, { endpoints });
   _Vue.use(find);
   _Vue.use(search);
   _Vue.use(Concrete, { size: 'sm' });
 
+  if (globalConfig) {
+    Vue.prototype.$config = globalConfig;
+  }
+
   _Vue.prototype.$transact = function (cb) {
     this.$store.dispatch('transaction/transact', cb);
   };
 }
 
-function getAppRootComponent() {
-  return (import.meta.env.DEV) ? import('./dev.vue') : import('./app.vue');
+function loadPlugin(_Vue, pluginConfig) {
+  if (pluginConfig instanceof Array) {
+    const [plugin, options] = pluginConfig;
+    _Vue.use(plugin, options);
+  }
+
+  return _Vue.use(pluginConfig);
+}
+
+async function getAppRootComponent() {
+  const appModule = (import.meta.env.DEV) ? await import('./dev.vue') : await import('./app.vue');
+  return appModule.default;
 }
 
 
@@ -47,17 +62,15 @@ export async function createApp(projectConfig) {
     await import('./host-mock');
   }
 
-  const { endpoints } = projectConfig;
   const storeConfig = {
     ...projectStoreConfig,
     models,
   };
 
-  await installPlugins(Vue, { endpoints });
+  await installPlugins(Vue, projectConfig);
 
-  const router = createRouter(Vue, routes);
   const store = createStore(Vue, storeConfig);
-  const App = await getAppRootComponent();
+  const router = createRouter(Vue, routes);
 
   sync(store, router);
 
@@ -73,9 +86,15 @@ export async function createApp(projectConfig) {
     });
   }
 
+  const App = await getAppRootComponent();
+
   const vue = new Vue({
     router,
     store,
     render: (h) => h(App),
   }).$mount('#app');
+
+  if (import.meta.env.DEV) {
+    window.vue = vue;
+  }
 }

@@ -3,7 +3,6 @@ import { useHost } from './plugins/host';
 
 export function createRouter(_Vue, routes) {
   _Vue.use(VueRouter);
-  const host = useHost();
 
   const router = new VueRouter({
     base: import.meta.env.BASE_URL,
@@ -13,10 +12,10 @@ export function createRouter(_Vue, routes) {
   router.beforeEach((to, from, next) => {
     if (to.meta.before) to.meta.before(to, from, next);
     else next();
-    console.log('Hello');
   });
 
   router.afterEach((to) => {
+    const host = useHost();
     host.setUrl(to.path);
   });
 

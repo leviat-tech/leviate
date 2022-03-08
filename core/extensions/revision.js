@@ -17,7 +17,6 @@ class Revision {
     this.store = store;
     this.handlers = handlers || {};
     this.store.subscribe(this.changed.bind(this));
-    this.commit();
   }
 
   get undoable() {

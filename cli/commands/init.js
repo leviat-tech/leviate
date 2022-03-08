@@ -1,10 +1,9 @@
-import { spawn, execSync } from 'child_process'
+import { spawn } from 'child_process'
 import path from 'path';
 import fs from 'fs-extra';
 import { prompt } from 'enquirer';
 import logger from '../logger.js'
 import packageJSON from '../../template/project/package';
-
 
 const questions = [
   {
@@ -25,7 +24,6 @@ const questions = [
   }
 ]
 
-
 export default {
   name: 'init',
   description: 'Initialise a host app project in the given directory, or CWD if none given',
@@ -40,8 +38,7 @@ export default {
     const cwd = (process.env.NODE_ENV === 'test') ? process.cwd() + '/.cwd' : process.cwd();
     const dest = dir ? `${cwd}/${dir}` : cwd;
 
-    const isDestEmpty = !fs.pathExistsSync(dest) || fs.readdirSync(dest).length === 0;
-    if (!isDestEmpty) {
+    if (!isDestEmpty(dest)) {
       logger.error('Cannot create new project in a non empty folder')
       return false;
     }
@@ -82,6 +79,16 @@ export default {
 
     return true;
   }
+}
+
+function isDestEmpty(dest) {
+  const pathExists = fs.pathExistsSync(dest)
+
+  if (!pathExists) return true;
+
+  const containsVisibleFilesOrFolders = fs.readdirSync(dest).filter(filename => filename[0] !== '.').length > 0;
+
+  return !containsVisibleFilesOrFolders;
 }
 
 async function replaceInFile(filePath, toReplace, replacement) {

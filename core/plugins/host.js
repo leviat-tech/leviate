@@ -46,7 +46,7 @@ const HostPlugin = {
     // Create api endpoint methods
     modules.api = {};
     Object.entries(endpoints).forEach(([key, url]) => {
-      if (!url) return console.log(`Cannot create API: no url found for ${key}`);
+      if (!url) return console.error(`Cannot create API: no url found for ${key}`);
       modules.api[key] = createApi(url, $host);
     });
   },
@@ -54,6 +54,6 @@ const HostPlugin = {
 
 export const useHost = () => modules.host;
 export const useApi = () => modules.api;
-export const useLocalize = () => modules.l;
+export const useLocalize = () => modules.localize;
 
 export default HostPlugin;
