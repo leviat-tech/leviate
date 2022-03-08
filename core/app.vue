@@ -8,7 +8,7 @@
 <style scoped lang="scss">
   // apply main scss to all children (it won't apply to layout's root unfortunately)
   ::v-deep {
-    @import '@/assets/styles/main.scss';
+    @import './assets/styles/main.scss';
   }
 </style>
 

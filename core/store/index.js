@@ -33,7 +33,7 @@ function generateCurrentGetter(entities) {
 function getDatabase(models = []) {
   const database = new VuexORM.Database();
 
-  models.forEach(database.register);
+  models.forEach((model) => database.register(model));
 
   return database;
 }
@@ -59,7 +59,7 @@ export const getStoreConfig = (projectStoreConfig) => {
   return cloneDeep({
     plugins: [pathify.plugin, VuexORM.install(database), revision, ...plugins],
     state,
-    getters: { ...coreGetters, projectGetters },
+    getters: { ...coreGetters, ...projectGetters },
     mutations: make.mutations(state),
     modules: {
       display,
