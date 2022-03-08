@@ -12,10 +12,11 @@ import './assets/styles/tailwinds.scss';
 import routes from '@/routes';
 import projectStoreConfig from '@/store';
 import models from '@/models';
+import globalComponents from '@/components';
 
 Vue.config.productionTip = false;
 
-async function installPlugins(_Vue, { endpoints, plugins, globalConfig }) {
+function installPlugins(_Vue, { endpoints, plugins, globalConfig }) {
   plugins?.forEach(plugin => loadPlugin(_Vue, plugin));
 
   _Vue.use(HostPlugin, { endpoints });
@@ -67,7 +68,9 @@ export async function createApp(projectConfig) {
     models,
   };
 
-  await installPlugins(Vue, projectConfig);
+  installPlugins(Vue, projectConfig);
+
+  globalComponents.forEach(component => Vue.component(component.name, component));
 
   const store = createStore(Vue, storeConfig);
   const router = createRouter(Vue, routes);

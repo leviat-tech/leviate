@@ -31,19 +31,6 @@ createApp({
 });
 ```
 
-### components: Array
-An array of components to be automatically loaded via `Vue.component`. Each component will be registered using its `name` property.
-
-**example**:
-```javascript
-createApp({
-  components: [
-    CustomInput,
-    GlobalComponent
-  ]
-});
-```
-
 ### endpoints: Object
 A map of keys to baseUrls. It is recommended to store these in an .env file which will be automatically included by vite.
 ```javascript
@@ -58,3 +45,33 @@ import { useApi } from 'leviate'
 const api = useApi();
 api.calc('/some/path', { some: 'data' });
 ```
+
+## Additional config
+
+Anything exported in `src/components/index.js` will be automatically registered globally as a component
+
+Anything exported in `src/models/index.js` will be automatically registered as a model in the VuexORM database
+
+## Updates to architecture and implementation
+
+### Host
+
+The host api is still available in components by using `this.$host` but two major things have changed.
+
+**decoupling from global `Vue`**
+
+Instead of calling `Vue.prototype.$host|$l` the modules should be used as follows:
+```js
+import { useHost, useLocalize } from 'leviate/plugins/host';
+
+const $host = useHost();
+const state = $host.getState();
+
+const $l = useLocalize();
+const translated = $l(phrase);
+```
+
+**config and functionality has been separated**
+
+- The host mock api is safely tucked away in leviate core and is unlikely to need updating
+- The mock configuration which gets passed to the host instance is stored with the project files in `src/mock.config.js`
