@@ -24,10 +24,10 @@
 import { call, get } from 'vuex-pathify';
 import debounce from 'lodash/debounce';
 import SettingsIcon from '@core/assets/icons/cog.svg';
-import nputGroup from '../ui/inputs/input-group.vue';
+import InputGroup from '../ui/inputs/input-group.vue';
 
 export default {
-  components: { SettingsIcon, nputGroup },
+  components: { SettingsIcon, InputGroup },
   name: 'SampleForm',
   props: {
     instance: {
