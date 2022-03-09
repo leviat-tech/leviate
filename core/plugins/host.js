@@ -33,7 +33,7 @@ const HostPlugin = {
   install(Vue, { endpoints }) {
     const $host = inject.attach({}).call;
     const $l = (phrase, options = {}) => {
-      $host.localize(phrase, { ...options, fallback: locales });
+      return $host.localize(phrase, { ...options, fallback: locales });
     };
 
     // Store so module can be imported
