@@ -66,7 +66,7 @@ class BaseModel extends Model {
   }
 
   validate() {
-    return this.constructor.schema.kValidate(this);
+    return this.constructor.schema.$validate(this);
   }
 
   get coercedSchema() {

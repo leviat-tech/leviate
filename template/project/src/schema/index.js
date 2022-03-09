@@ -39,7 +39,7 @@ yup.addMethod(yup.mixed, 'options', function options(path = null, key = null) {
   return [...(this._whitelist?.list || [])]; // eslint-disable-line
 });
 
-yup.addMethod(yup.mixed, 'kValidate', function kValidate(value) {
+yup.addMethod(yup.mixed, '$validate', function $validate(value) {
   try {
     this.validateSync(value, { abortEarly: false });
     return {};
@@ -57,9 +57,9 @@ yup.addMethod(yup.mixed, 'kValidate', function kValidate(value) {
   }
 });
 
-yup.addMethod(yup.mixed, 'kValidateAt', function kValidateAt(path, value) {
+yup.addMethod(yup.mixed, '$validateAt', function $validateAt(path, value) {
   const schema = yup.reach(this, path);
-  return schema.kValidate(value);
+  return schema.$validate(value);
 });
 
 yup.addMethod(yup.mixed, 'units', function units(value) {
