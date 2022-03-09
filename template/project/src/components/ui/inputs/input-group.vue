@@ -49,7 +49,7 @@
 
 <script>
 export default {
-  name: 'nputGroup',
+  name: 'InputGroup',
   props: ['label'],
   data() {
     return {
