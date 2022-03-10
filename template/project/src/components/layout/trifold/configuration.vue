@@ -1,6 +1,6 @@
 <style scoped lang="scss">
   @import '@/assets/styles/variables.scss';
-  @import '@core/assets/styles/buttons.scss';
+  @import 'leviate/assets/styles/buttons.scss';
 
   .configuration {
     position: relative;
@@ -135,9 +135,9 @@
 import { get, call } from 'vuex-pathify';
 import isEmpty from 'lodash/isEmpty';
 import pickBy from 'lodash/pickBy';
-import search from '@core/extensions/search';
-import find from '@core/extensions/find';
-import bus from '@core/extensions/eventBus';
+import search from 'leviate/extensions/search';
+import find from 'leviate/extensions/find';
+import bus from 'leviate/extensions/eventBus';
 
 
 export default {
