@@ -158,7 +158,7 @@
 
 <script>
 export default {
-  name: 'search',
+  name: 'Search',
   props: ['value', 'results'], // results = [{key, value}...]
   data() {
     return {
