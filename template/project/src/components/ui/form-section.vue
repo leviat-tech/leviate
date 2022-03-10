@@ -49,8 +49,8 @@
 
 
 <script>
-export const ormGroup = {
-  name: 'ormGroup',
+export const FormGroup = {
+  name: 'FormGroup',
   functional: true,
   render(createElement, context) {
     return createElement(
@@ -62,7 +62,7 @@ export const ormGroup = {
 };
 
 export default {
-  name: 'ormSection',
+  name: 'FormSection',
   props: ['title'],
 };
 </script>
