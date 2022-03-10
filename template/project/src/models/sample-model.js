@@ -1,4 +1,4 @@
-import BaseModel from '@core/BaseModel';
+import BaseModel from 'leviate/BaseModel';
 import schema from '@/schema/sample-schema';
 
 

@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import SettingsIcon from '@core/assets/icons/cog.svg';
+import SettingsIcon from 'leviate/assets/icons/cog.svg';
 import SettingsModal from './settings-modal.vue';
 import ExportModal from './export-modal.vue';
 

@@ -3,7 +3,7 @@ import mapValues from 'lodash/mapValues';
 import omitBy from 'lodash/omitBy';
 import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
-import { convertFromSI } from '@core/extensions/units';
+import { convertFromSI } from 'leviate/extensions/units';
 
 
 function getNewPath(currentPath, currentKey) {

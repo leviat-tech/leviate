@@ -1,7 +1,7 @@
 <style scoped lang="scss">
   @import '@/assets/styles/variables.scss';
-  @import '@core/assets/styles/buttons.scss';
-  @import '@core/assets/styles/inputs.scss';
+  @import 'leviate/assets/styles/buttons.scss';
+  @import 'leviate/assets/styles/inputs.scss';
 
   .document-settings {
     max-height: 90vh;
