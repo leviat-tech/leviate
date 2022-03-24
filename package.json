@@ -1,6 +1,6 @@
 {
-  "name": "leviate",
-  "version": "0.0.1",
+  "name": "@crhio/leviate",
+  "version": "1.0.0",
   "description": "A project template and CLI for building Vue apps",
   "homepage": "https://github.com/leviat-tech/host-app-core#readme",
   "repository": {
@@ -28,6 +28,7 @@
     "esm": "^3.2.25",
     "fs-extra": "^10.0.0",
     "glob": "^7.2.0",
+    "line-reader": "^0.4.0",
     "lodash": "^4.17.20",
     "md5": "^2.3.0",
     "pdfmake": "^0.1.68",
