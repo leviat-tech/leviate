@@ -2,7 +2,7 @@ const commands = {
   init: () => import('./init'),
   checkdeps: commandInDevelopment('Checks for unused dependencies'),
   checkurls: commandInDevelopment('Checks for hardcoded urls'),
-  checklang: () => import('./checklang')
+  checklang: commandInDevelopment('Checks for hardcoded language strings')
 }
 
 function commandInDevelopment(msg) {
