@@ -1,6 +1,6 @@
 import locales from '@/locales';
 
-export default {
+export const meta = {
   configurator: {
     schema: {},
     name: '{{ TITLE }}',
@@ -54,3 +54,5 @@ export default {
     name: 'CRH Technology Studio',
   },
 };
+
+export const initialState = {};

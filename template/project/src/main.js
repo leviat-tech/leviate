@@ -19,4 +19,4 @@ const appConfig = {
   ],
 };
 
-createApp(appConfig);
+createApp(appConfig, import.meta.env);
