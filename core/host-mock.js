@@ -5,7 +5,7 @@ import leviateConfig from './leviate.config';
 import mockConfig from '@/mock.config';
 import locales from '@/locales';
 
-let state = {};
+let state = mockConfig.state || {};
 
 const mockApi = {
   setUrl() {},
@@ -18,7 +18,7 @@ const mockApi = {
     return state;
   },
   getMeta() {
-    return mockConfig;
+    return mockConfig.meta;
   },
   setState(s) {
     state = s;

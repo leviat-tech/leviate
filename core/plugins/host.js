@@ -42,6 +42,7 @@ const HostPlugin = {
 
     // Assign to Vue prototype
     Object.assign(Vue.prototype, { $host, $l });
+    modules.localize = $l;
 
     // Create api endpoint methods
     modules.api = {};

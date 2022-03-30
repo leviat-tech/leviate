@@ -4,12 +4,13 @@ import Concrete from '@crhio/concrete';
 import search from './directives/v-search';
 import find from './directives/v-find';
 import HostPlugin, { useHost } from './plugins/host';
+import './plugins/yup';
 import { createStore, initializeStore } from './store';
+import './assets/styles/index.scss';
 import { createRouter } from './router.js';
-import './assets/styles/tailwinds.scss';
 
 // Project imports
-import routes from '@/routes';
+import routes from '@/router';
 import projectStoreConfig from '@/store';
 import models from '@/models';
 import globalComponents from '@/components';

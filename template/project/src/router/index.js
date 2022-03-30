@@ -9,7 +9,7 @@ function panelGuard(to, from, next) {
   else next();
 }
 
-const routes = [
+const index = [
   {
     name: 'panel',
     path: '/panels/:id',
@@ -32,4 +32,4 @@ const routes = [
   },
 ];
 
-export default routes;
+export default index;

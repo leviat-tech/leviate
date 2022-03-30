@@ -1,6 +1,4 @@
 <style scoped lang="scss">
-  @import '@/assets/styles/variables.scss';
-
   .menu {
     border-bottom: $border;
     min-height: $toolbar-height;

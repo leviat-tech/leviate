@@ -1,6 +1,4 @@
 <style scoped lang="scss">
-  @import '@/assets/styles/variables.scss';
-
   $primary: lighten($primary, 10%);
   .project {
     display: flex;

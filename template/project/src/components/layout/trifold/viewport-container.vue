@@ -1,5 +1,4 @@
 <style scoped lang="scss">
-@import '@/assets/styles/variables.scss';
 
 .viewport-container {
   border-right: 1px solid $color-gray-04;

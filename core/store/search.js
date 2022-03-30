@@ -1,13 +1,13 @@
-import Vue from 'vue';
 import range from 'lodash/range';
 import get from 'lodash/get';
 import last from 'lodash/last';
+import { useLocalize } from '../plugins/host';
 import BaseModel from '../BaseModel';
 
 
 const getters = {
   getEntryFromPath(s, g, rootS, rootG) {
-    const $l = Vue.prototype.$l;
+    const $l = useLocalize();
     return (path, localize = true) => {
       const current = rootG.current;
       if (!path) return current.name;

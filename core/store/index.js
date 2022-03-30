@@ -11,6 +11,9 @@ import errors from './errors';
 import search from './search';
 import settings from './settings';
 
+
+let store;
+
 const initialState = {
   selected: { entity: null, field: null },
   messages: [],
@@ -48,6 +51,7 @@ function getDatabase(models = []) {
  */
 export const getStoreConfig = (projectStoreConfig) => {
   const state = { ...initialState, ...projectStoreConfig.state };
+  const mutations = projectStoreConfig.mutations || {};
   const plugins = projectStoreConfig.plugins || [];
   const modules = projectStoreConfig.modules || {};
   const database = getDatabase(projectStoreConfig.models);
@@ -60,7 +64,8 @@ export const getStoreConfig = (projectStoreConfig) => {
     plugins: [pathify.plugin, VuexORM.install(database), revision, ...plugins],
     state,
     getters: { ...coreGetters, ...projectGetters },
-    mutations: make.mutations(state),
+    mutations: { ...mutations, ...make.mutations(state) },
+    actions: projectStoreConfig.actions || {},
     modules: {
       display,
       errors,
@@ -76,7 +81,8 @@ export const createStore = (vueInstance, projectStoreConfig) => {
   vueInstance.use(Vuex);
 
   const storeConfig = getStoreConfig(projectStoreConfig);
-  return new Vuex.Store(storeConfig);
+  store = new Vuex.Store(storeConfig);
+  return store;
 };
 
 // function to initialize store given initial state
@@ -96,6 +102,11 @@ export function initializeStore(store, initialState, {configurator, project, use
   }
   // Set default document state
   store.dispatch('transaction/initialize');
+  store.dispatch('calculation/initialize');
   store.dispatch('documents/initialize', configurator.documentTemplates);
   store.dispatch('settings/initialize', { name: project.name, locale: user.locale });
+}
+
+export function useStore() {
+  return store;
 }
