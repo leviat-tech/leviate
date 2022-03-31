@@ -1,6 +1,7 @@
 import Vuex from 'vuex';
 import pathify, { make } from 'vuex-pathify';
 import VuexORM from '@vuex-orm/core';
+import '../plugins/yup';
 import { isEmpty, cloneDeep } from 'lodash';
 import Migration from '../extensions/migration';
 import migrations from '@/migrations';
