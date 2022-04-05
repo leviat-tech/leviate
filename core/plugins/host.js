@@ -2,12 +2,28 @@ import inject from '@crhio/inject';
 import locales from '@/locales';
 
 const uninitializedWarning = (pluginName) => () => {
-  console.log(`${pluginName} has not been initialized. Did you call Vue.use(HostPlugin)?`);
+  console.error(`${pluginName} has not been initialized. Did you call Vue.use(HostPlugin)?`);
 };
+
+export const api = new Proxy({}, {
+  get(target, prop) {
+    if (!target[prop]) return uninitializedWarning(`api.${prop}`)();
+
+    return target[prop];
+  },
+  set(target, prop, value) {
+    if (typeof value !== 'function') {
+      throw new TypeError(`Cannot create API key. ${prop} is not a function`);
+    }
+
+    target[prop] = value;
+
+    return true;
+  }
+})
 
 const modules = {
   host: {},
-  api: uninitializedWarning('api'),
   localize: uninitializedWarning('$l'),
 };
 
@@ -37,24 +53,21 @@ const HostPlugin = {
     };
 
     // Store so module can be imported
-    modules.host = inject.attach({}).call;
-    modules.host = inject.attach({}).call;
+    modules.host = $host;
+    modules.localize = $l;
 
     // Assign to Vue prototype
     Object.assign(Vue.prototype, { $host, $l });
-    modules.localize = $l;
 
     // Create api endpoint methods
-    modules.api = {};
     Object.entries(endpoints).forEach(([key, url]) => {
       if (!url) return console.error(`Cannot create API: no url found for ${key}`);
-      modules.api[key] = createApi(url, $host);
+      api[key] = createApi(url, $host);
     });
   },
 };
 
 export const useHost = () => modules.host;
-export const useApi = () => modules.api;
 export const useLocalize = () => modules.localize;
 
 export default HostPlugin;

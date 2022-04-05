@@ -5,7 +5,6 @@ export function createRouter(_Vue, routes) {
   _Vue.use(VueRouter);
 
   const router = new VueRouter({
-    base: import.meta.env.BASE_URL,
     routes,
   });
 
