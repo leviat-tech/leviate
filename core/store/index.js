@@ -28,8 +28,6 @@ function generateCurrentGetter(entities) {
     current(state, getters) {
       const { name, params } = state.route;
 
-      console.log(name, entities.includes(name));
-
       if (!entities.includes(name)) return null;
 
       const query = getters[`entities/${name}/query`];
