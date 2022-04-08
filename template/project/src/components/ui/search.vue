@@ -1,5 +1,4 @@
 <style scoped lang="scss">
-  @import '@/assets/styles/variables.scss';
 
   $height: 2.25rem;
   $width: $height;

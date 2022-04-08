@@ -1,6 +1,7 @@
 import Vuex from 'vuex';
 import pathify, { make } from 'vuex-pathify';
 import VuexORM from '@vuex-orm/core';
+import '@/schema/index';
 import { isEmpty, cloneDeep } from 'lodash';
 import Migration from '../extensions/migration';
 import migrations from '@/migrations';
@@ -11,9 +12,14 @@ import errors from './errors';
 import search from './search';
 import settings from './settings';
 
+// Project config
+import projectStoreConfig from '@/store';
+import models from '@/models';
+
+let store;
+
 const initialState = {
   selected: { entity: null, field: null },
-  messages: [],
   serialization_version: null,
 };
 
@@ -38,29 +44,23 @@ function getDatabase(models = []) {
   return database;
 }
 
-/**
- * @typedef {Object} ProjectStoreConfig
- * @property {Array} plugins project plugins
- * @property {Object} modules project modules
- * @property {Array} models an array of VuexORM models
- * @param {ProjectStoreConfig} projectStoreConfig
- * @returns {Object} store config to be passed in to Vuex constructor
- */
-export const getStoreConfig = (projectStoreConfig) => {
+export const getStoreConfig = () => {
   const state = { ...initialState, ...projectStoreConfig.state };
+  const mutations = projectStoreConfig.mutations || {};
   const plugins = projectStoreConfig.plugins || [];
   const modules = projectStoreConfig.modules || {};
-  const database = getDatabase(projectStoreConfig.models);
+  const database = getDatabase(models);
   const entities = projectStoreConfig.entities;
   const coreGetters = projectStoreConfig.entities ? generateCurrentGetter(entities) : {};
   const projectGetters = projectStoreConfig.getters || {};
 
 
-  return cloneDeep({
+  return {
     plugins: [pathify.plugin, VuexORM.install(database), revision, ...plugins],
     state,
     getters: { ...coreGetters, ...projectGetters },
-    mutations: make.mutations(state),
+    mutations: { ...mutations, ...make.mutations(state) },
+    actions: projectStoreConfig.actions || {},
     modules: {
       display,
       errors,
@@ -69,14 +69,15 @@ export const getStoreConfig = (projectStoreConfig) => {
       transaction,
       ...modules,
     },
-  });
+  };
 };
 
-export const createStore = (vueInstance, projectStoreConfig) => {
+export const createStore = (vueInstance) => {
   vueInstance.use(Vuex);
 
-  const storeConfig = getStoreConfig(projectStoreConfig);
-  return new Vuex.Store(storeConfig);
+  const storeConfig = getStoreConfig();
+  store = new Vuex.Store(storeConfig);
+  return store;
 };
 
 // function to initialize store given initial state
@@ -96,6 +97,11 @@ export function initializeStore(store, initialState, {configurator, project, use
   }
   // Set default document state
   store.dispatch('transaction/initialize');
+  store.dispatch('calculation/initialize');
   store.dispatch('documents/initialize', configurator.documentTemplates);
   store.dispatch('settings/initialize', { name: project.name, locale: user.locale });
+}
+
+export function useStore() {
+  return store;
 }

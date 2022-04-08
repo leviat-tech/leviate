@@ -61,3 +61,22 @@
 .standard-indent {
   padding-left: $standard-indent;
 }
+
+/* hotfix to prevent dropdowns appearing out of position in modal */
+.concrete-modal {
+  [slot="reference"] {
+    position: relative;
+  }
+  .concrete-select-options {
+    /* override popperjs style attributes */
+    transform: translate(0, 10px) !important;
+    inset: 100% auto auto auto !important;
+  }
+}
+
+/* force consistent cursor on select inputs */
+.concrete-input-row[slot="reference"] {
+  .concrete-input, input, label, .concrete-select-options {
+    cursor: pointer;
+  }
+}

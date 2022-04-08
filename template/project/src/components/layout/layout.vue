@@ -1,6 +1,4 @@
 <style scoped lang="scss">
-  @import '@/assets/styles/variables.scss';
-
   $border: 1px solid $color-gray-04;
 
   .layout {

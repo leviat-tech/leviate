@@ -1,9 +1,7 @@
 import find from '../extensions/find';
 import search from '../extensions/search';
-import store from '@/store';
 
-
-function add(el, value) {
+function add(el, value, vnode) {
   let id;
   let before;
   let localize = true;
@@ -15,7 +13,7 @@ function add(el, value) {
     localize = value.localize;
   }
   el.setAttribute('data-find-id', id);
-  const entry = store.getters['search/getEntryFromPath'](id, localize);
+  const entry = vnode.context.$store.getters['search/getEntryFromPath'](id, localize);
   find.insert(el, id, before);
   search.insert(el, id, entry, [entry]);
 }
@@ -31,14 +29,14 @@ function remove(el) {
 export default {
   install(Vue, options) {
     Vue.directive('find', {
-      inserted(el, binding) {
-        add(el, binding.value);
+      inserted(el, binding, vnode) {
+        add(el, binding.value, vnode);
       },
       updated() {
       },
-      componentUpdated(el, binding) {
+      componentUpdated(el, binding, vnode) {
         remove(el);
-        add(el, binding.value);
+        add(el, binding.value, vnode);
       },
       unbind(el) {
         remove(el);

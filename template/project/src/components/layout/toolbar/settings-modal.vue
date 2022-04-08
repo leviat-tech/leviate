@@ -1,7 +1,4 @@
 <style scoped lang="scss">
-  @import '@/assets/styles/variables.scss';
-  @import 'leviate/assets/styles/buttons.scss';
-  @import 'leviate/assets/styles/inputs.scss';
 </style>
 
 

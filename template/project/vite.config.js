@@ -24,8 +24,20 @@ const config = {
     },
   },
 
+  // eliminate the need to explicitly import stylesheets in vue components
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `
+          @import "@crhio/leviate/core/assets/styles/variables.scss";
+          @import "@crhio/leviate/core/assets/styles/mixins.scss";
+        `,
+      },
+    },
+  },
+
   plugins: [
-    createVuePlugin({ jsx: true }),
+    createVuePlugin(),
     JSDraftLoader(),
     createSvgPlugin(),
   ],
