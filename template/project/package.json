@@ -14,7 +14,7 @@
   "dependencies": {
     "@crhio/concrete": "^0.0.81",
     "@crhio/inject": "^1.0.4",
-    "@crhio/leviate": "^1.0.2",
+    "@crhio/leviate": "^1.0.3",
     "@vuex-orm/core": "^0.36.4",
     "axios": "^0.21.1",
     "big.js": "^6.0.3",
