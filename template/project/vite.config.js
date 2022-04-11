@@ -19,6 +19,7 @@ const config = {
       output: {
         name: 'plugin',
         format: 'iife',
+        inlineDynamicImports: true, // iife build breaks without enabling this option
         entryFileNames: 'app.js',
       },
     },
