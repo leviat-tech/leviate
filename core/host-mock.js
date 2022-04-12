@@ -2,12 +2,12 @@ import axios from 'axios';
 import adapter from 'axios/lib/adapters/http';
 import inject from '@crhio/inject';
 import leviateConfig from './leviate.config';
-import mockConfig from '@/mock.config';
-import locales from '@/locales';
 
-let state = mockConfig.state || {};
+export function useMock(token, mockConfig, locales) {
+  console.log(mockConfig);
 
-export function useMock(token) {
+  let state = mockConfig.state || {};
+
   const mockApi = {
     setUrl() {
     },

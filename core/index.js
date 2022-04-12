@@ -8,16 +8,12 @@ import { createStore, initializeStore } from './store';
 import './assets/styles/index.scss';
 import { createRouter } from './router.js';
 
-// Project imports
-import routes from '@/router';
-import globalComponents from '@/components';
-
 Vue.config.productionTip = false;
 
-function installPlugins(_Vue, { endpoints, plugins, globalConfig }) {
+function installPlugins(_Vue, { endpoints, locales, plugins, globalConfig }) {
   plugins?.forEach(plugin => loadPlugin(_Vue, plugin));
 
-  _Vue.use(HostPlugin, { endpoints });
+  _Vue.use(HostPlugin, { endpoints, locales });
   _Vue.use(find);
   _Vue.use(search);
   _Vue.use(Concrete, { size: 'sm' });
@@ -56,16 +52,27 @@ async function getAppRootComponent(isDev) {
  * @param {Object} env - the import.meta.env object
  */
 export async function createApp(projectConfig, env) {
+  const {
+    globalComponents,
+    mockConfig,
+    locales,
+    routes,
+    storeConfig,
+    models,
+    migrations
+  } = projectConfig;
+
+
   if (env.DEV) {
     const { useMock } = await import('./host-mock');
-    useMock(env.VITE_PROXY_ACCESS_TOKEN);
+    useMock(env.VITE_PROXY_ACCESS_TOKEN, mockConfig, locales);
   }
 
   installPlugins(Vue, projectConfig);
 
   globalComponents.forEach(component => Vue.component(component.name, component));
 
-  const store = createStore(Vue);
+  const store = createStore(Vue, storeConfig, models);
   const router = createRouter(Vue, routes);
 
   sync(store, router);
@@ -74,7 +81,7 @@ export async function createApp(projectConfig, env) {
   const host = useHost();
   const initialState = host.getState();
   const context = host.getMeta();
-  initializeStore(store, initialState, context);
+  initializeStore(store, initialState, context, migrations);
 
   const initialUrl = host.getUrl();
   if (initialUrl) {
