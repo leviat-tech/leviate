@@ -4,8 +4,6 @@ import inject from '@crhio/inject';
 import leviateConfig from './leviate.config';
 
 export function useMock(token, mockConfig, locales) {
-  console.log(mockConfig);
-
   let state = mockConfig.state || {};
 
   const mockApi = {
