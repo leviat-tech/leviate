@@ -1,10 +1,8 @@
 import Vuex from 'vuex';
 import pathify, { make } from 'vuex-pathify';
 import VuexORM from '@vuex-orm/core';
-import '@/schema/index';
 import { isEmpty, cloneDeep } from 'lodash';
 import Migration from '../extensions/migration';
-import migrations from '@/migrations';
 import revision from './plugins/revision';
 import transaction from './transaction';
 import display from './display';
@@ -12,9 +10,6 @@ import errors from './errors';
 import search from './search';
 import settings from './settings';
 
-// Project config
-import projectStoreConfig from '@/store';
-import models from '@/models';
 
 let store;
 
@@ -44,7 +39,7 @@ function getDatabase(models = []) {
   return database;
 }
 
-export const getStoreConfig = () => {
+export const getStoreConfig = (projectStoreConfig, models) => {
   const state = { ...initialState, ...projectStoreConfig.state };
   const mutations = projectStoreConfig.mutations || {};
   const plugins = projectStoreConfig.plugins || [];
@@ -72,16 +67,16 @@ export const getStoreConfig = () => {
   };
 };
 
-export const createStore = (vueInstance) => {
+export const createStore = (vueInstance, projectStoreConfig, models) => {
   vueInstance.use(Vuex);
 
-  const storeConfig = getStoreConfig();
+  const storeConfig = getStoreConfig(projectStoreConfig, models);
   store = new Vuex.Store(storeConfig);
   return store;
 };
 
 // function to initialize store given initial state
-export function initializeStore(store, initialState, {configurator, project, user}) { // eslint-disable-line
+export function initializeStore(store, initialState, {configurator, project, user}, migrations) { // eslint-disable-line
   const migration = new Migration(migrations, initialState);
 
   const latestMigrationName = migration.latestMigrationName;

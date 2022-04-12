@@ -1,5 +1,4 @@
 import inject from '@crhio/inject';
-import locales from '@/locales';
 
 const uninitializedWarning = (pluginName) => () => {
   console.error(`${pluginName} has not been initialized. Did you call Vue.use(HostPlugin)?`);
@@ -46,7 +45,7 @@ function createApi(url, $host) {
 }
 
 const HostPlugin = {
-  install(Vue, { endpoints }) {
+  install(Vue, { endpoints, locales }) {
     const $host = inject.attach({}).call;
     const $l = (phrase, options = {}) => {
       return $host.localize(phrase, { ...options, fallback: locales });
