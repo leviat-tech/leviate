@@ -1,5 +1,5 @@
 export const pressAnyKey = async () => {
-  console.log('Press any key to continue...')
+  console.log('\nPress any key to continue...')
 
   process.stdin.setRawMode(true)
 
