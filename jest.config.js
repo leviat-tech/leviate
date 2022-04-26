@@ -9,8 +9,8 @@ module.exports = {
   },
   modulePathIgnorePatterns: [".cwd"],
   // resolver: '<rootDir>/test/utils/jest-resolver.js',
-  // setupFilesAfterEnv: ['jest-extended/all', '<rootDir>/test/utils/jest-setup'],
-  testEnvironment: 'jsdom',
+  setupFilesAfterEnv: ['<rootDir>/__tests__/utils/jest-setup'],
+  // testEnvironment: 'jsdom',
   transform: {
     // '.*\\.(vue)$': 'vue-jest',
     '.*\\.(m?js)$': 'babel-jest',
