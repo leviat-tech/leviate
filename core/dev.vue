@@ -31,6 +31,15 @@
         font-weight: bold;
       }
     }
+
+    .dev__buttons button {
+      transition: 1s;
+
+      &.highlight {
+        transition: none;
+        background-color: lighten($primary, 20);
+      }
+    }
   }
 </style>
 
@@ -67,16 +76,16 @@
 
           <input class="w-full px-2 py-1 text-black outline-none"
                  v-model="configurationName"
-                 @keydown.enter="saveConfiguration"
+                 @keydown.enter="onSave"
                  placeholder="Config name (default)">
 
           <div class="dev__buttons flex my-3">
 
             <div class="w-1/2 pr-1">
-              <c-button class="w-full" @click="saveConfiguration">Save</c-button>
+              <c-button class="w-full btn__save" @click="onSave" :class="{ 'highlight': saveTrigger }">Save</c-button>
             </div>
             <div class="w-1/2 pl-1">
-              <c-button class="w-full" @click="clearStorage">Clear</c-button>
+              <c-button class="w-full" @click="onClear">Clear</c-button>
             </div>
           </div>
 
@@ -110,7 +119,8 @@ export default {
       configurationName: null,
       autosave: false,
       configurations: [],
-      currentConfig: ''
+      currentConfig: '',
+      saveTrigger: false
     }
   },
   computed: {
@@ -129,6 +139,16 @@ export default {
     this.subscribe();
   },
   methods: {
+    async onSave() {
+      this.saveTrigger = true;
+      this.saveConfiguration();
+
+      setTimeout(() => { this.saveTrigger = false });
+    },
+    async onClear() {
+      document.querySelector('body').style.opacity = 0.5;
+      this.clearStorage();
+    },
     saveConfiguration(name) {
       const configName = name || this.configurationName || 'default';
       this.configurations = uniq([
@@ -181,7 +201,7 @@ export default {
       try {
         return JSON.parse(storedJSON);
       } catch(e) {
-        console.log('Cannot get item', e);
+        console.log(`Cannot get item: '${key}'`, e);
       }
     },
     setCurrentConfig(name) {
