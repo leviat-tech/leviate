@@ -70,14 +70,14 @@
           </div>
 
           <div class="flex items-center justify-between">
-            <label for="dev__autosave" class="flex-grow py-2">Autosave</label>
+            <label for="dev__autosave" class="flex-grow py-2 cursor-pointer">Autosave</label>
             <input id="dev__autosave" type="checkbox" v-model="autosave" />
           </div>
 
-          <input class="w-full px-2 py-1 text-black outline-none"
-                 v-model="configurationName"
+          <input class="w-full px-2 py-2 text-black outline-none text-sm"
+                 v-model="configNameInputVal"
                  @keydown.enter="onSave"
-                 placeholder="Config name (default)">
+                 placeholder="Save as">
 
           <div class="dev__buttons flex my-3">
 
@@ -116,7 +116,7 @@ export default {
   data() {
     return {
       unsubscribe: () => {},
-      configurationName: null,
+      configNameInputVal: null,
       autosave: false,
       configurations: [],
       currentConfig: '',
@@ -142,15 +142,16 @@ export default {
     async onSave() {
       this.saveTrigger = true;
       this.saveConfiguration();
+      this.configNameInputVal = '';
 
       setTimeout(() => { this.saveTrigger = false });
     },
     async onClear() {
       document.querySelector('body').style.opacity = 0.5;
-      this.clearStorage();
+      setTimeout(this.clearStorage);
     },
     saveConfiguration(name) {
-      const configName = name || this.configurationName || 'default';
+      const configName = name || this.configNameInputVal || this.currentConfig || 'Default';
       this.configurations = uniq([
         ...this.configurations,
         configName
@@ -161,7 +162,7 @@ export default {
 
       console.log(`Configuration '${configName}' saved`);
     },
-    async restoreConfiguration(name = 'default') {
+    async restoreConfiguration(name = 'Default') {
       this.unsubscribe()
 
       await this.$nextTick();
@@ -182,16 +183,21 @@ export default {
       this.removeStorageItem(name);
     },
     clearStorage() {
+      const deleteKeys = [];
+
       // Only clear storage for this app
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         if (key.slice(0, this.stateKey.length) === this.stateKey) {
-          localStorage.removeItem(key);
+          deleteKeys.push(key);
         }
       }
+
+      deleteKeys.forEach(key => localStorage.removeItem(key));
+
       window.location.reload();
     },
-    getStorageKey(name = 'default') {
+    getStorageKey(name = 'Default') {
       return [this.stateKey, name].join(':');
     },
     getStorageItem(name) {
