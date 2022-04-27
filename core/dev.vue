@@ -1,5 +1,6 @@
 <style scoped lang="scss">
   .host-bar {
+    position: relative;
     padding: 30px;
     color: white;
     background: #3c3f48;
@@ -18,13 +19,69 @@
     padding-top: 48px;
     margin-top: -48px;
   }
+
+  .dev__ui {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+
+    button {
+      &.active {
+        font-weight: bold;
+      }
+    }
+  }
 </style>
 
 <template>
   <!-- provide a little host like context -->
   <div class="h-full flex flex-row">
-    <div class="host-bar text-center">
-      TECH STUDIO
+    <div class="host-bar text-center flex flex-col justify-between">
+      <div class="flex-grow">TECH STUDIO</div>
+
+      <div class="dev__ui text-left">
+        <div class="mx-2">
+
+          <div class="mb-3 pb-3 border-b" v-if="configurations.length > 0">
+            <div class="text-lg mb-4 pb-2 border-b">Saved Configurations</div>
+            <div v-for="name in configurations">
+              <div class="flex items-center mb-2 px-2">
+                <div class="w-1 h-6 bg-gray-600 mr-2"
+                     :class="{ 'bg-green-600': name === currentConfig }" />
+                <button class="flex-grow text-left"
+                        :class="{ active: name === currentConfig }"
+                        @click="restoreConfiguration(name)">{{ name }}
+                </button>
+                <button class="flex items-center justify-center bg-gray-500 w-6 h-6" @click="deleteConfiguration(name)">
+                  <c-icon type="trash" size="md"></c-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <label for="dev__autosave" class="flex-grow py-2">Autosave</label>
+            <input id="dev__autosave" type="checkbox" v-model="autosave" />
+          </div>
+
+          <input class="w-full px-2 py-1 text-black outline-none"
+                 v-model="configurationName"
+                 @keydown.enter="saveConfiguration"
+                 placeholder="Config name (default)">
+
+          <div class="dev__buttons flex my-3">
+
+            <div class="w-1/2 pr-1">
+              <c-button class="w-full" @click="saveConfiguration">Save</c-button>
+            </div>
+            <div class="w-1/2 pl-1">
+              <c-button class="w-full" @click="clearStorage">Clear</c-button>
+            </div>
+          </div>
+
+        </div>
+      </div>
     </div>
     <div class="h-full w-full flex flex-col">
       <div class="host-nav">
@@ -39,11 +96,126 @@
 
 <script>
 import App from './app.vue';
+import uniq from 'lodash/uniq'
+import debounce from 'lodash/debounce'
 
 export default {
   name: 'Dev',
   components: {
     application: App,
   },
+  data() {
+    return {
+      unsubscribe: () => {},
+      configurationName: null,
+      autosave: false,
+      configurations: [],
+      currentConfig: ''
+    }
+  },
+  computed: {
+    stateKey() {
+      return this.$host.getMeta().configurator.name;
+    },
+  },
+  created() {
+    const storedSettings = this.getStorageItem('settings');
+
+    if (storedSettings) {
+      Object.assign(this, storedSettings);
+      this.restoreConfiguration(storedSettings.currentConfig);
+    }
+
+    this.subscribe();
+  },
+  methods: {
+    saveConfiguration(name) {
+      const configName = name || this.configurationName || 'default';
+      this.configurations = uniq([
+        ...this.configurations,
+        configName
+      ]);
+      this.saveSettings();
+      this.setStorageItem(configName, this.$store.state);
+      this.setCurrentConfig(configName);
+
+      console.log(`Configuration '${configName}' saved`);
+    },
+    async restoreConfiguration(name = 'default') {
+      this.unsubscribe()
+
+      await this.$nextTick();
+
+      const state = this.getStorageItem(name);
+
+      if (!state) return;
+
+      this.setCurrentConfig(name);
+      this.$store.replaceState(state);
+
+      this.subscribe();
+    },
+    deleteConfiguration(name) {
+      this.configurations = this.configurations
+          .filter(configuration => configuration !== name);
+      this.saveSettings();
+      this.removeStorageItem(name);
+    },
+    clearStorage() {
+      // Only clear storage for this app
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.slice(0, this.stateKey.length) === this.stateKey) {
+          localStorage.removeItem(key);
+        }
+      }
+      window.location.reload();
+    },
+    getStorageKey(name = 'default') {
+      return [this.stateKey, name].join(':');
+    },
+    getStorageItem(name) {
+      const key = this.getStorageKey(name);
+      const storedJSON = localStorage.getItem(key);
+
+      try {
+        return JSON.parse(storedJSON);
+      } catch(e) {
+        console.log('Cannot get item', e);
+      }
+    },
+    setCurrentConfig(name) {
+      this.currentConfig = name;
+      this.saveSettings();
+    },
+    setStorageItem(name, data) {
+      const key = this.getStorageKey(name);
+      localStorage.setItem(key, JSON.stringify(data));
+    },
+    removeStorageItem(name) {
+      const key = this.getStorageKey(name);
+      localStorage.removeItem(key);
+    },
+    saveSettings() {
+      const settings = {
+        autosave: this.autosave,
+        configurations: this.configurations,
+        currentConfig: this.currentConfig
+      }
+      this.setStorageItem('settings', settings);
+    },
+    subscribe() {
+      if (this.autosave) {
+        this.unsubscribe = this.$store.subscribe(debounce(() => {
+          this.saveConfiguration(this.currentConfig);
+        }, 1000));
+      }
+    }
+  },
+  watch: {
+    autosave(val) {
+      val ? this.subscribe() : this.unsubscribe();
+    }
+  }
 };
 </script>
