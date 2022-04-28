@@ -1,6 +1,6 @@
 import fs from 'fs-extra'
-import init from '../cli/commands/init'
-import { prompt } from '../__mocks__/enquirer';
+import init from '../../cli/commands/init'
+import { prompt } from '../../__mocks__/enquirer';
 
 let answers;
 
