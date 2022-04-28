@@ -1,3 +1,5 @@
+import 'regenerator-runtime/runtime';
+
 jest.mock('../../cli/helpers', () => {
   const helpers = jest.requireActual('../../cli/helpers');
 

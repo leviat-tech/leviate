@@ -1,6 +1,6 @@
-import checklang from '../cli/commands/checklang'
+import checklang from '../../cli/commands/checklang'
 
-import { pressAnyKey } from '../cli/helpers';
+import { pressAnyKey } from '../../cli/helpers';
 
 describe('checklang', () => {
   it('should have no matching files', async () => {

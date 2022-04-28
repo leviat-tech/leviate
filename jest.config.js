@@ -1,4 +1,4 @@
-module.exports = {
+const commonConfig = {
   moduleFileExtensions: [
     'js',
     'mjs',
@@ -8,9 +8,7 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/$1',
   },
   modulePathIgnorePatterns: [".cwd"],
-  // resolver: '<rootDir>/test/utils/jest-resolver.js',
   setupFilesAfterEnv: ['<rootDir>/__tests__/utils/jest-setup'],
-  // testEnvironment: 'jsdom',
   transform: {
     // '.*\\.(vue)$': 'vue-jest',
     '.*\\.(m?js)$': 'babel-jest',
@@ -18,4 +16,21 @@ module.exports = {
   transformIgnorePatterns: [
     '/node_modules/(?!@crhio).+\\.js$',
   ],
+}
+
+module.exports = {
+  projects: [
+    {
+      ...commonConfig,
+      displayName: 'core',
+      testEnvironment: 'jsdom',
+      testMatch: ['<rootDir>/__tests__/core/**/*.spec.js']
+    },
+    {
+      ...commonConfig,
+      displayName: 'cli',
+      testMatch: ['<rootDir>/__tests__/cli/**/*.spec.js']
+    }
+  ],
+
 };

@@ -27,15 +27,17 @@ const modules = {
 };
 
 function createApi(url, $host) {
-  const sanitizedUrl = url.slice(-1) === '/' ? url : `${url}/`;
-
   return (...args) => {
     const specifyPath = (typeof args[0] === 'string');
-    let fullPath = sanitizedUrl;
+    let fullPath = url;
     let [data, options] = args;
 
     if (specifyPath) {
-      fullPath = sanitizedUrl + args[0];
+      // Ensure that the base and path are joined by a single slash in all conditions
+      const basePath = url.replace(/\/$/, '');
+      const specifiedPath = args[0].replace(/^\//, '');
+      fullPath = [basePath, specifiedPath].join('/');
+
       data = args[1];
       options = args[2];
     }
