@@ -39,7 +39,7 @@ describe('init', () => {
 
   it('should prevent initializing a new project in an existing directory', async() => {
     const dirname = 'my-project';
-    const success = await init.run([dirname]).catch();
+    const success = await init.run([dirname]);
 
     const packageJSON = fs.readJsonSync(`${cwd}/${dirname}/project/package.json`);
 
