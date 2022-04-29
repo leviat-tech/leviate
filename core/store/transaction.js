@@ -2,7 +2,13 @@ import Vue from 'vue';
 import { make } from 'vuex-pathify';
 
 
-class TransactionError extends Error {}
+class TransactionError extends Error {
+  constructor() {
+    super();
+    this.name = 'TransactionError';
+  }
+}
+
 
 const state = {
   transactionDepth: 0,

@@ -31,7 +31,7 @@ beforeEach(() => {
   commitSetValue = (value) => store.commit('SET_TEST_VALUE', value);
 });
 
-describe.skip('store/transaction', () => {
+describe('store/transaction', () => {
   describe('actions/transact', () => {
     it('should successfully call the transaction function', () => {
       const value = 50;
@@ -73,11 +73,11 @@ describe.skip('store/transaction', () => {
       expect(store.state.transaction.transactionDepth).toBe(0);
     });
 
-    it('should call a transaction error', () => {
+    it('should throw a transaction error', () => {
       jest.spyOn(console, 'error').mockImplementation(jest.fn());
 
       // Create a callback with an unresolved promise so we can test
-      // for nested interactions. We don't the promise to resolve as
+      // for nested interactions. We don't want the promise to resolve as
       // we're only concerned with testing for the TransactionError
       const callbackWithUnresolvedPromise = () => new Promise((resolve) => {});
       const callbackWithError = () => { throw new Error(); };

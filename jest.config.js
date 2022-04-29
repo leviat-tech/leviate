@@ -9,10 +9,6 @@ const commonConfig = {
   },
   modulePathIgnorePatterns: [".cwd"],
   setupFilesAfterEnv: ['<rootDir>/__tests__/utils/jest-setup'],
-  transform: {
-    // '.*\\.(vue)$': 'vue-jest',
-    '.*\\.(m?js)$': 'babel-jest',
-  },
   transformIgnorePatterns: [
     '/node_modules/(?!@crhio).+\\.js$',
   ],
@@ -24,12 +20,19 @@ module.exports = {
       ...commonConfig,
       displayName: 'core',
       testEnvironment: 'jsdom',
-      testMatch: ['<rootDir>/__tests__/core/**/*.spec.js']
+      testMatch: ['<rootDir>/__tests__/core/**/*.spec.js'],
+      transform: {
+        '.*\\.(vue)$': 'vue-jest',
+        '.*\\.(m?js)$': 'babel-jest',
+      },
     },
     {
       ...commonConfig,
       displayName: 'cli',
-      testMatch: ['<rootDir>/__tests__/cli/**/*.spec.js']
+      testMatch: ['<rootDir>/__tests__/cli/**/*.spec.js'],
+      transform: {
+        '.*\\.(m?js)$': 'babel-jest',
+      },
     }
   ],
 
