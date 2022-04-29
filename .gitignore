@@ -36,3 +36,6 @@ node_modules/
 
 # temp dir for tests
 .cwd
+
+#built files from Vuepress
+documentation/docs/.vuepress/dist
