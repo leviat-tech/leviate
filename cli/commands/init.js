@@ -1,4 +1,4 @@
-import { spawn } from 'child_process'
+import { spawnSync } from 'child_process'
 import path from 'path';
 import fs from 'fs-extra';
 import { prompt } from 'enquirer';
@@ -68,7 +68,7 @@ export default {
     logger.log('Installing dependencies...')
 
     try {
-      spawn(`npm install`, {
+      spawnSync(`npm install`, {
         cwd: dest + '/project',
         stdio: 'inherit',
         shell: true
