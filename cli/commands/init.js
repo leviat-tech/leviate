@@ -44,7 +44,8 @@ export default {
     }
 
     fs.copySync(src, dest, {
-      filter: (src, dest) => !/node_modules/.test(src)
+      // Ignore modules in project folder during development
+      filter: (src, dest) => !/project\/node_modules/.test(src)
     });
 
     logger.log(`Initialising project in ${dest}`);
