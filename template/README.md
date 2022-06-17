@@ -7,7 +7,7 @@ Make sure you are in the project folder - `cd project` - and then run `npm run d
 The entry point - `main.js` is already configured with the minimum config which looks like this:
 
 ```javascript
-import { createApp } from 'leviate';
+import { createApp } from '@crhio/leviate';
 
 createApp(appConfig);
 ```
@@ -41,7 +41,7 @@ endpoints: {
 ```
 Using the api in a component or module looks like this:
 ```javascript
-import { useApi } from 'leviate'
+import { useApi } from '@crhio/leviate'
 const api = useApi();
 api.calc('/some/path', { some: 'data' });
 ```
@@ -62,7 +62,7 @@ The host api is still available in components by using `this.$host` but two majo
 
 Instead of calling `Vue.prototype.$host|$l` the modules should be used as follows:
 ```js
-import { useHost, useLocalize } from 'leviate/plugins/host';
+import { useHost, useLocalize } from '@crhio/leviate/plugins/host';
 
 const $host = useHost();
 const state = $host.getState();

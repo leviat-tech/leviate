@@ -2,7 +2,7 @@ import omit from 'lodash/omit';
 import Revision from '../../extensions/revision';
 import { useHost } from '../../plugins/host';
 
-const revision = (store) => {
+const revision = ({ store }) => {
   store.revision = new Revision(store, 25, {
     autocommit(mutation, s) {
       return s.transaction.transactionDepth === 0

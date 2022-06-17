@@ -1,7 +1,3 @@
-// https://github.com/anthonygore/vuex-undo-redo
-/* eslint-disable no-underscore-dangle */
-
-
 class Revision {
 
   // handlers:
@@ -9,8 +5,8 @@ class Revision {
   //   committed(state): called when state is committed (note undo sometimes calls commit too)
   //   undone(): called after successful undo
   //   redone(): called after succesful redo
-  constructor(store, max, handlers) {
-    this.max = (max || 15) + 1;
+  constructor(store, max = 15, handlers) {
+    this.max = max + 1;
     this.outdated = true;
     this.undos = [];
     this.redos = [];

@@ -1,27 +1,17 @@
-import { make } from 'vuex-pathify';
+import { defineStore } from 'pinia';
 
 
-const state = {
-  configName: '',
-  locale: '',
-  clientNotes: '',
-  internalNotes: '',
-};
-
-const mutations = make.mutations(state);
-
-const actions = {
-  initialize: ({ commit }, { name, locale }) => {
-    commit('SET_CONFIG_NAME', name);
-    commit('SET_LOCALE', locale);
-  },
-};
-
-const settings = {
-  namespaced: true,
-  state,
-  mutations,
-  actions,
-};
-
-export default settings;
+export const useSettingsStore = defineStore({
+  state: () => ({
+    configName: '',
+    locale: '',
+    clientNotes: '',
+    internalNotes: '',
+  }),
+  actions: {
+    initialize: ({ name, locale }) => {
+      this.name = name;
+      this.locale = locale;
+    },
+  }
+});

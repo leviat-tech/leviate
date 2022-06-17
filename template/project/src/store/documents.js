@@ -1,38 +1,22 @@
-import { make } from 'vuex-pathify';
-import merge from 'lodash/merge';
+import { defineStore } from 'pinia';
 import overview from '@/schema/documents/overview';
 
 const templates = {
   overview: () => overview.default(),
 };
 
-const state = {
-  types: {}, // TODO: does everything need to be nested into "types"?
-};
+export const useDocumentStore = defineStore('documents', {
+  state: () => ({
+    types: {},
+  }),
+  actions: {
+    initialize: (docs) => {
+      const defaultState = docs.reduce((obj, doc) => ({
+        ...obj,
+        [doc.meta.template]: { ...templates[doc.meta.template](), generating: false },
+      }), {});
 
-const mutations = make.mutations(state);
-
-const actions = {
-  initialize: ({ commit, state: s }, docs) => {
-    const defaultState = docs.reduce((obj, doc) => ({
-      ...obj,
-      [doc.meta.template]: { ...templates[doc.meta.template](), generating: false },
-    }), {});
-
-    const docState = merge(
-      defaultState,
-      s.types,
-    );
-
-    commit('SET_TYPES', docState);
+      this.types = { ...this.types, defaultState };
+    },
   },
-};
-
-const documents = {
-  namespaced: true,
-  state,
-  mutations,
-  actions,
-  templates,
-};
-export default documents;
+});

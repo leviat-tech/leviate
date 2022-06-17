@@ -30,72 +30,21 @@
           <layer-selector v-if="showLayerSelector" />
         </c-tool>
       </c-tool-group>
-      <c-tool-group>
-        <c-tool name="Add Vertex" tool-id="add-vertex">
-          <pointer-plus-icon />
-        </c-tool>
-        <c-tool name="Add Vertex" tool-id="remove-vertex">
-          <pointer-minus-icon />
-        </c-tool>
-        <c-tool
-          class="relative"
-          name="predefined panel"
-          tool-id="predefined-panel"
-          :stateful="false"
-          @click="showPanelSelector = !showPanelSelector">
-          <polygon-icon class="z-30" />
-          <panel-selector v-if="showPanelSelector" v-on:selected="showPanelSelector=false"/>
-        </c-tool>
-        <c-tool name="Hole" tool-id="hole">
-          <hole-icon />
-        </c-tool>
-        <c-tool
-          class="relative"
-          name="Thickening"
-          tool-id="thickening"
-          @click="showFeatureSelector = !showFeatureSelector">
-          <thickening-icon class="z-30"/>
-          <feature-selector v-if="showFeatureSelector" v-on:selected="showFeatureSelector=false"/>
-        </c-tool>
-      </c-tool-group>
-      <c-tool-group>
-        <c-tool name="Vertical Gridline" tool-id="gridline-vertical" :disabled="true">
-          <gridline-vertical-icon />
-        </c-tool>
-        <c-tool name="Horizontal Gridline" tool-id="gridline-horiontal" :disabled="true">
-          <gridline-horizontal-icon />
-        </c-tool>
-        <c-tool name="Anchor" tool-id="anchor" :disabled="true">
-          <anchor-icon />
-        </c-tool>
-      </c-tool-group>
+
+      <slot />
+
     </c-toolbar>
-    <div>
-      <c-button
-        size="xs"
-        class="mr-2"
-        @click="autolayout"
-      >
-        Autolayout
-      </c-button>
-      <c-button
-        size="xs"
-        class="mr-2"
-        @click="mockCalculation(current.id)"
-      >
-        Calculation
-      </c-button>
-    </div>
   </div>
 </template>
 
 <script>
-import { sync, get, call } from 'vuex-pathify';
-import LayerGroupIcon from 'leviate/assets/icons/layer-group.svg';
-import PointerPlusIcon from 'leviate/assets/icons/pointer-plus.svg';
-import PointerMinusIcon from 'leviate/assets/icons/pointer-minus.svg';
-import ZoomToFitIcon from 'leviate/assets/icons/zoom-to-fit.svg';
-import SearchPlusIcon from 'leviate/assets/icons/search-plus.svg';
+import { mapWritableState } from 'pinia';
+import { useDisplayStore } from '@crhio/leviate/store/display';
+import LayerGroupIcon from '@crhio/leviate/assets/icons/layer-group.svg';
+import PointerPlusIcon from '@crhio/leviate/assets/icons/pointer-plus.svg';
+import PointerMinusIcon from '@crhio/leviate/assets/icons/pointer-minus.svg';
+import ZoomToFitIcon from '@crhio/leviate/assets/icons/zoom-to-fit.svg';
+import SearchPlusIcon from '@crhio/leviate/assets/icons/search-plus.svg';
 
 export default {
   name: 'viewport-toolbar',
@@ -114,28 +63,10 @@ export default {
     };
   },
   computed: {
-    currentTool: sync('display/currentTool'),
-    activeViewport: sync('display/activeViewport'),
-    current: get('current'),
+    ...mapWritableState(useDisplayStore, ['currentTool']),
   },
   methods: {
-    mockCalculation: call('calculation/calculation_mock'),
-    async autolayout() {
-      let gridlines;
-      try {
-        gridlines = autogrid(this.current);
-      } catch (e) {
-        console.log(e);
-        this.$store.dispatch(
-          'errors/setTemporaryGlobalError',
-          { type: 'gridlines', text: 'Sorry, something went wrong on gridline generation. Pease try with another grid spacing' },
-          { root: true },
-        );
-      }
-    },
     zoomToFit() {
-      bus.$emit('zoomViewportToExtents', 'elevation');
-      bus.$emit('zoomViewportToExtents', 'section');
     },
   },
 };

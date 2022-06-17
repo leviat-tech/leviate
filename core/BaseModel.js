@@ -1,11 +1,10 @@
 import { v4 as uuid } from 'uuid';
-import { Model } from '@vuex-orm/core';
 import set from 'lodash/set';
 import get from 'lodash/get';
 import last from 'lodash/last';
 
 
-class BaseModel extends Model {
+class BaseModel {
   static parameterFields(defaults) {
     return Object.entries(defaults).reduce((attrs, [k, v]) => ({
       ...attrs,

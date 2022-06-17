@@ -54,9 +54,8 @@
 
 
 <script>
-import Vue from 'vue';
-import { get, sync } from 'vuex-pathify';
-
+import { mapWritableState } from 'pinia';
+import { useSettingsStore } from '@crhio/leviate/store/settings';
 
 export default {
   name: 'tool-settings',
@@ -85,7 +84,7 @@ export default {
       this.close();
     },
     async setName() {
-      await Vue.prototype.$host.setName(this.localConfigName);
+      this.$host.setName(this.localConfigName);
       this.configName = this.localConfigName;
     },
     // is this necessary?
@@ -96,8 +95,7 @@ export default {
     debug() {},
   },
   computed: {
-    ...sync('settings', ['configName', 'clientNotes', 'internalNotes']),
-    locale: get('settings/locale'),
+    ...mapWritableState(useSettingsStore, ['configName', 'clientNotes', 'internalNotes']),
   },
 };
 

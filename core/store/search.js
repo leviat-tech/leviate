@@ -1,3 +1,5 @@
+import { defineStore } from 'pinia';
+
 import range from 'lodash/range';
 import get from 'lodash/get';
 import last from 'lodash/last';

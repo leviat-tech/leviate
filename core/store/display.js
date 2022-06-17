@@ -1,5 +1,5 @@
-import Vue from 'vue';
-import { make } from 'vuex-pathify';
+import { defineStore } from 'pinia';
+
 
 
 const state = {

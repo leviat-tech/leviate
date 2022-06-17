@@ -1,17 +1,12 @@
-import Vuex from 'vuex';
-import pathify, { make } from 'vuex-pathify';
-import VuexORM from '@vuex-orm/core';
-import { isEmpty, cloneDeep } from 'lodash';
+import { defineStore } from 'pinia';
+import { cloneDeep, isEmpty } from 'lodash';
 import Migration from '../extensions/migration';
 import revision from './plugins/revision';
 import transaction from './transaction';
 import display from './display';
-import errors from './errors';
 import search from './search';
-import settings from './settings';
 
-
-let store;
+class TransactionError extends Error {}
 
 const initialState = {
   selected: { entity: null, field: null },
@@ -31,14 +26,6 @@ function generateCurrentGetter(entities) {
   };
 }
 
-function getDatabase(models = []) {
-  const database = new VuexORM.Database();
-
-  models.forEach((model) => database.register(model));
-
-  return database;
-}
-
 export const getStoreConfig = (projectStoreConfig, models) => {
   const state = { ...initialState, ...projectStoreConfig.state };
   const mutations = projectStoreConfig.mutations || {};
@@ -46,16 +33,13 @@ export const getStoreConfig = (projectStoreConfig, models) => {
   const modules = projectStoreConfig.modules || {};
   const database = getDatabase(models);
   const entities = projectStoreConfig.entities;
-  const coreGetters = projectStoreConfig.entities ? generateCurrentGetter(entities) : {};
-  const projectGetters = projectStoreConfig.getters || {};
+  const getters = projectStoreConfig.getters || {};
 
 
   return {
-    plugins: [pathify.plugin, VuexORM.install(database), revision, ...plugins],
+    plugins: [revision, ...plugins],
     state,
-    getters: { ...coreGetters, ...projectGetters },
-    mutations: { ...mutations, ...make.mutations(state) },
-    actions: projectStoreConfig.actions || {},
+    getters,
     modules: {
       display,
       errors,
@@ -67,13 +51,35 @@ export const getStoreConfig = (projectStoreConfig, models) => {
   };
 };
 
-export const createStore = (vueInstance, projectStoreConfig, models) => {
-  vueInstance.use(Vuex);
+  const storeConfig = getStoreConfig(projectStoreConfig);
 
-  const storeConfig = getStoreConfig(projectStoreConfig, models);
-  store = new Vuex.Store(storeConfig);
-  return store;
-};
+export const useRootStore = defineStore('root', {
+  state: () => ({
+    transactionDepth: 0,
+  }),
+  actions: {
+    async transact(cb) {
+      this.transactionDepth++;
+
+      await cb().catch(this.onTransactionError);
+    },
+    onTransactionError(e) {
+      if (!(e instanceof TransactionError)) {
+        console.error(e);
+      }
+
+      if (this.transactionDepth > 1) { // if we're in a nested transaction, propagate an error;
+        throw new TransactionError();
+      } else { // otherwise, undo to the last committed state;
+        this.revision.undo();
+        this.transactionDepth = 0;
+      }
+    },
+    initialize() {
+      this.transactionDepth = 0;
+    },
+  }
+});
 
 // function to initialize store given initial state
 export function initializeStore(store, initialState, {configurator, project, user}, migrations) { // eslint-disable-line

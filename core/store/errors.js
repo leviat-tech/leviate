@@ -1,43 +1,41 @@
+import { defineStore } from 'pinia';
+
 /* eslint-disable */
-import Vue from 'vue';
 import mapKeys from 'lodash/mapKeys';
 import pickBy from 'lodash/pickBy';
 import mergeWith from 'lodash/mergeWith';
-import { make } from 'vuex-pathify';
+import omit from 'lodash/omit';
 
-const state = {
-  globalErrors: {},
-  calculationErrors: {},
-};
-
-const mutations = {
-  ...make.mutations(state),
-  setGlobalError(s, { type, text }) {
-    Vue.set(s.globalErrors, type, text);
-  },
-  removeGlobalError(s, type) {
-    if (s.globalErrors[type]) {
-      Vue.delete(s.globalErrors, type);
-    }
-  },
-  setCalculationErrors(s, { id, errors }) {
-    Vue.set(s.calculationErrors, id, errors);
-  },
-  removeCalculationErrors(s, id) {
-    if (s.calculationErrors[id]) {
-      Vue.delete(s.calculationErrors, id);
+export const useErrorStore = defineStore('errors', {
+  state: () => ({
+    globalErrors: {},
+    calculationErrors: {},
+  }),
+  actions: {
+    setGlobalError({ type, text }) {
+      this.globalErrors[type] = text;
+    },
+    removeGlobalError(type) {
+      if (this.globalErrors[type]) {
+        this.globalErrors = omit(this.globalErrors, type);
+      }
+    },
+    setCalculationErrors({ id, errors }) {
+      this.calculationErrors[id] = errors;
+    },
+    removeCalculationErrors(id) {
+      if (this.calculationErrors[id]) {
+        this.calculationErrors = omit(this.calculationErrors, id);
+      }
+    },
+    setTemporaryGlobalError({ type, text, ms = 5000 }) {
+      this.setGlobalError({ type, text });
+      setTimeout(() => {
+        this.removeGlobalError(type);
+      });
     }
   }
-};
-
-const actions = {
-  setTemporaryGlobalError({ commit }, { type, text, ms }) {
-    commit('setGlobalError', { type, text });
-    setTimeout(() => {
-      commit('removeGlobalError', type);
-    }, ms || 5000);
-  }
-}
+});
 
 const getters = {
   currentErrors(s, g, rootS, rootG) {
@@ -59,12 +57,3 @@ const getters = {
     );
   }
 };
-
-const errors = {
-  namespaced: true,
-  state,
-  mutations,
-  actions,
-  getters,
-};
-export default errors;

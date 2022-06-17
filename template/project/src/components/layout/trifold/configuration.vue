@@ -130,12 +130,14 @@
 
 
 <script>
-import { get, call } from 'vuex-pathify';
+import { mapState } from 'pinia';
 import isEmpty from 'lodash/isEmpty';
-import pickBy from 'lodash/pickBy';
-import search from 'leviate/extensions/search';
-import find from 'leviate/extensions/find';
-import bus from 'leviate/extensions/eventBus';
+import { useErrorStore } from '@crhio/leviate/store/errors';
+import { useSearchStore } from '@crhio/leviate/store/search';
+import search from '@crhio/leviate/extensions/search';
+import find from '@crhio/leviate/extensions/find';
+import bus from '@crhio/leviate/extensions/eventBus';
+import { useCalculationStore } from '@/store/calculation';
 
 
 export default {
@@ -154,14 +156,9 @@ export default {
     });
   },
   computed: {
-    current: get('current'),
-    generating: get('calculation/generating'),
-    globalErrors: get('errors/globalErrors'),
-    currentErrors: get('errors/currentErrors'),
-    getEntryFromPath: get('search/getEntryFromPath'),
-    isZone() {
-      return this.$route.name === 'zone';
-    },
+    ...mapState(useCalculationStore, ['generating']),
+    ...mapState(useErrorStore, ['globalErrors', 'currentErrors']),
+    ...mapState(useSearchStore, ['getEntryFromPath']),
     hasErrors() {
       return !isEmpty(this.globalErrors) || !isEmpty(this.currentErrors);
     },
@@ -169,12 +166,8 @@ export default {
       if (!this.query) return []; // check query to tie computed to query
       return search.match(this.query);
     },
-    canGenerate() {
-      return isEmpty(pickBy(this.entityErrors, (v, k) => !k.includes('assemblies')));
-    },
   },
   methods: {
-    generate: call('calculation/generateAssemblies'),
     select({ el }) {
       this.query = '';
       const id = el.getAttribute('data-find-id');

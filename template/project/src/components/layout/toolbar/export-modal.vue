@@ -14,8 +14,8 @@
         <div class="py-1">Document</div>
         <div class="w-64">
           <c-select v-model="docType">
-            <option v-for="key, index in Object.keys(documentList)" v-bind:key="index" :value="key">
-              {{`${documentList[key].file_type} - ${documentList[key].name}` }}
+            <option v-for="key, index in Object.keys(types)" v-bind:key="index" :value="key">
+              {{`${types[key].file_type} - ${types[key].name}` }}
             </option>
           </c-select>
         </div>
@@ -30,8 +30,9 @@
 
 
 <script>
-import { get } from 'vuex-pathify';
+import { mapState } from 'pinia';
 import overviewDocument from '@/components/documents/overview-document.vue';
+import { useDocumentStore } from '@/store/documents';
 
 export default {
   name: 'tool-export',
@@ -51,7 +52,7 @@ export default {
     },
   },
   computed: {
-    documentList: get('documents/types'),
+    ...mapState(useDocumentStore, ['types']),
     documentComponent() {
       return {
         overview: overviewDocument,

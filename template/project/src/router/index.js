@@ -1,21 +1,22 @@
-import Panel from '@/views/panel.vue';
+import Entity from '@/views/entity.vue';
 import NotFound from '@/views/not-found.vue';
 import Home from '@/views/home.vue';
-import SampleModel from '@/models/sample-model';
 
 
-function panelGuard(to, from, next) {
-  if (!SampleModel.find(to.params.id)) next('/not-found');
+function guard(to, from, next) {
+  // Do some validation here ie checking an entity with the given id exists
+  const valid = !!to.params.id;
+  if (!valid) next('/not-found');
   else next();
 }
 
 const routes = [
   {
-    name: 'panel',
-    path: '/panels/:id',
-    component: Panel,
+    name: 'entity',
+    path: '/entity/:id',
+    component: Entity,
     meta: {
-      before: panelGuard,
+      before: guard,
     },
   },
   {
