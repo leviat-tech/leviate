@@ -1,4 +1,5 @@
 import { createApp as _createApp } from 'vue';
+import Concrete from '@crhio/concrete';
 import search from './directives/v-search';
 import find from './directives/v-find';
 import HostPlugin, { useHost } from './plugins/host';
@@ -12,7 +13,7 @@ function installPlugins(app, { endpoints, locales, plugins, globalConfig }) {
   app.use(HostPlugin, { endpoints, locales });
   app.use(find);
   app.use(search);
-  // app.use(Concrete, { size: 'sm' });
+  app.use(Concrete);
 
   if (globalConfig) {
     app.config.globalProperties.$config = globalConfig;
