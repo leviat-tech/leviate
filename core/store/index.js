@@ -1,16 +1,101 @@
-import { defineStore } from 'pinia';
+import { defineStore, createPinia } from 'pinia';
 import { cloneDeep, isEmpty } from 'lodash';
 import Migration from '../extensions/migration';
 import revision from './plugins/revision';
-import transaction from './transaction';
-import display from './display';
-import search from './search';
 
-class TransactionError extends Error {}
+import { useDisplayStore } from './display';
+import { useSearchStore } from './search';
+
+class TransactionError extends Error {
+  constructor() {
+    super();
+    this.name = 'TransactionError';
+  }
+}
+
+let storeConfig = {};
 
 const initialState = {
   selected: { entity: null, field: null },
   serialization_version: null,
+  transactionDepth: 0,
+};
+
+const initialActions = {
+  async transact(cb) {
+    this.transactionDepth++;
+
+    try {
+      const res = cb();
+
+      if (res instanceof Promise) {
+        await res.catch(this.onTransactionError);
+      }
+
+      this.transactionDepth = 0;
+    } catch(e) {
+      this.onTransactionError(e)
+    }
+  },
+
+  onTransactionError(e) {
+    if (!(e instanceof TransactionError)) {
+      console.error(e);
+    }
+
+    if (this.transactionDepth > 1) { // if we're in a nested transaction, propagate an error;
+      throw new TransactionError();
+    } else { // otherwise, undo to the last committed state;
+      this.revision.undo();
+      this.transactionDepth = 0;
+    }
+  },
+
+  registerModule(useStore) {
+    const id = useStore.$id;
+    let error;
+
+    if (!id) error = 'invalid store definition';
+
+    if (this[id]) error = `property ${id} already exists`;
+
+    if (error) return console.log(error);
+
+    if (!this.modules) this.modules = {};
+
+    this.modules[useStore.$id] = useStore;
+  },
+
+  replaceState(newState) {
+    const rootState = {};
+
+    Object.entries(newState).forEach(([key, value]) => {
+      if (this.$state[key]) rootState[key] = value;
+
+      const useModule = this.modules[key];
+      if (useModule) {
+        useModule().$state = newState[key];
+      } else {
+        console.error(`Store module ${key} does not exist`)
+      }
+    });
+
+    this.$patch(rootState);
+  },
+
+  toJSON() {
+    const { ...state } = this.$state;
+
+    Object.keys(this.modules).forEach(id => {
+      state[id] = this.modules[id]().$state;
+    });
+
+    return JSON.parse(JSON.stringify(state));
+  },
+  initialize() {
+    this.transactionDepth = 0;
+
+  },
 };
 
 function generateCurrentGetter(entities) {
@@ -26,64 +111,33 @@ function generateCurrentGetter(entities) {
   };
 }
 
-export const getStoreConfig = (projectStoreConfig, models) => {
-  const state = { ...initialState, ...projectStoreConfig.state };
-  const mutations = projectStoreConfig.mutations || {};
-  const plugins = projectStoreConfig.plugins || [];
-  const modules = projectStoreConfig.modules || {};
-  const database = getDatabase(models);
-  const entities = projectStoreConfig.entities;
-  const getters = projectStoreConfig.getters || {};
-
+export const getStoreConfig = (storeConfig, models) => {
+  const state = { ...initialState, ...storeConfig.state };
+  const actions = { ...initialActions, ...storeConfig.actions };
+  const modules = [useDisplayStore, useSearchStore, ...storeConfig.modules ];
+  const getters = storeConfig.getters || {};
 
   return {
-    plugins: [revision, ...plugins],
     state,
+    actions,
     getters,
-    modules: {
-      display,
-      errors,
-      search,
-      settings,
-      transaction,
-      ...modules,
-    },
+    modules
   };
 };
 
-  const storeConfig = getStoreConfig(projectStoreConfig);
+  // const storeConfig = getStoreConfig(projectStoreConfig);
 
-export const useRootStore = defineStore('root', {
-  state: () => ({
-    transactionDepth: 0,
-  }),
-  actions: {
-    async transact(cb) {
-      this.transactionDepth++;
-
-      await cb().catch(this.onTransactionError);
-    },
-    onTransactionError(e) {
-      if (!(e instanceof TransactionError)) {
-        console.error(e);
-      }
-
-      if (this.transactionDepth > 1) { // if we're in a nested transaction, propagate an error;
-        throw new TransactionError();
-      } else { // otherwise, undo to the last committed state;
-        this.revision.undo();
-        this.transactionDepth = 0;
-      }
-    },
-    initialize() {
-      this.transactionDepth = 0;
-    },
-  }
-});
+export let useRootStore = () => console.log('Root store has not been initialized');
 
 // function to initialize store given initial state
-export function initializeStore(store, initialState, {configurator, project, user}, migrations) { // eslint-disable-line
+export function initializeStore(initialState, migrations) { // eslint-disable-line
   const migration = new Migration(migrations, initialState);
+
+  const rootStore = useRootStore();
+
+  window.s = rootStore;
+
+  storeConfig.modules.forEach(rootStore.registerModule);
 
   const latestMigrationName = migration.latestMigrationName;
   if (!isEmpty(initialState)) {
@@ -92,17 +146,25 @@ export function initializeStore(store, initialState, {configurator, project, use
       migratedState = migration.migrateToLatest();
       console.log(`successfully migrated to latest: ${latestMigrationName}`);
     }
-    store.revision.replace(migratedState || initialState);
+    rootStore.replaceState(migratedState || initialState);
   } else {
-    store.commit('SET_SERIALIZATION_VERSION', latestMigrationName);
+    rootStore.$patch({ serialization_version: latestMigrationName });
   }
   // Set default document state
-  store.dispatch('transaction/initialize');
-  store.dispatch('calculation/initialize');
-  store.dispatch('documents/initialize', configurator.documentTemplates);
-  store.dispatch('settings/initialize', { name: project.name, locale: user.locale });
+  rootStore.$patch({ transactionDepth: 0 });
+  // store.dispatch('calculation/initialize');
 }
 
-export function useStore() {
-  return store;
+export function createStore(projectStoreConfig) {
+  storeConfig = getStoreConfig(projectStoreConfig);
+
+  useRootStore = defineStore('root', {
+    state: () => storeConfig.state,
+    actions: storeConfig.actions,
+    getters: storeConfig.getters,
+  });
+
+  const pinia = createPinia();
+  pinia.use(revision);
+  return pinia;
 }

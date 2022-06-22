@@ -28,7 +28,7 @@ const routes = [
     component: NotFound,
   },
   {
-    path: '*',
+    path: '/:pathMatch(.*)*',
     redirect: '/not-found',
   },
 ];

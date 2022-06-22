@@ -1,7 +1,7 @@
 <style scoped lang="scss">
 
   $color: red;
-  .error ::v-deep {
+  :deep(.error) {
     position: relative;
     & input {
       border: 1px solid $color !important;

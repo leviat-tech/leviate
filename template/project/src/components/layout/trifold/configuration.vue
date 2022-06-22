@@ -1,8 +1,10 @@
 <style scoped lang="scss">
 
+$toolbar-height: 3rem;
+
   .configuration {
     position: relative;
-    min-width:25rem;
+    min-width: 25rem;
   }
 
   .config-content {
@@ -14,11 +16,10 @@
   .config-tools {
     min-height: $toolbar-height;
     position: absolute;
-    padding-right: $standard-indent;
+    padding-right: 1rem;
     width: 100%;
     display: flex;
     justify-content: flex-end;
-    border-bottom: $border;
     align-items: center;
   }
 
@@ -70,14 +71,9 @@
   .generate {
     text-align: center;
     width: 100%;
-    padding: $standard-indent;
     &.has-errors {
       padding-bottom: 0;
     }
-  }
-
-  .status-bar {
-    margin: $standard-indent;
   }
 
 </style>
@@ -87,7 +83,7 @@
   <div>
     <div class="configuration v-box scroll" ref="configuration">
       <!-- search tool-->
-      <div class="config-tools flex-limit">
+      <div class="config-tools flex-limit border-b">
         <div class="search-container">
           <search
             v-model="query"
@@ -108,7 +104,7 @@
 
     <!-- status bar -->
     <transition name="expand">
-      <c-status-bar class="status-bar" v-if="hasErrors" type="danger">
+      <c-status-bar class="status-bar m-6" v-if="hasErrors" type="danger">
         <transition-group name="errors" tag="ul">
           <li class="error" v-for="(error, key) in globalErrors" :key="key">
             {{ error }}
@@ -149,7 +145,7 @@ export default {
     };
   },
   created() {
-    bus.$on('foundElement', () => {
+    bus.on('foundElement', () => {
       if (this.$refs.configuration) {
         this.$refs.configuration.scrollTop -= 100;
       }

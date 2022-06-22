@@ -1,18 +1,26 @@
 class Revision {
 
   // handlers:
-  //   autocommit(mutation): called on state change, when returns true will commit state
+  //   autocommit(mutation, state): called on state change, when returns true will commit state
   //   committed(state): called when state is committed (note undo sometimes calls commit too)
   //   undone(): called after successful undo
   //   redone(): called after succesful redo
-  constructor(store, max = 15, handlers) {
+  constructor(max = 15, handlers) {
     this.max = max + 1;
     this.outdated = true;
     this.undos = [];
     this.redos = [];
-    this.store = store;
     this.handlers = handlers || {};
-    this.store.subscribe(this.changed.bind(this));
+    this.changed = this.changed.bind(this);
+  }
+
+  initializeStore(store) {
+    this.store = store;
+    this.store.$subscribe(this.changed);
+  }
+
+  addStore(store) {
+    store.$subscribe(this.changed);
   }
 
   get undoable() {
@@ -63,7 +71,7 @@ class Revision {
 
   // return cloned copy of state
   snapshot() {
-    return JSON.parse(JSON.stringify(this.store.state));
+    return this.store.toJSON();
   }
 
   // replace current state with provided state
@@ -72,10 +80,10 @@ class Revision {
   }
 
   // called when state changes
-  changed(mutation) {
+  changed(mutation, state) {
     this.outdated = true;
     this.redos = [];
-    if (this.handlers.autocommit && this.handlers.autocommit(mutation, this.store.state)) this.commit();
+    if (this.handlers.autocommit && this.handlers.autocommit(mutation, state)) this.commit();
   }
 
   // clear revision undo / redo stack

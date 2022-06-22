@@ -37,7 +37,6 @@
 
       &.highlight {
         transition: none;
-        background-color: lighten($primary, 20);
       }
     }
   }
@@ -125,6 +124,7 @@ export default {
   },
   computed: {
     stateKey() {
+      console.log(this.$host);
       return this.$host.getMeta().configurator.name;
     },
   },

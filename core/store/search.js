@@ -6,6 +6,9 @@ import last from 'lodash/last';
 import { useLocalize } from '../plugins/host';
 import BaseModel from '../BaseModel';
 
+export const useSearchStore = defineStore('search', {
+
+})
 
 const getters = {
   getEntryFromPath(s, g, rootS, rootG) {

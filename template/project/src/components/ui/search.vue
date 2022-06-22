@@ -27,11 +27,10 @@
     z-index: 99;
   }
 
-  ::v-deep .concrete-input {
+  :deep(.concrete-input) {
     border-radius: $radius;
     padding: 0px 0.5rem;
     box-shadow: none !important;
-    color: $color-gray-08;
     input {
       margin-right: $width / 2; // space for close button
     }
@@ -42,10 +41,7 @@
     margin-left: $expanded - $width;
     background: white;
     cursor: pointer;
-    color: $color-gray-08;
     &:hover {
-      color: $primary !important;
-      background: $color-gray-02;
     }
   }
 
@@ -58,9 +54,7 @@
   .search-close {
     @include button;
     cursor: pointer;
-    color: $color-gray-08;
     &:hover {
-      color: $primary !important;
     }
     background: none;
     position: absolute;
@@ -74,12 +68,7 @@
     top: 2.5rem;
     width: $expanded;
     border-radius: $radius;
-    background: $color-gray-01;
     box-shadow: 1px 1px 0.375rem 0px rgba(0,0,0,0.01);
-
-    ::v-deep .highlight {
-      color: $primary;
-    }
 
     .result {
       padding: 7px;
@@ -91,10 +80,8 @@
         border-radius: 0rem 0rem $radius $radius;
       }
       &:hover {
-        background: $color-gray-03;
       }
       &.selected {
-        background: $color-gray-04;
       }
     }
   }

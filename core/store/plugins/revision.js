@@ -2,23 +2,28 @@ import omit from 'lodash/omit';
 import Revision from '../../extensions/revision';
 import { useHost } from '../../plugins/host';
 
-const revision = ({ store }) => {
-  store.revision = new Revision(store, 25, {
-    autocommit(mutation, s) {
-      return s.transaction.transactionDepth === 0
-        && !mutation.type.startsWith('display')
-        && mutation.type !== 'transaction/cleanUpKilledTransaction';
-    },
-    committed(snapshot) {
-      const host = useHost();
+const revision = new Revision(25, {
+  autocommit(mutation, state) {
+    return state.transactionDepth === 0
+  },
+  committed(snapshot) {
+    const host = useHost();
 
-      if (host.setState) {
-        const filtered = omit(snapshot, ['selected', 'search']);
-        filtered.settings = omit(filtered.settings, ['configName', 'locale']);
-        host.setState(filtered);
-      }
-    },
-  });
+    if (host.setState) {
+      const filtered = omit(snapshot, ['selected', 'search']);
+      filtered.settings = omit(filtered.settings, ['configName', 'locale']);
+      host.setState(filtered);
+    }
+  },
+});
+
+const revisionPlugin = ({ store }) => {
+  if (store.$id === 'root') {
+    store.revision = revision;
+    revision.initializeStore(store)
+  } else if (store.$id !== 'display1') {
+    revision.addStore(store);
+  }
 };
 
-export default revision;
+export default revisionPlugin;

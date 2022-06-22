@@ -1,14 +1,11 @@
 <style scoped lang="scss">
-  $primary: lighten($primary, 10%);
   .project {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 0px 0px 0.5rem 0rem;
-    background-color: $color-gray-02;
 
     .title {
-      padding: $standard-indent;
+      padding: 1rem;
       font-weight: bold;
     }
   }
@@ -16,17 +13,17 @@
 
 
 <template>
-  <div class="project h-full">
+  <div class="project h-full pb-2 bg-gray-200">
     <explorer-toolbar class="center"/>
     <div class="v-box justify-between">
       <div>
-        <div class="title h-box flex-limit items-center">
+        <div class="title h-box flex-limit items-center p-4">
           Project Explorer
         </div>
       </div>
 
       <div>
-        <div class="title h-box flex-limit items-center">
+        <div class="title h-box flex-limit items-center p-4">
           Release
         </div>
 

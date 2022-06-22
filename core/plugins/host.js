@@ -47,7 +47,7 @@ function createApi(url, $host) {
 }
 
 const HostPlugin = {
-  install(Vue, { endpoints, locales }) {
+  install(app, { endpoints, locales }) {
     const $host = inject.attach({}).call;
     const $l = (phrase, options = {}) => {
       return $host.localize(phrase, { ...options, fallback: locales });
@@ -57,8 +57,7 @@ const HostPlugin = {
     modules.host = $host;
     modules.localize = $l;
 
-    // Assign to Vue prototype
-    Object.assign(Vue.prototype, { $host, $l });
+    Object.assign(app.config.globalProperties, { $host, $l });
 
     // Create api endpoint methods
     Object.entries(endpoints).forEach(([key, url]) => {

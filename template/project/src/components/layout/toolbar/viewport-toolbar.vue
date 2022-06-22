@@ -1,14 +1,13 @@
 <style scoped lang="scss">
 
   .menu {
-    border-bottom: $border;
-    min-height: $toolbar-height;
+    min-height: 3rem;
   }
 
 </style>
 
 <template>
-  <div class="menu h-box flex-limit relative items-center flex-wrap justify-between px-2">
+  <div class="menu h-box flex-limit relative items-center flex-wrap justify-between border-b px-2">
     <c-toolbar default-tool="select" v-model="currentTool">
       <c-tool-group>
         <c-tool name="Select" tool-id="select" icon="pointer-outline" />

@@ -22,7 +22,7 @@ module.exports = {
       testEnvironment: 'jsdom',
       testMatch: ['<rootDir>/__tests__/core/**/*.spec.js'],
       transform: {
-        '.*\\.(vue)$': 'vue-jest',
+        '^.+\\.vue$': '@vue/vue3-jest',
         '.*\\.(m?js)$': 'babel-jest',
       },
     },
@@ -30,9 +30,6 @@ module.exports = {
       ...commonConfig,
       displayName: 'cli',
       testMatch: ['<rootDir>/__tests__/cli/**/*.spec.js'],
-      transform: {
-        '.*\\.(m?js)$': 'babel-jest',
-      },
     }
   ],
 

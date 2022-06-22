@@ -1,22 +1,18 @@
 import { createApp as _createApp } from 'vue';
-import { createPinia } from 'pinia';
-import Concrete from '@crhio/concrete';
 import search from './directives/v-search';
 import find from './directives/v-find';
 import HostPlugin, { useHost } from './plugins/host';
-import { useRootStore, initializeStore } from './store';
+import { createStore, initializeStore } from './store';
 import './assets/styles/index.scss';
 import { createRouter } from './router.js';
 
-Vue.config.productionTip = false;
-
 function installPlugins(app, { endpoints, locales, plugins, globalConfig }) {
-  plugins?.forEach(plugin => loadPlugin(_Vue, plugin));
+  plugins?.forEach(plugin => loadPlugin(app, plugin));
 
   app.use(HostPlugin, { endpoints, locales });
   app.use(find);
   app.use(search);
-  app.use(Concrete, { size: 'sm' });
+  // app.use(Concrete, { size: 'sm' });
 
   if (globalConfig) {
     app.config.globalProperties.$config = globalConfig;
@@ -27,13 +23,13 @@ function installPlugins(app, { endpoints, locales, plugins, globalConfig }) {
   // };
 }
 
-function loadPlugin(_Vue, pluginConfig) {
+function loadPlugin(app, pluginConfig) {
   if (pluginConfig instanceof Array) {
     const [plugin, options] = pluginConfig;
-    _Vue.use(plugin, options);
+    app.use(plugin, options);
   }
 
-  return _Vue.use(pluginConfig);
+  return app.use(pluginConfig);
 }
 
 async function getAppRootComponent(isDev) {
@@ -52,20 +48,24 @@ async function getAppRootComponent(isDev) {
  * @param {Object} env - the import.meta.env object
  */
 export async function createApp(projectConfig, env) {
+  const {
+    globalComponents,
+    mockConfig,
+    locales,
+    routes,
+    storeConfig,
+    models,
+    migrations
+  } = projectConfig;
+
   if (import.meta.env.DEV) {
     await import('./host-mock');
   }
 
   const App = await getAppRootComponent(env.DEV);
   const app = _createApp(App);
-  const pinia = createPinia();
-  const router = createRouter();
-
-  const storeConfig = {
-    ...projectStoreConfig,
-    models,
-    migrations
-  };
+  const store = createStore(storeConfig);
+  const router = createRouter(projectConfig.routes);
 
 
   if (env.DEV) {
@@ -75,27 +75,21 @@ export async function createApp(projectConfig, env) {
 
   installPlugins(app, projectConfig);
 
-  globalComponents.forEach(component => Vue.component(component.name, component));
+  globalComponents.forEach(component => app.component(component.name, component));
 
-  // const store = createStore(Vue, storeConfig);
-
-  // load initial url and initial state if host provided it
   const host = useHost();
   const initialState = host.getState();
-  const context = host.getMeta();
-  // initializeStore(store, initialState, context, migrations);
-
   const initialUrl = host.getUrl();
+
   if (initialUrl) {
     router.replace(initialUrl).catch(() => {});
   }
 
-  app
-    .use(pinia)
-    .use(router);
+  app.use(store)
+     .use(router);
 
-  // pinia
-  //   .use(revision);
+  // load initial url and initial state if host
+  initializeStore(initialState, migrations);
 
   await router.isReady()
 
@@ -104,6 +98,4 @@ export async function createApp(projectConfig, env) {
   if (env.DEV) {
     window.app = app;
   }
-
-
 }

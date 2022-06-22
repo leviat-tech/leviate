@@ -1,6 +1,4 @@
 <style scoped lang="scss">
-  $border: 1px solid $color-gray-04;
-
   .layout {
     height: 100%;
     display: flex;
@@ -15,11 +13,6 @@
     flex: none;
     max-width: 240px;
     min-width: 240px;
-    border-right: $border;
-  }
-
-  .project, .contents {
-    border-right: $border;
   }
 
 </style>
@@ -35,7 +28,7 @@
 
         <div class="h-box flex">
 
-          <div class="project flex-limit v-box scroll">
+          <div class="project flex-limit v-box scroll border-r">
             <project/>
           </div>
 

@@ -1,13 +1,5 @@
-<style scoped lang="scss">
-
-.viewport-container {
-  border-right: 1px solid $color-gray-04;
-}
-</style>
-
-
 <template>
-  <div class="viewport-container v-box">
+  <div class="viewport-container v-box border-r">
     <viewport-toolbar />
     <c-viewport-container
       v-model="maximizedViewport"

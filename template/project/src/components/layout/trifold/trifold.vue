@@ -1,7 +1,5 @@
 <style scoped lang="scss">
 
-  $border: 1px solid $color-gray-04;
-
   .k-layout {
     height: 100%;
     display: flex;
@@ -11,23 +9,13 @@
     min-width: 0;
     min-height: 0;
   }
-  .menu {
-    border-bottom: $border;
-  }
 
   .project {
     flex: none;
     max-width: 240px;
     min-width: 240px;
-    border-right: $border;
   }
 
-  .project, .contents {
-    border-right: $border;
-  }
-  .center {
-    border-right: $border;
-  }
   .right {
     width: 22rem;
   }
@@ -45,7 +33,7 @@
       <div class="flex flex-col flex-grow">
         <div class="h-box flex">
           <!-- project panel -->
-          <div class="project flex-limit v-box scroll">
+          <div class="project flex-limit v-box scroll border-r">
             <project/>
           </div>
 
@@ -61,7 +49,7 @@
       >
         <!-- properties panel -->
         <configuration
-          class="center v-box scroll"
+          class="center v-box scroll border-r"
           :class="{ 'single-column': singleColumnView }"
           ref="configuration"
         >

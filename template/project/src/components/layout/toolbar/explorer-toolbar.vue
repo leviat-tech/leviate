@@ -1,13 +1,12 @@
 <style scoped lang="scss">
   .menu {
-    border-bottom: $border;
-    min-height: $toolbar-height;
+    min-height: 3rem;
   }
 
 </style>
 
 <template>
-  <div class="menu h-box flex-limit justify-between">
+  <div class="menu h-box flex-limit justify-between border-b">
     <c-toolbar>
       <c-tool-group>
         <c-tool
@@ -42,6 +41,7 @@
 </template>
 
 <script>
+import { useRootStore } from '@crhio/leviate/store/index';
 import SettingsIcon from '@crhio/leviate/assets/icons/cog.svg';
 import SettingsModal from './settings-modal.vue';
 import ExportModal from './export-modal.vue';
@@ -55,19 +55,22 @@ export default {
     ExportModal,
   },
   computed: {
+    revision() {
+      return useRootStore().revision;
+    },
     undoable() {
-      return this.$store.revision.undoable;
+      return this.revision.undoable;
     },
     redoable() {
-      return this.$store.revision.redoable;
+      return this.revision.redoable;
     },
   },
   methods: {
     undo() {
-      this.$store.revision.undo();
+      this.revision.undo();
     },
     redo() {
-      this.$store.revision.redo();
+      this.revision.redo();
     },
     openExport() {
       this.$refs.export.open();
