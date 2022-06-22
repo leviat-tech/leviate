@@ -1,7 +1,7 @@
 import { createApp } from '@crhio/leviate';
 
 // Project imports
-import baseConfig from './base.config.js';
+import baseConfig from './base.config';
 import mockConfig from './mock.config';
 
 
