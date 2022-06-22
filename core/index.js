@@ -17,6 +17,7 @@ function installPlugins(app, { endpoints, locales, plugins, globalConfig }) {
 
   if (globalConfig) {
     app.config.globalProperties.$config = globalConfig;
+    app.provide('$config', globalConfig);
   }
 
   // app.config.globalProperties.$transact = function (cb) {

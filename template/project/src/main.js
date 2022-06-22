@@ -1,15 +1,18 @@
 import { createApp } from '@crhio/leviate';
 
 // Project imports
-import defaultConfig from './defaultConfig';
+import baseConfig from './base.config.js';
 import mockConfig from './mock.config';
 
 
 const appConfig = {
-  ...defaultConfig,
+  ...baseConfig,
   mockConfig: import.meta.env.DEV ? mockConfig : {},
   globalConfig: {
-    // Anything here will be accessible in Vue components via this.$config
+    // Anything here will be accessible via $config in
+    // - Vue component templates,
+    // - `this` in the Options API
+    // inject('$config') in the Composition API
   },
   endpoints: {
     calc: import.meta.env.VITE_API_CALC,
