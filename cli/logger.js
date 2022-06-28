@@ -1,17 +1,19 @@
-import { white, red, yellow } from 'ansi-colors'
+import { white, red, green, yellow } from 'ansi-colors'
 
-const prefix = 'leviate: ';
 const log = (msg, color = white, level = 'info') => {
-  console.log(color(`leviate [${level}]: ${msg}`));
+  console.log(color(`[leviate]: ${msg}`));
 }
 
 export default {
 
   error(msg) {
-    log(msg, red, 'error');
+    log(msg, red);
   },
   warn(msg) {
-    log(msg, yellow, 'warn');
+    log(msg, yellow);
+  },
+  success(msg) {
+    log(msg, green);
   },
   log
 }
