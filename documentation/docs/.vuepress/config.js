@@ -1,13 +1,14 @@
 module.exports = {
-    title: 'Leviate Documentation',
-    description: 'Documentation for Leviate',
-    themeConfig: {
-      displayAllHeaders: true,
-      sidebar: [
-        '/getting-started',
-        '/CLI',
-        '/project-template',
-        '/core'
-      ]
-    }
+  title: 'Leviate Documentation',
+  description: 'Documentation for Leviate',
+  themeConfig: {
+    displayAllHeaders: true,
+    sidebarDepth: 2,
+    sidebar: [
+      '/',
+      '/CLI',
+      '/project-template',
+      '/core',
+    ]
   }
+}
