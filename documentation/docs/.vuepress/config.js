@@ -3,7 +3,7 @@ module.exports = {
   description: 'Documentation for Leviate',
   themeConfig: {
     displayAllHeaders: true,
-    sidebarDepth: 2,
+    sidebarDepth: 1,
     sidebar: [
       '/',
       '/CLI',

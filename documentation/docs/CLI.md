@@ -25,6 +25,6 @@ Checks the `views` and `components` directories within the specified directory f
 - html tags
 - title attributes
 
-*This check is not foolproof and may fail to find some strings, and return others that don't need translating.*
+*This check is not foolproof and may possibly return false positives or fail to locate some strings.*
 *Care should always be taken when writing and reviewing code to use translation keys wherever possible.*
 
