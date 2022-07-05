@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.2.0 (2022-07-05)
+
+
+### Features
+
+* add husky, commitlint and standard-version ([90e017a](https://github.com/leviat-tech/leviate/commit/90e017a2a9d28f9b3b5e36283f7b62924167a050))
+* fetch proxy access token automatically ([7eb845b](https://github.com/leviat-tech/leviate/commit/7eb845b6d7b65731e749f04e02c983e2cdd6a482))
+
+
+### Fixes
+
+* init command not working ([a67b2c3](https://github.com/leviat-tech/leviate/commit/a67b2c3ef56769dc2384e99e87257acefa01139f))
+
 ## 1.1.0 (2022-05-04)
 
 
