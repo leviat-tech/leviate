@@ -1,27 +1,6 @@
-<style scoped lang="scss">
-  .layout {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    font-size: 13px;
-    flex-grow: 1;
-    min-width: 0;
-    min-height: 0;
-  }
-
-  .project {
-    flex: none;
-    max-width: 240px;
-    min-width: 240px;
-  }
-
-</style>
-
-
 <template>
 
-
-  <div class="layout">
+  <div class="h-full text-sm">
     <div class="h-box">
 
       <div class="flex flex-col flex-grow">
