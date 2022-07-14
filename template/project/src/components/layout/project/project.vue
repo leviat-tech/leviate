@@ -3,6 +3,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    min-width: 240px;
 
     .title {
       padding: 1rem;
