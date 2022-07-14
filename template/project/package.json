@@ -42,7 +42,7 @@
     "s3-folder-upload": "^2.3.5",
     "sass": "1.32",
     "tailwindcss": "^2.2.7",
-    "vite": "^2.9.12",
+    "vite": "^2.7.2",
     "vite-svg-loader": "^3.3.0"
   }
 }

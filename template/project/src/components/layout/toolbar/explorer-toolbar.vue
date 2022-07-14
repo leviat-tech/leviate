@@ -31,7 +31,6 @@
       <c-tool-group>
         <c-tool name="Export" tool-id="export" icon="file-export" :stateful="false" @click="openExport" />
         <c-tool name="Settings" tool-id="settings" :stateful="false" @click="openSettings">
-          <settings-icon />
         </c-tool>
       </c-tool-group>
     </c-toolbar>
