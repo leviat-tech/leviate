@@ -1,5 +1,5 @@
-import { nextTick } from 'vue';
-import bus from './eventBus';
+// import { nextTick } from 'vue';
+// import bus from './eventBus';
 
 
 const index = {};

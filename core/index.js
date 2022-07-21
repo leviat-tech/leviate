@@ -1,4 +1,6 @@
 import { createApp as _createApp } from 'vue';
+import App from './app.vue';
+import Dev from './dev.vue';
 import Concrete from '@crhio/concrete';
 import search from './directives/v-search';
 import find from './directives/v-find';
@@ -10,10 +12,10 @@ import { createRouter } from './router.js';
 function installPlugins(app, { endpoints, locales, plugins, globalConfig }) {
   plugins?.forEach(plugin => loadPlugin(app, plugin));
 
+  app.use(Concrete);
   app.use(HostPlugin, { endpoints, locales });
   app.use(find);
   app.use(search);
-  app.use(Concrete);
 
   if (globalConfig) {
     app.config.globalProperties.$config = globalConfig;
@@ -34,9 +36,8 @@ function loadPlugin(app, pluginConfig) {
   return app.use(pluginConfig);
 }
 
-async function getAppRootComponent(isDev) {
-  const appModule = (isDev) ? await import('./dev.vue') : await import('./app.vue');
-  return appModule.default;
+function getAppRootComponent(isDev) {
+  return isDev ? Dev : App;
 }
 
 
@@ -64,8 +65,9 @@ export async function createApp(projectConfig, env) {
     await import('./host-mock');
   }
 
-  const App = await getAppRootComponent(env.DEV);
-  const app = _createApp(App);
+  const Root = getAppRootComponent(env.DEV);
+  const app = _createApp(Root);
+
   const store = createStore(storeConfig);
   const router = createRouter(projectConfig.routes);
 
@@ -76,7 +78,7 @@ export async function createApp(projectConfig, env) {
   }
 
   installPlugins(app, projectConfig);
-
+  //
   globalComponents.forEach(component => app.component(component.name, component));
 
   const host = useHost();

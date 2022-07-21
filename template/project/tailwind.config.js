@@ -1,11 +1,14 @@
 module.exports = {
-  purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
-  darkMode: false, // or 'media' or 'class'
-  theme: {
-    extend: {},
-  },
-  variants: {
-    extend: {},
-  },
-  plugins: [],
-}
+  presets: [
+    require('@crhio/leviat-tailwind-configuration'),
+  ],
+  content: [
+    './index.html',
+    './src/**/*.{vue,js,ts,jsx,tsx,mdx}',
+    './node_modules/@crhio/concrete/src/**/*.{js,ts,vue,mdx}',
+  ],
+  darkMode: 'media',
+  plugins: [
+    require('@headlessui/tailwindcss')({ prefix: 'ui' })
+  ],
+};

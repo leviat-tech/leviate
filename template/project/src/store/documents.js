@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
-import overview from '@/schema/documents/overview';
+// import overview from '@/schema/documents/overview';
 
 const templates = {
-  overview: () => overview.default(),
+//   overview: () => overview.default(),
 };
 
 export const useDocumentStore = defineStore('documents', {

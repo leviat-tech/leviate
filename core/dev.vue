@@ -46,7 +46,7 @@
   <!-- provide a little host like context -->
   <div class="h-full flex flex-row">
     <div class="host-bar text-center flex flex-col justify-between">
-      <div class="flex-grow">{{ $host.getMeta().configurator.name }}</div>
+<!--      <div class="flex-grow">{{ $host.getMeta().configurator.name }}</div>-->
 
       <div class="dev__ui text-left">
         <div class="mx-2">
@@ -124,8 +124,7 @@ export default {
   },
   computed: {
     stateKey() {
-      console.log(this.$host);
-      return this.$host.getMeta().configurator.name;
+      // return this.$host.getMeta().configurator.name;
     },
   },
   created() {

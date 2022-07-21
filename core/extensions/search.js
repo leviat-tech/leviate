@@ -1,13 +1,14 @@
-// the index isn't currently on the state because we need to index elements that arent serializable
-// obviously this search can be optimized!!
+// the index isn't in the state because we need to index elements that aren't serializable
+// TODO: optimise search
 
 const index = {};
 
-// key is a unique id for this result
-// name is a short label for this result
-// keywords is a list of terms that will be indexed to match this result
-// el is the search result (in our case usually a dom element)
-
+/**
+ * @param {HTMLElement} el - the search result, a dom element
+ * @param {string} key - the unique id for the search result
+ * @param {string} name - a short label for this result
+ * @param {Array} keywords - a list of terms that will be indexed to match this result
+ */
 function insert(el, key, name, keywords) {
   index[key] = {
     el,

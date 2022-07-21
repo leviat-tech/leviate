@@ -4,7 +4,6 @@ import Migration from '../extensions/migration';
 import revision from './plugins/revision';
 
 import { useDisplayStore } from './display';
-import { useSearchStore } from './search';
 
 class TransactionError extends Error {
   constructor() {
@@ -114,7 +113,7 @@ function generateCurrentGetter(entities) {
 export const getStoreConfig = (storeConfig, models) => {
   const state = { ...initialState, ...storeConfig.state };
   const actions = { ...initialActions, ...storeConfig.actions };
-  const modules = [useDisplayStore, useSearchStore, ...storeConfig.modules ];
+  const modules = [useDisplayStore, ...storeConfig.modules ];
   const getters = storeConfig.getters || {};
 
   return {
@@ -134,8 +133,6 @@ export function initializeStore(initialState, migrations) { // eslint-disable-li
   const migration = new Migration(migrations, initialState);
 
   const rootStore = useRootStore();
-
-  window.s = rootStore;
 
   storeConfig.modules.forEach(rootStore.registerModule);
 

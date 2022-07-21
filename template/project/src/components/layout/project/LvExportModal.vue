@@ -13,11 +13,11 @@
       <div class="flex justify-between space-x-8">
         <div class="py-1">Document</div>
         <div class="w-64">
-          <c-select v-model="docType">
-            <option v-for="key, index in Object.keys(types)" v-bind:key="index" :value="key">
-              {{`${types[key].file_type} - ${types[key].name}` }}
-            </option>
-          </c-select>
+<!--          <c-select v-model="docType">-->
+<!--            <option v-for="key, index in Object.keys(types)" v-bind:key="index" :value="key">-->
+<!--              {{`${types[key].file_type} - ${types[key].name}` }}-->
+<!--            </option>-->
+<!--          </c-select>-->
         </div>
       </div>
       <div class="space-y-4 pb-2">
@@ -30,9 +30,9 @@
 
 
 <script>
-import { mapState } from 'pinia';
+// import { mapState } from 'pinia';
 import overviewDocument from '@/components/documents/overview-document.vue';
-import { useDocumentStore } from '@/store/documents';
+// import { useDocumentStore } from '@/store/documents';
 
 export default {
   name: 'tool-export',
@@ -52,7 +52,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(useDocumentStore, ['types']),
+    // ...mapState(useDocumentStore, ['types']),
     documentComponent() {
       return {
         overview: overviewDocument,

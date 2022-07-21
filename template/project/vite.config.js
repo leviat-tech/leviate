@@ -38,7 +38,7 @@ export default defineConfig({
   },
 
   plugins: [
-    vue({ jsx: true }),
+    vue(),
     svgLoader(),
   ],
 

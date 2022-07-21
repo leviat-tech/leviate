@@ -1,5 +1,39 @@
 import find from '../extensions/find';
 import search from '../extensions/search';
+import { useLocalize } from '../plugins/host';
+import range from 'lodash/range';
+import get from 'lodash/get';
+import BaseModel from '../BaseModel';
+import last from 'lodash/last';
+
+
+function getEntryFromPath(path, localize = true) {
+  const $l = useLocalize();
+  const current = rootG.current;
+  if (!path) return current.name;
+
+  const allSubpaths = range(path.length)
+    .filter((i) => path[i] === '.')
+    .map((i) => path.slice(0, i));
+
+  const entitySubpaths = allSubpaths.filter((subpath) => get(current, subpath) instanceof BaseModel);
+  const entityPath = entitySubpaths.map((subpath) => get(current, subpath));
+  const displayPath = entityPath.map((entity) => entity.name).join(' > ');
+
+  const entity = last(entityPath) || current;
+  const termPath = entitySubpaths ? path.replace(last(entitySubpaths), '') : path;
+
+  let term;
+  if (get(current, path) instanceof BaseModel) {
+    term = get(current, path).name;
+  } else {
+    term = entity.coercedSchema.getSearchTerm(termPath);
+    if (localize) {
+      term = $l(term, { capitalize: true });
+    }
+  }
+  return displayPath ? `${term} (${displayPath})` : term;
+}
 
 function add(el, value, vnode) {
   let id;
@@ -13,7 +47,7 @@ function add(el, value, vnode) {
     localize = value.localize;
   }
   el.setAttribute('data-find-id', id);
-  const entry = vnode.context.$store.getters['search/getEntryFromPath'](id, localize);
+  const entry = getEntryFromPath(id, localize);
   find.insert(el, id, before);
   search.insert(el, id, entry, [entry]);
 }
@@ -27,18 +61,16 @@ function remove(el) {
 
 
 export default {
-  install(Vue, options) {
-    Vue.directive('find', {
-      inserted(el, binding, vnode) {
+  install(app, options) {
+    app.directive('find', {
+      mounted(el, binding, vnode) {
         add(el, binding.value, vnode);
       },
-      updated() {
-      },
-      componentUpdated(el, binding, vnode) {
+      updated(el, binding, vnode) {
         remove(el);
         add(el, binding.value, vnode);
       },
-      unbind(el) {
+      unmounted(el) {
         remove(el);
       },
     });

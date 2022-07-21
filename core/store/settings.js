@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 
 
-export const useSettingsStore = defineStore({
+export const useSettingsStore = defineStore('settings', {
   state: () => ({
     configName: '',
     locale: '',

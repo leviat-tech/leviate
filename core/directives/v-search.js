@@ -21,18 +21,16 @@ function remove(el) {
 
 
 export default {
-  install(Vue, options) {
-    Vue.directive('search', {
-      inserted(el, binding) {
+  install(app, options) {
+    app.directive('search', {
+      mounted(el, binding) {
         add(el, binding.value);
       },
-      updated() {
-      },
-      componentUpdated(el, binding) {
+      updated(el, binding) {
         remove(el);
         add(el, binding.value);
       },
-      unbind(el) {
+      unmounted(el) {
         remove(el);
       },
     });
