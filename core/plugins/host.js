@@ -49,15 +49,14 @@ function createApi(url, $host) {
 const HostPlugin = {
   install(app, { endpoints, locales }) {
     const $host = inject.attach({}).call;
-    const $l = (phrase, options = {}) => {
-      return $host.localize(phrase, { ...options, fallback: locales });
-    };
+    const $l = (phrase, options) => $host.localize(phrase, { ...options, fallback: locales })
+    const $L = (phrase) => $host.localize(phrase, { capitalize: true, fallback: locales })
 
     // Store so module can be imported
     modules.host = $host;
-    modules.localize = $l;
+    modules.localize = { $l, $L };
 
-    Object.assign(app.config.globalProperties, { $host, $l });
+    Object.assign(app.config.globalProperties, { $host, $l, $L });
 
     // Create api endpoint methods
     Object.entries(endpoints).forEach(([key, url]) => {

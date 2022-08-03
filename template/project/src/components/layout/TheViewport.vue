@@ -23,22 +23,12 @@
 </template>
 
 
-<script>
-import ViewportToolbar from '@/components/layout/toolbar/viewport-toolbar.vue';
+<script setup>
+import { ref } from 'vue';
 
+// import ViewportToolbar from '@/components/layout/toolbar/viewport-toolbar.vue';
 
-export default {
-  name: 'viewport-container',
-  components: {
-    ViewportToolbar,
-  },
-  data() {
-    return {
-      cloned: null,
-      maximizedViewport: null,
-      leftViewport: 'left',
-      rightViewport: 'right',
-    };
-  },
-};
+const maximizedViewport = ref(null);
+const leftViewport = ref('left');
+const rightViewport = ref('right');
 </script>

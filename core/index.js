@@ -8,6 +8,8 @@ import HostPlugin, { useHost } from './plugins/host';
 import { createStore, initializeStore } from './store';
 import './assets/styles/index.scss';
 import { createRouter } from './router.js';
+import { defineStore } from 'pinia/dist/pinia.esm-browser';
+import { normie } from 'normie';
 
 function installPlugins(app, { endpoints, locales, plugins, globalConfig }) {
   plugins?.forEach(plugin => loadPlugin(app, plugin));
@@ -68,9 +70,8 @@ export async function createApp(projectConfig, env) {
   const Root = getAppRootComponent(env.DEV);
   const app = _createApp(Root);
 
-  const store = createStore(storeConfig);
+  const store = createStore(storeConfig, models);
   const router = createRouter(projectConfig.routes);
-
 
   if (env.DEV) {
     const { useMock } = await import('./host-mock');
@@ -90,10 +91,10 @@ export async function createApp(projectConfig, env) {
   }
 
   app.use(store)
-     .use(router);
+    .use(router);
 
   // load initial url and initial state if host
-  initializeStore(initialState, migrations);
+  initializeStore(initialState, migrations, models);
 
   await router.isReady()
 

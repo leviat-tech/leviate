@@ -3,7 +3,7 @@
 
 
 <template>
-  <c-modal v-model="showModal" title="Settings" @close="close" size="lg">
+  <c-modal :show="showModal" title="Settings" @close="showModal = false" size="lg">
     <div class="space-y-4">
 
       <div class="flex justify-between space-x-8">
@@ -35,7 +35,7 @@
       </div>
 
       <div class='flex space-x-8 mt-8'>
-        <button class="btn secondary w-full" @click="reset">
+        <button class="secondary w-full" @click="reset">
           Reset
         </button>
         <button class="btn secondary w-full" @click="save">

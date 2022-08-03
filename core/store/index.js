@@ -1,4 +1,5 @@
 import { defineStore, createPinia } from 'pinia';
+import { normie } from 'normie';
 import { cloneDeep, isEmpty } from 'lodash';
 import Migration from '../extensions/migration';
 import revision from './plugins/revision';
@@ -69,7 +70,10 @@ const initialActions = {
     const rootState = {};
 
     Object.entries(newState).forEach(([key, value]) => {
-      if (this.$state[key]) rootState[key] = value;
+      if (this.$state[key] !== undefined) {
+        rootState[key] = value;
+        return;
+      }
 
       const useModule = this.modules[key];
       if (useModule) {
@@ -129,12 +133,13 @@ export const getStoreConfig = (storeConfig, models) => {
 export let useRootStore = () => console.log('Root store has not been initialized');
 
 // function to initialize store given initial state
-export function initializeStore(initialState, migrations) { // eslint-disable-line
+export function initializeStore(initialState, migrations, models) { // eslint-disable-line
   const migration = new Migration(migrations, initialState);
-
   const rootStore = useRootStore();
 
   storeConfig.modules.forEach(rootStore.registerModule);
+
+  normie(defineStore, Object.values(models));
 
   const latestMigrationName = migration.latestMigrationName;
   if (!isEmpty(initialState)) {
@@ -150,6 +155,7 @@ export function initializeStore(initialState, migrations) { // eslint-disable-li
   // Set default document state
   rootStore.$patch({ transactionDepth: 0 });
   // store.dispatch('calculation/initialize');
+
 }
 
 export function createStore(projectStoreConfig) {

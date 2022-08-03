@@ -1,6 +1,6 @@
-import Entity from '@/views/entity.vue';
-import NotFound from '@/views/not-found.vue';
-import Home from '@/views/home.vue';
+import Entity from '@/views/Entity.vue';
+import NotFound from '@/views/NotFound.vue';
+import Home from '@/views/Home.vue';
 
 
 function guard(to, from, next) {
@@ -13,7 +13,7 @@ function guard(to, from, next) {
 const routes = [
   {
     name: 'entity',
-    path: '/entity/:id',
+    path: '/entity/:type/:id',
     component: Entity,
     meta: {
       before: guard,

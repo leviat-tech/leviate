@@ -1,10 +1,10 @@
-import { v4 as uuid } from 'uuid';
+import { Entity } from 'normie'
 import set from 'lodash/set';
 import get from 'lodash/get';
 import last from 'lodash/last';
 
 
-class BaseModel {
+class BaseModel extends Entity {
   static parameterFields(defaults) {
     return Object.entries(defaults).reduce((attrs, [k, v]) => ({
       ...attrs,
@@ -14,7 +14,6 @@ class BaseModel {
 
   static get baseFields() {
     return {
-      id: this.uid(uuid),
       created_at: this.attr(() => new Date().getTime()),
       updated_at: this.attr(() => new Date().getTime()),
     };

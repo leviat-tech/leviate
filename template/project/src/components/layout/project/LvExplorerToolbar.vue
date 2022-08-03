@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between p-2 border-b">
+  <div class="flex justify-between h-12 p-2 border-b">
     <c-toolbar>
       <c-tool-group>
         <c-tool
@@ -22,7 +22,7 @@
     </c-toolbar>
     <c-toolbar>
       <c-tool-group>
-        <c-tool name="Export" tool-id="export" icon="file-export" :stateful="false" @click="showExportModal = true" />
+        <c-tool name="Export" tool-id="export" icon="download" :stateful="false" @click="showExportModal = true" />
         <c-tool name="Settings" tool-id="settings" :stateful="false" @click="showSettingsModal = true">
           <CogIcon />
         </c-tool>

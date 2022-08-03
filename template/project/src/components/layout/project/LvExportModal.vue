@@ -22,7 +22,7 @@
       </div>
       <div class="space-y-4 pb-2">
         <div class="py-2 font-medium">Document Settings</div>
-        <component :is="documentComponent" @closed="close"></component>
+        <component :is="documentComponent" @close="close"></component>
         </div>
     </div>
   </c-modal>
