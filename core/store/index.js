@@ -5,6 +5,7 @@ import Migration from '../extensions/migration';
 import revision from './plugins/revision';
 
 import { useDisplayStore } from './display';
+import { markRaw } from 'vue';
 
 class TransactionError extends Error {
   constructor() {
@@ -14,6 +15,8 @@ class TransactionError extends Error {
 }
 
 let storeConfig = {};
+
+export let useRootStore = () => console.log('Root store has not been initialized');
 
 const initialState = {
   selected: { entity: null, field: null },
@@ -104,12 +107,8 @@ const initialActions = {
 function generateCurrentGetter(entities) {
   return {
     current(state, getters) {
-      const { name, params } = state.route;
-
-      if (!entities.includes(name)) return null;
-
-      const query = getters[`entities/${name}/query`];
-      return query().withAllRecursive().whereId(params.id).first();
+      const rootStore = useRootStore();
+      const { entity, id } = rootStore.$route.params;
     },
   };
 }
@@ -118,7 +117,7 @@ export const getStoreConfig = (storeConfig, models) => {
   const state = { ...initialState, ...storeConfig.state };
   const actions = { ...initialActions, ...storeConfig.actions };
   const modules = [useDisplayStore, ...storeConfig.modules ];
-  const getters = storeConfig.getters || {};
+  const getters = { ...generateCurrentGetter(), ...storeConfig.getters };
 
   return {
     state,
@@ -127,10 +126,6 @@ export const getStoreConfig = (storeConfig, models) => {
     modules
   };
 };
-
-  // const storeConfig = getStoreConfig(projectStoreConfig);
-
-export let useRootStore = () => console.log('Root store has not been initialized');
 
 // function to initialize store given initial state
 export function initializeStore(initialState, migrations, models) { // eslint-disable-line
@@ -158,7 +153,7 @@ export function initializeStore(initialState, migrations, models) { // eslint-di
 
 }
 
-export function createStore(projectStoreConfig) {
+export function createStore(projectStoreConfig, router) {
   storeConfig = getStoreConfig(projectStoreConfig);
 
   useRootStore = defineStore('root', {
@@ -169,5 +164,8 @@ export function createStore(projectStoreConfig) {
 
   const pinia = createPinia();
   pinia.use(revision);
+  pinia.use(({ store }) => {
+    store.$route = router.currentRoute;
+  });
   return pinia;
 }

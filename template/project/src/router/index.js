@@ -13,7 +13,7 @@ function guard(to, from, next) {
 const routes = [
   {
     name: 'entity',
-    path: '/entity/:type/:id',
+    path: '/entity/:entity/:id',
     component: Entity,
     meta: {
       before: guard,

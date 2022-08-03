@@ -14,7 +14,11 @@ import { normie } from 'normie';
 function installPlugins(app, { endpoints, locales, plugins, globalConfig }) {
   plugins?.forEach(plugin => loadPlugin(app, plugin));
 
-  app.use(Concrete);
+  app.use(Concrete, {
+    inputHandler: (key, val) => {
+      console.log(key, val);
+    }
+  });
   app.use(HostPlugin, { endpoints, locales });
   app.use(find);
   app.use(search);
@@ -70,8 +74,8 @@ export async function createApp(projectConfig, env) {
   const Root = getAppRootComponent(env.DEV);
   const app = _createApp(Root);
 
-  const store = createStore(storeConfig, models);
   const router = createRouter(projectConfig.routes);
+  const store = createStore(storeConfig, router);
 
   if (env.DEV) {
     const { useMock } = await import('./host-mock');
@@ -103,4 +107,6 @@ export async function createApp(projectConfig, env) {
   if (env.DEV) {
     window.app = app;
   }
+
+  console.log(store);
 }
