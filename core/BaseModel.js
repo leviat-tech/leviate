@@ -1,4 +1,4 @@
-import { Entity } from 'normie'
+import { Entity } from '@crhio/normie'
 import set from 'lodash/set';
 import get from 'lodash/get';
 import last from 'lodash/last';
