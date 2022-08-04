@@ -8,8 +8,6 @@ import HostPlugin, { useHost } from './plugins/host';
 import { createStore, initializeStore } from './store';
 import './assets/styles/index.scss';
 import { createRouter } from './router.js';
-import { defineStore } from 'pinia/dist/pinia.esm-browser';
-import { normie } from 'normie';
 
 function installPlugins(app, { endpoints, locales, plugins, globalConfig }) {
   plugins?.forEach(plugin => loadPlugin(app, plugin));

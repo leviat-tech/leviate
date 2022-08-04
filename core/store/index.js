@@ -1,11 +1,10 @@
 import { defineStore, createPinia } from 'pinia';
-import { normie } from 'normie';
-import { cloneDeep, isEmpty } from 'lodash';
+import { normie } from '@crhio/normie';
+import { isEmpty } from 'lodash';
 import Migration from '../extensions/migration';
 import revision from './plugins/revision';
 
 import { useDisplayStore } from './display';
-import { markRaw } from 'vue';
 
 class TransactionError extends Error {
   constructor() {
