@@ -1,7 +1,7 @@
-// import BaseModel from '@crhio/leviate/BaseModel';
-import { Entity } from 'normie'
+import BaseModel from '@crhio/leviate/BaseModel';
+// import { Entity } from 'normie'
 
-class ExampleModel extends Entity {
+class ExampleModel extends BaseModel {
   static id = 'rectangles'
 
   static get fields() {

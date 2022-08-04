@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between h-12 p-2 border-b">
+  <lv-toolbar-container class="flex justify-between h-12 p-2 border-b">
     <c-toolbar>
       <c-tool-group>
         <c-tool
@@ -23,24 +23,25 @@
     <c-toolbar>
       <c-tool-group>
         <c-tool name="Export" tool-id="export" icon="download" :stateful="false" @click="showExportModal = true" />
-        <c-tool name="Settings" tool-id="settings" :stateful="false" @click="showSettingsModal = true">
-          <CogIcon />
-        </c-tool>
-
+        <c-tool name="Settings"
+                tool-id="settings"
+                icon="cog"
+                :stateful="false"
+                @click="showSettingsModal = true"></c-tool>
       </c-tool-group>
     </c-toolbar>
 
     <lv-export-modal v-model="showExportModal" />
     <lv-settings-modal v-model="showSettingsModal" />
-  </div>
+  </lv-toolbar-container>
 </template>
 
 <script setup>
 import { computed, ref } from 'vue';
 import { useRootStore } from '@crhio/leviate/store/index';
-import { CogIcon } from '@heroicons/vue/solid';
 import LvExportModal from './LvExportModal.vue';
 import LvSettingsModal from './LvSettingsModal.vue';
+import LvToolbarContainer from '@/components/styled/LvToolbarContainer.vue';
 
 const showExportModal = ref(false);
 const showSettingsModal = ref(false);
