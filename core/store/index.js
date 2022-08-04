@@ -131,10 +131,11 @@ export const getStoreConfig = (storeConfig, models) => {
 export function initializeStore(initialState, migrations, models) { // eslint-disable-line
   const migration = new Migration(migrations, initialState);
   const rootStore = useRootStore();
+  const useEntityStore = normie(defineStore, Object.values(models));
 
-  storeConfig.modules.forEach(rootStore.registerModule);
+  const modules = storeConfig.modules.concat(useEntityStore);
 
-  normie(defineStore, Object.values(models));
+  modules.forEach(rootStore.registerModule);
 
   const latestMigrationName = migration.latestMigrationName;
   if (!isEmpty(initialState)) {

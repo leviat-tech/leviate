@@ -107,6 +107,4 @@ export async function createApp(projectConfig, env) {
   if (env.DEV) {
     window.app = app;
   }
-
-  console.log(store);
 }
