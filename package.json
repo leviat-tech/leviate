@@ -23,7 +23,7 @@
   "dependencies": {
     "@commitlint/cli": "^16.2.4",
     "@commitlint/config-conventional": "^16.2.4",
-    "@crhio/concrete": "^1.0.0-alpha",
+    "@crhio/concrete": "github:leviat-tech/concrete#v2",
     "@crhio/inject": "^1.0.4",
     "ansi-colors": "^4.1.1",
     "axios": "^0.21.1",
