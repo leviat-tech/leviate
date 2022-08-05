@@ -104,7 +104,7 @@
 
 <script>
 import App from './app.vue';
-import { uniq, debounce } from 'lodash'
+import { uniq, debounce } from 'lodash-es'
 
 export default {
   name: 'Dev',

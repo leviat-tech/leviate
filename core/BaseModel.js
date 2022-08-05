@@ -1,7 +1,5 @@
 import { Entity } from '@crhio/normie'
-import set from 'lodash/set';
-import get from 'lodash/get';
-import last from 'lodash/last';
+import { set, get, last } from 'lodash-es';
 
 
 class BaseModel extends Entity {

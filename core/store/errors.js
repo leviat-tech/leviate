@@ -1,10 +1,6 @@
 import { defineStore } from 'pinia';
 
-/* eslint-disable */
-import mapKeys from 'lodash/mapKeys';
-import pickBy from 'lodash/pickBy';
-import mergeWith from 'lodash/mergeWith';
-import omit from 'lodash/omit';
+import { mapKeys, pickBy, mergeWith, omit } from 'lodash-es';
 
 export const useErrorStore = defineStore('errors', {
   state: () => ({

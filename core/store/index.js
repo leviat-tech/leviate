@@ -1,6 +1,6 @@
 import { defineStore, createPinia } from 'pinia';
 import { normie } from '@crhio/normie';
-import { isEmpty } from 'lodash';
+import { isEmpty } from 'lodash-es';
 import Migration from '../extensions/migration';
 import revision from './plugins/revision';
 

@@ -1,4 +1,4 @@
-import omit from 'lodash/omit';
+import { omit } from 'lodash-es';
 import Revision from '../../extensions/revision';
 import { useHost } from '../../plugins/host';
 

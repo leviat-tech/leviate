@@ -1,10 +1,8 @@
 import find from '../extensions/find';
 import search from '../extensions/search';
 import { useLocalize } from '../plugins/host';
-import range from 'lodash/range';
-import get from 'lodash/get';
 import BaseModel from '../BaseModel';
-import last from 'lodash/last';
+import { range, get, last } from 'lodash-es';
 
 
 function getEntryFromPath(path, localize = true) {
