@@ -7,5 +7,5 @@
 </template>
 
 <script setup>
-import TheLayout from '@/components/layout/TheLayout.vue';
+import TheLayout from '@/components/TheLayout.vue';
 </script>

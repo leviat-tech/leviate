@@ -10,17 +10,17 @@
       <c-viewport
         v-model="topViewport"
         viewport-id="top"
-        :options="[{ label: 'Top', value: 'top' }, { label: 'Bottom', value: 'bottom' }]"
+        :options="[{ label: 'Top View', value: 'top' }]"
       >
-        TOP VIEWPORT
+        <drawing-top :entity="entity"></drawing-top>
       </c-viewport>
 
       <c-viewport
         v-model="bottomViewport"
         viewport-id="bottom"
-        :options="[{ label: 'Bottom', value: 'bottom' }]"
+        :options="[{ label: 'Side View', value: 'bottom' }]"
       >
-        BOTTOM VIEWPORT
+        <drawing-side :entity="entity"></drawing-side>
       </c-viewport>
 
     </c-viewport-container>
@@ -29,9 +29,15 @@
 
 
 <script setup>
-import { ref } from 'vue';
-
+import { computed, ref } from 'vue';
 import TheViewportToolbar from './TheViewportToolbar.vue';
+import DrawingTop from './DrawingTop.vue';
+import DrawingSide from './DrawingSide.vue';
+import ExampleModel from '@/models/ExampleModel';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const entity = computed(() => ExampleModel.find(route.params.id));
 
 const maximizedViewport = ref(null);
 const topViewport = ref('top');

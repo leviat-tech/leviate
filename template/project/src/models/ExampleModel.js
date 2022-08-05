@@ -5,10 +5,13 @@ class ExampleModel extends BaseModel {
   static id = 'rectangles'
 
   static get fields() {
+    if (!this.useStore) return {};
+
     return {
-      name: `Rectangle ${Math.random()}`,
-      width: 200,
-      height: 100,
+      name: `Rectangle ${this.read().length +1}`,
+      width: Math.round(Math.random() * 200) + 50,
+      height: Math.round(Math.random() * 200) + 50,
+      depth: Math.round(Math.random() * 200) + 50,
     };
   }
 }

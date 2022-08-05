@@ -1,7 +1,7 @@
 <template>
     <div class="configuration flex flex-col flex-1 border-l border-r" ref="configuration">
       <!-- search tool-->
-      <div class="border-b h-12">
+      <lv-toolbar-container>
         <div class="search-container">
 <!--          <search-->
 <!--            v-model="query"-->
@@ -12,7 +12,7 @@
 <!--            @shortkey.native="$refs.search.open()"-->
 <!--          />-->
         </div>
-      </div>
+      </lv-toolbar-container>
 
       <!-- configuration -->
       <div class="configuration__content flex-1">
@@ -35,9 +35,11 @@ import search from '@crhio/leviate/extensions/search';
 import find from '@crhio/leviate/extensions/find';
 import bus from '@crhio/leviate/extensions/eventBus';
 import { useCalculationStore } from '@/store/calculation';
+import LvToolbarContainer from './styled/LvToolbarContainer.vue';
 
 
 export default {
+  components: { LvToolbarContainer },
   data() {
     return {
       query: '',
