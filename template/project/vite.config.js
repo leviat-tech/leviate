@@ -27,6 +27,9 @@ export default defineConfig({
 
   optimizeDeps: {
     exclude: ['@headlessui/vue'],
+    include: [
+      '@crhio/leviate > axios',
+    ],
   },
 
   plugins: [
