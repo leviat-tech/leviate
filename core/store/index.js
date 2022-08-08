@@ -128,14 +128,29 @@ export const getStoreConfig = (storeConfig, models) => {
 
 // function to initialize store given initial state
 export function initializeStore(initialState, migrations, models) { // eslint-disable-line
-  const migration = new Migration(migrations, initialState);
   const rootStore = useRootStore();
+
+  // Register user modules and normie entities module in the root store
   const useEntityStore = normie(defineStore, Object.values(models));
-
   const modules = storeConfig.modules.concat(useEntityStore);
-
   modules.forEach(rootStore.registerModule);
 
+  performMigration(rootStore, initialState, migrations)
+
+  // Initialize each module after migration has taken place
+  Object.values(rootStore.modules).forEach(useStore => {
+    const store = useStore();
+    if (
+      useStore.$id !== 'entities' &&
+      typeof store.initialize === 'function'
+    ) store.initialize();
+  })
+
+  rootStore.$patch({ transactionDepth: 0 });
+}
+
+function performMigration(rootStore, initialState, migrations) {
+  const migration = new Migration(migrations, initialState);
   const latestMigrationName = migration.latestMigrationName;
   if (!isEmpty(initialState)) {
     let migratedState;
@@ -147,10 +162,6 @@ export function initializeStore(initialState, migrations, models) { // eslint-di
   } else {
     rootStore.$patch({ serialization_version: latestMigrationName });
   }
-  // Set default document state
-  rootStore.$patch({ transactionDepth: 0 });
-  // store.dispatch('calculation/initialize');
-
 }
 
 export function createStore(projectStoreConfig, router) {
@@ -164,8 +175,5 @@ export function createStore(projectStoreConfig, router) {
 
   const pinia = createPinia();
   pinia.use(revision);
-  pinia.use(({ store }) => {
-    store.$route = router.currentRoute;
-  });
   return pinia;
 }

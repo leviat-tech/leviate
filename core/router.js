@@ -11,9 +11,10 @@ export function createRouter(routes) {
     routes,
   })
 
-  router.beforeEach((to, from, next) => {
-    if (to.meta.before) to.meta.before(to, from, next);
-    else next();
+  router.beforeEach((to, from) => {
+    if (to.meta.before) {
+      to.meta.before(to, from);
+    }
   });
 
   router.afterEach((to) => {
