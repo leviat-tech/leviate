@@ -13,7 +13,7 @@ export function createRouter(routes) {
 
   router.beforeEach((to, from) => {
     if (to.meta.before) {
-      to.meta.before(to, from);
+      return to.meta.before(to, from);
     }
   });
 
