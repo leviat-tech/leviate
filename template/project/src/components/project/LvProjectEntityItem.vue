@@ -1,5 +1,5 @@
 <template>
-  <div class="project__entity-item flex border-b p-2 pl-4 bg-white">
+  <li class="project__entity-item flex border-b p-2 pl-4 bg-white">
 
     <router-link :to="getItemRoute(item.id)" class="flex-1">
       <div
@@ -13,21 +13,13 @@
       </div>
     </router-link>
 
-    <div class="project__entity-item-buttons flex opacity-70 space-x-1">
-      <button @click="onEdit">
-        <c-icon type="edit" size="sm"></c-icon>
-      </button>
-
-      <button @click="onClone">
-        <c-icon type="copy" size="sm"></c-icon>
-      </button>
-
-      <button @click="onDelete">
-        <c-icon type="trash" size="sm"></c-icon>
-      </button>
+    <div class="project__entity-item-buttons flex text-gray-600 space-x-1">
+      <LvProjectEntityItemButton @click="onEdit" icon="edit" :title="$L('edit')" />
+      <LvProjectEntityItemButton @click="onClone" icon="copy" :title="$L('clone')" />
+      <LvProjectEntityItemButton @click="onDelete" icon="trash" :title="$L('delete')" />
     </div>
 
-  </div>
+  </li>
 
 </template>
 
@@ -35,11 +27,12 @@
 import { nextTick, ref } from 'vue';
 import { omit } from 'lodash-es';
 import { useRouter } from 'vue-router';
+import LvProjectEntityItemButton from './LvProjectEntityItemButton.vue';
 
 const router = useRouter();
 
 const props = defineProps({
-  item: Object
+  item: Object,
 });
 const { item } = props;
 const model = item.constructor;
@@ -47,7 +40,7 @@ const model = item.constructor;
 const isEditing = ref(false);
 const inputRef = ref(null);
 
-const getItemRoute = (itemId) => `/entity/${model.id}/${itemId}`;
+const getItemRoute = (itemId) => `/entities/${model.id}/${itemId}`;
 
 const onEdit = async () => {
   if (isEditing.value) return;

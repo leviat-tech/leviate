@@ -1,5 +1,4 @@
 import BaseModel from '@crhio/leviate/BaseModel';
-// import { Entity } from 'normie'
 
 class ExampleModel extends BaseModel {
   static id = 'rectangles'

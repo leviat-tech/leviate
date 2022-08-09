@@ -1,29 +1,27 @@
 <template>
-  <the-layout>
+  <TheLayout>
 
     <div class="h-full flex">
 
-      <the-configuration class="flex-1">
-        <div class="flex-1 p-4">
-          <div class="mb-8">
-            <div>Entity: <b>{{ $route.params.entity }}</b></div>
-            <div>ID: <b>{{ $route.params.id }}</b></div>
-          </div>
+      <LvConfiguration class="flex-1">
+        <template #toolbar>
+          <TheConfigurationToolbar />
+        </template>
 
-          <example-form />
-        </div>
-      </the-configuration>
+        <TheConfigurationContent />
+      </LvConfiguration>
 
-      <the-viewport class="flex-1"></the-viewport>
+      <TheViewport class="flex-1" />
 
     </div>
 
-  </the-layout>
+  </TheLayout>
 </template>
 
 <script setup>
-import TheLayout from '@/components/TheLayout.vue';
+import TheLayout from '@/components/scaffold/TheLayout.vue';
 import TheViewport from '@/components/viewport/TheViewport.vue';
-import TheConfiguration from '@/components/TheConfiguration.vue';
-import ExampleForm from '../components/forms/example-form.vue';
+import LvConfiguration from '@/components/scaffold/LvConfiguration.vue';
+import TheConfigurationToolbar from '@/components/configuration/TheConfigurationToolbar.vue';
+import TheConfigurationContent from '../components/configuration/TheConfigurationContent.vue';
 </script>

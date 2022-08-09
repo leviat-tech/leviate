@@ -1,29 +1,34 @@
 import Entity from '@/views/Entity.vue';
 import NotFound from '@/views/NotFound.vue';
 import Home from '@/views/Home.vue';
+import { useRootStore } from '@crhio/leviate/store/index';
 
 
-function guard(to, from, next) {
+function entityGuard(to, from) {
   // Do some validation here ie checking an entity with the given id exists
-  const valid = !!to.params.id;
-  if (!valid) next('/not-found');
-  else next();
+  const store = useRootStore().modules.entities();
+  const { id, entity } = to.params;
+  const current = store[entity].dataById[id];
+
+  if (!current) return { name: 'home' };
 }
 
 const routes = [
   {
-    name: 'entity',
-    path: '/entity/:entity/:id',
+    name: 'entities',
+    path: '/entities/:entity/:id',
     component: Entity,
     meta: {
-      before: guard,
+      before: entityGuard,
     },
   },
   {
+    name: 'home',
     path: '/',
     component: Home,
   },
   {
+    name: 'not-found',
     path: '/not-found',
     component: NotFound,
   },

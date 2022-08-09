@@ -8,16 +8,16 @@
 
 
 <template>
-  <c-modal v-if="showModal" title="Export" @close="close" size="lg">
+  <CModal v-if="showModal" title="Export" @close="close" size="lg">
     <div class="space-y-4 -mr-2 pl-2 pr-4 document-settings overflow-y-auto">
       <div class="flex justify-between space-x-8">
         <div class="py-1">Document</div>
         <div class="w-64">
-<!--          <c-select v-model="docType">-->
+<!--          <CSelect v-model="docType">-->
 <!--            <option v-for="key, index in Object.keys(types)" v-bind:key="index" :value="key">-->
 <!--              {{`${types[key].file_type} - ${types[key].name}` }}-->
 <!--            </option>-->
-<!--          </c-select>-->
+<!--          </CSelect>-->
         </div>
       </div>
       <div class="space-y-4 pb-2">
@@ -25,7 +25,7 @@
         <component :is="documentComponent" @close="close"></component>
         </div>
     </div>
-  </c-modal>
+  </CModal>
 </template>
 
 

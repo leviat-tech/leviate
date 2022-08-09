@@ -7,6 +7,7 @@ export const useCalculationStore = defineStore('calculation', {
   actions: {
     initialize: () => {
       // Perform some checks here when loading a previously saved state
+      console.log('Initializing calculation store');
     },
   },
 });

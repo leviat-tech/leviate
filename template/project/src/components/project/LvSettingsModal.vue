@@ -1,55 +1,42 @@
-<style scoped lang="scss">
-</style>
-
-
 <template>
-  <c-modal :show="showModal" title="Settings" @close="showModal = false" size="lg">
+  <CModal :show="showModal" title="Settings" @close="showModal = false" size="lg">
     <div class="space-y-4">
 
       <div class="flex justify-between space-x-8">
-        <div class="py-1">Config Name</div>
-        <div class="w-64">
-<!--          <c-text-input v-model="localConfigName" />-->
-        </div>
+          <CTextInput v-model="localConfigName" label="Config Name"/>
       </div>
 
       <div class="flex justify-between space-x-8">
         <div class="py-1">Language</div>
         <div class="w-64">
-<!--          <c-text-input :disabled="true" :value="locale" />-->
+          <CTextInput :disabled="true" :modelValue="locale" />
         </div>
       </div>
 
       <div class="flex justify-between space-x-8">
         <div class="py-1">Client Notes</div>
         <div class="w-64">
-<!--          <c-textarea v-model="localClientNotes" :rows="4" />-->
+<!--          <CTextarea v-model="localClientNotes" :rows="4" />-->
         </div>
       </div>
 
       <div class="flex justify-between space-x-8">
         <div class="py-1">Internal Notes</div>
         <div class="w-64">
-<!--          <c-textarea v-model="localInternalNotes" :rows="4" />-->
+<!--          <CTextarea v-model="localInternalNotes" :rows="4" />-->
         </div>
       </div>
 
-      <div class='flex space-x-8 mt-8'>
-        <button class="secondary w-full" @click="reset">
+      <div class='flex space-x-6 mt-8'>
+        <CButton class="w-full" @click="reset">
           Reset
-        </button>
-        <button class="btn secondary w-full" @click="save">
+        </CButton>
+        <CButton class="w-full" @click="save">
           Save
-        </button>
-      </div>
-
-      <div class='flex'>
-        <c-button color="success" @click="debug">
-          Debug
-        </c-button>
+        </CButton>
       </div>
     </div>
-  </c-modal>
+  </CModal>
 </template>
 
 
@@ -86,6 +73,7 @@ const save = () => {
 }
 
 const debug = () => console.log(data);
+const { locale } = host.getMeta().user;
 
 const setName = async () => {
   host.setName(data.localConfigName);
@@ -98,5 +86,5 @@ watch(showModal, (show) => {
 
 watch(showValue, val => {
   showModal.value = val;
-})
+});
 </script>

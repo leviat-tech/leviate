@@ -1,5 +1,5 @@
 <template>
-  <lv-project-entity :model="ExampleModel"></lv-project-entity>
+  <LvProjectEntity :model="ExampleModel"></LvProjectEntity>
 </template>
 
 <script setup>
