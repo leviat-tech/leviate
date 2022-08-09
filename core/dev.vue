@@ -1,52 +1,56 @@
 <style scoped lang="scss">
-  .host-bar {
-    position: relative;
-    padding: 30px;
-    color: white;
-    background: #3c3f48;
-    width: 256px;
-  }
-  .host-nav {
-    color: #94979e;
-    background: #f5f5f5;
-    border-bottom: 1px solid #dfe0e3;
-    height: 48px;
-    padding: 12px;
-    z-index: 10;
-  }
-  .host-container {
-    overflow-y: auto;
-    padding-top: 48px;
-    margin-top: -48px;
-  }
+.host-bar {
+  position: relative;
+  padding: 30px;
+  color: white;
+  width: 256px;
+}
+.host-nav {
+  color: #94979e;
+  background: #f5f5f5;
+  border-bottom: 1px solid #dfe0e3;
+  height: 48px;
+  padding: 12px;
+  z-index: 10;
+}
+.host-container {
+  overflow-y: auto;
+  padding-top: 48px;
+  margin-top: -48px;
+}
 
-  .dev__ui {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
+.dev__ui {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
 
-    button {
-      &.active {
-        font-weight: bold;
-      }
-    }
-
-    .dev__buttons button {
-      transition: 1s;
-
-      &.highlight {
-        transition: none;
-      }
+  button {
+    &.active {
+      font-weight: bold;
     }
   }
+
+  .dev__buttons button {
+    transition: 1s;
+
+    &.highlight {
+      transition: none;
+    }
+  }
+}
 </style>
 
 <template>
   <!-- provide a little host like context -->
   <div class="h-full flex flex-row">
-    <div class="host-bar text-center flex flex-col justify-between">
-<!--      <div class="flex-grow">{{ $host.getMeta().configurator.name }}</div>-->
+    <div class="host-bar text-center flex flex-col bg-indigo">
+      <img src="./assets/images/leviat-logo.png" class="w-32">
+
+      <div class="text-left">
+        <div class="text-xl opacity-50 my-4">DEVELOPMENT</div>
+        {{ $host.getMeta().configurator.name }}
+      </div>
 
       <div class="dev__ui text-left">
         <div class="mx-2">
@@ -62,7 +66,7 @@
                         @click="restoreConfiguration(name)">{{ name }}
                 </button>
                 <button class="flex items-center justify-center bg-gray-500 w-6 h-6" @click="deleteConfiguration(name)">
-                  <c-icon type="trash" size="md"></c-icon>
+                  <CIcon type="trash" size="md"></CIcon>
                 </button>
               </div>
             </div>
@@ -81,10 +85,10 @@
           <div class="dev__buttons flex my-3">
 
             <div class="w-1/2 pr-1">
-              <c-button class="w-full btn__save" @click="onSave" :class="{ 'highlight': saveTrigger }">Save</c-button>
+              <CButton class="w-full btn__save" color="sky" click="onSave" :class="{ 'highlight': saveTrigger }">Save</CButton>
             </div>
             <div class="w-1/2 pl-1">
-              <c-button class="w-full" @click="onClear">Clear</c-button>
+              <CButton class="w-full" color="sky" click="onClear">Clear</CButton>
             </div>
           </div>
 
