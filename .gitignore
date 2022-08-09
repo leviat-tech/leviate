@@ -17,7 +17,8 @@ coverage
 *.lcov
 
 # Dependency directories
-node_modules/
+node_modules
+template/project/node_modules
 
 # Optional npm cache directory
 .npm

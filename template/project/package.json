@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@crhio/concrete": "^2.0.0-beta.0",
-    "@crhio/leviate": "github:leviat-tech/leviate#feature/vue3",
+    "@crhio/leviate": "@crhio/leviate@beta",
     "@headlessui/vue": "^1.6.7",
     "@heroicons/vue": "^1.0.6",
     "axios": "^0.21.1",
