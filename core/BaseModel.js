@@ -1,64 +1,28 @@
 import { Entity } from '@crhio/normie'
 import { set, get, last } from 'lodash-es';
+import logger from './utils/logger';
 
 
 class BaseModel extends Entity {
-  static parameterFields(defaults) {
-    return Object.entries(defaults).reduce((attrs, [k, v]) => ({
-      ...attrs,
-      [k]: this.attr(v),
-    }), {});
+  constructor(props) {
+    super(props);
+
+    const { name, schema } = this.constructor;
+
+    if (!schema) {
+      logger.warn(`${name} must have a schema property`)
+    }
   }
 
   static get baseFields() {
     return {
-      created_at: this.attr(() => new Date().getTime()),
-      updated_at: this.attr(() => new Date().getTime()),
+      created_at: new Date().getTime(),
+      updated_at: new Date().getTime(),
     };
   }
 
-  async $update(field, value, schema) {
-    await this.constructor.update({
-      where: this.$id,
-      data(instance) {
-        set(instance, field, value);
-        if (schema) {
-          try {
-            Object.assign(instance, schema.cast(instance));
-          } catch (e) {
-            return; // eslint-disable-line
-          }
-        }
-      },
-    });
-  }
-
-  // Push a new value to an array field
-  async $push(field, value, schema) {
-    await this.constructor.update({
-      where: this.$id,
-      data(instance) {
-        const arr = get(instance, field);
-        arr.push(value);
-
-        if (schema) {
-          try {
-            Object.assign(instance, schema.cast(instance));
-          } catch (e) {
-            return; // eslint-disable-line
-          }
-        }
-      },
-    });
-  }
-
-  static async insertOne(data) {
-    const res = await this.insert({ data });
-    return last(res[this.entity]);
-  }
-
-  static beforeUpdate(instance) {
-    instance.updated_at = new Date().getTime(); // eslint-disable-line
+  static onUpdate(instance) {
+    instance.updated_at = new Date().getTime();
   }
 
   validate() {

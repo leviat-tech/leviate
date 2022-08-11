@@ -1,50 +1,18 @@
 <style scoped lang="scss">
 .host-bar {
-  position: relative;
-  padding: 30px;
-  color: white;
   width: 256px;
 }
 .host-nav {
   color: #94979e;
   background: #f5f5f5;
   border-bottom: 1px solid #dfe0e3;
-  height: 48px;
-  padding: 12px;
-  z-index: 10;
-}
-.host-container {
-  overflow-y: auto;
-  padding-top: 48px;
-  margin-top: -48px;
-}
-
-.dev__ui {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-
-  button {
-    &.active {
-      font-weight: bold;
-    }
-  }
-
-  .dev__buttons button {
-    transition: 1s;
-
-    &.highlight {
-      transition: none;
-    }
-  }
 }
 </style>
 
 <template>
   <!-- provide a little host like context -->
   <div class="h-full flex flex-row">
-    <div class="host-bar text-center flex flex-col bg-indigo">
+    <div class="host-bar relative p-6 text-white text-center flex flex-col bg-indigo">
       <img src="./assets/images/leviat-logo.png" class="w-32">
 
       <div class="text-left">
@@ -52,7 +20,7 @@
         {{ $host.getMeta().configurator.name }}
       </div>
 
-      <div class="dev__ui text-left">
+      <div class="dev__ui absolute bottom-0 left-0 w-full text-left">
         <div class="mx-2">
 
           <div class="mb-3 pb-3 border-b" v-if="configurations.length > 0">
@@ -62,7 +30,7 @@
                 <div class="w-1 h-6 bg-gray-600 mr-2"
                      :class="{ 'bg-green-600': name === currentConfig }" />
                 <button class="flex-grow text-left"
-                        :class="{ active: name === currentConfig }"
+                        :class="{ 'font-bold': name === currentConfig }"
                         @click="restoreConfiguration(name)">{{ name }}
                 </button>
                 <button class="flex items-center justify-center bg-gray-500 w-6 h-6" @click="deleteConfiguration(name)">
@@ -85,10 +53,10 @@
           <div class="dev__buttons flex my-3">
 
             <div class="w-1/2 pr-1">
-              <CButton class="w-full btn__save" color="sky" click="onSave" :class="{ 'highlight': saveTrigger }">Save</CButton>
+              <CButton class="w-full  transition duration-150 btn__save" color="sky" click="onSave" :class="{ 'highlight': saveTrigger }">Save</CButton>
             </div>
             <div class="w-1/2 pl-1">
-              <CButton class="w-full" color="sky" click="onClear">Clear</CButton>
+              <CButton class="w-full transition duration-150" color="sky" click="onClear">Clear</CButton>
             </div>
           </div>
 
@@ -96,10 +64,10 @@
       </div>
     </div>
     <div class="h-full w-full flex flex-col">
-      <div class="host-nav">
+      <div class="host-nav h-12 p-3 z-10 border-b">
         Projects > New Project > Item
       </div>
-      <div class="host-container relative h-full">
+      <div class="host-container relative h-full overflow-y-scroll pt-12 -mt-12">
         <application></application>
       </div>
     </div>

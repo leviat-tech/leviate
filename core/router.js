@@ -4,6 +4,7 @@ import {
 } from 'vue-router'
 import { useHost } from './plugins/host';
 
+
 export function createRouter(routes) {
   const router = _createRouter({
     base: import.meta.env.BASE_URL,
