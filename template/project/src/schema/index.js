@@ -1,8 +1,10 @@
 import * as yup from 'yup';
-import mapValues from 'lodash/mapValues';
-import omitBy from 'lodash/omitBy';
-import isEmpty from 'lodash/isEmpty';
-import get from 'lodash/get';
+import {
+  mapValues,
+  omitBy,
+  isEmpty,
+  get,
+} from 'lodash-es';
 import { convertFromSI } from '@crhio/leviate/extensions/units';
 
 
@@ -96,6 +98,5 @@ yup.addMethod(yup.number, 'maxConverted', function maxConverted(value) {
 const version = 1; // parameter space schema version number
 
 export {
-  yup,
   version,
 };

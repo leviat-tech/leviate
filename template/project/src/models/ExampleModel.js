@@ -1,16 +1,18 @@
 import BaseModel from '@crhio/leviate/BaseModel';
+import exampleSchema from '@/schema/example-schema';
 
 class ExampleModel extends BaseModel {
-  static id = 'rectangles'
+  static id = 'rectangles';
+
+  static schema = exampleSchema;
 
   static get fields() {
     if (!this.useStore) return {};
 
     return {
-      name: `Rectangle ${this.read().length +1}`,
-      width: Math.round(Math.random() * 200) + 50,
-      height: Math.round(Math.random() * 200) + 50,
-      depth: Math.round(Math.random() * 200) + 50,
+      ...this.schema.cast(),
+      ...this.baseFields,
+      name: `Rectangle ${this.read().length + 1}`,
     };
   }
 }

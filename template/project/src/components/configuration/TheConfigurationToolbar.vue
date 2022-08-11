@@ -1,5 +1,5 @@
 <template>
-  <div>CONF TOOLBAR</div>
+  <div class="mx-3">TOOLBAR GOES HERE</div>
 </template>
 
 <script setup>

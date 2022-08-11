@@ -1,5 +1,5 @@
 <template>
-  <div class="project flex flex-col justify-between h-full pb-2 bg-gray-100 w-64">
+  <div class="project flex flex-col justify-between h-full pb-2 bg-gray-100 w-64 border-r">
 
     <LvToolbarContainer>
       <slot name="toolbar"/>
@@ -21,7 +21,7 @@
 <script setup>
 import LvToolbarContainer from '../styled/LvToolbarContainer.vue';
 import { useSlots } from 'vue';
-import { useLocalize } from '@crhio/leviate/plugins/host';
+import { useLocalize } from '@crhio/leviate';
 
 const slots = useSlots();
 const props = defineProps({
