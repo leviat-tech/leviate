@@ -15,7 +15,11 @@ class TransactionError extends Error {
 
 let storeConfig = {};
 
-export let useRootStore = () => console.log('Root store has not been initialized');
+let useRootStore = () => console.log('Root store has not been initialized');
+
+function transact (cb) {
+  return useRootStore().transact(cb);
+}
 
 const initialState = {
   selected: { entity: null, field: null },
@@ -35,8 +39,11 @@ const initialActions = {
       }
 
       this.transactionDepth = 0;
+
+      return res;
     } catch(e) {
       this.onTransactionError(e)
+      return false;
     }
   },
 
@@ -112,11 +119,17 @@ function generateCurrentGetter(entities) {
   };
 }
 
-export const getStoreConfig = (storeConfig, models) => {
+function getEntity(state) {
+  return (entityName, entityId) => {
+    return state.modules.entities?.().models[entityName]?.find(entityId);
+  }
+}
+
+function getStoreConfig(storeConfig, models) {
   const state = { ...initialState, ...storeConfig.state };
   const actions = { ...initialActions, ...storeConfig.actions };
   const modules = [useDisplayStore, ...storeConfig.modules ];
-  const getters = { ...generateCurrentGetter(), ...storeConfig.getters };
+  const getters = { getEntity, ...generateCurrentGetter(), ...storeConfig.getters };
 
   return {
     state,
@@ -127,7 +140,7 @@ export const getStoreConfig = (storeConfig, models) => {
 };
 
 // function to initialize store given initial state
-export function initializeStore(initialState, migrations, models) { // eslint-disable-line
+function initializeStore(initialState, migrations, models) { // eslint-disable-line
   const rootStore = useRootStore();
 
   // Register user modules and normie entities module in the root store
@@ -164,7 +177,7 @@ function performMigration(rootStore, initialState, migrations) {
   }
 }
 
-export function createStore(projectStoreConfig, router) {
+function createStore(projectStoreConfig, router) {
   storeConfig = getStoreConfig(projectStoreConfig);
 
   useRootStore = defineStore('root', {
@@ -176,4 +189,13 @@ export function createStore(projectStoreConfig, router) {
   const pinia = createPinia();
   pinia.use(revision);
   return pinia;
+}
+
+export {
+  transact,
+  getStoreConfig,
+  useRootStore,
+  createStore,
+  initializeStore,
+
 }

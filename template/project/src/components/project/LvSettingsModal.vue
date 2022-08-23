@@ -28,12 +28,8 @@
       </div>
 
       <div class='flex space-x-6 mt-8'>
-        <CButton class="w-full" @click="reset">
-          Reset
-        </CButton>
-        <CButton class="w-full" @click="save">
-          Save
-        </CButton>
+        <CButton class="w-full" @click="reset">Reset</CButton>
+        <CButton class="w-full" @click="save">Save</CButton>
       </div>
     </div>
   </CModal>

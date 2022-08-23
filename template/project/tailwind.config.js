@@ -5,7 +5,8 @@ module.exports = {
   content: [
     './index.html',
     './src/**/*.{vue,js,ts,jsx,tsx,mdx}',
-    './node_modules/@crhio/concrete/src/**/*.{js,ts,vue,mdx}',
+    './node_modules/@crhio/concrete/**/*.{js,ts,vue,mdx}',
+    '../../core/**/*.vue',
   ],
   darkMode: 'media',
   plugins: [

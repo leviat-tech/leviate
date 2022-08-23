@@ -1,7 +1,7 @@
 import { Entity } from '@crhio/normie'
-import { set, get, last } from 'lodash-es';
 import logger from './utils/logger';
-
+import { useErrorStore } from './store/errors';
+import { isEmpty, each } from 'lodash-es';
 
 class BaseModel extends Entity {
   constructor(props) {
@@ -22,11 +22,26 @@ class BaseModel extends Entity {
   }
 
   static onUpdate(instance) {
-    instance.updated_at = new Date().getTime();
+    instance.$validate();
+
+    this.updated_at = new Date().getTime();
   }
 
-  validate() {
-    return this.constructor.schema.$validate(this);
+  getInputId(path) {
+    return [this.constructor.id, this.id, path].join('_');
+  }
+
+  $validate() {
+    const { inputErrors } = useErrorStore();
+    const errors = this.constructor.schema.$validate(this);
+    const id = [this.constructor.id, this.id].join('_');
+
+    if (isEmpty(errors)) {
+      // Remove any remaining errors in the store
+      if (inputErrors[id]) delete inputErrors[id];
+    } else {
+      inputErrors[id] = errors;
+    }
   }
 
   get coercedSchema() {

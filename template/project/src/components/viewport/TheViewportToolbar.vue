@@ -2,9 +2,9 @@
   <LvToolbarContainer class="flex-limit relative items-center justify-between">
     <CToolbar default-tool="select" v-model="displayStore.currentTool">
       <CTool-group>
-        <CTool name="Select" tool-id="select" icon="pointer-outline" />
-        <CTool name="Pan" tool-id="pan" icon="hand" />
-        <CTool name="Zoom" tool-id="zoom" icon="zoom-in"></CTool>
+        <CTool name="Select" tool-id="select" icon="pointer-outline" stateful/>
+        <CTool name="Pan" tool-id="pan" icon="hand" stateful />
+        <CTool name="Zoom" tool-id="zoom" icon="zoom-in" stateful />
         <CTool name="Zoom to Fit" tool-id="zoom-to-fit" :stateful="false" @click="zoomToFit">
           <ZoomToFitIcon />
         </CTool>

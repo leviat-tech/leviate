@@ -1,7 +1,7 @@
 import inject from '@crhio/inject';
 
 const uninitializedWarning = (pluginName) => () => {
-  console.error(`${pluginName} has not been initialized. Did you call Vue.use(HostPlugin)?`);
+  console.error(`${pluginName} has not been initialized. Did you call app.use(HostPlugin)?`);
 };
 
 export const api = new Proxy({}, {

@@ -19,10 +19,6 @@ class Revision {
     this.store.$subscribe(this.changed);
   }
 
-  addStore(store) {
-    store.$subscribe(this.changed);
-  }
-
   get undoable() {
     return this.undos.length > 1 || (this.undos.length === 1 && this.outdated);
   }

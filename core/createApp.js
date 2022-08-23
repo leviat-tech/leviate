@@ -1,6 +1,6 @@
 import { createApp as _createApp } from 'vue';
-import App from './app.vue';
-import Dev from './dev.vue';
+import App from './components/App.vue';
+import Dev from './components/Dev.vue';
 import Concrete from '@crhio/concrete';
 import search from './directives/v-search';
 import find from './directives/v-find';
@@ -8,15 +8,12 @@ import HostPlugin, { useHost } from './plugins/host';
 import { createStore, initializeStore } from './store';
 import './assets/styles/index.scss';
 import { createRouter } from './router.js';
+import concreteOptions from './concreteOptions';
 
 function installPlugins(app, { endpoints, locales, plugins, globalConfig }) {
   plugins?.forEach(plugin => loadPlugin(app, plugin));
 
-  app.use(Concrete, {
-    inputHandler: (key, val) => {
-      console.log(key, val);
-    }
-  });
+  app.use(Concrete, concreteOptions);
   app.use(HostPlugin, { endpoints, locales });
   app.use(find);
   app.use(search);

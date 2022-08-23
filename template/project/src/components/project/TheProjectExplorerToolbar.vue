@@ -7,7 +7,6 @@
         icon="undo"
         :stateful="false"
         @click="revision.undo()"
-        :disabled="!undoable"
       />
       <CTool
         name="Redo"

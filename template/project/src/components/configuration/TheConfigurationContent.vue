@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-1 p-4">
+  <div class="h-full p-4">
 
     <div class="mb-8 text-lg">
       <div>Entity: <b>{{ $route.params.entity }}</b></div>
@@ -12,5 +12,5 @@
 </template>
 
 <script setup>
-import ExampleForm from '@/components/forms/example-form.vue';
+import ExampleForm from '@/components/forms/ExampleForm.vue';
 </script>

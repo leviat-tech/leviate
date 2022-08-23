@@ -4,6 +4,7 @@ import { mapKeys, pickBy, mergeWith, omit } from 'lodash-es';
 
 export const useErrorStore = defineStore('errors', {
   state: () => ({
+    inputErrors: {},
     globalErrors: {},
     calculationErrors: {},
   }),

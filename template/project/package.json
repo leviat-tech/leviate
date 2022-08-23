@@ -13,14 +13,16 @@
     "test": "jest --coverage=true --verbose"
   },
   "dependencies": {
-    "@crhio/concrete": "^2.0.0-beta.0",
+    "@crhio/concrete": "^2.0.0-beta.2",
     "@crhio/leviate": "@crhio/leviate@beta",
+    "@crhio/normie": "^0.0.1",
     "@headlessui/vue": "^1.6.7",
     "@heroicons/vue": "^1.0.6",
     "axios": "^0.21.1",
     "core-js": "^3.16.0",
     "file-saver": "^2.0.2",
     "lodash": "^4.17.20",
+    "lodash-es": "^4.17.21",
     "pinia": "^2.0.14",
     "uuid": "^8.3.1",
     "vue": "^3.2.37",
@@ -46,7 +48,7 @@
     "postcss": "^8.3.6",
     "s3-folder-upload": "^2.3.5",
     "sass": "1.32",
-    "tailwindcss": "^2.2.7",
+    "tailwindcss": "^3.0.24",
     "vite": "^3.0.0",
     "vite-svg-loader": "^3.3.0"
   }
