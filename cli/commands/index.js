@@ -1,9 +1,17 @@
+import logger from '../logger';
+
 const commands = {
   init: () => import('./init'),
+  devOnly: () => import('./dev'),
+  version: () => import('./version'),
+  checkUpdates: () => import('./checkUpdates'),
   checkdeps: commandInDevelopment('Checks for unused dependencies'),
   checkurls: commandInDevelopment('Checks for hardcoded urls'),
-  checklang: () => import('./checklang')
-}
+  checklang: () => import('./checklang'),
+
+  // Compound commands
+  dev: ['checkUpdates', 'devOnly']
+};
 
 function commandInDevelopment(msg) {
   return () => new Promise(resolve => {
@@ -38,8 +46,22 @@ export default async function processCommand(name, options) {
     return printPossibleCommands();
   }
 
-  const commandModule = await command();
-  runCommand(commandModule.default, options);
+  // Handle a single command
+  if (typeof command === 'function') {
+    const commandModule = await command();
+    return runCommand(commandModule.default, options);
+  }
+
+  // Handle batch commands
+  if (command instanceof Array) {
+    const commandQueue = await Promise.all(command.map(async (commandName) => {
+      return await commands[commandName]();
+    }));
+
+    for (const module of commandQueue) {
+      await runCommand(module.default, options);
+    }
+  }
 }
 
 /**
@@ -47,18 +69,23 @@ export default async function processCommand(name, options) {
  * @param commandModule
  * @param options
  */
-function runCommand(commandModule, options) {
-  commandModule.run(options);
+async function runCommand(commandModule, options) {
+  commandModule.run(options).catch(logger.error);
 }
 
 /**
  * Print an automatically generated list of possible commands
  */
 function printPossibleCommands() {
+  console.log('Usage: leviate <command> [<options>]\n');
   console.log('Possible commands:\n')
   Object.entries(commands).forEach(async ([commandStr, commandLoader]) => {
+    if (commandLoader instanceof Array) {
+      return console.log(`${commandStr}: [${commandLoader.join(', ')}]`);
+    }
+
     const commandConfig = await commandLoader();
     const usage = commandConfig.default.usage || commandStr
-    console.log('leviate ' + usage)
+    console.log(usage)
   })
 }
