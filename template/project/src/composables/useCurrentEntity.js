@@ -9,15 +9,8 @@ const useCurrentEntity = () => {
   return computed(() => {
     if (!route.params) return null;
 
-    const { entity, id } = route.params;
-
-    if (!entity || !id) return null;
-
-
-    const entitiesStore = store.modules.entities();
-
-    return entitiesStore.models[entity].find(id);
-  })
-}
+    return store.currentEntity;
+  });
+};
 
 export default useCurrentEntity;

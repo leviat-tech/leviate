@@ -46,7 +46,7 @@ yup.addMethod(yup.mixed, '$validate', function $validate(value) {
     this.validateSync(value, { abortEarly: false });
     return {};
   } catch (e) {
-    console.log('e', e);
+    console.log(`Schema validation failed: ${e.message}`);
     return e.inner.reduce((errors, error) => ({
       ...errors,
       [error.path]: [

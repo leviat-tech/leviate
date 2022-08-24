@@ -1,5 +1,5 @@
 <template>
-  <TheLayout>
+  <LvLayout>
 
     <div class="h-full flex">
 
@@ -15,11 +15,11 @@
 
     </div>
 
-  </TheLayout>
+  </LvLayout>
 </template>
 
 <script setup>
-import TheLayout from '@/components/scaffold/TheLayout.vue';
+import LvLayout from '@/components/scaffold/LvLayout.vue';
 import TheViewport from '@/components/viewport/TheViewport.vue';
 import LvConfiguration from '@/components/scaffold/LvConfiguration.vue';
 import TheConfigurationToolbar from '@/components/configuration/TheConfigurationToolbar.vue';

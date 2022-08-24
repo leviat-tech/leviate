@@ -1,11 +1,11 @@
 <template>
-  <the-layout>
-      <div class="m-auto">
-        Not Found
-      </div>
-  </the-layout>
+  <LvLayout>
+    <div class="m-auto">
+      Not Found
+    </div>
+  </LvLayout>
 </template>
 
 <script setup>
-import TheLayout from '@/components/scaffold/TheLayout.vue';
+import LvLayout from '@/components/scaffold/LvLayout.vue';
 </script>

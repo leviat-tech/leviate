@@ -1,5 +1,6 @@
 import { useCalculationStore } from './calculation';
 import { useDocumentStore } from './documents';
+import { useUiStore } from './ui';
 
 export default {
   state: {},
@@ -8,5 +9,6 @@ export default {
   modules: [
     useCalculationStore,
     useDocumentStore,
+    useUiStore,
   ],
 };

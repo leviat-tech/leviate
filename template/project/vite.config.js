@@ -10,6 +10,7 @@ export default defineConfig({
     alias: {
       '~': `${path.resolve(__dirname)}`,
       '@': `${path.resolve(__dirname, 'src')}`,
+      '@crhio/leviate':  `${path.resolve(__dirname, '../../core/')}`
     },
   },
 
@@ -42,8 +43,4 @@ export default defineConfig({
     svgLoader(),
     createFetchProxyAccessTokenPlugin(),
   ],
-
-  server: {
-    port: 8080,
-  },
 });

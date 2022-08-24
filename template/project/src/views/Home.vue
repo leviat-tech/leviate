@@ -1,11 +1,11 @@
 <template>
-  <the-layout>
+  <LvLayout>
     <div class="h-full flex items-center justify-center">
        Select or create an entity in the Project Explorer to continue
     </div>
-  </the-layout>
+  </LvLayout>
 </template>
 
 <script setup>
-import TheLayout from '@/components/scaffold/TheLayout.vue';
+import LvLayout from '@/components/scaffold/LvLayout.vue';
 </script>

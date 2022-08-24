@@ -39,7 +39,7 @@
 <script setup>
 import { computed, reactive, ref, watch } from 'vue';
 import { useHost } from '@crhio/leviate/plugins/host';
-import { useSettingsStore } from '@crhio/leviate/store/settings';
+import { useSettingsStore } from '@/store/settings';
 
 const host = useHost();
 const settings = useSettingsStore();
