@@ -54,11 +54,8 @@ export default async function processCommand(name, options) {
 
   // Handle batch commands
   if (command instanceof Array) {
-    const commandQueue = await Promise.all(command.map(async (commandName) => {
-      return await commands[commandName]();
-    }));
-
-    for (const module of commandQueue) {
+    for (const commandName of command) {
+      const module = await commands[commandName]();
       await runCommand(module.default, options);
     }
   }
@@ -70,7 +67,7 @@ export default async function processCommand(name, options) {
  * @param options
  */
 async function runCommand(commandModule, options) {
-  commandModule.run(options).catch(logger.error);
+  return commandModule.run(options).catch(logger.error);
 }
 
 /**
