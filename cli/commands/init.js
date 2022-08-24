@@ -100,7 +100,7 @@ function isDestEmpty(dest) {
 }
 
 async function replaceInFile(dest, relativePath, toReplace, replacement) {
-  const filePath = dir + relativePath;
+  const filePath = dest + relativePath;
   const contents = await fs.readFileSync(filePath, 'utf8');
   const compiled = contents.replace(toReplace, replacement);
   fs.writeFileSync(filePath, compiled);
