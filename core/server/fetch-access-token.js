@@ -1,6 +1,5 @@
 const axios = require('axios');
 
-
 async function fetchProxyAccessToken() {
   const url = 'https://crh.eu.auth0.com/oauth/token';
   const audience = 'https://crh-host-proxy.herokuapp.com';
@@ -11,10 +10,10 @@ async function fetchProxyAccessToken() {
     audience,
     grant_type,
   }).catch((e) => {
-    throw new Error('Error fetching VITE_PROXY_ACCESS_TOKEN');
+    console.warn('Error fetching VITE_PROXY_ACCESS_TOKEN. API requests may fail.');
   });
 
-  return res.data.access_token;
+  return res?.data.access_token;
 }
 
 function createFetchProxyAccessTokenPlugin() {
