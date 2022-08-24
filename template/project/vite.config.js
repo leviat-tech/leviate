@@ -37,8 +37,6 @@ export default defineConfig({
     vue(),
     svgLoader(),
     createFetchProxyAccessTokenPlugin(),
-    createVuePlugin(),
-    JSDraftLoader(),
   ],
 
   server: {

@@ -2,8 +2,6 @@ import { createApp as _createApp } from 'vue';
 import App from './components/App.vue';
 import Dev from './components/Dev.vue';
 import Concrete from '@crhio/concrete';
-import search from './directives/v-search';
-import find from './directives/v-find';
 import HostPlugin, { useHost } from './plugins/host';
 import { createStore, initializeStore } from './store';
 import './assets/styles/index.scss';
@@ -15,17 +13,11 @@ function installPlugins(app, { endpoints, locales, plugins, globalConfig }) {
 
   app.use(Concrete, concreteOptions);
   app.use(HostPlugin, { endpoints, locales });
-  app.use(find);
-  app.use(search);
 
   if (globalConfig) {
     app.config.globalProperties.$config = globalConfig;
     app.provide('$config', globalConfig);
   }
-
-  // app.config.globalProperties.$transact = function (cb) {
-  //   this.$store.dispatch('transaction/transact', cb);
-  // };
 }
 
 function loadPlugin(app, pluginConfig) {
