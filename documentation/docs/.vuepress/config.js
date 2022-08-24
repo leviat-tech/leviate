@@ -7,6 +7,7 @@ module.exports = {
     sidebar: [
       '/',
       '/CLI',
+      'config-glossary',
       '/project-template',
       '/core',
     ]
