@@ -3,13 +3,13 @@ import { execSync  } from 'child_process';
 import semver from 'semver';
 const { Confirm } = require('enquirer');
 import logger from '../logger';
-import { getVersion } from '../helpers';
+import { getLocalVersion, getGlobalVersion } from '../helpers';
 
 export default {
   async run(options) {
     logger.log('Checking for updates...');
 
-    const currentVersion = getVersion();
+    const currentVersion = (options.global) ? getGlobalVersion() : getLocalVersion();
     const latestVersion = execSync('npm view @crhio/leviate version').toString().trim();
     const isUpdateAvailable = semver.gt(latestVersion, currentVersion);
 
@@ -18,17 +18,21 @@ export default {
     logger.error(`You are currently on version ${currentVersion}. Version ${latestVersion} is available`);
 
     const shouldUpdate = await new Confirm({
-      message: `Update now?`
+      message: `Do you want to update now?`
     }).run();
 
     if (!shouldUpdate) return;
 
+    const globalSwitch = options.global ? '-g' : ''
+
     try {
-      execSync('npm update @crhio/leviate');
+      logger.log(`Updated to version ${latestVersion}...`)
+      execSync(`npm install ${globalSwitch} @crhio/leviate@${latestVersion}`, { stdio: 'inherit' });
       logger.success(`Successfully updated to version ${latestVersion}`)
     } catch (e) {
       logger.error('Error updating to latest version');
     }
 
+    process.exit();
   }
 }

@@ -3,6 +3,7 @@ import path from 'path';
 import fs from 'fs-extra';
 import { prompt } from 'enquirer';
 import logger from '../logger.js'
+import checkUpdates from './checkUpdates';
 import packageJSON from '../../template/project/package';
 
 const questions = [
@@ -32,6 +33,8 @@ export default {
     if (!process.env.NPM_AUTH_TOKEN) {
       return logger.error('Cannot initialise a project without a valid NPM_AUTH_TOKEN')
     }
+
+    await checkUpdates.run({ global: true });
 
     const dir = options[0];
     const src = path.resolve(__dirname + '../../../template');
