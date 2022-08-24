@@ -1,7 +1,7 @@
-import logger from './utils/logger';
+import logger from './extensions/logger';
 import { useRootStore } from './store';
 import { get, set } from 'lodash-es';
-import { useErrorStore } from './store/errors';
+import { useMessageStore } from './store/message';
 import { transact } from './store';
 
 const parseInputId = (inputId) => {
@@ -34,10 +34,10 @@ export default {
   inputGetStatus: (id) => {
     if (!id) return;
 
-    const { inputErrors } = useErrorStore();
+    const { inputStatus } = useMessageStore();
     const [entityName, entityId, path] = id.split('_');
     const storeKey = [entityName, entityId].join('_');
-    const errors = inputErrors[storeKey]?.[path];
+    const errors = inputStatus[storeKey]?.[path];
 
     if (!errors) return;
 

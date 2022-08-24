@@ -1,10 +1,11 @@
 import { defineStore, createPinia } from 'pinia';
 import { normie } from '@crhio/normie';
-import { isEmpty } from 'lodash-es';
+import { isEmpty, get, last, range } from 'lodash-es';
 import Migration from '../extensions/migration';
 import revision from './plugins/revision';
+import BaseModel from '../BaseModel';
+import { useLocalize } from '../plugins/host';
 
-import { useDisplayStore } from './display';
 
 class TransactionError extends Error {
   constructor() {
@@ -17,7 +18,7 @@ let storeConfig = {};
 
 let useRootStore = () => console.log('Root store has not been initialized');
 
-function transact (cb) {
+function transact(cb) {
   return useRootStore().transact(cb);
 }
 
@@ -41,7 +42,7 @@ const initialActions = {
       this.transactionDepth = 0;
 
       return res;
-    } catch(e) {
+    } catch (e) {
       this.onTransactionError(e)
       return false;
     }
@@ -110,26 +111,70 @@ const initialActions = {
   },
 };
 
-function generateCurrentGetter(entities) {
-  return {
-    current(state, getters) {
-      const rootStore = useRootStore();
-      const { entity, id } = rootStore.$route.params;
-    },
+function getEntryFromId(state) {
+
+  const { $L } = useLocalize();
+
+  return function(id) {
+    const [entityName, entityId, path] = id.split('_');
+    const instance = this.getEntity(entityName, entityId);
+
+    const allSubpaths = range(path.length)
+      .filter((i) => path[i] === '.')
+      .map((i) => path.slice(0, i));
+
+    const entitySubpaths = allSubpaths.filter((subpath) => get(instance, subpath) instanceof BaseModel);
+    const entityPath = entitySubpaths.map((subpath) => get(instance, subpath));
+    const displayPath = entityPath.map((entity) => entity.name).join(' > ');
+
+    const entity = last(entityPath) || instance;
+    const termPath = entitySubpaths ? path.replace(last(entitySubpaths), '') : path;
+
+    let term;
+    if (get(instance, path) instanceof BaseModel) {
+      term = get(instance, path).name;
+    } else {
+      term = entity.coercedSchema.getSearchTerm(termPath);
+      term = $L(term, { capitalize: true });
+    }
+    return displayPath ? `${term} (${displayPath})` : term;
+  }
+}
+
+function generateCurrentGetter(router) {
+  return function(state) {
+    const { entity, id } = router.currentRoute.value.params;
+
+    if (!entity || !id) return null;
+
+    return this.getEntity(entity, id);
   };
+}
+
+function getModel(state) {
+  return (entityName) => {
+    return state.modules.entities?.().models[entityName];
+  }
 }
 
 function getEntity(state) {
   return (entityName, entityId) => {
-    return state.modules.entities?.().models[entityName]?.find(entityId);
+    return getModel(state)(entityName)?.find(entityId);
   }
 }
 
-function getStoreConfig(storeConfig, models) {
+function getStoreConfig(storeConfig, router) {
   const state = { ...initialState, ...storeConfig.state };
   const actions = { ...initialActions, ...storeConfig.actions };
-  const modules = [useDisplayStore, ...storeConfig.modules ];
-  const getters = { getEntity, ...generateCurrentGetter(), ...storeConfig.getters };
+  const modules = [...storeConfig.modules];
+  const currentEntity = generateCurrentGetter(router);
+  const getters = {
+    getEntryFromId,
+    getModel,
+    getEntity,
+    currentEntity,
+    ...storeConfig.getters
+  };
 
   return {
     state,
@@ -137,7 +182,7 @@ function getStoreConfig(storeConfig, models) {
     getters,
     modules
   };
-};
+}
 
 // function to initialize store given initial state
 function initializeStore(initialState, migrations, models) { // eslint-disable-line
@@ -178,13 +223,14 @@ function performMigration(rootStore, initialState, migrations) {
 }
 
 function createStore(projectStoreConfig, router) {
-  storeConfig = getStoreConfig(projectStoreConfig);
+  storeConfig = getStoreConfig(projectStoreConfig, router);
 
   useRootStore = defineStore('root', {
     state: () => storeConfig.state,
     actions: storeConfig.actions,
     getters: storeConfig.getters,
   });
+
 
   const pinia = createPinia();
   pinia.use(revision);

@@ -57,16 +57,16 @@ export async function createApp(projectConfig, env) {
   const Root = getAppRootComponent(env.DEV);
   const app = _createApp(Root);
 
-  const router = createRouter(projectConfig.routes);
+  const router = createRouter(routes);
   const store = createStore(storeConfig, router);
 
+  // TODO: move this to a separate dev entry point
   if (env.DEV) {
     const { useMock } = await import('./host-mock');
     useMock(env.VITE_PROXY_ACCESS_TOKEN, mockConfig, locales);
   }
 
   installPlugins(app, projectConfig);
-  //
   globalComponents.forEach(component => app.component(component.name, component));
 
   const host = useHost();

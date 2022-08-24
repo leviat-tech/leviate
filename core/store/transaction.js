@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia';
 
+
 class TransactionError extends Error {
   constructor() {
     super();
     this.name = 'TransactionError';
   }
 }
-
 
 defineStore({
   state: () => ({
@@ -36,7 +36,3 @@ defineStore({
     },
   }
 });
-
-export default {
-  namespaced: true, state, mutations, actions,
-};

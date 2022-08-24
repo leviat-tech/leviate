@@ -1,6 +1,6 @@
 import { Entity } from '@crhio/normie'
-import logger from './utils/logger';
-import { useErrorStore } from './store/errors';
+import logger from './extensions/logger';
+import { useMessageStore } from './store/message';
 import { isEmpty, each } from 'lodash-es';
 
 class BaseModel extends Entity {
@@ -21,26 +21,25 @@ class BaseModel extends Entity {
     };
   }
 
-  static onUpdate(instance) {
-    instance.$validate();
-
-    this.updated_at = new Date().getTime();
+  static beforeUpdate(patch) {
+    patch.updated_at = new Date().getTime();
   }
 
-  getInputId(path) {
-    return [this.constructor.id, this.id, path].join('_');
+  static afterUpdate(instance) {
+    instance.$validate();
+    instance.afterUpdate?.();
   }
 
   $validate() {
-    const { inputErrors } = useErrorStore();
+    const { inputStatus } = useMessageStore();
     const errors = this.constructor.schema.$validate(this);
     const id = [this.constructor.id, this.id].join('_');
 
     if (isEmpty(errors)) {
       // Remove any remaining errors in the store
-      if (inputErrors[id]) delete inputErrors[id];
+      if (inputStatus[id]) delete inputStatus[id];
     } else {
-      inputErrors[id] = errors;
+      inputStatus[id] = errors;
     }
   }
 

@@ -1,11 +1,11 @@
 import { createApp } from './createApp';
 import { useRootStore } from './store';
-import { useHost, useLocalize, api } from './plugins/host';
+import { useHost, useLocalize, useApi } from './plugins/host';
 
 export {
   createApp,
   useRootStore,
   useHost,
   useLocalize,
-  api,
+  useApi,
 };

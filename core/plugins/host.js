@@ -23,6 +23,7 @@ export const api = new Proxy({}, {
 
 const modules = {
   host: {},
+  api: uninitializedWarning('api'),
   localize: uninitializedWarning('$l'),
 };
 
@@ -54,6 +55,7 @@ const HostPlugin = {
 
     // Store so module can be imported
     modules.host = $host;
+    modules.api = api;
     modules.localize = { $l, $L };
 
     Object.assign(app.config.globalProperties, { $host, $l, $L });
@@ -68,5 +70,6 @@ const HostPlugin = {
 
 export const useHost = () => modules.host;
 export const useLocalize = () => modules.localize;
+export const useApi = () => modules.api;
 
 export default HostPlugin;
