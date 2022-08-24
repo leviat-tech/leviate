@@ -9,7 +9,8 @@ export default {
   async run(options) {
     logger.log('Checking for updates...');
 
-    const currentVersion = (options.global) ? getGlobalVersion() : getLocalVersion();
+    const isGlobal = options.global || Object.values(options).includes('-g');
+    const currentVersion = (isGlobal) ? getGlobalVersion() : getLocalVersion();
     const latestVersion = execSync('npm view @crhio/leviate version').toString().trim();
     const isUpdateAvailable = semver.gt(latestVersion, currentVersion);
 

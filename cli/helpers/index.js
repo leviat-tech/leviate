@@ -19,6 +19,9 @@ export async function pressAnyKey() {
 
 export function parseOptions(options) {
   const rxNumbersOnly = /^\d+$/;
+  const shorthandMap = {
+    '-g': { global: true },
+  };
 
   return options.reduce((options, option, i) => {
     if (option.slice(0, 2) !== '--') return { ...options, [i]: option };
