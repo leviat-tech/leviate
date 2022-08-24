@@ -54,10 +54,6 @@ export async function createApp(projectConfig, env) {
     migrations
   } = projectConfig;
 
-  if (import.meta.env.DEV) {
-    await import('./host-mock');
-  }
-
   const Root = getAppRootComponent(env.DEV);
   const app = _createApp(Root);
 
