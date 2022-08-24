@@ -63,11 +63,15 @@ export default {
     fs.writeFileSync(packagePath, JSON.stringify(packageJSON, null, '  '));
 
     const titlePlaceholder = '{{ TITLE }}';
-    const indexPath = `${dest}/project/index.html`
-    await replaceInFile(indexPath, titlePlaceholder, title);
+    const filePathsWithPlaceholder = [
+      '/project/index.html',
+      '/README.md',
+      '/project/src/mock.config.js'
+    ];
 
-    const readmePath = `${dest}/README.md`;
-    await replaceInFile(readmePath, titlePlaceholder, name);
+    for (const relativePath of filePathsWithPlaceholder) {
+      await replaceInFile(dest, relativePath, titlePlaceholder, title);
+    }
 
     logger.log('Installing dependencies...')
 
@@ -95,7 +99,8 @@ function isDestEmpty(dest) {
   return !containsVisibleFilesOrFolders;
 }
 
-async function replaceInFile(filePath, toReplace, replacement) {
+async function replaceInFile(dest, relativePath, toReplace, replacement) {
+  const filePath = dir + relativePath;
   const contents = await fs.readFileSync(filePath, 'utf8');
   const compiled = contents.replace(toReplace, replacement);
   fs.writeFileSync(filePath, compiled);
