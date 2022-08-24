@@ -6,7 +6,7 @@ module.exports = {
     './index.html',
     './src/**/*.{vue,js,ts,jsx,tsx,mdx}',
     './node_modules/@crhio/concrete/**/*.{js,ts,vue,mdx}',
-    '../../core/**/*.vue',
+    './node_modules/@crhio/leviate/**/*.{js,ts,vue,mdx}',
   ],
   darkMode: 'media',
   plugins: [

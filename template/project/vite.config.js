@@ -27,9 +27,13 @@ export default defineConfig({
   },
 
   optimizeDeps: {
-    exclude: ['@headlessui/vue'],
+    exclude: [
+      '@headlessui/vue',
+      '@crhio/leviate',
+    ],
     include: [
       '@crhio/leviate > axios',
+      'axios/lib/adapters/http'
     ],
   },
 
