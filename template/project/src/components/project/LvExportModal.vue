@@ -1,12 +1,3 @@
-<style scoped lang="scss">
-
-  .document-settings {
-    max-height: 90vh;
-  }
-
-</style>
-
-
 <template>
   <CModal v-if="showModal" title="Export" @close="close" size="lg">
     <div class="space-y-4 -mr-2 pl-2 pr-4 document-settings overflow-y-auto">
@@ -22,23 +13,21 @@
       </div>
       <div class="space-y-4 pb-2">
         <div class="py-2 font-medium">Document Settings</div>
-        <component :is="documentComponent" @close="close"></component>
         </div>
     </div>
   </CModal>
 </template>
 
+<style scoped lang="scss">
+.document-settings {
+  max-height: 90vh;
+}
+</style>
 
 <script>
-// import { mapState } from 'pinia';
-import overviewDocument from '@/components/documents/overview-document.vue';
-// import { useDocumentStore } from '@/store/documents';
 
 export default {
   name: 'tool-export',
-  components: {
-    overviewDocument,
-  },
   data: () => ({
     docType: 'overview',
     showModal: false,
@@ -52,7 +41,6 @@ export default {
     },
   },
   computed: {
-    // ...mapState(useDocumentStore, ['types']),
     documentComponent() {
       return {
         overview: overviewDocument,

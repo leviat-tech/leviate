@@ -48,9 +48,9 @@ api.calc('/some/path', { some: 'data' });
 
 ## Additional config
 
-Anything exported in `src/components/index.js` will be automatically registered globally as a component
+Anything exported in `src/components/routes.js` will be automatically registered globally as a component
 
-Anything exported in `src/models/index.js` will be automatically registered as a model in the VuexORM database
+Anything exported in `src/models/routes.js` will be automatically registered as a model in the VuexORM database
 
 ## Updates to architecture and implementation
 

@@ -4,9 +4,10 @@ import Dev from './components/Dev.vue';
 import Concrete from '@crhio/concrete';
 import HostPlugin, { useHost } from './plugins/host';
 import { createStore, initializeStore } from './store';
-import './assets/styles/index.scss';
 import { createRouter } from './router.js';
 import concreteOptions from './concreteOptions';
+import baseConfig from './base.config';
+import './assets/styles/index.scss';
 
 function installPlugins(app, { endpoints, locales, plugins, globalConfig }) {
   plugins?.forEach(plugin => loadPlugin(app, plugin));
@@ -43,16 +44,19 @@ function getAppRootComponent(isDev) {
  * @param {ProjectConfig} projectConfig
  * @param {Object} env - the import.meta.env object
  */
-export async function createApp(projectConfig, env) {
+export async function createApp(appConfig) {
+  const env = import.meta.env;
+  const projectConfig = { ...appConfig, ...baseConfig, mockConfig: env.DEV ? baseConfig.mockConfig : {}, };
   const {
     globalComponents,
-    mockConfig,
     locales,
+    mockConfig,
     routes,
     storeConfig,
     models,
     migrations
   } = projectConfig;
+
 
   const Root = getAppRootComponent(env.DEV);
   const app = _createApp(Root);
