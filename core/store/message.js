@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia';
 import { v4 as uuidv4 } from 'uuid';
 
-import { mergeWith, reduce } from 'lodash-es';
+import { reduce } from 'lodash-es';
 
 /**
  * Contains system messages including global, calculation and form input errors and warnings
  */
-export const useMessageStore = defineStore('errors', {
+export const useMessageStore = defineStore('messages', {
   state: () => ({
     inputStatus: {},
     messages: {},
