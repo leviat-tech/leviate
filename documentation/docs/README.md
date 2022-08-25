@@ -1,26 +1,16 @@
-# Getting Started
-
-## Prerequisites
-
-You'll need a valid npm token set as an environment variable in order to install leviate and some of its dependencies:
-```shell
-export NPM_AUTH_TOKEN="TOKEN"
-```
-
-## Installation
-
-Install leviate globally to access the command line tools anywhere and initiate new projects in a directory of your choosing.
-
-```shell
-npm install -g @crhio/leviate
-```
-
-## Creating a project
-
-Create a leviate project in the given directory.
-
-More about this command in the [CLI](/CLI.html) documentation.
-
-```shell
-leviate init <project-name>
-```
+---
+home: true
+heroText: Leviate
+tagline: A framework for creating Leviat Host plugins
+actionText: Get Started →
+actionLink: /getting-started
+features:
+- title: Simplicity First
+  details: Minimal setup with markdown-centered project structure helps you focus on writing.
+- title: Vue-Powered
+  details: Enjoy the dev experience of Vue3, 
+- title: Performant
+  details: VuePress generates pre-rendered static HTML for each page, and runs as an SPA once a page is loaded.
+footer: Copyright © 2022 Leviat
+---
+asdasd
