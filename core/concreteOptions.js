@@ -3,6 +3,8 @@ import { useRootStore } from './store';
 import { get, set } from 'lodash-es';
 import { useMessageStore } from './store/message';
 import { transact } from './store';
+import { useLocalize } from './plugins/host';
+
 
 const parseInputId = (inputId) => {
   const segments = inputId.split('_');
@@ -45,5 +47,9 @@ export default {
       type: 'error',
       message: errors[0],
     }
+  },
+  labelFormatter: (label) => {
+    const { $L } = useLocalize();
+    return $L(label.toLowerCase());
   }
 }
