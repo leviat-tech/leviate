@@ -1,12 +1,9 @@
 import { createApp as _createApp } from 'vue';
-import App from './components/App.vue';
-import Dev from './components/Dev.vue';
 import Concrete from '@crhio/concrete';
 import HostPlugin, { useHost } from './plugins/host';
 import { createStore, initializeStore } from './store';
 import { createRouter } from './router.js';
 import concreteOptions from './concreteOptions';
-import baseConfig from './base.config';
 import './assets/styles/index.scss';
 
 function installPlugins(app, { endpoints, locales, plugins, globalConfig }) {
@@ -30,11 +27,6 @@ function loadPlugin(app, pluginConfig) {
   return app.use(pluginConfig);
 }
 
-function getAppRootComponent(isDev) {
-  return isDev ? Dev : App;
-}
-
-
 /**
  * @typedef {Object} ProjectConfig
  * @property {Array} routes
@@ -42,33 +34,26 @@ function getAppRootComponent(isDev) {
  * @property {Object} locales
  * @property {Object} endpoints
  * @param {ProjectConfig} projectConfig
- * @param {Object} env - the import.meta.env object
+ * @param {VueComponent} Root - the app root component
  */
-export async function createApp(appConfig) {
+export async function createApp(projectConfig, Root) {
   const env = import.meta.env;
-  const projectConfig = { ...appConfig, ...baseConfig, mockConfig: env.DEV ? baseConfig.mockConfig : {}, };
   const {
     globalComponents,
-    locales,
-    mockConfig,
     routes,
     storeConfig,
     models,
-    migrations
+    migrations,
+    onAppCreated,
   } = projectConfig;
 
 
-  const Root = getAppRootComponent(env.DEV);
   const app = _createApp(Root);
 
   const router = createRouter(routes);
   const store = createStore(storeConfig, router);
 
-  // TODO: move this to a separate dev entry point
-  if (env.DEV) {
-    const { useMock } = await import('./host-mock');
-    useMock(env.VITE_PROXY_ACCESS_TOKEN, mockConfig, locales);
-  }
+  onAppCreated?.();
 
   installPlugins(app, projectConfig);
   globalComponents.forEach(component => app.component(component.name, component));
@@ -94,4 +79,6 @@ export async function createApp(appConfig) {
   if (env.DEV) {
     window.app = app;
   }
+
+  return app;
 }

@@ -1,6 +1,4 @@
-import { createApp } from '@crhio/leviate';
-
-const appConfig = {
+export default {
   globalConfig: {
     // Anything here will be accessible via $config in
     // - Vue component templates,
@@ -15,5 +13,3 @@ const appConfig = {
     // You can also pass options using an array e.g. [MyPlugin, myPluginConfig]
   ],
 };
-
-createApp(appConfig);

@@ -1,4 +1,4 @@
-const log = (msg, data = '', level = 'log') => {
+const log = (msg, data = '', level = 'info') => {
   const prefix = `[LEVIATE ${level}]:`;
   const fullMessage = [prefix, msg].join(' ');
   const action = console[level];

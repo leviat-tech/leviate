@@ -17,7 +17,7 @@ export default defineConfig({
   build: {
     minify: true,
     rollupOptions: {
-      input: './src/main.js',
+      input: '/node_modules/@crhio/leviate/core/entry-dev.js',
       output: {
         name: 'plugin',
         format: 'iife',

@@ -1,7 +1,8 @@
 import inject from '@crhio/inject';
+import logger from '../extensions/logger.js';
 
 const uninitializedWarning = (pluginName) => () => {
-  console.error(`${pluginName} has not been initialized. Did you call app.use(HostPlugin)?`);
+  logger.error(`${pluginName} has not been initialized. Did you call app.use(HostPlugin)?`);
 };
 
 export const api = new Proxy({}, {
@@ -60,9 +61,14 @@ const HostPlugin = {
 
     Object.assign(app.config.globalProperties, { $host, $l, $L });
 
+    if (!endpoints) {
+      logger.log('No endpoints defined in leviate.config.js');
+      return;
+    }
+
     // Create api endpoint methods
     Object.entries(endpoints).forEach(([key, url]) => {
-      if (!url) return console.error(`Cannot create API: no url found for ${key}`);
+      if (!url) return logger.error(`Cannot create API: no url found for ${key}`);
       api[key] = createApi(url, $host);
     });
   },
