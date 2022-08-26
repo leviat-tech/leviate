@@ -2,7 +2,7 @@
 
 ## Assets directory
 
-The assets folder is not currently in use. At present apps are bundled in a single js file and injected into an iframe. This is likely to change in the future.
+The assets folder is often not used. At present apps are bundled in a single JavaScript file and injected into an iframe. This is likely to change in the future. You can however import svgs, which will be bundled in the JavaScript.
 
 ## Components directory
 

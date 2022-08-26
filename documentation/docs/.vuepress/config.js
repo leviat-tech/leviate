@@ -5,11 +5,12 @@ module.exports = {
     repo: 'https://github.com/leviat-tech/leviate',
     logo: '/logo.png',
     nav: [
-      { text: 'Home', link: '/' },
-      { text: 'CLI', link: '/cli' },
-      { text: 'Guide', link: '/guide' },
-      { text: 'Structure', link: '/structure' },
-      { text: 'Config', link: '/config' },
+      // { text: 'Home', link: '/' },
+      // { text: 'CLI', link: '/cli' },
+      // { text: 'Guide', link: '/guide' },
+      // { text: 'Structure', link: '/directory-structure' },
+      // { text: 'Config', link: '/config' },
+      // { text: 'Core', link: '/core' },
     ],
     smoothScroll: true,
     // displayAllHeaders: true,
@@ -18,10 +19,11 @@ module.exports = {
       '/': [
         '/',
         '/getting-started',
+        '/cli',
         '/guide',
         '/directory-structure',
-        '/cli',
-        '/core',
+        '/config',
+        '/core'
       ]
     }
   },

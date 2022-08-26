@@ -4,7 +4,6 @@ Leviate core exports the following methods:
 
 ```javascript
 export {
-  createApp,
   useRootStore,
   transact,
   useHost,
@@ -12,12 +11,6 @@ export {
   useApi,
 };
 ```
-
-## `createApp`
-
-The command to create the app instance. Takes an optional `config` parameter with properties as follows:
-
-
 
 ## `useRootStore`
 
@@ -118,10 +111,15 @@ You can call your endpoint by doing the following:
 import { useApi } from '@crhio/leviate';
 
 const api = useApi();
-api.myEndpoint({ data });
+const res = await api.myEndpoint({ data });
 
 // You can also use destructuring of course:
 
 const { myEndpoint } = useApi();
-myEndpoint({ data });
+const res = await myEndpoint({ data });
+
+// The examples above POST to the base endpoint.
+// You can also specify a path in the first argument and data in the second
+const res = await myEndpoint('/some-path/', data);
+const res = await myEndpoint('/some/other/path/', data);
 ```

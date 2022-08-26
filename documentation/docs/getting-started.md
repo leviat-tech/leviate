@@ -47,3 +47,13 @@ import MyForm from '@/components/forms/MyForm.vue'
 ::: danger Please Note
 You must specify the `.vue` extension when importing Vue components
 :::
+
+## Styling
+
+There are no scss/css files included in the project template. Leviate used tailwind and the prefered approach is to use tailwind classes exclusively.
+
+For reusable styled elements/components the recommendation is to use the [styled](/directory-structure.html#styled) components directory.
+
+There may be certain instances where tailwind classes are insufficient e.g. nested selectors, in which case the `<style>` tag should be used in the SFC.
+
+External stylesheets should be a last reort.
