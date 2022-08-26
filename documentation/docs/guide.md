@@ -33,7 +33,7 @@ export default object().shape({
 ```
 
 
-### `models/section.js`
+### `models/SectionModel.js`
 
 ```javascript
 import BaseModel from '@crhio/leviate/BaseModel';
@@ -45,8 +45,6 @@ class SectionModel extends BaseModel {
   static schema = sectionsSchema;
 
   static get fields() {
-    if (!this.useStore) return {};
-
     return {
       // This is required
       ...this.baseFields,
@@ -77,8 +75,30 @@ export default {
 
 ## Step Two: Build the form
 
+The most important thing here is that 
+
 ### `components/forms/SectionForm.vue`
 
-```javascript
+```vue
+<template>
+  <CTextInput :id="`sections_${id}_name`" />
+  <CNumericInput :id="`sections_${id}_width`" />
+  <CNumericInput :id="`sections_${id}_height`" />
+  <CFormElement label="Date of Birth">
+    <div class="w-full flex space-x-4">
+      <CNumericInput :id="`sections_${id}_thickness.min`" />
+      <CNumericInput :id="`sections_${id}_thickness.max`" />
+    </div>
+  </CFormElement>
+</template>
 
+<script setup>
+import Section from '@/models/SectionModel'
+
+const section = Section.create();
+const { id } = section;
+
+</script>
 ```
+
+This is where the magic happens.
