@@ -9,13 +9,13 @@ Leviate is a framework for building data-centric product configurators and desig
 - Validate the user's input against the model schema
 - Render the translated label
 
-Let's look at this in action
+Let's look at this in action.
 
 ## Step One: Define the data structure
 
 First of all, lets define a schema and data model. We'll also define the corresponding language strings.
 
-### `schema/section-schema.js`
+**`schema/section-schema.js`**
 
 ```javascript
 import { string, number, object } from 'yup';
@@ -33,7 +33,7 @@ export default object().shape({
 ```
 
 
-### `models/SectionModel.js`
+**`models/SectionModel.js`**
 
 ```javascript
 import BaseModel from '@crhio/leviate/BaseModel';
@@ -62,7 +62,7 @@ export default SectionModel;
 
 ```
 
-### `locales/en.js`
+**`locales/en.js`**
 ```javascript
 export default {
   name: 'name',
@@ -75,19 +75,19 @@ export default {
 
 ## Step Two: Build the form
 
-The most important thing here is that 
+This is where the magic happens. Using the format `[instanceId]_[key]` for the input ids, the inputs will render the respective label and value, update the state, and display any validation errors.
 
-### `components/forms/SectionForm.vue`
+**`components/forms/SectionForm.vue`**
 
 ```vue
 <template>
-  <CTextInput :id="`sections_${id}_name`" />
-  <CNumericInput :id="`sections_${id}_width`" />
-  <CNumericInput :id="`sections_${id}_height`" />
-  <CFormElement label="Date of Birth">
+  <CTextInput :id="`${id}_name`" />
+  <CNumericInput :id="`${id}_width`" />
+  <CNumericInput :id="`${id}_height`" />
+  <CFormElement label="thickness">
     <div class="w-full flex space-x-4">
-      <CNumericInput :id="`sections_${id}_thickness.min`" />
-      <CNumericInput :id="`sections_${id}_thickness.max`" />
+      <CNumericInput :id="`${id}_thickness.min`" />
+      <CNumericInput :id="`${id}_thickness.max`" />
     </div>
   </CFormElement>
 </template>
@@ -101,4 +101,36 @@ const { id } = section;
 </script>
 ```
 
-This is where the magic happens.
+::: tip
+As you can see in the example above, nested properties can be bound using dot notation
+:::
+
+## More on Form Inputs
+
+Leviate is very opinionated and assumes the following:
+- all inputs will be wrapped in a `<CFormElement>` wrapper containing a label and some basic styling
+- all labels should be generated from the input id and translated
+- all inputs should use the id to create a two way binding
+
+We understand that although this functionality is incredibly powerful, and leads to less boilerplate code, you may not want this behaviour every time. All of it can be overridden by specifying additional props. Here are some examples:
+
+```vue
+// Renders an unwrapped input
+<CTextInput :id="`${id}_name`" no-wrap />
+
+// Renders a wrapped input without a label (still shows errors)
+<CTextInput :id="`${id}_name`" no-label />
+
+// Renders an input with a custom label (still translates the label)
+<CNumericInput :id="`${id}_thickness.max`" label="max" />
+
+// Renders an input with a custom label and no translation
+<CNumericInput :id="`${id}_thickness.max`" label="mm" no-translate />
+
+// Renders an input with a local data binding
+<CNumericInput id="height`" v-model="myData.height" />
+```
+
+## Input Documentation
+
+You can find documentation on each of the different input components on the [Concrete Docs Site](https://leviat-concrete.netlify.app/)

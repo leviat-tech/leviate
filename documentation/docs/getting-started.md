@@ -28,3 +28,22 @@ More about this command in the [CLI](/cli) documentation.
 ```shell
 leviate init <project-name>
 ```
+
+## Starting the dev server
+
+`cd` in to the `project` folder and run `npm run dev`
+
+Click the link in the terminal and the app template will open in your default browser. Hot Module Reloading is enabled so the browser should update everytime you save your local changes
+
+## Importing project modules
+
+The `src` folder has been aliased with `@` in `vite.config.js` so you can import modules like so:
+```javascript
+import SomeModel from '@/models/SomeModel'
+import MyForm from '@/components/forms/MyForm.vue'
+// etc
+```
+
+::: danger Please Note
+You must specify the `.vue` extension when importing Vue components
+:::

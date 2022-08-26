@@ -10,6 +10,6 @@ features:
 - title: Minimal Setup Needed
   details: Start with a template containing the standard layout and working examples of Leviate's common features
 - title: Data-centric
-  details: Leviate has powerful built-in features for keeping your inputs and data in sync and validated, with minimal coding required.
+  details: Leviate has powerful built-in features for keeping your inputs and data in sync and validated, with minimal code
 footer: Copyright © 2022 Leviat
 ---
