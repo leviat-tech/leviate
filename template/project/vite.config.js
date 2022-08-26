@@ -10,6 +10,7 @@ export default defineConfig({
     alias: {
       '~': `${path.resolve(__dirname)}`,
       '@': `${path.resolve(__dirname, 'src')}`,
+      '@crhio/leviate': `${path.resolve(__dirname, '../../core')}`,
     },
   },
 
@@ -30,10 +31,13 @@ export default defineConfig({
     exclude: [
       '@headlessui/vue',
       '@crhio/leviate',
+      // 'pinia',
+      // 'vue-router',
+      // 'vue',
     ],
     include: [
       '@crhio/leviate > axios',
-      'axios/lib/adapters/http'
+      'axios/lib/adapters/http',
     ],
   },
 

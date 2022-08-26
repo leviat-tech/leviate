@@ -9,12 +9,12 @@ import { useLocalize } from './plugins/host';
 const parseInputId = (inputId) => {
   const segments = inputId.split('_');
 
-  if (segments.length !== 3) logger.warn(`Input id ${inputId} does not match the format entity_id_path`);
+  if (segments.length !== 2) logger.warn(`Input id ${inputId} does not match the format entity_id_path`);
 
-  const [entityName, entityId, path] = segments;
+  const [entityId, path] = segments;
 
-  const model = useRootStore().modules.entities().models[entityName];
-  const instance = model.find(entityId);
+  const store = useRootStore();
+  const instance = store.getEntityById(entityId);
 
   return { instance, path };
 }
@@ -37,9 +37,8 @@ export default {
     if (!id) return;
 
     const { inputStatus } = useMessageStore();
-    const [entityName, entityId, path] = id.split('_');
-    const storeKey = [entityName, entityId].join('_');
-    const errors = inputStatus[storeKey]?.[path];
+    const [entityId, path] = id.split('_');
+    const errors = inputStatus[entityId]?.[path];
 
     if (!errors) return;
 

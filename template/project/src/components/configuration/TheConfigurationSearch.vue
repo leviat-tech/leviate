@@ -1,6 +1,6 @@
 <template>
   <div :style="{ width }">
-    <CAutoComplete placeholder="" v-model="query" :options="options" @change="onSelect" @focus="onFocus">
+    <CAutoComplete placeholder="" v-model="query" :options="options" @change="onSelect">
       <template #suffix>
         <CInputAffix>
           <CIcon type="search"/>
@@ -39,9 +39,5 @@ async function onSelect(val) {
     document.querySelector('.configuration__content').scrollTop -= 100;
     el.focus();
   }, 0);
-}
-
-function onFocus() {
-
 }
 </script>

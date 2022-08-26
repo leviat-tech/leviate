@@ -1,4 +1,3 @@
-import { omit } from 'lodash-es';
 import Revision from '../../extensions/Revision';
 import { useHost } from '../../plugins/host';
 
@@ -15,9 +14,7 @@ const revision = new Revision(25, {
     const host = useHost();
 
     if (host.setState) {
-      const filtered = omit(snapshot, ['selected', 'search']);
-      filtered.settings = omit(filtered.settings, ['configName', 'locale']);
-      host.setState(filtered);
+      host.setState(snapshot);
     }
   },
 });

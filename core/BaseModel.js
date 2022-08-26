@@ -33,7 +33,7 @@ class BaseModel extends Entity {
   $validate() {
     const { inputStatus } = useMessageStore();
     const errors = this.constructor.schema.$validate(this);
-    const id = [this.constructor.id, this.id].join('_');
+    const { id } = this;
 
     if (isEmpty(errors)) {
       // Remove any remaining errors in the store

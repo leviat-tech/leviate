@@ -23,7 +23,6 @@ function transact(cb) {
 }
 
 const initialState = {
-  selected: { entity: null, field: null },
   serialization_version: null,
   transactionDepth: 0,
 };
@@ -36,19 +35,19 @@ const initialActions = {
       const res = cb();
 
       if (res instanceof Promise) {
-        await res.catch(this.onTransactionError);
+        await res.catch(this._onTransactionError);
       }
 
       this.transactionDepth = 0;
 
       return res;
     } catch (e) {
-      this.onTransactionError(e)
+      this._onTransactionError(e)
       return false;
     }
   },
 
-  onTransactionError(e) {
+  _onTransactionError(e) {
     if (!(e instanceof TransactionError)) {
       console.error(e);
     }
@@ -61,7 +60,7 @@ const initialActions = {
     }
   },
 
-  registerModule(useStore) {
+  _registerModule(useStore) {
     const id = useStore.$id;
     let error;
 
@@ -105,10 +104,6 @@ const initialActions = {
 
     return JSON.parse(JSON.stringify(state));
   },
-  initialize() {
-    this.transactionDepth = 0;
-
-  },
 };
 
 function getEntryFromId(state) {
@@ -116,8 +111,8 @@ function getEntryFromId(state) {
   const { $L } = useLocalize();
 
   return function(id) {
-    const [entityName, entityId, path] = id.split('_');
-    const instance = this.getEntity(entityName, entityId);
+    const [entityId, path] = id.split('_');
+    const instance = this.getEntityById(entityId);
 
     const allSubpaths = range(path.length)
       .filter((i) => path[i] === '.')
@@ -166,17 +161,20 @@ function getEntity(state) {
 function idToEntityName(state) {
   const map = {};
 
-  console.log(state.modules.entities?.().$state);
-
   each(state.modules.entities?.().$state, ({ dataById }, entityName) => {
-    Object.keys(dataById, (key) => {
+    Object.keys(dataById).forEach((key) => {
       map[key] = entityName;
     })
   });
-  
-  console.log(map);
 
   return map;
+}
+
+function getEntityById(state) {
+  return function(id) {
+    const entityName = this.idToEntityName[id];
+    return this.getEntity(entityName, id);
+  }
 }
 
 function getStoreConfig(storeConfig, router) {
@@ -186,6 +184,7 @@ function getStoreConfig(storeConfig, router) {
   const currentEntity = generateCurrentGetter(router);
   const getters = {
     idToEntityName,
+    getEntityById,
     getEntryFromId,
     getModel,
     getEntity,
@@ -208,7 +207,7 @@ function initializeStore(initialState, migrations, models) { // eslint-disable-l
   // Register user modules and normie entities module in the root store
   const useEntityStore = normie(defineStore, Object.values(models));
   const modules = storeConfig.modules.concat(useEntityStore);
-  modules.forEach(rootStore.registerModule);
+  modules.forEach(rootStore._registerModule);
 
   performMigration(rootStore, initialState, migrations)
 

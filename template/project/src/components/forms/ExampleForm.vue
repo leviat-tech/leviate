@@ -14,5 +14,5 @@
 import useCurrentEntity from '@/composables/useCurrentEntity';
 
 const entity = useCurrentEntity();
-const getEntityId = (path) => [entity.value.constructor.id, entity.value.id, path].join('_');
+const getEntityId = (path) => [entity.value.id, path].join('_');
 </script>

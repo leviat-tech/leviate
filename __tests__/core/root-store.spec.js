@@ -29,13 +29,13 @@ const useBarStore = defineStore('bar', {
 describe('Root store', () => {
   describe('Modules', () => {
     it('registers a module', () => {
-      rootStore.registerModule(useFooStore);
+      rootStore._registerModule(useFooStore);
 
       expect(rootStore.foo.value).toBe(1)
     });
 
     it('maintains reactivity on a registered module', () => {
-      rootStore.registerModule(useFooStore);
+      rootStore._registerModule(useFooStore);
       const fooStore = useFooStore();
       fooStore.setFoo(2);
 
@@ -47,7 +47,7 @@ describe('Root store', () => {
   describe('State', () => {
 
     it('replaces the existing state', () => {
-      rootStore.registerModule(useFooStore);
+      rootStore._registerModule(useFooStore);
 
       rootStore.replaceState({
         foo: { value: 4 }
@@ -57,7 +57,7 @@ describe('Root store', () => {
     });
 
     it('maintains reactivity on a replaced state', () => {
-      rootStore.registerModule(useFooStore);
+      rootStore._registerModule(useFooStore);
 
       rootStore.replaceState({
         foo: { value: 10 }
@@ -71,7 +71,7 @@ describe('Root store', () => {
     });
 
     it('serialises the state', () => {
-      rootStore.registerModule(useFooStore);
+      rootStore._registerModule(useFooStore);
 
       const state = rootStore.serializeState();
 
