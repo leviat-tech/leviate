@@ -7,7 +7,7 @@ module.exports = {
     nav: [
       { text: 'Home', link: '/' },
       { text: 'CLI', link: '/cli' },
-      { text: 'Features', link: '/features' },
+      { text: 'Guide', link: '/guide' },
       { text: 'Structure', link: '/structure' },
       { text: 'Config', link: '/config' },
     ],
@@ -18,9 +18,9 @@ module.exports = {
       '/': [
         '/',
         '/getting-started',
-        '/cli',
-        '/configuration',
+        '/guide',
         '/directory-structure',
+        '/cli',
         '/core',
       ]
     }
