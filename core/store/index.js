@@ -1,6 +1,6 @@
 import { defineStore, createPinia } from 'pinia';
 import { normie } from '@crhio/normie';
-import { isEmpty, get, last, range } from 'lodash-es';
+import { isEmpty, get, last, range, each } from 'lodash-es';
 import Migration from '../extensions/migration';
 import revision from './plugins/revision';
 import BaseModel from '../BaseModel';
@@ -163,12 +163,29 @@ function getEntity(state) {
   }
 }
 
+function idToEntityName(state) {
+  const map = {};
+
+  console.log(state.modules.entities?.().$state);
+
+  each(state.modules.entities?.().$state, ({ dataById }, entityName) => {
+    Object.keys(dataById, (key) => {
+      map[key] = entityName;
+    })
+  });
+  
+  console.log(map);
+
+  return map;
+}
+
 function getStoreConfig(storeConfig, router) {
   const state = { ...initialState, ...storeConfig.state };
   const actions = { ...initialActions, ...storeConfig.actions };
   const modules = [...storeConfig.modules];
   const currentEntity = generateCurrentGetter(router);
   const getters = {
+    idToEntityName,
     getEntryFromId,
     getModel,
     getEntity,
