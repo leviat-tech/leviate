@@ -42,4 +42,8 @@ export default defineConfig({
     svgLoader(),
     createFetchProxyAccessTokenPlugin(),
   ],
+
+  server: {
+    port: 8080,
+  },
 });
