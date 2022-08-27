@@ -105,7 +105,7 @@ const { id } = section;
 As you can see in the example above, nested properties can be bound using dot notation
 :::
 
-## More on Form Inputs
+## More on form inputs
 
 Leviate is very opinionated and assumes the following:
 - all inputs will be wrapped in a `<CFormElement>` wrapper containing a label and some basic styling
@@ -131,6 +131,91 @@ We understand that although this functionality is incredibly powerful, and leads
 <CNumericInput id="height`" v-model="myData.height" />
 ```
 
-## Input Documentation
-
 You can find documentation on each of the different input components on the [Concrete Docs Site](https://leviat-concrete.netlify.app/)
+
+## Updating the State
+
+Whenever the state is updated it will be persisted by calling `host.setState()`, and the update will be comitted to the revision history, allowing you to undo and redo any changes. You don't need to do anything to make this happen, but there are a couple of things to be aware of.
+
+By using the form inputs in the way described in the examples above the update will automatically be wrapped in a `transaction`. Using a transaction ensures that if there is an error any changes will be reverted.
+
+It's likely that you will want to perform other updates in the app. You should ensure that you call `transact` in order to prevent errors being commited to the persistent state. `transact` is asynchronous so you can `await` any changes before performing additional actions. E.g.
+
+```javascript
+import transact from '@crhio/leviate';
+import Model from '@/models/Model'
+
+async function updateStore() {
+  const id = await transact(() => {
+    const data = fetchSomethingFromServer();
+    const model = Model.create(data);
+    return model.id;
+  });
+  
+  doSomethingWithId(id);
+}
+```
+
+::: tip
+You can directly import local pinia stores but only stores exported in the `modules` property of `@/store/index.js` will be saved to the persistent state.
+:::
+
+## Displaying messages
+
+The configuration section in the template is automatically configured to display any config or calculation errors as 'toast' messages using Concrete's `<CStatusBar>` component. You need to call the message store actions yourself but as long as you follow the examples below the messages will automatically be displayed for you.
+
+### Config errors
+
+A simplified example of how to set a config error
+
+```javascript
+import { useMessageStore } from '@crhio/leviate';
+
+const messageStore = useMessageStore();
+const { calc } = useApi();
+
+function validateConfig() {
+  if (!configIsValid()) {
+    messageStore.setConfigError('There are errors in your configuration');
+  }
+}
+```
+
+### Calculation errors
+
+Calculation errors are a bit more complicated as we need to specify the entity id and path
+
+```javascript
+import { useMessageStore, useApi } from '@crhio/leviate';
+import Model from '@/Models/Model';s
+
+async function getDataFromEndpoint(id) {
+  const modelData = Model.find(id).$toJSON();
+  const res = await calc(modelData);
+  
+  if (res.errors) {
+    messageStore.setCalculationErrors(Model.id, id, errorPath, res.errors);
+  }
+} 
+```
+
+### Global messages
+
+Global messages aren't configured to display anywhere in the template but it's easy to do so. The following example uses `concrete`'s `<CStatusBar>` but you don't have to use this.
+
+**`MyComponent.vue`**
+```vue
+<template>
+  <CStatusBar :messages="messages" @dismiss="messageStore.removeMessage($event)" />
+</template>
+
+<script setup>
+import { computed } from 'vue';
+import { useMessageStore } from '@crhio/leviate';
+
+const messageStore = useMessageStore();
+const messages = computed(() => messageStore.globalMessages);
+</script>
+```
+
+Find the complete reference in the [useMessageStore](/core.html#usemessagestore) section of the Core API page

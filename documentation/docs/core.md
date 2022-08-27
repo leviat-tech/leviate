@@ -52,9 +52,82 @@ Returns the Entity's model definition by its name. Normally it would be easier t
 
 Returns an entity by passing in its name and id. Normally you would just use `getEntityById`
 
+
+
+## `useMessageStore`
+
+The message store contains the following actions, many of which are friendly wrappers around lower level actions:
+
+**`setMessage(type = 'info', text, additionalData = {})`**
+
+**`removeMessage(id)`**
+
+**`setTemporaryGlobalMessage(type = 'info', text, durationSeconds = 5)`**
+
+**`setTemporaryWarning(text, durationSeconds = 5)`**
+
+**`setTemporaryError(text, durationSeconds = 5)`**
+
+**`setWarning(text, additionalData)`**
+
+**`setError(text, additionalData)`**
+
+**`setConfigWarning(text)`**
+
+**`setConfigError(text)`**
+
+**`setGlobalWarning(text)`**
+
+**`setGlobalError(text)`**
+
+**`setCalculationWarning(modelId, entityId, path, warnings, additionalData)`**
+
+**`setCalculationErrors(modelId, entityId, path, errors, additionalData)`**
+
+
+## `transact`
+
+Takes a single `callback` argument and performs a store transaction. Changes made within a transaction will be undoable, and saved to the persistent state
+
+
 ## `useHost`
 
-Returns the host instance, or mock host instance in dev mode.
+Returns the host instance, or mock host instance in dev mode. The host instance exposes the following methods:
+
+**`setUrl()`**
+
+Sets the host url when the route changes. Not needed in dev mode
+
+**`getUrl()`**
+
+Returns the current URL as an absolute path without the hash.
+
+**`getState()`**
+
+Returns the saved state.
+
+**`getMeta()`**
+
+Returns the meta information for the application. In dev mode this returns the meta value in `@/mock.config.js` 
+
+**`setState(state)`**
+
+Saves the current state serialized to JSON.
+
+**`setName(name)`**
+
+TBC
+
+**`authorizedPostRequest(url, data, config = {})`**
+
+Performs an authorized `POST` request to a given URL.
+
+This is not required as we have the [useApi](/) wrapper working in conjunction with the `endpoints` config. 
+
+**`localize(phrase, options)`**
+
+This is not required as we have the [useLocalize](/) wrapper for translations.
+
 
 ## `useLocalize`
 
