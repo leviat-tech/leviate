@@ -54,7 +54,10 @@ The CLI's `checklang` command helps check for any hard-coded language strings in
 
 ## Migrations directory
 
-The `migrations` directory contains migration definitions to be executed when the data model changes in a live app. These migrations ensure that any new properties added to the state are not overwritten when persisting data between multiple sessions. 
+The `migrations` directory contains migration definitions to be executed when the data model changes in a live app. These migrations ensure that any new properties added to the state are not overwritten when persisting data between multiple sessions.
+
+
+Further documentation and examples coming soon
 
 ## Models directory
 

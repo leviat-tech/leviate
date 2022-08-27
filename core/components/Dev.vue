@@ -80,6 +80,7 @@ import { uniq, debounce } from 'lodash-es'
 import { useHost } from '../plugins/host';
 import { nextTick, onBeforeMount, reactive, toRefs, watch } from 'vue';
 import { useRootStore } from '../store';
+import logger from '../extensions/logger.js';
 
 const $host = useHost();
 const store = useRootStore();
@@ -138,7 +139,7 @@ function saveConfiguration(name) {
   setStorageItem(configName, store.toJSON());
   setCurrentConfig(configName);
 
-  console.log(`Configuration '${configName}' saved`);
+  logger.log(`Configuration '${configName}' saved`);
 }
 
 async function restoreConfiguration(name = 'Default') {
@@ -189,7 +190,7 @@ function getStorageItem(name) {
   try {
     return JSON.parse(storedJSON);
   } catch(e) {
-    console.log(`Cannot get item: '${key}'`, e);
+    logger.log(`Cannot get item: '${key}'`, e);
   }
 }
 

@@ -5,6 +5,7 @@ import Migration from '../extensions/migration';
 import revision from './plugins/revision';
 import BaseModel from '../BaseModel';
 import { useLocalize } from '../plugins/host';
+import logger from '../extensions/logger.js';
 
 
 class TransactionError extends Error {
@@ -16,7 +17,7 @@ class TransactionError extends Error {
 
 let storeConfig = {};
 
-let useRootStore = () => console.log('Root store has not been initialized');
+let useRootStore = () => logger.log('Root store has not been initialized');
 
 function transact(cb) {
   return useRootStore().transact(cb);
@@ -49,7 +50,7 @@ const initialActions = {
 
   _onTransactionError(e) {
     if (!(e instanceof TransactionError)) {
-      console.error(e);
+      logger.error(e);
     }
 
     if (this.transactionDepth > 1) { // if we're in a nested transaction, propagate an error;
@@ -68,7 +69,7 @@ const initialActions = {
 
     if (this[id]) error = `property ${id} already exists`;
 
-    if (error) return console.log(error);
+    if (error) return logger.log(error);
 
     if (!this.modules) this.modules = {};
 
@@ -88,7 +89,7 @@ const initialActions = {
       if (useModule) {
         useModule().$state = newState[key];
       } else {
-        console.error(`Store module ${key} does not exist`)
+        logger.error(`Store module ${key} does not exist`)
       }
     });
 
@@ -230,7 +231,7 @@ function performMigration(rootStore, initialState, migrations) {
     let migratedState;
     if (!migration.isUpToDate) {
       migratedState = migration.migrateToLatest();
-      console.log(`successfully migrated to latest: ${latestMigrationName}`);
+      logger.log(`successfully migrated to latest: ${latestMigrationName}`);
     }
     rootStore.replaceState(migratedState || initialState);
   } else {
