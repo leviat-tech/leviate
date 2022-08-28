@@ -56,21 +56,25 @@ Returns an entity by passing in its name and id. Normally you would just use `ge
 
 ## `useMessageStore`
 
+All messages are stored in the state's `messages` property. A unique id is automatically assigned to each new message unless it is specified in the `additionalData` argument.
+
+### actions
+
 The message store contains the following actions, many of which are friendly wrappers around lower level actions:
 
-**`setMessage(type = 'info', text, additionalData = {})`**
+**`setMessage(text, type = 'info', additionalData = {})`**
 
 **`removeMessage(id)`**
 
-**`setTemporaryGlobalMessage(type = 'info', text, durationSeconds = 5)`**
+**`setTemporaryMessage(text, type = 'info', category = 'global', durationSeconds = 5)`**
 
-**`setTemporaryWarning(text, durationSeconds = 5)`**
+**`setTemporaryWarning(text, category, durationSeconds)`**
 
-**`setTemporaryError(text, durationSeconds = 5)`**
+**`setTemporaryError(text, category, durationSeconds)`**
 
-**`setWarning(text, additionalData)`**
+**`setWarning(text, additionalData = { category: 'global' })`**
 
-**`setError(text, additionalData)`**
+**`setError(text, additionalData = { category: 'global' })`**
 
 **`setConfigWarning(text)`**
 
@@ -84,6 +88,17 @@ The message store contains the following actions, many of which are friendly wra
 
 **`setCalculationErrors(modelId, entityId, path, errors, additionalData)`**
 
+### getters
+
+The message store also provides the following getters:
+
+**`filterMessagesByCategory(category)`**
+
+**`globalMessages`** - equivalent to calling `filterMessagesByCategory('global')`
+
+**`configErrors`** - equivalent to calling `filterMessagesByCategory('config')`
+
+**`calculationErrors`** - equivalent to calling `filterMessagesByCategory('calculation')`
 
 ## `transact`
 
