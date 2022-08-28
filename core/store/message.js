@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import { v4 as uuidv4 } from 'uuid';
-
 import { reduce } from 'lodash-es';
 
 /**
@@ -23,18 +22,18 @@ export const useMessageStore = defineStore('messages', {
       delete this.messages[id];
     },
 
-    setTemporaryMessage(type = 'info', text, durationSeconds = 5) {
+    setTemporaryGlobalMessage(type = 'info', text, durationSeconds = 5) {
       const id = this.setMessage(type, text, { global: true });
 
       setTimeout(this.removeMessage.bind(this, id), durationSeconds * 1000)
     },
 
     setTemporaryWarning(text, durationSeconds = 5) {
-      this.setTemporaryMessage('warning', text, durationSeconds);
+      this.setTemporaryGlobalMessage('warning', text, durationSeconds);
     },
 
     setTemporaryError(text, durationSeconds = 5) {
-      this.setTemporaryMessage('error', text, durationSeconds);
+      this.setTemporaryGlobalMessage('error', text, durationSeconds);
     },
 
     setWarning(text, additionalData) {
@@ -79,7 +78,7 @@ export const useMessageStore = defineStore('messages', {
         }, [])
       }
     },
-    globalErrors(state) {
+    globalMessages(state) {
       return this.filterMessagesByType('global');
     },
     configErrors(state) {

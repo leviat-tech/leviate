@@ -1,10 +1,10 @@
-import { createApp } from './createApp';
 import { useRootStore, transact } from './store';
+import { useMessageStore } from './store/message';
 import { useHost, useLocalize, useApi } from './plugins/host';
 
 export {
-  createApp,
   useRootStore,
+  useMessageStore,
   transact,
   useHost,
   useLocalize,
