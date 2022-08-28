@@ -23,7 +23,8 @@ module.exports = {
         '/guide',
         '/directory-structure',
         '/config',
-        '/core'
+        '/core',
+        '/style-guide'
       ]
     }
   },
