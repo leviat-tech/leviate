@@ -40,3 +40,5 @@ template/project/node_modules
 
 #built files from Vuepress
 documentation/docs/.vuepress/dist
+# Local Netlify folder
+.netlify
