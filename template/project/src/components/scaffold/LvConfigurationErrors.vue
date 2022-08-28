@@ -4,7 +4,7 @@
 
 <script setup>
 import { computed } from 'vue';
-import { useMessageStore } from '@crhio/leviate/store/message';
+import { useMessageStore } from '@crhio/leviate';
 
 const messageStore = useMessageStore();
 const errors = computed(() => [...messageStore.configErrors, ...messageStore.calculationErrors]);

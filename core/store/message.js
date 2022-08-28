@@ -11,81 +11,82 @@ export const useMessageStore = defineStore('messages', {
     messages: {},
   }),
   actions: {
-    setMessage(type = 'info', text, additionalData = {}) {
+    setMessage(text, type = 'info', additionalData = {}) {
       const { id, ...data } = additionalData;
       const messageId = (id === undefined) ? uuidv4() : id;
       this.messages[messageId] = { type, text, ...data };
-      return id;
+      return messageId;
     },
 
     removeMessage(id) {
+      console.log(id, this.messages[id]);
       delete this.messages[id];
     },
 
-    setTemporaryGlobalMessage(type = 'info', text, durationSeconds = 5) {
-      const id = this.setMessage(type, text, { global: true });
+    setTemporaryMessage(text, type = 'info', category = 'global', durationSeconds = 5) {
+      const id = this.setMessage(text, type, { category });
 
       setTimeout(this.removeMessage.bind(this, id), durationSeconds * 1000)
     },
 
-    setTemporaryWarning(text, durationSeconds = 5) {
-      this.setTemporaryGlobalMessage('warning', text, durationSeconds);
+    setTemporaryWarning(text, category, durationSeconds) {
+      this.setTemporaryMessage(text, 'warning', category, durationSeconds);
     },
 
-    setTemporaryError(text, durationSeconds = 5) {
-      this.setTemporaryGlobalMessage('error', text, durationSeconds);
+    setTemporaryError(text, category, durationSeconds) {
+      this.setTemporaryMessage(text, 'error', category, durationSeconds);
     },
 
-    setWarning(text, additionalData) {
-      return this.setMessage('warning', text, additionalData);
+    setWarning(text, additionalData = { category: 'global' }) {
+      return this.setMessage(text, 'warning', additionalData);
     },
 
-    setError(text, additionalData) {
-      return this.setMessage('error', text, additionalData);
+    setError(text, additionalData = { category: 'global' }) {
+      return this.setMessage(text, 'error', additionalData);
     },
 
     setConfigWarning(text) {
-      return this.setWarning(text, { config: true });
+      return this.setWarning(text, { category: 'config' });
     },
 
     setConfigError(text) {
-      return this.setError(text, { config: true });
+      return this.setError(text, { category: 'config' });
     },
 
     setGlobalWarning(text) {
-      return this.setWarning(text, { global: true });
+      return this.setWarning(text, { category: 'global' });
     },
 
     setGlobalError(text) {
-      return this.setError(text, { global: true });
+      return this.setError(text, { category: 'global' });
     },
 
     setCalculationWarning(modelId, entityId, path, warnings, additionalData) {
       const id = [modelId, entityId, path].join('_');
-      return this.setWarning(warnings[0], { id, calculation: true, ...additionalData });
+      return this.setWarning(warnings[0], { id, category: 'calculation', ...additionalData });
     },
 
     setCalculationErrors(modelId, entityId, path, errors, additionalData) {
       const id = [modelId, entityId, path].join('_');
-      return this.setError(errors[0], { id, calculation: true, ...additionalData });
+      return this.setError(errors[0], { id, category: 'calculation', ...additionalData });
     },
   },
   getters: {
-    filterMessagesByType(state) {
-      return (type) => {
+    filterMessagesByCategory(state) {
+      return (category) => {
         return reduce(state.messages, (errors, message, id) => {
-          return message[type] ? [...errors, { id, ...message }] : errors;
+          return message.category === category ? [...errors, { id, ...message }] : errors;
         }, [])
       }
     },
     globalMessages(state) {
-      return this.filterMessagesByType('global');
+      return this.filterMessagesByCategory('global');
     },
     configErrors(state) {
-      return this.filterMessagesByType('config');
+      return this.filterMessagesByCategory('config');
     },
     calculationErrors(state) {
-      return this.filterMessagesByType('calculation');
+      return this.filterMessagesByCategory('calculation');
     }
   }
 });
