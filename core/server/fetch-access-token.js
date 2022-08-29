@@ -1,5 +1,4 @@
 const axios = require('axios');
-const logger = require('../extensions/logger.js');
 
 async function fetchProxyAccessToken() {
   const url = 'https://crh.eu.auth0.com/oauth/token';
@@ -11,7 +10,7 @@ async function fetchProxyAccessToken() {
     audience,
     grant_type,
   }).catch((e) => {
-    logger.warn('Error fetching VITE_PROXY_ACCESS_TOKEN. API requests may fail.');
+    console.warn('Error fetching VITE_PROXY_ACCESS_TOKEN. API requests may fail.');
   });
 
   return res?.data.access_token;
