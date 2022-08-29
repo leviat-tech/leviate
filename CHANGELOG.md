@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.1](https://github.com/leviat-tech/leviate/compare/v2.0.0...v2.0.1) (2022-08-29)
+
+
+### Fixes
+
+* fetch-access-token error ([63e44b6](https://github.com/leviat-tech/leviate/commit/63e44b66c32b79afb3b8cf4f0bbe6b8e2e1f6d83))
+
 ## 2.0.0 (2022-08-28)
 
 
