@@ -1,6 +1,6 @@
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
-import { useRootStore } from '@crhio/leviate/store/index';
+import { useRootStore } from '@crhio/leviate';
 
 const useCurrentEntity = () => {
   const route = useRoute();

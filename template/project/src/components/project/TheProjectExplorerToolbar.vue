@@ -37,7 +37,7 @@
 
 <script setup>
 import { computed, ref } from 'vue';
-import { useRootStore } from '@crhio/leviate/store/index';
+import { useRootStore } from '@crhio/leviate';
 import LvExportModal from './LvExportModal.vue';
 import LvSettingsModal from './LvSettingsModal.vue';
 

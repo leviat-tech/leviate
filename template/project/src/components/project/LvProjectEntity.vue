@@ -21,7 +21,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { transact } from '@crhio/leviate/store';
+import { transact } from '@crhio/leviate';
 import LvProjectEntityItem from './LvProjectEntityItem.vue';
 
 const router = useRouter();
