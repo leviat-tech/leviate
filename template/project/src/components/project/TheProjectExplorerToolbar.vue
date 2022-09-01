@@ -7,6 +7,7 @@
         icon="undo"
         :stateful="false"
         @click="revision.undo()"
+        :disabled="!undoable"
       />
       <CTool
         name="Redo"
@@ -36,7 +37,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import { useRootStore } from '@crhio/leviate';
 import LvExportModal from './LvExportModal.vue';
 import LvSettingsModal from './LvSettingsModal.vue';
@@ -45,6 +46,6 @@ const showExportModal = ref(false);
 const showSettingsModal = ref(false);
 
 const revision = useRootStore().revision;
-const undoable = computed(() => revision.undoable);
-const redoable = computed(() => revision.redoable);
+const undoable = revision.undoable;
+const redoable = revision.redoable;
 </script>

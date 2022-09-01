@@ -1,7 +1,12 @@
 <template>
   <div :style="{ width }">
-    <CAutoComplete placeholder="" v-model="query" :options="options" @change="onSelect">
-      <template #suffix>
+    <CAutoComplete placeholder="Search"
+                   v-model="query"
+                   :options="options"
+                   @change="onSelect"
+                   size="sm"
+    >
+      <template #prefix>
         <CInputAffix>
           <CIcon type="search"/>
         </CInputAffix>
