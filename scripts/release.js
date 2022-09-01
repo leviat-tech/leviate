@@ -1,6 +1,7 @@
-// Runs on standard version postbump to keep
+// Runs on standard version prebump to keep
 // template in sync with newly bumped version
 
+const { exec } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const root = path.resolve(__dirname, '../')
@@ -17,3 +18,4 @@ const json = JSON.stringify(templatePackage, null, '  ');
 
 fs.writeFileSync(templatePackagePath, json);
 
+exec(`git commit -m "chore(release): bump template to ${newVersion}"`);
