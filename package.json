@@ -16,7 +16,7 @@
   },
   "standard-version": {
     "scripts": {
-      "postbump": "node scripts/release.js"
+      "precommit": "node scripts/release.js"
     }
   },
   "exports": {
