@@ -1,5 +1,6 @@
 import Revision from '../../extensions/Revision';
 import { useHost } from '../../plugins/host';
+import { markRaw } from 'vue';
 
 const revision = new Revision(25, {
   autocommit(mutation, state) {
@@ -21,7 +22,7 @@ const revision = new Revision(25, {
 
 const revisionPlugin = ({ store }) => {
   if (store.$id === 'root') {
-    store.revision = revision;
+    store.revision = markRaw(revision);
     revision.initializeStore(store)
   }
 };

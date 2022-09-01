@@ -1,4 +1,4 @@
-<style scoped lang="scss">
+<style scoped>
 .host-bar {
   width: 256px;
 }

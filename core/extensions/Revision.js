@@ -1,3 +1,5 @@
+import { computed, reactive } from 'vue';
+
 class Revision {
 
   // handlers:
@@ -8,23 +10,18 @@ class Revision {
   constructor(max = 15, handlers) {
     this.max = max + 1;
     this.outdated = true;
-    this.undos = [];
-    this.redos = [];
+    this.undos = reactive([]);
+    this.redos = reactive([]);
     this.handlers = handlers || {};
     this.changed = this.changed.bind(this);
+
+    this.redoable = computed(() => this.redos.length > 0);
+    this.undoable = computed(() => this.undos.length > 1 || (this.undos.length === 1 && this.outdated));
   }
 
   initializeStore(store) {
     this.store = store;
     this.store.$subscribe(this.changed);
-  }
-
-  get undoable() {
-    return this.undos.length > 1 || (this.undos.length === 1 && this.outdated);
-  }
-
-  get redoable() {
-    return this.redos.length > 0;
   }
 
   // save current state to undo stack
@@ -78,15 +75,17 @@ class Revision {
   // called when state changes
   changed(mutation, state) {
     this.outdated = true;
-    this.redos = [];
-    if (this.handlers.autocommit && this.handlers.autocommit(mutation, state)) this.commit();
+    if (this.handlers.autocommit && this.handlers.autocommit(mutation, state)) {
+      this.commit();
+      this.redos.length = 0;
+    }
   }
 
   // clear revision undo / redo stack
   clear() {
     this.outdated = true;
-    this.undos = [];
-    this.redos = [];
+    this.undos.length = 0;
+    this.redos.length = 0;
   }
 }
 

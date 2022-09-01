@@ -4,7 +4,7 @@ import HostPlugin, { useHost } from './plugins/host';
 import { createStore, initializeStore } from './store';
 import { createRouter } from './router.js';
 import concreteOptions from './concreteOptions';
-import './assets/styles/index.scss';
+import './assets/styles/index.css';
 
 function installPlugins(app, { endpoints, locales, plugins, globalConfig }) {
   plugins?.forEach(plugin => loadPlugin(app, plugin));

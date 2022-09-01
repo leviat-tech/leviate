@@ -1,4 +1,4 @@
-<style lang="scss">
+<style>
   html,
   body {
     height: 100%;
