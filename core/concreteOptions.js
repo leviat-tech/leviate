@@ -23,6 +23,8 @@ export default {
   inputHandler: (id, val) => {
     const { instance, path } = parseInputId(id);
 
+    console.log(instance, path, get(instance, path, val), val);
+
     transact(() => {
       set(instance, path, val);
     });
@@ -47,8 +49,21 @@ export default {
       message: errors[0],
     }
   },
-  labelFormatter: (label) => {
+  labelFormatter: (props) => {
+    const { id, label } = props;
     const { $L } = useLocalize();
-    return $L(label.toLowerCase());
+
+    if (label) return $L(label);
+
+    const path = id.split('_')[1];
+
+    if (!path) {
+      logger.warn(`Could not generate label for input id '${id}'`);
+      return null;
+    }
+
+    const labelPath = path.replace(/\./g, '_');
+    return $L(labelPath);
   }
 }
+
