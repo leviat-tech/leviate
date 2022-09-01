@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/leviat-tech/leviate/compare/v2.0.1...v2.1.0) (2022-09-01)
+
+
+### Features
+
+* update label formatter to use input ids ([d0c0d2e](https://github.com/leviat-tech/leviate/commit/d0c0d2e6613b9b205cfbb0c573e065bca274efaf))
+
+
+### Fixes
+
+* revision plugin (undo/redo) ([184bc29](https://github.com/leviat-tech/leviate/commit/184bc29da59b306338ec01cfd23d80afedd4f8c2))
+
 ### [2.0.1](https://github.com/leviat-tech/leviate/compare/v2.0.0...v2.0.1) (2022-08-29)
 
 
