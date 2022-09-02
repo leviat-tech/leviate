@@ -10,18 +10,4 @@ In essence this module can be broken down into three separate parts:
   - essential application files used within all host plugins
   - additional extensions which are often but not always used
 
-## Installation
-
-```
-// Instructions to follow
-```
-
-## Usage
-
-### CLI
-
-Instructions to follow
-
-### Template
-
-Instructions are included in the template's [README.md](template/README.md)
+Full documentation can be found at [https://leviate-docs.netlify.app/](https://leviate-docs.netlify.app/)
