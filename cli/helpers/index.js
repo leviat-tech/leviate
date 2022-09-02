@@ -1,4 +1,7 @@
-export const pressAnyKey = async () => {
+import fs from 'fs-extra';
+import { execSync } from 'child_process';
+
+export async function pressAnyKey() {
   console.log('\nPress any key to continue...')
 
   process.stdin.setRawMode(true)
@@ -14,8 +17,11 @@ export const pressAnyKey = async () => {
   }))
 }
 
-export const parseOptions = (options) => {
+export function parseOptions(options) {
   const rxNumbersOnly = /^\d+$/;
+  const shorthandMap = {
+    '-g': { global: true },
+  };
 
   return options.reduce((options, option, i) => {
     if (option.slice(0, 2) !== '--') return { ...options, [i]: option };
@@ -28,4 +34,21 @@ export const parseOptions = (options) => {
 
     return { ...options, [key]: val };
   }, {})
+}
+
+export function getLocalVersion() {
+  try {
+    return fs.readJSONSync(process.cwd() + '/node_modules/@crhio/leviate/package.json').version
+  } catch(e) {
+    throw 'Could not locate local leviate package';
+  }
+}
+
+export function getGlobalVersion() {
+  const globalPackages = execSync('npm list -g').toString().trim();
+  const matches = globalPackages.match(/@crhio\/leviate@([\w.-]+)/);
+
+  if (!matches) throw 'Could not locate global leviate package';
+
+  return matches[1];
 }

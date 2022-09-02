@@ -24,7 +24,7 @@ module.exports = {
     }],
     'no-multiple-empty-lines': ['error', { max: 2, maxEOF: 0 }],
     'padded-blocks': ['error', { blocks: 'never' }],
-    'import/extensions': ['error', 'ignorePackages', { json: 'never', js: 'never' }],
+    'import/extensions': ['error', 'ignorePackages', { json: 'never', js: 'never', vue: 'always' }],
     'linebreak-style': 0,
   },
   overrides: [

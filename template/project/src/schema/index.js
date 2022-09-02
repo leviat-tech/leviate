@@ -1,9 +1,11 @@
 import * as yup from 'yup';
-import mapValues from 'lodash/mapValues';
-import omitBy from 'lodash/omitBy';
-import isEmpty from 'lodash/isEmpty';
-import get from 'lodash/get';
-import { convertFromSI } from 'leviate/extensions/units';
+import {
+  mapValues,
+  omitBy,
+  isEmpty,
+  get,
+} from 'lodash-es';
+import { convertFromSI } from '@crhio/leviate/extensions/units';
 
 
 function getNewPath(currentPath, currentKey) {
@@ -44,7 +46,7 @@ yup.addMethod(yup.mixed, '$validate', function $validate(value) {
     this.validateSync(value, { abortEarly: false });
     return {};
   } catch (e) {
-    console.log('e', e);
+    console.log(`Schema validation failed: ${e.message}`);
     return e.inner.reduce((errors, error) => ({
       ...errors,
       [error.path]: [
@@ -96,6 +98,5 @@ yup.addMethod(yup.number, 'maxConverted', function maxConverted(value) {
 const version = 1; // parameter space schema version number
 
 export {
-  yup,
   version,
 };

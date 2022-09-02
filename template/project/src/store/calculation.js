@@ -1,17 +1,13 @@
-const state = {};
+import { defineStore } from 'pinia';
 
-const mutations = {};
+export const useCalculationStore = defineStore('calculation', {
+  state: () => ({
 
-const actions = {
-  initialize: ({ commit, state: s }, docs) => {
-    // Perform some checks here when loading a previously saved state
+  }),
+  actions: {
+    initialize: () => {
+      // Perform some checks here when loading a previously saved state
+      console.log('Initializing calculation store');
+    },
   },
-};
-
-const documents = {
-  namespaced: true,
-  state,
-  mutations,
-  actions,
-};
-export default documents;
+});

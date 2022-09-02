@@ -1,7 +1,8 @@
 import inject from '@crhio/inject';
+import logger from '../extensions/logger.js';
 
 const uninitializedWarning = (pluginName) => () => {
-  console.error(`${pluginName} has not been initialized. Did you call Vue.use(HostPlugin)?`);
+  logger.error(`${pluginName} has not been initialized. Did you call app.use(HostPlugin)?`);
 };
 
 export const api = new Proxy({}, {
@@ -23,6 +24,7 @@ export const api = new Proxy({}, {
 
 const modules = {
   host: {},
+  api: uninitializedWarning('api'),
   localize: uninitializedWarning('$l'),
 };
 
@@ -47,22 +49,26 @@ function createApi(url, $host) {
 }
 
 const HostPlugin = {
-  install(Vue, { endpoints, locales }) {
+  install(app, { endpoints, locales }) {
     const $host = inject.attach({}).call;
-    const $l = (phrase, options = {}) => {
-      return $host.localize(phrase, { ...options, fallback: locales });
-    };
+    const $l = (phrase, options) => $host.localize(phrase, { ...options, fallback: locales })
+    const $L = (phrase) => $host.localize(phrase, { capitalize: true, fallback: locales })
 
     // Store so module can be imported
     modules.host = $host;
-    modules.localize = $l;
+    modules.api = api;
+    modules.localize = { $l, $L };
 
-    // Assign to Vue prototype
-    Object.assign(Vue.prototype, { $host, $l });
+    Object.assign(app.config.globalProperties, { $host, $l, $L });
+
+    if (!endpoints) {
+      logger.log('No endpoints defined in leviate.config.js');
+      return;
+    }
 
     // Create api endpoint methods
     Object.entries(endpoints).forEach(([key, url]) => {
-      if (!url) return console.error(`Cannot create API: no url found for ${key}`);
+      if (!url) return logger.error(`Cannot create API: no url found for ${key}`);
       api[key] = createApi(url, $host);
     });
   },
@@ -70,5 +76,6 @@ const HostPlugin = {
 
 export const useHost = () => modules.host;
 export const useLocalize = () => modules.localize;
+export const useApi = () => modules.api;
 
 export default HostPlugin;

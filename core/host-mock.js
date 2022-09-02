@@ -2,6 +2,7 @@ import axios from 'axios';
 import adapter from 'axios/lib/adapters/http';
 import inject from '@crhio/inject';
 import leviateConfig from './leviate.config';
+import logger from './extensions/logger.js';
 
 export function useMock(token, mockConfig, locales) {
   let state = mockConfig.state || {};
@@ -24,7 +25,7 @@ export function useMock(token, mockConfig, locales) {
       state = s;
     },
     async setName(name) {
-      console.log(name);
+      logger.log(name);
     },
     async authorizedPostRequest(url, data, config = {}) {
       if (!token) {
@@ -42,7 +43,7 @@ export function useMock(token, mockConfig, locales) {
       const capitalize = (string) => string.replace(/(^|\s)\S/g, (l) => l.toUpperCase());
       const translation = locales.en[phrase] || options.default;
       if (translation === undefined) {
-        console.error(`Unable to translate ${phrase}`);
+        logger.error(`Unable to translate ${phrase}`);
         return `{{ ${phrase} }}`
       }
       return options?.capitalize

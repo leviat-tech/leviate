@@ -1,16 +1,21 @@
-import VueRouter from 'vue-router';
+import {
+  createWebHashHistory,
+  createRouter as _createRouter,
+} from 'vue-router'
 import { useHost } from './plugins/host';
 
-export function createRouter(_Vue, routes) {
-  _Vue.use(VueRouter);
 
-  const router = new VueRouter({
+export function createRouter(routes) {
+  const router = _createRouter({
+    base: import.meta.env.BASE_URL,
+    history: createWebHashHistory(),
     routes,
-  });
+  })
 
-  router.beforeEach((to, from, next) => {
-    if (to.meta.before) to.meta.before(to, from, next);
-    else next();
+  router.beforeEach((to, from) => {
+    if (to.meta.before) {
+      return to.meta.before(to, from);
+    }
   });
 
   router.afterEach((to) => {

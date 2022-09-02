@@ -1,103 +1,14 @@
-import Vue from 'vue';
-import { sync } from 'vuex-router-sync';
-import Concrete from '@crhio/concrete';
-import search from './directives/v-search';
-import find from './directives/v-find';
-import HostPlugin, { useHost } from './plugins/host';
-import { createStore, initializeStore } from './store';
-import './assets/styles/index.scss';
-import { createRouter } from './router.js';
+import { useRootStore, transact } from './store';
+import { useMessageStore } from './store/message';
+import { useHost, useLocalize, useApi } from './plugins/host';
+import BaseModel from './BaseModel'
 
-Vue.config.productionTip = false;
-
-function installPlugins(_Vue, { endpoints, locales, plugins, globalConfig }) {
-  plugins?.forEach(plugin => loadPlugin(_Vue, plugin));
-
-  _Vue.use(HostPlugin, { endpoints, locales });
-  _Vue.use(find);
-  _Vue.use(search);
-  _Vue.use(Concrete, { size: 'sm' });
-
-  if (globalConfig) {
-    _Vue.prototype.$config = globalConfig;
-  }
-
-  _Vue.prototype.$transact = function (cb) {
-    this.$store.dispatch('transaction/transact', cb);
-  };
-}
-
-function loadPlugin(_Vue, pluginConfig) {
-  if (pluginConfig instanceof Array) {
-    const [plugin, options] = pluginConfig;
-    _Vue.use(plugin, options);
-  }
-
-  return _Vue.use(pluginConfig);
-}
-
-async function getAppRootComponent(isDev) {
-  const appModule = (isDev) ? await import('./dev.vue') : await import('./app.vue');
-  return appModule.default;
-}
-
-
-/**
- * @typedef {Object} ProjectConfig
- * @property {Array} routes
- * @property {Array} models an array of VuexORM models
- * @property {Object} locales
- * @property {Object} endpoints
- * @param {ProjectConfig} projectConfig
- * @param {Object} env - the import.meta.env object
- */
-export async function createApp(projectConfig, env) {
-  const {
-    globalComponents,
-    mockConfig,
-    locales,
-    routes,
-    storeConfig,
-    models,
-    migrations
-  } = projectConfig;
-
-
-  if (env.DEV) {
-    const { useMock } = await import('./host-mock');
-    useMock(env.VITE_PROXY_ACCESS_TOKEN, mockConfig, locales);
-  }
-
-  installPlugins(Vue, projectConfig);
-
-  globalComponents.forEach(component => Vue.component(component.name, component));
-
-  const store = createStore(Vue, storeConfig, models);
-  const router = createRouter(Vue, routes);
-
-  sync(store, router);
-
-  // load initial url and initial state if host provided it
-  const host = useHost();
-  const initialState = host.getState();
-  const context = host.getMeta();
-  initializeStore(store, initialState, context, migrations);
-
-  const initialUrl = host.getUrl();
-  if (initialUrl) {
-    router.replace(initialUrl).catch(() => {
-    });
-  }
-
-  const App = await getAppRootComponent(env.DEV);
-
-  const vue = new Vue({
-    router,
-    store,
-    render: (h) => h(App),
-  }).$mount('#app');
-
-  if (env.DEV) {
-    window.vue = vue;
-  }
-}
+export {
+  useRootStore,
+  useMessageStore,
+  transact,
+  useHost,
+  useLocalize,
+  useApi,
+  BaseModel,
+};

@@ -1,6 +1,5 @@
-import SampleModel from './sample-model';
+import ExampleModel from './ExampleModel';
 
-// Anything exported here will be registered as a model in the VuexORM database
-export default [
-  SampleModel,
-];
+export default {
+  ExampleModel,
+}

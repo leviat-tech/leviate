@@ -1,19 +1,22 @@
-import Vue from 'vue';
-import overview from './templates/pdf/overview';
+import { useApi } from '../plugins/host';
+import logger from './logger.js';
 
-const pdfExporter = (doc) => {
-  const url = 'https://659asa3aoe.execute-api.us-east-1.amazonaws.com/pdf';
+
+const exportPdf = (template, payload, meta) => {
+  const doc = template(payload, meta);
+  const api = useApi();
+
+  if (!api.pdf) {
+    logger.warn(`You must specify a 'pdf' property in leviate.config.js endpoints config`)
+  }
+
   const options = {
     responseEncoding: 'binary',
     responseType: 'arraybuffer',
     dataType: 'blob',
   };
 
-  return Vue.prototype.$host.authorizedPostRequest(url, { doc }, options);
+  return api.pdf({ doc }, options);
 };
 
-export default {
-  pdf: {
-    overview: (payload, meta) => pdfExporter(overview(payload, meta)),
-  },
-};
+export default exportPdf;

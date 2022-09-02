@@ -1,72 +1,46 @@
-import { v4 as uuid } from 'uuid';
-import { Model } from '@vuex-orm/core';
-import set from 'lodash/set';
-import get from 'lodash/get';
-import last from 'lodash/last';
+import { Entity } from '@crhio/normie'
+import logger from './extensions/logger';
+import { useMessageStore } from './store/message';
+import { isEmpty, each } from 'lodash-es';
 
+class BaseModel extends Entity {
+  constructor(props) {
+    super(props);
 
-class BaseModel extends Model {
-  static parameterFields(defaults) {
-    return Object.entries(defaults).reduce((attrs, [k, v]) => ({
-      ...attrs,
-      [k]: this.attr(v),
-    }), {});
+    const { name, schema } = this.constructor;
+
+    if (!schema) {
+      logger.warn(`${name} must have a schema property`)
+    }
   }
 
   static get baseFields() {
     return {
-      id: this.uid(uuid),
-      created_at: this.attr(() => new Date().getTime()),
-      updated_at: this.attr(() => new Date().getTime()),
+      created_at: new Date().getTime(),
+      updated_at: new Date().getTime(),
     };
   }
 
-  async $update(field, value, schema) {
-    await this.constructor.update({
-      where: this.$id,
-      data(instance) {
-        set(instance, field, value);
-        if (schema) {
-          try {
-            Object.assign(instance, schema.cast(instance));
-          } catch (e) {
-            return; // eslint-disable-line
-          }
-        }
-      },
-    });
+  static beforeUpdate(patch) {
+    patch.updated_at = new Date().getTime();
   }
 
-  // Push a new value to an array field
-  async $push(field, value, schema) {
-    await this.constructor.update({
-      where: this.$id,
-      data(instance) {
-        const arr = get(instance, field);
-        arr.push(value);
-
-        if (schema) {
-          try {
-            Object.assign(instance, schema.cast(instance));
-          } catch (e) {
-            return; // eslint-disable-line
-          }
-        }
-      },
-    });
+  static afterUpdate(instance) {
+    instance.$validate();
+    instance.afterUpdate?.();
   }
 
-  static async insertOne(data) {
-    const res = await this.insert({ data });
-    return last(res[this.entity]);
-  }
+  $validate() {
+    const { inputStatus } = useMessageStore();
+    const errors = this.constructor.schema.$validate(this);
+    const { id } = this;
 
-  static beforeUpdate(instance) {
-    instance.updated_at = new Date().getTime(); // eslint-disable-line
-  }
-
-  validate() {
-    return this.constructor.schema.$validate(this);
+    if (isEmpty(errors)) {
+      // Remove any remaining errors in the store
+      if (inputStatus[id]) delete inputStatus[id];
+    } else {
+      inputStatus[id] = errors;
+    }
   }
 
   get coercedSchema() {

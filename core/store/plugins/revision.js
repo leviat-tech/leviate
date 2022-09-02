@@ -1,24 +1,30 @@
-import omit from 'lodash/omit';
-import Revision from '../../extensions/revision';
+import Revision from '../../extensions/Revision';
 import { useHost } from '../../plugins/host';
+import { markRaw } from 'vue';
 
-const revision = (store) => {
-  store.revision = new Revision(store, 25, {
-    autocommit(mutation, s) {
-      return s.transaction.transactionDepth === 0
-        && !mutation.type.startsWith('display')
-        && mutation.type !== 'transaction/cleanUpKilledTransaction';
-    },
-    committed(snapshot) {
-      const host = useHost();
+const revision = new Revision(25, {
+  autocommit(mutation, state) {
+    if (mutation.type === 'patch object') {
+      revision.outdated = false;
+      return false;
+    }
 
-      if (host.setState) {
-        const filtered = omit(snapshot, ['selected', 'search']);
-        filtered.settings = omit(filtered.settings, ['configName', 'locale']);
-        host.setState(filtered);
-      }
-    },
-  });
+    return mutation.storeId === 'root' && state.transactionDepth === 0;
+  },
+  committed(snapshot) {
+    const host = useHost();
+
+    if (host.setState) {
+      host.setState(snapshot);
+    }
+  },
+});
+
+const revisionPlugin = ({ store }) => {
+  if (store.$id === 'root') {
+    store.revision = markRaw(revision);
+    revision.initializeStore(store)
+  }
 };
 
-export default revision;
+export default revisionPlugin;

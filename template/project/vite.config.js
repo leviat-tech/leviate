@@ -1,22 +1,23 @@
 import path from 'path';
-import { createVuePlugin } from 'vite-plugin-vue2';
-import JSDraftLoader from '@crhio/rollup-plugin-jsdraft';
-import { createSvgPlugin } from 'vite-plugin-vue2-svg';
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import svgLoader from 'vite-svg-loader';
 import { createFetchProxyAccessTokenPlugin } from '@crhio/leviate/server/fetch-access-token.js';
 import 'dotenv/config';
 
-const config = {
+export default defineConfig({
   resolve: {
     alias: {
       '~': `${path.resolve(__dirname)}`,
       '@': `${path.resolve(__dirname, 'src')}`,
+      '@crhio/leviate': '/node_modules/@crhio/leviate/core',
     },
   },
 
   build: {
     minify: true,
     rollupOptions: {
-      input: './src/main.js',
+      input: '/node_modules/@crhio/leviate/core/entry-dev.js',
       output: {
         name: 'plugin',
         format: 'iife',
@@ -26,28 +27,28 @@ const config = {
     },
   },
 
-  // eliminate the need to explicitly import stylesheets in vue components
-  css: {
-    preprocessorOptions: {
-      scss: {
-        additionalData: `
-          @import "@crhio/leviate/core/assets/styles/variables.scss";
-          @import "@crhio/leviate/core/assets/styles/mixins.scss";
-        `,
-      },
-    },
+  optimizeDeps: {
+    exclude: [
+      '@headlessui/vue',
+      '@crhio/leviate',
+      '@crhio/normie',
+      'pinia',
+      'vue-router',
+      'vue',
+    ],
+    include: [
+      '@crhio/leviate > axios',
+      'axios/lib/adapters/http',
+    ],
   },
 
   plugins: [
+    vue(),
+    svgLoader(),
     createFetchProxyAccessTokenPlugin(),
-    createVuePlugin(),
-    JSDraftLoader(),
-    createSvgPlugin(),
   ],
 
   server: {
     port: 8080,
   },
-};
-
-export default config;
+});

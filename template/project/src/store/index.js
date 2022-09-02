@@ -1,7 +1,14 @@
-import documents from './documents';
+import { useCalculationStore } from './calculation';
+import { useDocumentStore } from './documents';
+import { useUiStore } from './ui';
 
 export default {
-  modules: {
-    documents,
-  },
+  state: {},
+  actions: {},
+  getters: {},
+  modules: [
+    useCalculationStore,
+    useDocumentStore,
+    useUiStore,
+  ],
 };

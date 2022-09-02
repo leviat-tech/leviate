@@ -1,6 +1,5 @@
-import get from 'lodash/get';
-import set from 'lodash/set';
-import unset from 'lodash/unset';
+import { set, get, unset } from 'lodash-es'
+import logger from './logger.js';
 
 
 class Migration {
@@ -40,7 +39,7 @@ class Migration {
 
   next = function next() {
     if (this.isUpToDate) {
-      console.log('already migrated to latest version');
+      logger.log('already migrated to latest version');
       return;
     }
     this.currentMigration.next.up(this);
@@ -49,7 +48,7 @@ class Migration {
 
   prev = function prev() {
     if (!this.currentMigration.prev) {
-      console.log('cannot go backwards any further');
+      logger.log('cannot go backwards any further');
       return;
     }
     this.currentMigration.down(this);
