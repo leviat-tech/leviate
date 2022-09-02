@@ -6,7 +6,7 @@
       <CNumericInput :id="getEntityId('height')" :step="10"/>
       <CNumericInput :id="getEntityId('depth')" :step="10"/>
     </div>
-  </CFormSection>s
+  </CFormSection>
 </template>
 
 

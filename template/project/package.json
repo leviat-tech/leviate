@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@crhio/concrete": "^2.0.1",
-    "@crhio/leviate": "^2.0.1",
+    "@crhio/leviate": "^2.1.0",
     "@crhio/normie": "^1.0.0",
     "@headlessui/vue": "^1.6.7",
     "@heroicons/vue": "^1.0.6",
