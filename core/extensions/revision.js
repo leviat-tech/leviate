@@ -1,93 +1,107 @@
-// https://github.com/anthonygore/vuex-undo-redo
-/* eslint-disable no-underscore-dangle */
+// inspired by https://github.com/anthonygore/vuex-undo-redo
+import Vue from 'vue';
 
+/**
+ * @typedef { Object } Handlers
+ * @property { Function<mutation: object, state: object> } autocommit - called on state change. Return true to commit the state to the revision history
+ * @property { Function<state> } committed(mutation) - called when state is committed
+ * @property { Function } undone - called after successful undo
+ * @property { Function } redone - called after succesful redo
+ *
+ * @param { VuexStore } store
+ * @param { number } maxSteps
+ * @param { Handlers } handlers
+ * @returns { Vue }
+ */
+export function createRevision(store, maxSteps, handlers) {
+  return new Vue({
+    created() {
+      this.store = store;
+      this.maxSteps = maxSteps;
+      this.handlers = handlers || {};
 
-class Revision {
+      window.rev = this;
 
-  // handlers:
-  //   autocommit(mutation): called on state change, when returns true will commit state
-  //   committed(state): called when state is committed (note undo sometimes calls commit too)
-  //   undone(): called after successful undo
-  //   redone(): called after succesful redo
-  constructor(store, max, handlers) {
-    this.max = (max || 15) + 1;
-    this.outdated = true;
-    this.undos = [];
-    this.redos = [];
-    this.store = store;
-    this.handlers = handlers || {};
-    this.store.subscribe(this.changed.bind(this));
-  }
+      this.store.subscribe(this.onStoreUpdated);
+    },
+    data() {
+      return {
+        undos: [],
+        redos: [],
+        isNewUpdate: true,
+      };
+    },
+    computed: {
+      undoable() {
+        return this.undos.length > 1;
+      },
+      redoable() {
+        return this.redos.length > 0;
+      },
+    },
+    methods: {
+      snapshot() {
+        return JSON.parse(JSON.stringify(this.store.state));
+      },
+      replace(store) {
+        this.store.replaceState(JSON.parse(JSON.stringify(store)));
+      },
+      onStoreUpdated(mutation, state) {
+        const stateStr = JSON.stringify(state);
+        const storeHasUpdated = stateStr !== this.previousStateStr;
 
-  get undoable() {
-    return this.undos.length > 1 || (this.undos.length === 1 && this.outdated);
-  }
+        this.previousStateStr = stateStr;
 
-  get redoable() {
-    return this.redos.length > 0;
-  }
+        const shouldCommit =
+          this.isNewUpdate &&
+          storeHasUpdated &&
+          this.handlers.autocommit?.(mutation, state);
 
-  // save current state to undo stack
-  commit() {
-    if (!this.outdated) return;
-    this.outdated = false;
-    this.undos.push(this.snapshot());
-    if (this.undos.length > this.max) {
-      this.undos.shift();
+        if (shouldCommit) {
+          this.redos = [];
+          this.commit();
+        }
+      },
+      commit() {
+        this.undos.push(this.snapshot());
+        if (this.undos.length > this.maxSteps) {
+          this.undos.shift();
+        }
+
+        if (this.handlers.committed) {
+          this.handlers.committed(this.snapshot());
+        }
+      },
+      undo() {
+        if (!this.undoable) return;
+
+        this.isNewUpdate = false;
+
+        this.redos.push(this.undos.pop());
+        this.replace(this.undos[this.undos.length - 1]);
+
+        if (this.handlers.undone) {
+          this.handlers.undone(this.snapshot());
+        }
+
+        this.isNewUpdate = true;
+      },
+
+      redo() {
+        if (!this.redoable) return;
+
+        this.isNewUpdate = false;
+
+        const state = this.redos.pop();
+        this.undos.push(state);
+        this.replace(state);
+
+        if (this.handlers.redone) {
+          this.handlers.redone(this.snapshot());
+        }
+
+        this.isNewUpdate = true;
+      }
     }
-
-    if (this.handlers.committed) {
-      this.handlers.committed(this.snapshot());
-    }
-  }
-
-  // save current state and rewind to last commit
-  undo() {
-    if (!this.undoable) return;
-    if (this.outdated) this.commit();
-    this.redos.push(this.undos.pop());
-    this.replace(this.undos[this.undos.length - 1]);
-
-    if (this.handlers.undone) {
-      this.handlers.undone(this.snapshot());
-    }
-  }
-
-  // move fast forward to previous commit
-  redo() {
-    if (!this.redoable) return;
-    const state = this.redos.pop();
-    this.undos.push(state);
-    this.replace(state);
-
-    if (this.handlers.redone) {
-      this.handlers.redone(this.snapshot());
-    }
-  }
-
-  // return cloned copy of state
-  snapshot() {
-    return JSON.parse(JSON.stringify(this.store.state));
-  }
-
-  // replace current state with provided state
-  replace(store) {
-    this.store.replaceState(JSON.parse(JSON.stringify(store)));
-  }
-
-  // called when state changes
-  changed(mutation) {
-    this.outdated = true;
-    this.redos = [];
-    if (this.handlers.autocommit && this.handlers.autocommit(mutation, this.store.state)) this.commit();
-  }
-
-  // clear revision undo / redo stack
-  clear() {
-    this.outdated = true;
-    this.undos = [];
-    this.redos = [];
-  }
+  });
 }
-
-export default Revision;

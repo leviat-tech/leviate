@@ -1,12 +1,14 @@
 import omit from 'lodash/omit';
-import Revision from '../../extensions/revision';
+import { createRevision } from '../../extensions/revision';
 import { useHost } from '../../plugins/host';
 
 const revision = (store) => {
-  store.revision = new Revision(store, 25, {
+  store.revision = createRevision(store, 25, {
     autocommit(mutation, s) {
-      return s.transaction.transactionDepth === 0
+      return store.isInitialized
+        && s.transaction.transactionDepth === 0
         && !mutation.type.startsWith('display')
+        && !mutation.type.startsWith('errors')
         && mutation.type !== 'transaction/cleanUpKilledTransaction';
     },
     committed(snapshot) {
