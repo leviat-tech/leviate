@@ -55,7 +55,10 @@ export const getStoreConfig = (projectStoreConfig, models) => {
     state,
     getters: { ...coreGetters, ...projectGetters },
     mutations: { ...mutations, ...make.mutations(state) },
-    actions: projectStoreConfig.actions || {},
+    actions: {
+      initialize() {},
+      ...projectStoreConfig.actions
+    },
     modules: {
       display,
       errors,
@@ -72,11 +75,13 @@ export const createStore = (vueInstance, projectStoreConfig, models) => {
 
   const storeConfig = getStoreConfig(projectStoreConfig, models);
   store = new Vuex.Store(storeConfig);
+  store.isInitialized = false;
   return store;
 };
 
 // function to initialize store given initial state
-export function initializeStore(store, initialState, {configurator, project, user}, migrations) { // eslint-disable-line
+export function initializeStore(store, initialState, context, migrations) {
+  const { configurator, project, user } = context;
   const migration = new Migration(migrations, initialState);
 
   const latestMigrationName = migration.latestMigrationName;
@@ -91,10 +96,12 @@ export function initializeStore(store, initialState, {configurator, project, use
     store.commit('SET_SERIALIZATION_VERSION', latestMigrationName);
   }
   // Set default document state
+  store.dispatch('initialize', context);
   store.dispatch('transaction/initialize');
   store.dispatch('calculation/initialize');
   store.dispatch('documents/initialize', configurator.documentTemplates);
   store.dispatch('settings/initialize', { name: project.name, locale: user.locale });
+  store.isInitialized = true;
 }
 
 export function useStore() {
