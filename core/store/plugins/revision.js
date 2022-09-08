@@ -5,6 +5,7 @@ import { useHost } from '../../plugins/host';
 const revision = (store) => {
   store.revision = createRevision(store, 25, {
     autocommit(mutation) {
+      // Only store revision history and save to state if ending a transaction
       const { type, payload } = mutation;
       return store.isInitialized
         && type === 'transaction/SET_TRANSACTION_DEPTH'
