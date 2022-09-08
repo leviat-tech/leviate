@@ -4,12 +4,11 @@ import { useHost } from '../../plugins/host';
 
 const revision = (store) => {
   store.revision = createRevision(store, 25, {
-    autocommit(mutation, s) {
+    autocommit(mutation) {
+      const { type, payload } = mutation;
       return store.isInitialized
-        && s.transaction.transactionDepth === 0
-        && !mutation.type.startsWith('display')
-        && !mutation.type.startsWith('errors')
-        && mutation.type !== 'transaction/cleanUpKilledTransaction';
+        && type === 'transaction/SET_TRANSACTION_DEPTH'
+        && payload === 0;
     },
     committed(snapshot) {
       const host = useHost();
