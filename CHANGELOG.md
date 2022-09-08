@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.1](https://github.com/leviat-tech/leviate/compare/v1.3.0...v1.3.1) (2022-09-08)
+
+
+### Fixes
+
+* simplify revision logic ([4dfa472](https://github.com/leviat-tech/leviate/commit/4dfa4722144f7461c16a88c25e3c0cc1d8053d20))
+
 ## 1.3.0 (2022-09-07)
 
 
