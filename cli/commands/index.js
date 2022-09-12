@@ -21,6 +21,7 @@ function commandInDevelopment(msg) {
         run(options) {
           console.log(msg)
           console.log('This command is still in development')
+          return new Promise(resolve => resolve());
         }
       }
     })
