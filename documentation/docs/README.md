@@ -2,7 +2,7 @@
 home: true
 heroText: Leviate
 tagline: A framework for creating Leviat Host plugins
-actionText: Get Started →
+actionText: View Documentation →
 actionLink: /getting-started
 features:
 - title: First Class Tooling
@@ -13,3 +13,10 @@ features:
   details: Leviate has powerful built-in features for keeping your inputs and data in sync and validated, with minimal code
 footer: Copyright © 2022 Leviat
 ---
+<hr>
+<div style="text-align: center">
+  <a style="display: inline-block;padding: 0.75rem 2rem;margin: 2rem auto; border-radius: 4px;background: #04093d; color: white"
+href="app.html">
+  View the Demo App
+</a>
+</div>

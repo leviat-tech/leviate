@@ -5,6 +5,8 @@
 You'll need a valid npm token set as an environment variable in order to install leviate and some of its dependencies:
 ```shell
 export NPM_AUTH_TOKEN="TOKEN"
+
+npm config set //registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}
 ```
 
 ::: tip
