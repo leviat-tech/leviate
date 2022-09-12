@@ -23,8 +23,6 @@ export default {
   inputHandler: (id, val) => {
     const { instance, path } = parseInputId(id);
 
-    console.log(instance, path, get(instance, path, val), val);
-
     transact(() => {
       set(instance, path, val);
     });
