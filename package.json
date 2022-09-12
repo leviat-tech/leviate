@@ -19,6 +19,11 @@
       "precommit": "node scripts/release.js"
     }
   },
+  "files": [
+    "core",
+    "template",
+    "cli"
+  ],
   "exports": {
     ".": "./core/index.js",
     "./store": "./core/store/index.js",
@@ -29,7 +34,7 @@
   "dependencies": {
     "@commitlint/cli": "^16.2.4",
     "@commitlint/config-conventional": "^16.2.4",
-    "@crhio/concrete": "^2.0.2",
+    "@crhio/concrete": "^2.0.4",
     "@crhio/inject": "^1.0.4",
     "@crhio/normie": "^1.0.0",
     "ansi-colors": "^4.1.1",
