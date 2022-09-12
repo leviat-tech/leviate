@@ -1,6 +1,6 @@
 <template>
   <LvLayout>
-    <div class="m-auto">
+    <div class="h-full flex items-center justify-center">
       Not Found
     </div>
   </LvLayout>

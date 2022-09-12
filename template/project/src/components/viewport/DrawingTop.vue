@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="border-black border-2 bg-blue-300" :style="style"></div>
+    <div class="border-black" :class="[colorClass, borderClass]" :style="style"></div>
   </div>
 </template>
 
@@ -18,5 +18,22 @@ const style = computed(() => {
     width: `${width }px`,
     height: `${depth }px`
   }
+})
+
+const colorClasses = {
+  red: 'bg-red-300',
+  orange: 'bg-orange-300',
+  yellow: 'bg-yellow-300',
+  green: 'bg-green-300',
+  blue: 'bg-blue-300',
+  purple: 'bg-purple-300',
+};
+
+const colorClass = computed(() => {
+  return colorClasses[props.entity.color.top];
+});
+
+const borderClass = computed(() => {
+  return props.entity.hasBorder && 'border-2';
 })
 </script>

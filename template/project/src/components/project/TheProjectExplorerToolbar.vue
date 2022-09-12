@@ -5,7 +5,6 @@
         name="Undo"
         tool-id="undo"
         icon="undo"
-        :stateful="false"
         @click="revision.undo()"
         :disabled="!undoable"
       />
@@ -13,7 +12,6 @@
         name="Redo"
         tool-id="redo"
         icon="redo"
-        :stateful="false"
         @click="revision.redo()"
         :disabled="!redoable"
       />
@@ -22,12 +20,10 @@
       <CTool name="Export"
              tool-id="export"
              icon="download"
-             :stateful="false"
              @click="showExportModal = true"/>
       <CTool name="Settings"
              tool-id="settings"
              icon="cog"
-             :stateful="false"
              @click="showSettingsModal = true"/>
     </CTool-group>
   </CToolbar>

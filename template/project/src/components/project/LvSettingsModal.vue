@@ -1,35 +1,15 @@
 <template>
-  <CModal :show="showModal" title="Settings" @close="showModal = false" size="lg">
+  <CModal :show="modelValue" title="Settings" @close="$emit('update:modelValue', false)" size="lg">
     <div class="space-y-4">
 
-      <div class="flex justify-between space-x-8">
-          <CTextInput v-model="localConfigName" label="Config Name"/>
-      </div>
-
-      <div class="flex justify-between space-x-8">
-        <div class="py-1">Language</div>
-        <div class="w-64">
-          <CTextInput :disabled="true" :modelValue="locale" />
-        </div>
-      </div>
-
-      <div class="flex justify-between space-x-8">
-        <div class="py-1">Client Notes</div>
-        <div class="w-64">
-<!--          <CTextarea v-model="localClientNotes" :rows="4" />-->
-        </div>
-      </div>
-
-      <div class="flex justify-between space-x-8">
-        <div class="py-1">Internal Notes</div>
-        <div class="w-64">
-<!--          <CTextarea v-model="localInternalNotes" :rows="4" />-->
-        </div>
-      </div>
+      <CTextInput label="config_name" no-translate v-model="data.localConfigName" />
+      <CTextInput label="locale" :disabled="true" :modelValue="locale"/>
+      <CTextArea label="client_notes" v-model="data.localClientNotes" :rows="4"/>
+      <CTextArea label="internal_notes" v-model="data.localInternalNotes" :rows="4"/>
 
       <div class='flex space-x-6 mt-8'>
-        <CButton class="w-full" @click="reset">Reset</CButton>
         <CButton class="w-full" @click="save">Save</CButton>
+        <CButton class="w-full" fill="outline" @click="reset">Reset</CButton>
       </div>
     </div>
   </CModal>
@@ -37,7 +17,7 @@
 
 
 <script setup>
-import { computed, reactive, ref, watch } from 'vue';
+import { reactive } from 'vue';
 import { useHost } from '@crhio/leviate';
 import { useSettingsStore } from '@/store/settings';
 
@@ -56,8 +36,15 @@ const data = reactive({
   localInternalNotes: '',
 });
 
-const showModal = ref(props.modelValue);
-const showValue = computed(() => props.modelValue);
+const { locale } = host.getMeta().user;
+
+const reset = () => {
+  Object.assign(data, {
+    localConfigName: '',
+    localClientNotes: '',
+    localInternalNotes: '',
+  })
+}
 
 const save = () => {
   settings.clientNotes = data.localClientNotes;
@@ -65,22 +52,8 @@ const save = () => {
   if (settings.configName !== data.localConfigName) {
     this.setName();
   }
-  showModal.value = false;
+  emit('update:modelValue', false);
 }
 
 const debug = () => console.log(data);
-const { locale } = host.getMeta().user;
-
-const setName = async () => {
-  host.setName(data.localConfigName);
-  settings.configName = data.localConfigName;
-}
-
-watch(showModal, (show) => {
-  emit('update:modelValue', show);
-});
-
-watch(showValue, val => {
-  showModal.value = val;
-});
 </script>

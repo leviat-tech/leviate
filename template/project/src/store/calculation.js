@@ -1,3 +1,6 @@
+// Use this store to perform calculation actions and
+// set calculated values in the state
+
 import { defineStore } from 'pinia';
 
 export const useCalculationStore = defineStore('calculation', {

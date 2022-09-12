@@ -1,15 +1,15 @@
 <template>
-  <div :style="{ width }">
+  <div class="relative transition-all duration-150">
     <CAutoComplete placeholder="Search"
                    v-model="query"
                    :options="options"
                    @change="onSelect"
                    size="sm"
     >
-      <template #prefix>
-        <CInputAffix>
+      <template #suffix>
+        <div class="absolute z-30 w-8 h-8 p-1.5 right-0 text-gray-400">
           <CIcon type="search"/>
-        </CInputAffix>
+        </div>
       </template>
     </CAutoComplete>
   </div>
@@ -23,8 +23,6 @@ import { useRootStore } from '@crhio/leviate';
 const rootStore = useRootStore();
 
 const query = ref('');
-// TODO: expand when input is focussed
-const width = computed(() => '200px');
 
 const { registeredInputs } = inject('concrete');
 const options = computed(() => {
@@ -42,7 +40,14 @@ async function onSelect(val) {
   setTimeout(() => {
     el.scrollIntoView(true);
     document.querySelector('.configuration__content').scrollTop -= 100;
-    el.focus();
+    focusElement(el);
   }, 0);
+}
+
+function focusElement(el) {
+  const button = el.querySelector('button');
+  const elementToFocus = button || el;
+
+  elementToFocus.focus();
 }
 </script>

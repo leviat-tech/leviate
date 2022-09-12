@@ -1,5 +1,5 @@
 <template>
-  <button class="hover:text-indigo" :title="title">
+  <button class="hover:opacity-50" :title="title">
     <CIcon :type="icon" size="sm"></CIcon>
   </button>
 </template>

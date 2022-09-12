@@ -1,3 +1,5 @@
+// Use this store to save document configuration and data
+
 import { defineStore } from 'pinia';
 // import overview from '@/schema/documents/overview';
 
