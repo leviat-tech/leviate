@@ -133,13 +133,34 @@ We understand that although this functionality is incredibly powerful, and leads
 
 You can find documentation on each of the different input components on the [Concrete Docs Site](https://leviat-concrete.netlify.app/)
 
-## Updating the State
+## Updating the state
 
-Whenever the state is updated it will be persisted by calling `host.setState()`, and the update will be comitted to the revision history, allowing you to undo and redo any changes. You don't need to do anything to make this happen, but there are a couple of things to be aware of.
+```javascript
+import transact from '@crhio/leviate';
 
-By using the form inputs in the way described in the examples above the update will automatically be wrapped in a `transaction`. Using a transaction ensures that if there is an error any changes will be reverted.
+transact(async () => {
+  // Do your updates here!
+})
+```
 
-It's likely that you will want to perform other updates in the app. You should ensure that you call `transact` in order to prevent errors being commited to the persistent state. `transact` is asynchronous so you can `await` any changes before performing additional actions. E.g.
+Transactions are at the heart of state management and persistence. See below for a quick reference when to use and when not to use transactions, and continue reading for a more detailed explanation.
+
+::: tip DO USE TRANSACTIONS
+For changes to data and settings and anything else that you wish to persist between sessions
+:::
+
+::: danger DON'T USE TRANSACTIONS
+For trivial UI changes e.g. changing the zoom, current editing tool, or displaying messages
+:::
+
+Whilst you can update the state directly, wrapping the update action in a `transaction` will ensure that the update:
+- is committed to the persistent state by calling `host.setState()`
+- is stored in the undo history
+- will be reverted if any errors occur
+
+By using the form inputs in the way described in the examples above the update will automatically be wrapped in a `transaction`.
+
+`transact` is asynchronous so you can `await` any changes before performing additional actions. E.g.
 
 ```javascript
 import transact from '@crhio/leviate';
@@ -157,7 +178,7 @@ async function updateStore() {
 ```
 
 ::: tip
-You can directly import local pinia stores but only stores exported in the `modules` property of `@/store/index.js` will be saved to the persistent state.
+You can create and directly import local pinia stores but only stores exported in the `modules` property of `@/store/index.js` will be saved to the persistent state.
 :::
 
 ## Displaying messages
