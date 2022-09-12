@@ -1,6 +1,6 @@
 # Vue Style Guide
 
-# Team specific guidelines
+## Team specific guidelines
 
 ::: tip 💡 TL;DR
 - Composition API with `<script setup>`
@@ -78,7 +78,7 @@ To separate concerns, improve readability and avoid really long lines e.g.
      :class="[activeClass, dynamicClass, sizeClass]"></div>
 ```
 
-# General Guidelines
+## General Guidelines
 
 We also recommend following the rules found in the official Vue style guide:
 
