@@ -1,5 +1,5 @@
 <template>
-  <li class="project__entity-item flex border-b p-2 pl-4 bg-white">
+  <li class="project__entity-item flex border-b p-2 pl-4 bg-white" :class="isActive && 'bg-blue-500 text-white'">
 
     <router-link :to="getItemRoute(item.id)" class="flex-1">
       <div
@@ -13,7 +13,7 @@
       </div>
     </router-link>
 
-    <div class="project__entity-item-buttons flex text-gray-600 space-x-1">
+    <div class="project__entity-item-buttons flex space-x-1" :class="isActive || 'text-gray-500'">
       <LvProjectEntityItemButton @click="onEdit" icon="edit" :title="$L('edit')" />
       <LvProjectEntityItemButton @click="onClone" icon="copy" :title="$L('clone')" />
       <LvProjectEntityItemButton @click="onDelete" icon="trash" :title="$L('delete')" />
@@ -24,12 +24,13 @@
 </template>
 
 <script setup>
-import { nextTick, ref } from 'vue';
+import { computed, nextTick, ref } from 'vue';
 import { omit } from 'lodash-es';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import LvProjectEntityItemButton from './LvProjectEntityItemButton.vue';
 
 const router = useRouter();
+const route = useRoute();
 
 const props = defineProps({
   item: Object,
@@ -39,6 +40,7 @@ const model = item.constructor;
 
 const isEditing = ref(false);
 const inputRef = ref(null);
+const isActive = computed(() => useRoute().params.id === item.id);
 
 const getItemRoute = (itemId) => `/entities/${model.id}/${itemId}`;
 

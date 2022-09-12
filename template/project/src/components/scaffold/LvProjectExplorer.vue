@@ -1,5 +1,5 @@
 <template>
-  <div class="project flex flex-col justify-between h-full pb-2 bg-gray-100 w-64 border-r">
+  <div class="project flex flex-col justify-between h-full pb-2 bg-gray-100 w-64">
 
     <LvToolbarContainer>
       <slot name="toolbar"/>

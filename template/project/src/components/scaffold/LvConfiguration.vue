@@ -10,8 +10,10 @@
         </div>
       </div>
 
-      <div class="relative m-4">
-        <LvConfigurationErrors />
+      <div class="absolute bottom-0 w-full">
+        <div class="relative m-4 pb-4">
+          <LvConfigurationErrors />
+        </div>
       </div>
     </div>
 
