@@ -4,7 +4,7 @@
   "description": "VuePress powered documentation for leviate",
   "scripts": {
     "dev": "vuepress dev docs",
-    "build": "npm run build:app && npm run build:docs",
+    "build": "npm run build:docs && npm run build:app",
     "build:docs": "vuepress build docs",
     "build:app": "cd ../app && npm run build"
   },
