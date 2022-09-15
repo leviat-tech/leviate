@@ -13,7 +13,7 @@
     "test": "jest --coverage=true --verbose"
   },
   "dependencies": {
-    "@crhio/leviate": "^2.1.2",
+    "@crhio/leviate": "^2.1.3",
     "@crhio/normie": "^1.0.0",
     "@headlessui/vue": "^1.6.7",
     "@heroicons/vue": "^1.0.6",
