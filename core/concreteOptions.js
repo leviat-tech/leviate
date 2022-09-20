@@ -9,7 +9,7 @@ import { useLocalize } from './plugins/host';
 const parseInputId = (inputId) => {
   const segments = inputId.split(':');
 
-  if (segments.length !== 2) logger.warn(`Input id ${inputId} does not match the format entity_id_path`);
+  if (segments.length !== 2) logger.warn(`Input id ${inputId} does not match the format entity_id:path`);
 
   const [entityId, path] = segments;
 
@@ -37,7 +37,7 @@ export default {
     if (!id) return;
 
     const { inputStatus } = useMessageStore();
-    const [entityId, path] = id.split('_');
+    const [entityId, path] = id.split(':');
     const errors = inputStatus[entityId]?.[path];
 
     if (!errors) return;
@@ -53,14 +53,14 @@ export default {
 
     if (label) return $L(label);
 
-    const path = id.split('_')[1];
+    const path = id.split(':')[1];
 
     if (!path) {
       logger.warn(`Could not generate label for input id '${id}'`);
       return null;
     }
 
-    const labelPath = path.replace(/\./g, '_');
+    const labelPath = path.replace(/\./g, ':');
     return $L(labelPath);
   }
 }
