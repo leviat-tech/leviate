@@ -7,7 +7,7 @@ import { useLocalize } from './plugins/host';
 
 
 const parseInputId = (inputId) => {
-  const segments = inputId.split('_');
+  const segments = inputId.split(':');
 
   if (segments.length !== 2) logger.warn(`Input id ${inputId} does not match the format entity_id_path`);
 
