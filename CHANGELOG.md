@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.6](https://github.com/leviat-tech/leviate/compare/v2.1.5...v2.1.6) (2022-09-20)
+
+
+### Fixes
+
+* complete refactor of input id separator ([a5e7c32](https://github.com/leviat-tech/leviate/commit/a5e7c3296be5c5c52c524fcb0cfd385cc31cf195))
+
 ### [2.1.5](https://github.com/leviat-tech/leviate/compare/v2.1.4...v2.1.5) (2022-09-20)
 
 
