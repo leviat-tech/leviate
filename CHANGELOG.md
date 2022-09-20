@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.5](https://github.com/leviat-tech/leviate/compare/v2.1.4...v2.1.5) (2022-09-20)
+
+
+### Fixes
+
+* change input id separator to colon ([832f6ca](https://github.com/leviat-tech/leviate/commit/832f6caee0959ea95af58e3ae66112be11d24dc4))
+
 ### [2.1.4](https://github.com/leviat-tech/leviate/compare/v2.1.3...v2.1.4) (2022-09-20)
 
 ### [2.1.3](https://github.com/leviat-tech/leviate/compare/v2.1.2...v2.1.3) (2022-09-15)
