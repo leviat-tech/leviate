@@ -42,7 +42,7 @@ Return an instance of an `Entity` by its id. This getter saves you the trouble o
 
 **`getEntryFromId(id)`**
 
-Returns a translated string by passing in the id in the same format that the form inputs use, `[instanceId]_[path]`.
+Returns a translated string by passing in the id in the same format that the form inputs use, `[instanceId]:[path]`.
 
 **`getModel(name)`**
 
