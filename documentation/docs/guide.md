@@ -141,7 +141,7 @@ You can find documentation on each of the different input components on the [Con
 ## Updating the state
 
 ```javascript
-import transact from '@crhio/leviate';
+import { transact } from '@crhio/leviate';
 
 transact(async () => {
   // Do your updates here!
@@ -168,7 +168,7 @@ By using the form inputs in the way described in the examples above the update w
 `transact` is asynchronous so you can `await` any changes before performing additional actions. E.g.
 
 ```javascript
-import transact from '@crhio/leviate';
+import { transact } from '@crhio/leviate';
 import Model from '@/models/Model'
 
 async function updateStore() {
