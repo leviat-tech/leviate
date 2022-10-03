@@ -60,7 +60,7 @@ export default {
       return null;
     }
 
-    const labelPath = path.replace(/\./g, ':');
+    const labelPath = path.replace(/\./g, '_');
     return $L(labelPath);
   }
 }
