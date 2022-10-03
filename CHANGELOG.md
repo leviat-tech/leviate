@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.7](https://github.com/leviat-tech/leviate/compare/v2.1.6...v2.1.7) (2022-09-29)
+
+
+### Fixes
+
+* allow store modules in global input handler ([02f2ca8](https://github.com/leviat-tech/leviate/commit/02f2ca83f75babe030d90162f4517b53a4a19447))
+
 ### [2.1.6](https://github.com/leviat-tech/leviate/compare/v2.1.5...v2.1.6) (2022-09-20)
 
 

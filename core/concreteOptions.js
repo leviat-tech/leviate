@@ -1,6 +1,7 @@
+import { get, set } from 'lodash-es';
+import { validate } from 'uuid';
 import logger from './extensions/logger';
 import { useRootStore } from './store';
-import { get, set } from 'lodash-es';
 import { useMessageStore } from './store/message';
 import { transact } from './store';
 import { useLocalize } from './plugins/host';
@@ -12,9 +13,10 @@ const parseInputId = (inputId) => {
   if (segments.length !== 2) logger.warn(`Input id ${inputId} does not match the format entity_id:path`);
 
   const [entityId, path] = segments;
-
   const store = useRootStore();
-  const instance = store.getEntityById(entityId);
+  // If the entityId is a uuid then get the instance from the entities store
+  // Otherwise entityId is a store module
+  const instance = validate(entityId) ? store.getEntityById(entityId) : store.modules[entityId]?.();
 
   return { instance, path };
 }

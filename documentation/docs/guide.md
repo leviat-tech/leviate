@@ -75,19 +75,24 @@ export default {
 
 ## Step Two: Build the form
 
-This is where the magic happens. Using the format `[instanceId]_[key]` for the input ids, the inputs will render the respective label and value, update the state, and display any validation errors.
+This is where the magic happens. Using the format `[instanceId]:[key]` for the input ids, the inputs will render the respective label and value, update the state, and display any validation errors.
+
+::: tip
+`instanceId` can be either a normie model's uuid, or a store submodule key. For the examples below we'll be using the entity id from a normie model
+:::
+
 
 **`components/forms/SectionForm.vue`**
 
 ```vue
 <template>
-  <CTextInput :id="`${id}_name`" />
-  <CNumericInput :id="`${id}_width`" />
-  <CNumericInput :id="`${id}_height`" />
+  <CTextInput :id="`${id}:name`" />
+  <CNumericInput :id="`${id}:width`" />
+  <CNumericInput :id="`${id}:height`" />
   <CFormElement label="thickness">
     <div class="w-full flex space-x-4">
-      <CNumericInput :id="`${id}_thickness.min`" />
-      <CNumericInput :id="`${id}_thickness.max`" />
+      <CNumericInput :id="`${id}:thickness.min`" />
+      <CNumericInput :id="`${id}:thickness.max`" />
     </div>
   </CFormElement>
 </template>
@@ -116,16 +121,16 @@ We understand that although this functionality is incredibly powerful, and leads
 
 ```vue
 // Renders an unwrapped input
-<CTextInput :id="`${id}_name`" no-wrap />
+<CTextInput :id="`${id}:name`" no-wrap />
 
 // Renders a wrapped input without a label (still shows errors)
-<CTextInput :id="`${id}_name`" no-label />
+<CTextInput :id="`${id}:name`" no-label />
 
 // Renders an input with a custom label (still translates the label)
-<CNumericInput :id="`${id}_thickness.max`" label="max" />
+<CNumericInput :id="`${id}:thickness.max`" label="max" />
 
 // Renders an input with a custom label and no translation
-<CNumericInput :id="`${id}_thickness.max`" label="mm" no-translate />
+<CNumericInput :id="`${id}:thickness.max`" label="mm" no-translate />
 
 // Renders an input with a local data binding
 <CNumericInput id="height`" v-model="myData.height" />
@@ -136,7 +141,7 @@ You can find documentation on each of the different input components on the [Con
 ## Updating the state
 
 ```javascript
-import transact from '@crhio/leviate';
+import { transact } from '@crhio/leviate';
 
 transact(async () => {
   // Do your updates here!
@@ -163,7 +168,7 @@ By using the form inputs in the way described in the examples above the update w
 `transact` is asynchronous so you can `await` any changes before performing additional actions. E.g.
 
 ```javascript
-import transact from '@crhio/leviate';
+import { transact } from '@crhio/leviate';
 import Model from '@/models/Model'
 
 async function updateStore() {
