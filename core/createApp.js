@@ -3,22 +3,22 @@ import Concrete from '@crhio/concrete';
 import HostPlugin, { useHost } from './plugins/host';
 import { createStore, initializeStore } from './store';
 import { createRouter } from './router.js';
-import concreteDefaultOptions from './concreteOptions'
-import './assets/styles/index.css'
+import concreteDefaultOptions from './concreteOptions';
+import './assets/styles/index.css';
 
 function installPlugins(
   app,
   { concreteOptions, endpoints, locales, plugins, globalConfig }
 ) {
-  plugins?.forEach((plugin) => loadPlugin(app, plugin))
+  plugins?.forEach((plugin) => loadPlugin(app, plugin));
 
-  const concreteConfig = { ...concreteDefaultOptions, ...concreteOptions }
-  app.use(Concrete, concreteConfig)
-  app.use(HostPlugin, { endpoints, locales })
+  const concreteConfig = { ...concreteDefaultOptions, ...concreteOptions };
+  app.use(Concrete, concreteConfig);
+  app.use(HostPlugin, { endpoints, locales });
 
   if (globalConfig) {
-    app.config.globalProperties.$config = globalConfig
-    app.provide('$config', globalConfig)
+    app.config.globalProperties.$config = globalConfig;
+    app.provide('$config', globalConfig);
   }
 }
 
