@@ -12,4 +12,7 @@ export default {
   plugins: [
     // You can also pass options using an array e.g. [MyPlugin, myPluginConfig]
   ],
+  concreteOptions: {
+    // You can override any of the concrete options here e.g. registerInputs: true
+  },
 };
