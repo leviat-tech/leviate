@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/leviat-tech/leviate/compare/v2.1.6...v2.2.0) (2022-11-02)
+
+
+### Features
+
+* allow passing concrete options to createApp ([49696ab](https://github.com/leviat-tech/leviate/commit/49696ab950d82957481b82b119453f5a4df11246))
+
+
+### Fixes
+
+* allow store modules in global input handler ([aa1e94b](https://github.com/leviat-tech/leviate/commit/aa1e94bf7dd63dcc87ba20ddf7abe62a128d9109))
+* revert label formatter to underscore ([7b8fd73](https://github.com/leviat-tech/leviate/commit/7b8fd73bc8ad3abb50cd7837778546f8294f657d))
+
 ### [2.1.8](https://github.com/leviat-tech/leviate/compare/v2.1.6...v2.1.8) (2022-10-03)
 
 
