@@ -40,8 +40,7 @@ function loadPlugin(app, pluginConfig) {
  * @param {ProjectConfig} projectConfig
  * @param {VueComponent} Root - the app root component
  */
-export async function createApp(projectConfig, Root) {
-  const env = import.meta.env;
+export async function createApp(projectConfig, Root, isDev) {
   const {
     globalComponents,
     routes,
@@ -80,7 +79,8 @@ export async function createApp(projectConfig, Root) {
 
   app.mount('#app');
 
-  if (env.DEV) {
+  if (isDev) {
+    window.store = store;
     window.app = app;
   }
 
