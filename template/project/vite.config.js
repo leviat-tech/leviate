@@ -14,19 +14,6 @@ export default defineConfig({
     },
   },
 
-  build: {
-    minify: true,
-    rollupOptions: {
-      input: '/node_modules/@crhio/leviate/core/entry-dev.js',
-      output: {
-        name: 'plugin',
-        format: 'iife',
-        inlineDynamicImports: true, // iife build breaks without enabling this option
-        entryFileNames: 'app.js',
-      },
-    },
-  },
-
   optimizeDeps: {
     exclude: [
       '@headlessui/vue',
