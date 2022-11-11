@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/leviat-tech/leviate/compare/v2.2.0...v3.0.0) (2022-11-11)
+
+
+### Fixes
+
+* simplify entry point and make app/store globally available for e2e testing ([943f4bb](https://github.com/leviat-tech/leviate/commit/943f4bb9921b40cc004ef3b5e7a81243192cc178))
+
 ## [2.2.0](https://github.com/leviat-tech/leviate/compare/v2.1.6...v2.2.0) (2022-11-02)
 
 
