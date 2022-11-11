@@ -17,7 +17,7 @@
     "test:e2e": "npm run build:test && start-server-and-test serve http://localhost:8081 cy:run"
   },
   "dependencies": {
-    "@crhio/leviate": "^2.1.7",
+    "@crhio/leviate": "^3.0.0",
     "@crhio/normie": "^1.0.0",
     "@headlessui/vue": "^1.6.7",
     "@heroicons/vue": "^1.0.6",
