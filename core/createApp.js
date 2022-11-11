@@ -6,10 +6,7 @@ import { createRouter } from './router.js';
 import concreteDefaultOptions from './concreteOptions';
 import './assets/styles/index.css';
 
-function installPlugins(
-  app,
-  { concreteOptions, endpoints, locales, plugins, globalConfig }
-) {
+function installPlugins(app, { concreteOptions, endpoints, locales, plugins, globalConfig }) {
   plugins?.forEach((plugin) => loadPlugin(app, plugin));
 
   const concreteConfig = { ...concreteDefaultOptions, ...concreteOptions };
@@ -80,6 +77,7 @@ export async function createApp(projectConfig, Root, isDev) {
   app.mount('#app');
 
   if (isDev) {
+    // Expose app and store globally for e2e testing
     window.store = store;
     window.app = app;
   }

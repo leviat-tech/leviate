@@ -3,12 +3,16 @@ import appConfig from '@/leviate.config';
 import { createApp } from './createApp';
 
 
-const isStandalone = window.self === window.top;
+const isDev = import.meta.env.DEV;
 
+/**
+ * Lazy load host mock as not needed in production
+ * @return {Promise<null|(function(): void)|*>}
+ */
 async function getAppcreatedHandler() {
-  if (!isStandalone) return null;
+  if (!isDev) return null;
 
-  if (isStandalone) {
+  if (isDev) {
     const mockConfig = await import('@/mock.config');
     const { useMock } = await import('./host-mock');
     return () => {
@@ -18,7 +22,7 @@ async function getAppcreatedHandler() {
 }
 
 async function getRootComponent() {
-  const rootComponentModule = isStandalone
+  const rootComponentModule = isDev
     ? await import('./components/Dev.vue')
     : await import('./components/App.vue');
 
@@ -30,7 +34,7 @@ async function start() {
   const rootComponent = await getRootComponent();
   const projectConfig = { ...baseConfig, ...appConfig, onAppCreated };
 
-  createApp(projectConfig, rootComponent, isStandalone);
+  createApp(projectConfig, rootComponent, isDev);
 }
 
 start();

@@ -5,12 +5,16 @@
     "dev": "vite",
     "dev:clean": "vite --force",
     "build": "vite build",
+    "build:test": "vite build --mode test",
     "serve": "vite preview",
     "deploy-staging": "npm install && npm run build -- --minify false && node scripts/deploy-to-staging.js",
     "make-migration": "node scripts/make-migration.js",
     "generate-migration-index": "node scripts/generate-migration-index.js",
-    "lint": "vue-cli-service lint",
-    "test": "jest --coverage=true --verbose"
+    "test": "jest --coverage=true --verbose",
+    "cy:run": "cypress run --env port=8081",
+    "cy:open": "cypress open --env port=8080",
+    "test:e2e:dev": "start-server-and-test dev http://localhost:8080 cy:open",
+    "test:e2e": "npm run build:test && start-server-and-test serve http://localhost:8081 cy:run"
   },
   "dependencies": {
     "@crhio/leviate": "^2.1.7",
