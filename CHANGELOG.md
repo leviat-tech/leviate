@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.2](https://github.com/leviat-tech/leviate/compare/v1.3.0...v1.3.2) (2022-12-01)
+
+
+### Features
+
+* add getConfiguration to host mock ([6b8c522](https://github.com/leviat-tech/leviate/commit/6b8c5228094c466a4ab7a3aa209057f8f063ca57))
+
+
+### Fixes
+
+* simplify revision logic ([c2aaa49](https://github.com/leviat-tech/leviate/commit/c2aaa49dc7cdde973271de1fc475a449c8c06379))
+
 ### [1.3.1](https://github.com/leviat-tech/leviate/compare/v1.3.0...v1.3.1) (2022-09-08)
 
 
