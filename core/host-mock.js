@@ -20,6 +20,9 @@ export function useMock(token, mockConfig, locales) {
     getMeta() {
       return mockConfig.meta;
     },
+    getConfiguration() {
+      return mockConfig.configuration;
+    },
     setState(s) {
       state = s;
     },
