@@ -31,8 +31,15 @@ More about this command in the [CLI](/cli) documentation.
 leviate init <project-name>
 ```
 
-## Starting the dev server
+## Dev server
 
+### Environment variables
+You should create `.env` file and include:
+```shell
+VITE_PROXY_URL="https://crh-host-proxy.herokuapp.com"
+```
+
+### Starting server
 `cd` in to the `project` folder and run `npm run dev`
 
 Click the link in the terminal and the app template will open in your default browser. Hot Module Reloading is enabled so the browser should update everytime you save your local changes
