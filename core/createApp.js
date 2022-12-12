@@ -36,8 +36,9 @@ function loadPlugin(app, pluginConfig) {
  * @property {Object} endpoints
  * @param {ProjectConfig} projectConfig
  * @param {VueComponent} Root - the app root component
+ * @param {Boolean} isStandalone
  */
-export async function createApp(projectConfig, Root, isDev) {
+export async function createApp(projectConfig, Root, isStandalone) {
   const {
     globalComponents,
     routes,
@@ -76,7 +77,7 @@ export async function createApp(projectConfig, Root, isDev) {
 
   app.mount('#app');
 
-  if (isDev) {
+  if (isStandalone) {
     // Expose app and store globally for e2e testing
     window.store = store;
     window.app = app;
