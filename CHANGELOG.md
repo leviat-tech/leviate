@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/leviat-tech/leviate/compare/v3.0.0...v3.1.0) (2022-12-12)
+
+
+### Features
+
+* use host mock in standalone mode ([4d70e66](https://github.com/leviat-tech/leviate/commit/4d70e66e71f14f9c9dce96d184225ea6670d53ad))
+
 ## [3.0.0](https://github.com/leviat-tech/leviate/compare/v2.2.0...v3.0.0) (2022-11-11)
 
 
