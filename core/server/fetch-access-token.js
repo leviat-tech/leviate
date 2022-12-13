@@ -20,7 +20,7 @@ function createFetchProxyAccessTokenPlugin() {
   return {
     name: 'createFetchAccessToken',
     async config(config, env) {
-      if (env.mode === 'development') {
+      if (env.mode === 'development' || process.env.VITE_DEPLOY_TARGET === 'staging') {
         process.env.VITE_PROXY_ACCESS_TOKEN = await fetchProxyAccessToken();
       }
     },
