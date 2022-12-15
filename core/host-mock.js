@@ -1,7 +1,6 @@
 import axios from 'axios';
 import adapter from 'axios/lib/adapters/http';
 import inject from '@crhio/inject';
-import leviateConfig from './leviate.config';
 import logger from './extensions/logger.js';
 
 export function useMock(token, mockConfig, locales) {
@@ -36,7 +35,8 @@ export function useMock(token, mockConfig, locales) {
       const options = { ...config, adapter };
       options.headers = { ...options.headers, Authorization: `Bearer ${token}` };
       const encodedURL = encodeURIComponent(url);
-      const response = await axios.post(`${leviateConfig.proxyUrl}?url=${encodedURL}`, data, options);
+      const proxyUrl = import.meta.env.VITE_PROXY_URL;
+      const response = await axios.post(`${proxyUrl}?url=${encodedURL}`, data, options);
       return response.data;
     },
     localize(phrase, options = {}) {
