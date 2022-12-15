@@ -26,6 +26,18 @@ export function useMock(token, mockConfig, locales) {
     async setName(name) {
       logger.log(name);
     },
+    async authorizedGetRequest(url, config = {}) {
+      if (!token) {
+        throw new Error('VITE_PROXY_ACCESS_TOKEN environment variable has not been set.');
+      }
+
+      // Use http adapt to prevent preflight reqs failing in test env
+      const options = { ...config, adapter };
+      options.headers = { ...options.headers, Authorization: `Bearer ${token}` };
+      const encodedURL = encodeURIComponent(url);
+      const response = await axios.get(`${leviateConfig.proxyUrl}?url=${encodedURL}`, options);
+      return response.data;
+    },
     async authorizedPostRequest(url, data, config = {}) {
       if (!token) {
         throw new Error('VITE_PROXY_ACCESS_TOKEN environment variable has not been set.');
