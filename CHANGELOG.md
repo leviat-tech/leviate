@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.2.1](https://github.com/leviat-tech/leviate/compare/v3.2.0...v3.2.1) (2022-12-16)
+
+
+### Fixes
+
+* ensure nested model updates are reactive ([c41ddb2](https://github.com/leviat-tech/leviate/commit/c41ddb23b44176e469f732f4603d2001338657e0))
+
 ## [3.2.0](https://github.com/leviat-tech/leviate/compare/v3.0.0...v3.2.0) (2022-12-16)
 
 
