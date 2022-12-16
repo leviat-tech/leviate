@@ -4,7 +4,7 @@
       <CTextInput :id="getEntityId('name')">
         <CInputAffix v-slot:prefix type="suffix">mm</CInputAffix>
       </CTextInput>
-      <CNumericInput :id="getEntityId('width')" :step="10"/>
+      <CNumericInput :id="getEntityId('width')" :step="10" unit="m"/>
       <CNumericInput :id="getEntityId('height')" :step="10"/>
       <CNumericInput :id="getEntityId('depth')" :step="10"/>
       <CListbox :id="getEntityId('color.top')" :options="colorOptions" />
@@ -22,7 +22,7 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const entity = useCurrentEntity();
-const getEntityId = (path) => [entity.value.id, path].join('_');
+const getEntityId = (path) => [entity.value.id, path].join(':');
 
 const colorOptions = entity.value.coercedSchema.reach('color.top').options();
 

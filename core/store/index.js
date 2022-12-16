@@ -112,7 +112,7 @@ function getEntryFromId(state) {
   const { $L } = useLocalize();
 
   return function(id) {
-    const [entityId, path] = id.split('_');
+    const [entityId, path] = id.split(':');
     const instance = this.getEntityById(entityId);
 
     const allSubpaths = range(path.length)
