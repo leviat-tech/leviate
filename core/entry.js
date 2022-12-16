@@ -20,7 +20,7 @@ async function getAppCreatedHandler() {
 }
 
 async function getRootComponent() {
-  const rootComponentModule = isStandalone
+  const rootComponentModule = isStandalone || appConfig.staging?.useDevWrapper === false
     ? await import('./components/Dev.vue')
     : await import('./components/App.vue');
 

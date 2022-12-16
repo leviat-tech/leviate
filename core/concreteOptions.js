@@ -25,8 +25,16 @@ export default {
   inputHandler: (id, val) => {
     const { instance, path } = parseInputId(id);
 
+    const pathSegments = path.split('.');
+
     transact(() => {
-      set(instance, path, val);
+      if (pathSegments.length === 1) {
+        return set(instance, path, val);
+      }
+
+      const newData = set(instance.$toJSON(), path, val);
+      const rootKey = pathSegments[0];
+      instance[rootKey] = newData[rootKey];
     });
   },
   inputIdToValue: (id) => {
