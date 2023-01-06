@@ -19,7 +19,6 @@ export const useMessageStore = defineStore('messages', {
     },
 
     removeMessage(id) {
-      console.log(id, this.messages[id]);
       delete this.messages[id];
     },
 
