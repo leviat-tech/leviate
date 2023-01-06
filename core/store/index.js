@@ -222,6 +222,8 @@ function initializeStore(initialState, migrations, models) { // eslint-disable-l
   })
 
   rootStore.$patch({ transactionDepth: 0 });
+
+  if (typeof rootStore.initialize === 'function') rootStore.initialize();
 }
 
 function performMigration(rootStore, initialState, migrations) {
