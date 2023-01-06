@@ -20,7 +20,7 @@ async function getAppCreatedHandler() {
 }
 
 async function getRootComponent() {
-  const rootComponentModule = isStandalone || appConfig.staging?.useDevWrapper === false
+  const rootComponentModule = isStandalone && import.meta.env.VITE_DEPLOY_TYPE !== 'standalone'
     ? await import('./components/Dev.vue')
     : await import('./components/App.vue');
 

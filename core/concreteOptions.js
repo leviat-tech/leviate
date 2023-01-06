@@ -1,4 +1,4 @@
-import { get, set } from 'lodash-es';
+import { get, set, snakeCase } from 'lodash-es';
 import { validate } from 'uuid';
 import logger from './extensions/logger';
 import { useRootStore } from './store';
@@ -61,7 +61,7 @@ export default {
     const { id, label } = props;
     const { $L } = useLocalize();
 
-    if (label) return $L(label);
+    if (label) return $L(snakeCase(label));
 
     const path = id.split(':')[1];
 
@@ -71,7 +71,7 @@ export default {
     }
 
     const labelPath = path.replace(/\./g, '_');
-    return $L(labelPath);
+    return $L(snakeCase(labelPath));
   }
 }
 
