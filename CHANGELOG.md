@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.2.2](https://github.com/leviat-tech/leviate/compare/v3.2.1...v3.2.2) (2023-01-06)
+
+
+### Fixes
+
+* authorizedGetRequest ([6aca348](https://github.com/leviat-tech/leviate/commit/6aca34854952090806c4364dda7b2823d87550d6))
+
 ### [3.2.1](https://github.com/leviat-tech/leviate/compare/v3.2.0...v3.2.1) (2022-12-16)
 
 
