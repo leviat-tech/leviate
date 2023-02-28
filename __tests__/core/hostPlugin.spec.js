@@ -1,7 +1,11 @@
-import HostPlugin, { api, useHost } from '@/core/plugins/host';
+import HostPlugin, { api, useLocalize, useHost } from '@/core/plugins/host';
 import { useMock } from '@/core/host-mock';
 
-useMock(null, {});
+useMock('test-token', {}, {
+  en: {
+    test_phrase: 'test phrase'
+  }
+});
 
 function installHost(endpointBase) {
   HostPlugin.install({
@@ -14,7 +18,9 @@ function installHost(endpointBase) {
     }
   });
 
-  return useHost().authorizedPostRequest;
+  const mockPost = vi.spyOn(useHost(), 'authorizedPostRequest');
+  mockPost.mockImplementation(() => {});
+  return mockPost;
 }
 
 const postData = { foo: 'bar' };
@@ -61,4 +67,19 @@ describe('Host plugin', () => {
       expect(mockPost).toHaveBeenCalledWith('https://example.com/test-route', postData, undefined);
     });
   })
-})
+
+  describe('localize', () => {
+    it('should translate a string exactly as defined in the locales file', () => {
+      const translated = useLocalize().$l('test_phrase');
+
+      expect(translated).toBe('test phrase');
+    });
+
+
+    it('should capitalise the translated string', () => {
+      const translated = useLocalize().$L('test_phrase');
+
+      expect(translated).toBe('Test Phrase');
+    });
+  });
+});
