@@ -1,8 +1,6 @@
 import { v4 as uuid } from 'uuid';
 import { Model } from '@vuex-orm/core';
-import set from 'lodash/set';
-import get from 'lodash/get';
-import last from 'lodash/last';
+import { set, get, last } from 'lodash-es';
 
 
 class BaseModel extends Model {

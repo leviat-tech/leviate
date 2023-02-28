@@ -3,8 +3,9 @@ import { sync } from 'vuex-router-sync';
 import Concrete from '@crhio/concrete';
 import search from './directives/v-search';
 import find from './directives/v-find';
-import HostPlugin, { useHost } from './plugins/host';
-import { createStore, initializeStore } from './store';
+import HostPlugin, { useHost, useLocalize, useMeta } from './plugins/host';
+import { useApiGateway } from './composables/use-api-gateway';
+import { createStore, initializeStore, useStore } from './store';
 import './assets/styles/index.scss';
 import { createRouter } from './router.js';
 
@@ -51,7 +52,7 @@ async function getAppRootComponent(isDev) {
  * @param {ProjectConfig} projectConfig
  * @param {Object} env - the import.meta.env object
  */
-export async function createApp(projectConfig, env) {
+async function createApp(projectConfig, env) {
   const {
     globalComponents,
     mockConfig,
@@ -65,7 +66,7 @@ export async function createApp(projectConfig, env) {
 
   if (env.DEV) {
     const { useMock } = await import('./host-mock');
-    useMock(env.VITE_PROXY_ACCESS_TOKEN, mockConfig, locales);
+    useMock(mockConfig, locales);
   }
 
   installPlugins(Vue, projectConfig);
@@ -100,4 +101,13 @@ export async function createApp(projectConfig, env) {
   if (env.DEV) {
     window.vue = vue;
   }
+}
+
+export {
+  createApp,
+  useHost,
+  useLocalize,
+  useMeta,
+  useApiGateway,
+  useStore,
 }

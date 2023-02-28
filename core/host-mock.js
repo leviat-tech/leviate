@@ -1,9 +1,6 @@
-import axios from 'axios';
-import adapter from 'axios/lib/adapters/http';
 import inject from '@crhio/inject';
-import leviateConfig from './leviate.config';
 
-export function useMock(token, mockConfig, locales) {
+export function useMock(mockConfig, locales) {
   let state = mockConfig.state || {};
 
   const mockApi = {
@@ -23,34 +20,14 @@ export function useMock(token, mockConfig, locales) {
     getConfiguration() {
       return mockConfig.configuration;
     },
+    getDictionary() {
+      return locales;
+    },
     setState(s) {
       state = s;
     },
     async setName(name) {
       console.log(name);
-    },
-    async authorizedPostRequest(url, data, config = {}) {
-      if (!token) {
-        throw new Error('VITE_PROXY_ACCESS_TOKEN environment variable has not been set.');
-      }
-
-      // Use http adapt to prevent preflight reqs failing in test env
-      const options = { ...config, adapter };
-      options.headers = { ...options.headers, Authorization: `Bearer ${token}` };
-      const encodedURL = encodeURIComponent(url);
-      const response = await axios.post(`${leviateConfig.proxyUrl}?url=${encodedURL}`, data, options);
-      return response.data;
-    },
-    localize(phrase, options = {}) {
-      const capitalize = (string) => string.replace(/(^|\s)\S/g, (l) => l.toUpperCase());
-      const translation = locales.en[phrase] || options.default;
-      if (translation === undefined) {
-        console.error(`Unable to translate ${phrase}`);
-        return `{{ ${phrase} }}`
-      }
-      return options?.capitalize
-        ? capitalize(translation)
-        : translation;
     },
   };
 

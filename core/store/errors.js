@@ -1,8 +1,6 @@
 /* eslint-disable */
 import Vue from 'vue';
-import mapKeys from 'lodash/mapKeys';
-import pickBy from 'lodash/pickBy';
-import mergeWith from 'lodash/mergeWith';
+import { mapKeys, pickBy, mergeWith } from 'lodash-es';
 import { make } from 'vuex-pathify';
 
 const state = {
