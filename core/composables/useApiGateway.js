@@ -4,10 +4,6 @@ export const instance = axios.create({
   baseURL: '/api'
 });
 
-export function normalizePath() {
-
-}
-
 /**
  *
  * @param basePath
