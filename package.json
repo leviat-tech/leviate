@@ -10,14 +10,9 @@
   "bin": "cli/index.js",
   "main": "core/index.js",
   "scripts": {
-    "test": "jest",
-    "release": "standard-version",
-    "prepare": "husky install"
-  },
-  "standard-version": {
-    "scripts": {
-      "precommit": "node scripts/release.js"
-    }
+    "prepublishOnly": "node scripts/bump-template-version",
+    "prepare": "husky install",
+    "test": "vitest"
   },
   "files": [
     "core",
@@ -57,7 +52,6 @@
   },
   "devDependencies": {
     "husky": "^8.0.1",
-    "standard-version": "^9.3.2",
     "vitest": "^0.29.1"
   }
 }
