@@ -75,7 +75,6 @@ describe('Host plugin', () => {
       expect(translated).toBe('test phrase');
     });
 
-
     it('should capitalise the translated string', () => {
       const translated = useLocalize().$L('test_phrase');
 

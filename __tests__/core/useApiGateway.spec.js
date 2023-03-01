@@ -31,8 +31,8 @@ describe('useApiGateway', () => {
       expect(instance.post).toHaveBeenCalledWith('test-api', postData, undefined);
     });
 
-    it('should post to the endpoint with a LEADING AND trailing slash', () => {
-      const api = useApiGateway('test-api/');
+    it('should post to the endpoint with a leading and trailing slash', () => {
+      const api = useApiGateway('/test-api/');
 
       api.post(postData);
 
@@ -93,7 +93,11 @@ describe('useApiGateway', () => {
     });
 
     it('should strip a slash if the base ends and the path begins with a slash', () => {
+      const api = useApiGateway('test-api/');
 
+      api.post('/a/b/c/', postData);
+
+      expect(instance.post).toHaveBeenCalledWith('test-api/a%2Fb%2Fc', postData, undefined);
     });
   });
 
@@ -116,7 +120,11 @@ describe('useApiGateway', () => {
     });
 
     it('should strip a slash if the base ends and the path begins with a slash', () => {
+      const api = useApiGateway('test-api/test-subpath/');
 
+      api.post('/a/b/c/', postData);
+
+      expect(instance.post).toHaveBeenCalledWith('test-api/a%2Fb%2Fc', postData, undefined);
     });
   });
 })
