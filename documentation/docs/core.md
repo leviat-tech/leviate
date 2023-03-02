@@ -9,6 +9,8 @@ export {
   useHost,
   useLocalize,
   useApi,
+  useApiGateway,
+  useEnum
 };
 ```
 
@@ -210,4 +212,76 @@ const res = await myEndpoint({ data });
 // You can also specify a path in the first argument and data in the second
 const res = await myEndpoint('/some-path/', data);
 const res = await myEndpoint('/some/other/path/', data);
+```
+
+## `useApiGateway`
+
+Still under development
+
+## `useEnum`
+
+Not a strict enum implementation but a useful utility for dealing with arrays of strings as selectable or configurable options
+
+`useEnum` accepts a single array of items, or individual items as arguments e.g.
+```javascript
+import { useEnum } from '@crhio/leviate';
+
+const STATE = useEnum('NOT_STARTED', 'IN_PROGRESS', 'COMPLETE');
+// or
+const colors = ['red', 'green', 'blue'];
+const COLORS = useEnum(colors);
+```
+
+The return value references the array of items passed in
+
+```javascript
+JSON.stringify(STATE) === JSON.stringify(['NOT_STARTED', 'IN_PROGRESS', 'COMPLETE']) // true
+```
+
+But the items are also available as direct properties
+
+```javascript
+STATE.NOT_STARTED === 'NOT_STARTED' // true
+```
+
+We also have some other helpful properties available: 
+
+**`isValid(testValue)`**
+
+Test whether the items include the given value
+
+```javascript
+STATE.isValid('IN_PROGRESS') // true
+STATE.isValid('READY') // false
+```
+
+**`is`**
+
+This getter returns an object whose keys correspond to the enum's items. Each property is a function which accepts a `testValue` parameter and returns a boolean. Use this to test whether a given value is equal to an item
+
+```javascript
+const currentState = 'NOT_STARTED'
+
+STATE.is.NOT_STARTED(currentState) // true
+STATE.is.IN_PROGRESS(currentState) // false
+```
+
+**`lower`**
+
+This getter returns new Enum constructed with lowercase values
+
+```javascript
+STATE.lower // ['not_started', 'in_progress', 'complete']
+STATE.lower.not_started // 'not_started'
+STATE.lower.NOT_STARTED // undefined
+```
+
+**`upper`**
+
+This getter returns new Enum constructed with uppercase values
+
+```javascript
+colors.upper // ['RED', 'BLUE', 'GREEN']
+colors.upper.RED // 'RED'
+colors.upper.red // undefined
 ```
