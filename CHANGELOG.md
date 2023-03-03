@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.3.0](https://github.com/leviat-tech/leviate/compare/v3.2.1...v3.3.0) (2023-03-03)
+
+
+### Features
+
+* add useApiGateway to core ([fcb39bd](https://github.com/leviat-tech/leviate/commit/fcb39bd0e359d7cd98e60525134fecd9df220208))
+
+
+### Bug Fixes
+
+* authorizedGetRequest ([5d9cecc](https://github.com/leviat-tech/leviate/commit/5d9cecced0f0813b62a657991a5be68f82deb0ff))
+
 ### [3.2.2](https://github.com/leviat-tech/leviate/compare/v3.2.1...v3.2.2) (2023-01-06)
 
 
