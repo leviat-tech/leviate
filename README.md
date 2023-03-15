@@ -11,3 +11,5 @@ In essence this module can be broken down into three separate parts:
   - additional extensions which are often but not always used
 
 Full documentation can be found at [https://leviate-docs.netlify.app/](https://leviate-docs.netlify.app/)
+
+[CONTRIBUTING](CONTRIBUTING.MD)
