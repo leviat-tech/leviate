@@ -76,7 +76,7 @@ yup.addMethod(yup.mixed, 'getSearchTerm', function getSearchTerm(path) {
   const search = yup.reach(this, path).describe().meta?.search;
   if (search) return search;
   // if there's no search term, return the last subpath
-  if (path.includes('.')) return path.slice(path.lastIndexOf('.') + 1).replace(/\./g, '_');
+  if (path.includes('.')) return path.slice(path.lastIndexOf('.') + 1).replace(/\./g, ':');
   // if there are no subpaths, just return the whole path
   return path;
 });

@@ -61,12 +61,12 @@ export const useMessageStore = defineStore('messages', {
     },
 
     setCalculationWarning(modelId, entityId, path, warnings, additionalData) {
-      const id = [modelId, entityId, path].join('_');
+      const id = [modelId, entityId, path].join(':');
       return this.setWarning(warnings[0], { id, category: 'calculation', ...additionalData });
     },
 
     setCalculationErrors(modelId, entityId, path, errors, additionalData) {
-      const id = [modelId, entityId, path].join('_');
+      const id = [modelId, entityId, path].join(':');
       return this.setError(errors[0], { id, category: 'calculation', ...additionalData });
     },
   },
