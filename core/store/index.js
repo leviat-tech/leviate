@@ -87,7 +87,7 @@ const initialActions = {
 
       const useModule = this.modules[key];
       if (useModule) {
-        useModule().$state = newState[key];
+        useModule().$patch(newState[key])
       } else {
         logger.error(`Store module ${key} does not exist`)
       }
@@ -149,7 +149,7 @@ function generateCurrentGetter(router) {
 
 function getModel(state) {
   return (entityName) => {
-    return state.modules.entities?.().models[entityName];
+    return state.modules?.entities?.().models[entityName];
   }
 }
 

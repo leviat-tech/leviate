@@ -18,7 +18,7 @@ async function getAppCreatedHandler() {
   const mockConfig = await import('@/mock.config');
   const { useMock } = await import('../core/host-mock');
   return () => {
-    useMock(import.meta.env.VITE_PROXY_ACCESS_TOKEN, mockConfig.default, baseConfig.locales);
+    useMock(mockConfig.default, baseConfig.locales);
   };
 }
 

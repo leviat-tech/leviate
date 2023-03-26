@@ -2,7 +2,7 @@ import {
   createWebHashHistory,
   createRouter as _createRouter,
 } from 'vue-router'
-import { useHost } from './plugins/host';
+import { useHost, hostIsConnected } from './plugins/host';
 
 
 export function createRouter(routes) {
@@ -18,7 +18,8 @@ export function createRouter(routes) {
     }
   });
 
-  router.afterEach((to) => {
+  router.afterEach(async (to) => {
+    await hostIsConnected()
     const host = useHost();
     host.setUrl(to.path);
   });
