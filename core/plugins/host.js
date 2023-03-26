@@ -1,5 +1,6 @@
 import inject from '@crhio/inject';
 import { get, merge } from 'lodash-es';
+import { useRootStore } from '../store';
 import logger from '../extensions/logger.js';
 
 const uninitializedWarning = (pluginName) => () => {
@@ -30,26 +31,6 @@ const modules = {
   localize: uninitializedWarning('$l'),
 };
 
-function createApi(url, $host) {
-  return (...args) => {
-    const specifyPath = (typeof args[0] === 'string');
-    let fullPath = url;
-    let [data, options] = args;
-
-    if (specifyPath) {
-      // Ensure that the base and path are joined by a single slash in all conditions
-      const basePath = url.replace(/\/$/, '');
-      const specifiedPath = args[0].replace(/^\//, '');
-      fullPath = [basePath, specifiedPath].join('/');
-
-      data = args[1];
-      options = args[2];
-    }
-
-    return $host.authorizedPostRequest(fullPath, data, options);
-  };
-}
-
 function localize(dictionary, locale, phrase, options = {}) {
   const capitalize = string => string.replace(/(^|\s)\S/g, l => l.toUpperCase());
   const translation = get(dictionary, [locale, phrase])
@@ -74,17 +55,33 @@ export const hostIsConnected = () => hostPromise
 export const useHost = () => modules.host
 export const useMeta = () => modules.meta
 export const useLocalize = () => modules.localize;
-export const useApi = () => modules.api;
+
 
 const HostPlugin = {
-  async install(app, { endpoints, locales }) {
-    const setUrl = () => console.log('fake set url')
-    const setState = () => console.log('fake set state')
+  async install(app, { locales, router }) {
+    const setUrl = (url) => {
+      if (router.currentRoute.value.path !== url) {
+        router.push(url)
+      }
+    }
+    const setState = (state) => {
+      const store = useRootStore()
+      store.replaceState(state)
+    }
+
+    // cache host getters so that they're not async
     const $host = (await inject.attach({ setUrl, setState })).call
-    const dictionary = await $host.getDictionary();
+    for (const key in $host) {
+      if (key.startsWith('get')) {
+        const value = await $host[key]()
+        $host[key] = () => value;
+      }
+    }
+
+    const dictionary = $host.getDictionary();
     merge(dictionary, locales)
 
-    const meta = await $host.getMeta();
+    const meta = $host.getMeta();
     const locale = meta.user.locale;
 
     const $l = (phrase, options) => localize(dictionary, locale, phrase, options)
@@ -93,21 +90,9 @@ const HostPlugin = {
     // Store so module can be imported
     modules.host = $host
     modules.meta = meta
-    modules.api = api;
     modules.localize = { $l, $L };
 
     Object.assign(app.config.globalProperties, { $host, $l, $L });
-
-    if (!endpoints) {
-      logger.log('No endpoints defined in leviate.config.js');
-      return;
-    }
-
-    // Create api endpoint methods
-    Object.entries(endpoints).forEach(([key, url]) => {
-      if (!url) return logger.error(`Cannot create API: no url found for ${key}`);
-      api[key] = createApi(url, $host);
-    });
 
     _resolve($host)
   },

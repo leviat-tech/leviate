@@ -65,13 +65,12 @@ export async function createApp(projectConfig, Root, isStandalone) {
 
   await hostIsConnected();
   const host = useHost()
-  const initialState = await host.getState();
-  const initialUrl = await host.getUrl();
+  const initialState = host.getState();
+  const initialUrl = host.getUrl();
 
   if (initialUrl) {
     router.replace(initialUrl).catch(() => {});
   }
-
 
   // load initial url and initial state if host
   initializeStore(initialState, migrations, models);
