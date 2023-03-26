@@ -13,7 +13,6 @@ const revision = new Revision(25, {
   },
   committed(snapshot) {
     const host = useHost();
-
     if (host.setState) {
       host.setState(snapshot);
     }

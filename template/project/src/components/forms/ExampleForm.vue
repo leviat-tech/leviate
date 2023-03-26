@@ -17,8 +17,8 @@
 
 <script setup>
 
-import useCurrentEntity from '@/composables/useCurrentEntity';
 import { useRouter } from 'vue-router';
+import useCurrentEntity from '@/composables/useCurrentEntity';
 
 const router = useRouter();
 const entity = useCurrentEntity();

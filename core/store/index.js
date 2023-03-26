@@ -244,15 +244,15 @@ function performMigration(rootStore, initialState, migrations) {
 function createStore(projectStoreConfig, router) {
   storeConfig = getStoreConfig(projectStoreConfig, router);
 
+  const pinia = createPinia();
+  pinia.use(revision);
+
   useRootStore = defineStore('root', {
     state: () => storeConfig.state,
     actions: storeConfig.actions,
     getters: storeConfig.getters,
   });
 
-
-  const pinia = createPinia();
-  pinia.use(revision);
   return pinia;
 }
 
@@ -262,5 +262,4 @@ export {
   useRootStore,
   createStore,
   initializeStore,
-
 }
