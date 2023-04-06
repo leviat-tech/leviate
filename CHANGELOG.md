@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.4.0](https://github.com/leviat-tech/leviate/compare/v3.3.0...v3.4.0) (2023-04-06)
+
+
+### Features
+
+* cache getters from host ([88e8507](https://github.com/leviat-tech/leviate/commit/88e8507c5ab60fa8a536fd3b491a74a15ba1ad1a))
+* use async inject, wait for host to attach before mounting app ([7cf55b1](https://github.com/leviat-tech/leviate/commit/7cf55b1d3dfef9304df6e43b488cabad047d3ad1))
+
 ## [3.3.0](https://github.com/leviat-tech/leviate/compare/v3.2.1...v3.3.0) (2023-03-03)
 
 
