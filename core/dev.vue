@@ -1,46 +1,46 @@
 <style scoped lang="scss">
-  .host-bar {
-    position: relative;
-    padding: 30px;
-    color: white;
-    background: #3c3f48;
-    width: 256px;
-  }
-  .host-nav {
-    color: #94979e;
-    background: #f5f5f5;
-    border-bottom: 1px solid #dfe0e3;
-    height: 48px;
-    padding: 12px;
-    z-index: 10;
-  }
-  .host-container {
-    overflow-y: auto;
-    padding-top: 48px;
-    margin-top: -48px;
-  }
+.host-bar {
+  position: relative;
+  padding: 30px;
+  color: white;
+  background: #3c3f48;
+  width: 256px;
+}
+.host-nav {
+  color: #94979e;
+  background: #f5f5f5;
+  border-bottom: 1px solid #dfe0e3;
+  height: 48px;
+  padding: 12px;
+  z-index: 10;
+}
+.host-container {
+  overflow-y: auto;
+  padding-top: 48px;
+  margin-top: -48px;
+}
 
-  .dev__ui {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
+.dev__ui {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
 
-    button {
-      &.active {
-        font-weight: bold;
-      }
-    }
-
-    .dev__buttons button {
-      transition: 1s;
-
-      &.highlight {
-        transition: none;
-        background-color: lighten($primary, 20);
-      }
+  button {
+    &.active {
+      font-weight: bold;
     }
   }
+
+  .dev__buttons button {
+    transition: 1s;
+
+    &.highlight {
+      transition: none;
+      background-color: lighten($primary, 20);
+    }
+  }
+}
 </style>
 
 <template>
@@ -107,6 +107,7 @@
 import App from './app.vue';
 import uniq from 'lodash/uniq'
 import debounce from 'lodash/debounce'
+import { useLocalStorage } from './plugins/localStorage';
 
 export default {
   name: 'Dev',
@@ -123,17 +124,14 @@ export default {
       saveTrigger: false
     }
   },
-  computed: {
-    stateKey() {
-      return this.$host.getMeta().configurator.name;
-    },
-  },
   created() {
-    const storedSettings = this.getStorageItem('settings');
+    const storageKey = this.$host.getMeta().configurator.name;
+    this.storage = useLocalStorage(storageKey);
+
+    const storedSettings = this.storage.getItem('settings');
 
     if (storedSettings) {
       Object.assign(this, storedSettings);
-      this.restoreConfiguration(storedSettings.currentConfig);
     }
 
     this.subscribe();
@@ -148,7 +146,7 @@ export default {
     },
     async onClear() {
       document.querySelector('body').style.opacity = 0.5;
-      setTimeout(this.clearStorage);
+      setTimeout(this.storage.clear);
     },
     saveConfiguration(name) {
       const configName = name || this.configNameInputVal || this.currentConfig || 'Default';
@@ -157,7 +155,7 @@ export default {
         configName
       ]);
       this.saveSettings();
-      this.setStorageItem(configName, this.$store.state);
+      this.storage.setItem(configName, this.$store.state);
       this.setCurrentConfig(configName);
 
       console.log(`Configuration '${configName}' saved`);
@@ -167,7 +165,7 @@ export default {
 
       await this.$nextTick();
 
-      const state = this.getStorageItem(name);
+      const state = this.storage.getItem(name);
 
       if (!state) return;
 
@@ -180,47 +178,11 @@ export default {
       this.configurations = this.configurations
           .filter(configuration => configuration !== name);
       this.saveSettings();
-      this.removeStorageItem(name);
-    },
-    clearStorage() {
-      const deleteKeys = [];
-
-      // Only clear storage for this app
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key.slice(0, this.stateKey.length) === this.stateKey) {
-          deleteKeys.push(key);
-        }
-      }
-
-      deleteKeys.forEach(key => localStorage.removeItem(key));
-
-      window.location.reload();
-    },
-    getStorageKey(name = 'Default') {
-      return [this.stateKey, name].join(':');
-    },
-    getStorageItem(name) {
-      const key = this.getStorageKey(name);
-      const storedJSON = localStorage.getItem(key);
-
-      try {
-        return JSON.parse(storedJSON);
-      } catch(e) {
-        console.log(`Cannot get item: '${key}'`, e);
-      }
+      this.storage.removeItem(name);
     },
     setCurrentConfig(name) {
       this.currentConfig = name;
       this.saveSettings();
-    },
-    setStorageItem(name, data) {
-      const key = this.getStorageKey(name);
-      localStorage.setItem(key, JSON.stringify(data));
-    },
-    removeStorageItem(name) {
-      const key = this.getStorageKey(name);
-      localStorage.removeItem(key);
     },
     saveSettings() {
       const settings = {
@@ -228,7 +190,7 @@ export default {
         configurations: this.configurations,
         currentConfig: this.currentConfig
       }
-      this.setStorageItem('settings', settings);
+      this.storage.setItem('settings', settings);
     },
     subscribe() {
       if (this.autosave) {
