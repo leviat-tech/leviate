@@ -2,9 +2,18 @@ import axios from 'axios';
 import adapter from 'axios/lib/adapters/http';
 import inject from '@crhio/inject';
 import leviateConfig from './leviate.config';
+import { useLocalStorage } from './plugins/localStorage';
+
 
 export function useMock(token, mockConfig, locales) {
   let state = mockConfig.state || {};
+
+  const storage = useLocalStorage(mockConfig.meta.configurator.name);
+  const storedSettings = storage.getItem('settings');
+
+  if (storedSettings) {
+    state = storage.getItem(storedSettings.currentConfig)
+  }
 
   const mockApi = {
     setUrl() {
