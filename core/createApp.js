@@ -59,21 +59,21 @@ export async function createApp(projectConfig, Root, isStandalone) {
   installPlugins(app, { ...projectConfig, store, router });
   globalComponents.forEach(component => app.component(component.name, component));
 
-  app
-    .use(store)
-    .use(router);
+  app.use(store);
 
   await hostIsConnected();
   const host = useHost()
   const initialState = host.getState();
   const initialUrl = host.getUrl();
 
+  initializeStore(initialState, migrations, models);
+
+  // Wait for store to initialize before initializing router
+  app.use(router);
+
   if (initialUrl) {
     router.replace(initialUrl).catch(() => {});
   }
-
-  // load initial url and initial state if host
-  initializeStore(initialState, migrations, models);
 
   await router.isReady()
 

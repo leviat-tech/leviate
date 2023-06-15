@@ -23,15 +23,15 @@
       <div class="dev__ui absolute bottom-0 left-0 w-full text-left">
         <div class="mx-2">
 
-          <div class="mb-3 pb-3 border-b" v-if="configurations.length > 0">
+          <div class="mb-3 pb-3 border-b" v-if="settings.configurations.length > 0">
             <div class="text-lg mb-4 pb-2 border-b">Saved Configurations</div>
-            <div v-for="name in configurations">
+            <div v-for="name in settings.configurations">
               <div class="flex items-center mb-2 px-2">
                 <div class="w-1 h-6 bg-gray-600 mr-2"
-                     :class="{ 'bg-green-600': name === currentConfig }" />
+                     :class="{ 'bg-green-600': name === settings.currentConfig }" />
                 <button class="flex-grow text-left"
-                        :class="{ 'font-bold': name === currentConfig }"
-                        @click="restoreConfiguration(name)">{{ name }}
+                        :class="{ 'font-bold': name === settings.currentConfig }"
+                        @click="onLoad(name)">{{ name }}
                 </button>
                 <button class="flex items-center justify-center bg-gray-500 w-6 h-6" @click="deleteConfiguration(name)">
                   <CIcon type="trash" size="md" />
@@ -42,7 +42,7 @@
 
           <div class="flex items-center justify-between">
             <label for="dev__autosave" class="flex-grow py-2 cursor-pointer">Autosave</label>
-            <input id="dev__autosave" type="checkbox" v-model="autosave" />
+            <input id="dev__autosave" type="checkbox" v-model="settings.autosave" />
           </div>
 
           <input class="w-full px-2 py-2 text-black outline-none text-sm"
@@ -76,52 +76,38 @@
 
 <script setup>
 import App from './App.vue';
-import { uniq, debounce } from 'lodash-es'
 import { useHost } from '../plugins/host';
-import { nextTick, onBeforeMount, reactive, toRefs, watch } from 'vue';
+import { useMock } from '../host-mock.js';
+import { ref, toRefs } from 'vue';
 import { useRootStore } from '../store';
-import logger from '../extensions/logger.js';
 
 const $host = useHost();
 const store = useRootStore();
-
-let unsubscribe = () => {};
-
-const state = reactive({
-  configNameInputVal: null,
-  autosave: false,
-  configurations: [],
-  currentConfig: '',
-});
-
 const {
-  configNameInputVal,
-  autosave,
-  configurations,
-  currentConfig,
-} = toRefs(state);
+  settings,
+  loadConfiguration,
+  saveConfiguration,
+  deleteConfiguration,
+  clearStorage,
+} = useMock();
 
-const stateKey = $host.getMeta().configurator.name;
+const configNameInputVal = ref('');
 
-onBeforeMount(() => {
-  const storedSettings = getStorageItem('settings');
-
-  if (storedSettings) {
-    Object.assign(state, storedSettings);
-    restoreConfiguration(storedSettings.currentConfig);
-  }
-
-  subscribe();
-})
-
-watch(autosave, (val) => {
-  val ? subscribe() : unsubscribe();
-});
-
+const state = $host.getState();
 
 async function onSave() {
-  saveConfiguration();
-  state.configNameInputVal = '';
+  const configName = configNameInputVal.value;
+  const newState = store.toJSON();
+
+  saveConfiguration(configName, newState);
+
+  configNameInputVal.value = '';
+}
+
+function onLoad(name) {
+  const newState = loadConfiguration(name);
+
+  store.replaceState(newState);
 }
 
 async function onClear() {
@@ -129,100 +115,5 @@ async function onClear() {
   setTimeout(clearStorage);
 }
 
-function saveConfiguration(name) {
-  const configName = name || state.configNameInputVal || state.currentConfig || 'Default';
-  state.configurations = uniq([
-    ...state.configurations,
-    configName
-  ]);
-  saveSettings();
-  setStorageItem(configName, store.toJSON());
-  setCurrentConfig(configName);
 
-  logger.log(`Configuration '${configName}' saved`);
-}
-
-async function restoreConfiguration(name = 'Default') {
-  unsubscribe()
-
-  await nextTick();
-
-  const state = getStorageItem(name);
-
-  if (!state) return;
-
-  setCurrentConfig(name);
-  store.replaceState(state);
-
-  subscribe();
-}
-
-function deleteConfiguration(name) {
-  state.configurations = state.configurations.filter(configuration => configuration !== name);
-  saveSettings();
-  removeStorageItem(name);
-}
-
-function clearStorage() {
-  const deleteKeys = [];
-
-  // Only clear storage for this app
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key.slice(0, stateKey.length) === stateKey) {
-      deleteKeys.push(key);
-    }
-  }
-
-  deleteKeys.forEach(key => localStorage.removeItem(key));
-
-  window.location.reload();
-}
-
-function getStorageKey(name = 'Default') {
-  return [stateKey, name].join(':');
-}
-
-function getStorageItem(name) {
-  const key = getStorageKey(name);
-  const storedJSON = localStorage.getItem(key);
-
-  try {
-    return JSON.parse(storedJSON);
-  } catch(e) {
-    logger.log(`Cannot get item: '${key}'`, e);
-  }
-}
-
-function setCurrentConfig(name) {
-  state.currentConfig = name;
-  saveSettings();
-}
-
-function setStorageItem(name, data) {
-  const key = getStorageKey(name);
-  localStorage.setItem(key, JSON.stringify(data));
-}
-
-function removeStorageItem(name) {
-  const key = getStorageKey(name);
-  localStorage.removeItem(key);
-}
-
-function saveSettings() {
-  const settings = {
-    autosave: state.autosave,
-    configurations: state.configurations,
-    currentConfig: state.currentConfig
-  }
-  setStorageItem('settings', settings);
-}
-
-function subscribe() {
-  if (state.autosave) {
-    unsubscribe = store.$subscribe(debounce(() => {
-      saveConfiguration(state.currentConfig);
-    }, 1000));
-  }
-}
 </script>
