@@ -17,8 +17,9 @@ async function getAppCreatedHandler() {
 
   const mockConfig = await import('@/mock.config');
   const { useMock } = await import('../core/host-mock');
+  const { initialize } = useMock();
   return () => {
-    useMock(mockConfig.default, baseConfig.locales);
+    initialize(mockConfig.default, baseConfig.locales);
   };
 }
 

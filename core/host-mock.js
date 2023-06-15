@@ -15,17 +15,23 @@ const data = {
   dictionary: {}
 };
 
-const mockApi = {
-  setUrl() {},
-  getUrl: () => window.location.hash.replace(/^#/, ''),
-  getState: () => data.state,
-  getMeta: () => data.meta,
-  getDictionary: () => data.dictionary,
-  setState: (newState) => { data.state = newState },
-  setName: async (name) => logger.log(name),
-};
-
 export function useMock() {
+
+  const mockApi = {
+    setUrl() {},
+    getUrl: () => window.location.hash.replace(/^#/, ''),
+    getState: () => data.state,
+    getMeta: () => data.meta,
+    getDictionary: () => data.dictionary,
+    setState: (newState) => {
+      data.state = newState;
+
+      if (settings.autosave) {
+        saveConfiguration(settings.currentConfig, newState)
+      }
+    },
+    setName: async (name) => logger.log(name),
+  };
 
   function initialize(mockConfig, locales) {
     data.state = mockConfig.state;
