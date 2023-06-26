@@ -3,7 +3,7 @@
     <div class="space-y-4">
 
       <CTextInput label="config_name" no-translate v-model="data.localConfigName" />
-      <CTextInput label="locale" :disabled="true" :modelValue="locale"/>
+      <CListbox label="locale" :options="Object.keys($host.getDictionary())" v-model="locale"/>
       <CTextArea label="client_notes" v-model="data.localClientNotes" :rows="4"/>
       <CTextArea label="internal_notes" v-model="data.localInternalNotes" :rows="4"/>
 
@@ -17,7 +17,7 @@
 
 
 <script setup>
-import { reactive } from 'vue';
+import { computed, reactive } from 'vue';
 import { useHost } from '@crhio/leviate';
 import { useSettingsStore } from '@/store/settings';
 
@@ -36,7 +36,14 @@ const data = reactive({
   localInternalNotes: '',
 });
 
-const { locale } = host.getMeta().user;
+const locale = computed({
+  get: () => host.locale.value,
+  set: (val) => {
+    host.locale.value = val
+    console.log(host.locale.value, val);
+    window.appKey.value = val;
+  }
+});
 
 const reset = () => {
   Object.assign(data, {

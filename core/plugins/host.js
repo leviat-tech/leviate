@@ -2,6 +2,8 @@ import inject from '@crhio/inject';
 import { get, merge } from 'lodash-es';
 import { useRootStore } from '../store';
 import logger from '../extensions/logger.js';
+import { computed, ref } from 'vue';
+import locales from '../../template/project/src/locales/index.js';
 
 const uninitializedWarning = (pluginName) => () => {
   logger.error(`${pluginName} has not been initialized. Did you call app.use(HostPlugin)?`);
@@ -79,16 +81,23 @@ const HostPlugin = {
     }
 
     const dictionary = $host.getDictionary();
-    merge(dictionary, locales)
+    merge(dictionary, locales);
 
     const meta = $host.getMeta();
-    const locale = meta.user.locale;
+    const locale = ref(meta.user.locale);
 
-    const $l = (phrase, options) => localize(dictionary, locale, phrase, options)
-    const $L = (phrase, options) => localize(dictionary, locale, phrase, { ...options, capitalize: true })
+    const $l = (phrase, options) => localize(dictionary, locale.value, phrase, options)
+    const $L = (phrase, options) => localize(dictionary, locale.value, phrase, { ...options, capitalize: true })
+
+    Object.assign($host, {
+      locale: computed({
+        get: () => locale.value,
+        set: val => locale.value = val
+      }),
+    });
 
     // Store so module can be imported
-    modules.host = $host
+    modules.host = $host;
     modules.meta = meta
     modules.localize = { $l, $L };
 
