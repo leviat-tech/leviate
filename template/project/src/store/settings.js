@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { useHost } from '@crhio/leviate';
 
 
 export const useSettingsStore = defineStore('settings', {
@@ -9,9 +10,8 @@ export const useSettingsStore = defineStore('settings', {
     internalNotes: '',
   }),
   actions: {
-    initialize: ({ name, locale }) => {
-      this.name = name;
-      this.locale = locale;
+    initialize() {
+      useHost().locale.value = this.locale;
     },
   }
 });
