@@ -11,6 +11,7 @@ export const useSettingsStore = defineStore('settings', {
   }),
   actions: {
     initialize() {
+      // Ensure app renders in saved language
       useHost().locale.value = this.locale;
     },
   }
