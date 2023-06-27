@@ -1,25 +1,25 @@
 const phrases = {
-  project_explorer: '[[ project explorer]]',
-  edit: '[[ edit]]',
-  clone: '[[ clone]]',
-  delete: '[[ delete]]',
+  project_explorer: 'explorador de proyectos',
+  edit: 'editar',
+  clone: 'clonar',
+  delete: 'eliminar',
 
-  // Settings
+// Configuración
 
-  config_name: '[[ config name]]',
-  locale: '[[ locale]]',
-  client_notes: '[[ client notes]]',
-  internal_notes: '[[ internal notes]]',
+  config_name: 'nombre de configuración',
+  locale: 'idioma',
+  client_notes: 'notas del cliente',
+  internal_notes: 'notas internas',
 
-  // Form inputs
+// Entradas del formulario
 
-  name: '[[ name]]',
-  width: '[[ width]]',
-  height: '[[ height]]',
-  depth: '[[ depth]]',
-  color_top: '[[ top colour]]',
-  color_side: '[[ side colour]]',
-  border: '[[ border ]]',
+  name: 'nombre',
+  width: 'ancho',
+  height: 'altura',
+  depth: 'profundidad',
+  color_top: 'color superior',
+  color_side: 'color lateral',
+  border: 'borde'
 };
 
 export default phrases;
