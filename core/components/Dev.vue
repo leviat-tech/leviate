@@ -11,7 +11,7 @@
 
 <template>
   <!-- provide a little host like context -->
-  <div class="h-full flex flex-row" :key="appKey">
+  <div class="h-full flex flex-row">
     <div class="host-bar relative p-6 text-white text-center flex flex-col bg-indigo">
       <img src="../assets/images/leviat-logo.png" class="w-32">
 
@@ -114,11 +114,4 @@ async function onClear() {
   document.querySelector('body').style.opacity = 0.5;
   setTimeout(clearStorage);
 }
-
-const appKey = ref(1);
-
-window.appKey = appKey;
-
-window.$host = $host;
-
 </script>

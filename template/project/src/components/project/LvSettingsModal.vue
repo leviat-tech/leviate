@@ -3,7 +3,7 @@
     <div class="space-y-4">
 
       <CTextInput label="config_name" no-translate v-model="data.localConfigName" />
-      <CListbox label="locale" :options="Object.keys($host.getDictionary())" v-model="locale"/>
+      <CListbox label="locale" :options="Object.keys($host.getDictionary())" v-model="data.locale"/>
       <CTextArea label="client_notes" v-model="data.localClientNotes" :rows="4"/>
       <CTextArea label="internal_notes" v-model="data.localInternalNotes" :rows="4"/>
 
@@ -31,17 +31,16 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 
 const data = reactive({
-  localConfigName: '',
-  localClientNotes: '',
-  localInternalNotes: '',
+  localConfigName: settings.configName,
+  localClientNotes: settings.clientNotes,
+  localInternalNotes: settings.internalNotes,
+  locale: host.locale.value,
 });
 
 const locale = computed({
   get: () => host.locale.value,
   set: (val) => {
     host.locale.value = val
-    console.log(host.locale.value, val);
-    window.appKey.value = val;
   }
 });
 
@@ -56,9 +55,9 @@ const reset = () => {
 const save = () => {
   settings.clientNotes = data.localClientNotes;
   settings.internalNotes = data.localInternalNotes;
-  if (settings.configName !== data.localConfigName) {
-    this.setName();
-  }
+  settings.configName = data.localConfigName;
+  settings.locale = host.locale.value;
+  host.locale.value = data.locale;
   emit('update:modelValue', false);
 }
 

@@ -10,12 +10,12 @@
   }
 </style>
 
-<template>
-  <router-view></router-view>
+<template >
+  <RouterView :key="appKey" />
 </template>
 
-<script>
-export default {
-  name: 'App',
-};
+<script setup>
+import { useHost } from '../plugins/host.js';
+
+const appKey = useHost().locale;
 </script>

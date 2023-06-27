@@ -13,13 +13,17 @@ const phrases = {
 
 // Entradas del formulario
 
+  rectangle: 'rectángulo',
+  rectangles: 'rectángulos',
   name: 'nombre',
   width: 'ancho',
   height: 'altura',
   depth: 'profundidad',
   color_top: 'color superior',
   color_side: 'color lateral',
-  border: 'borde'
+  border: 'borde',
+
+  home: 'Selecciona o crea una entidad en el Explorador de Proyectos para continuar.',
 };
 
 export default phrases;

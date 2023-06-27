@@ -1,4 +1,4 @@
-import { BaseModel } from '@crhio/leviate';
+import { BaseModel, useLocalize } from '@crhio/leviate';
 import exampleSchema from '@/schema/example-schema';
 
 class ExampleModel extends BaseModel {
@@ -9,10 +9,12 @@ class ExampleModel extends BaseModel {
   static get fields() {
     if (!this.useStore) return {};
 
+    const name = useLocalize().$L('rectangle');
+
     return {
       ...this.schema.cast(),
       ...this.baseFields,
-      name: `Rectangle ${this.read().length + 1}`,
+      name: `${name} ${this.read().length + 1}`,
     };
   }
 }

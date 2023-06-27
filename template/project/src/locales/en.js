@@ -13,13 +13,17 @@ const phrases = {
 
   // Form inputs
 
+  rectangle: 'rectangle',
+  rectangles: 'rectangles',
   name: 'name',
   width: 'width',
   height: 'height',
   depth: 'depth',
   color_top: 'top colour',
   color_side: 'side colour',
-  border: 'border'
+  border: 'border',
+
+  home: ' Select or create an entity in the Project Explorer to continue',
 };
 
 export default phrases;
