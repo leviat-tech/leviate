@@ -37,13 +37,6 @@ const data = reactive({
   locale: host.locale.value,
 });
 
-const locale = computed({
-  get: () => host.locale.value,
-  set: (val) => {
-    host.locale.value = val
-  }
-});
-
 const reset = () => {
   Object.assign(data, {
     localConfigName: '',
