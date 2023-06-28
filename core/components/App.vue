@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import { useHost } from '../plugins/host.js';
+import { useLocalize } from '../plugins/localize';
 
-const appKey = useHost().locale;
+const appKey = useLocalize().locale;
 </script>

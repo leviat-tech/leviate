@@ -1,17 +1,22 @@
 import { createApp as _createApp } from 'vue';
 import Concrete from '@crhio/concrete';
 import HostPlugin, { useHost, hostIsConnected } from './plugins/host';
+import LocalizePlugin from './plugins/localize';
 import { createStore, initializeStore } from './store';
-import { createRouter } from './router.js';
+import { createRouter } from './router';
 import concreteDefaultOptions from './concreteOptions';
 import './assets/styles/index.css';
 
-function installPlugins(app, { concreteOptions, endpoints, locales, plugins, globalConfig, store, router }) {
+async function installPlugins(app, { concreteOptions, endpoints, locales, plugins, globalConfig, store, router }) {
   plugins?.forEach((plugin) => loadPlugin(app, plugin));
 
   const concreteConfig = { ...concreteDefaultOptions, ...concreteOptions };
   app.use(Concrete, concreteConfig);
-  app.use(HostPlugin, { endpoints, locales, store, router });
+  app.use(LocalizePlugin, { locales });
+  app.use(HostPlugin, { router });
+
+  await hostIsConnected();
+
 
   if (globalConfig) {
     app.config.globalProperties.$config = globalConfig;
@@ -56,12 +61,11 @@ export async function createApp(projectConfig, Root, isStandalone) {
 
   onAppCreated?.();
 
-  installPlugins(app, { ...projectConfig, store, router });
+  await installPlugins(app, { ...projectConfig, store, router });
   globalComponents.forEach(component => app.component(component.name, component));
 
   app.use(store);
 
-  await hostIsConnected();
   const host = useHost()
   const initialState = host.getState();
   const initialUrl = host.getUrl();

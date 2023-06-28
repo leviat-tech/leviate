@@ -4,7 +4,7 @@ import logger from './extensions/logger';
 import { useRootStore } from './store';
 import { useMessageStore } from './store/message';
 import { transact } from './store';
-import { useLocalize } from './plugins/host';
+import { useLocalize } from './plugins/localize';
 
 
 const parseInputId = (inputId) => {

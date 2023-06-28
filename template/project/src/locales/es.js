@@ -1,4 +1,6 @@
 const phrases = {
+  en: 'inglés',
+  es: 'español',
   project_explorer: 'explorador de proyectos',
   edit: 'editar',
   clone: 'clonar',
