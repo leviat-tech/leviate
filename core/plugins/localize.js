@@ -45,6 +45,9 @@ export default {
   install(app, { locales }) {
     Object.assign(dictionary, locales);
     availableLanguages = Object.keys(dictionary);
+
+    // TODO: merge app locales with global translations
+
     Object.assign(app.config.globalProperties, { $availableLanguages: availableLanguages, $l, $L });
   }
 }
