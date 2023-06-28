@@ -7,15 +7,13 @@ import { createRouter } from './router';
 import concreteDefaultOptions from './concreteOptions';
 import './assets/styles/index.css';
 
-async function installPlugins(app, { concreteOptions, endpoints, locales, plugins, globalConfig, store, router }) {
+function installPlugins(app, { concreteOptions, endpoints, locales, plugins, globalConfig, store, router }) {
   plugins?.forEach((plugin) => loadPlugin(app, plugin));
 
   const concreteConfig = { ...concreteDefaultOptions, ...concreteOptions };
   app.use(Concrete, concreteConfig);
   app.use(LocalizePlugin, { locales });
   app.use(HostPlugin, { router });
-
-  await hostIsConnected();
 
 
   if (globalConfig) {
@@ -61,11 +59,12 @@ export async function createApp(projectConfig, Root, isStandalone) {
 
   onAppCreated?.();
 
-  await installPlugins(app, { ...projectConfig, store, router });
+  installPlugins(app, { ...projectConfig, store, router });
   globalComponents.forEach(component => app.component(component.name, component));
 
   app.use(store);
 
+  await hostIsConnected();
   const host = useHost()
   const initialState = host.getState();
   const initialUrl = host.getUrl();
