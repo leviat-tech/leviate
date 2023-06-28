@@ -15,7 +15,6 @@ function installPlugins(app, { concreteOptions, endpoints, locales, plugins, glo
   app.use(LocalizePlugin, { locales });
   app.use(HostPlugin, { router });
 
-
   if (globalConfig) {
     app.config.globalProperties.$config = globalConfig;
     app.provide('$config', globalConfig);

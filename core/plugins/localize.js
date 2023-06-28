@@ -21,8 +21,6 @@ function localize(phrase, options = {}) {
     : translation;
 }
 
-
-
 const $l = (phrase, options) => localize(phrase, options)
 const $L = (phrase, options) => localize(phrase, { ...options, capitalize: true })
 
