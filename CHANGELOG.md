@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.5.0](https://github.com/leviat-tech/leviate/compare/v3.4.0...v3.5.0) (2023-06-28)
+
+
+### Features
+
+* enable update locale ([fdd200c](https://github.com/leviat-tech/leviate/commit/fdd200c49152d00963c5abc4696c6e632ed33057))
+
+
+### Bug Fixes
+
+* ensure local storage state is restored before app mounts in dev ([3a11f4d](https://github.com/leviat-tech/leviate/commit/3a11f4d8a34a36e6dcdc49ef7c22f60a8f7ff6e2))
+
 ## [3.4.0](https://github.com/leviat-tech/leviate/compare/v3.3.0...v3.4.0) (2023-04-06)
 
 
