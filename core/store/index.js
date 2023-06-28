@@ -4,7 +4,7 @@ import { isEmpty, get, last, range, each } from 'lodash-es';
 import Migration from '../extensions/migration';
 import revision from './plugins/revision';
 import BaseModel from '../BaseModel';
-import { useLocalize } from '../plugins/host';
+import { useLocalize } from '../plugins/localize';
 import logger from '../extensions/logger.js';
 
 

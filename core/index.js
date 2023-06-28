@@ -1,7 +1,8 @@
 import { useRootStore, transact } from './store';
 import { useMessageStore } from './store/message';
 import { useEnum } from './composables/useEnum';
-import { useHost, useLocalize, useMeta } from './plugins/host';
+import { useHost, useMeta } from './plugins/host';
+import { useLocalize } from './plugins/localize';
 import { useApiGateway } from './composables/useApiGateway';
 import BaseModel from './BaseModel'
 

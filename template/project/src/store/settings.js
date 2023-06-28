@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { useHost } from '@crhio/leviate';
+import { useLocalize } from '@crhio/leviate';
 
 
 export const useSettingsStore = defineStore('settings', {
@@ -12,7 +12,7 @@ export const useSettingsStore = defineStore('settings', {
   actions: {
     initialize() {
       // Ensure app renders in saved language
-      useHost().locale.value = this.locale;
+      useLocalize().setLocale(this.locale);
     },
   }
 });
