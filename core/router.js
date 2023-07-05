@@ -3,13 +3,21 @@ import {
   createRouter as _createRouter,
 } from 'vue-router'
 import { useHost, hostIsConnected } from './plugins/host';
+import LvReleaseNotesPage from './components/LvReleaseNotesPage.vue';
 
 
 export function createRouter(routes) {
   const router = _createRouter({
     base: import.meta.env.BASE_URL,
     history: createWebHashHistory(),
-    routes,
+    routes: [
+      {
+        name: 'release-notes',
+        path: '/release-notes',
+        component: LvReleaseNotesPage,
+      },
+      ...routes,
+    ],
   })
 
   router.beforeEach((to, from) => {

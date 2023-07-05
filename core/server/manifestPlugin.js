@@ -12,6 +12,18 @@ function generateManifest(root) {
   }, null, '  ');
 }
 
+function stripGitHubReferences(str) {
+  const matches = str.match(/(.+)\(\[\w+]\(.+\)$/);
+
+  const textOnlyMatch = matches?.[1];
+
+  if (textOnlyMatch) return textOnlyMatch.trim();
+
+  console.warn(`Update in unexpected format: ${str}`);
+
+  return str;
+}
+
 
 function generateUpdates(root) {
   const markdown = fs.readFileSync(`${root}/CHANGELOG.md`, 'utf8');
@@ -39,20 +51,22 @@ function generateUpdates(root) {
             currentUpdateItemType = 'features';
           }
 
-          if (token.text === 'Bug Fixes') {
+          else if (token.text.includes('Fixes')) {
             currentUpdateItemType = 'fixes';
+          }
+
+          else {
+            currentUpdateItemType = null;
           }
         }
 
         break;
       case 'list':
-        currentUpdate[currentUpdateItemType] = token.items.map(item => {
-          return item.text.match(/(.+)\(.+\)$/)[1];
-        });
+        if (!currentUpdateItemType) return;
+
+        currentUpdate[currentUpdateItemType] = token.items.map(item => stripGitHubReferences(item.text))
     }
   });
-
-  console.log(updates);
 
   return JSON.stringify(updates, null, '  ');
 }
