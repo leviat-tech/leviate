@@ -6,7 +6,38 @@
     <title>{{ TITLE }}</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <style>
+          .loader {
+              width: 100px;
+              animation: flipX 2.5s linear infinite;
+          }
+
+          @keyframes flipX {
+              0% {
+                  transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+              }
+              20% {
+                  transform: perspective(1000px) rotateX(180deg) rotateY(0deg);
+              }
+              40% {
+                  transform: perspective(1000px) rotateX(180deg) rotateY(-180deg);
+              }
+              60% {
+                  transform: perspective(1000px) rotateX(0deg) rotateY(-180deg);
+              }
+              80% {
+                  transform: perspective(1000px) rotateX(0deg) rotateY(-360deg);
+              }
+              100% {
+                  transform: perspective(1000px) rotateX(0deg) rotateY(-360deg);
+              }
+          }
+      </style>
+      <div style="position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;">
+        <img class="loader" src="/logo-icon.png">
+      </div>
+    </div>
     <script type="module" src="/node_modules/@crhio/leviate/core/entry.js"></script>
   </body>
 </html>
