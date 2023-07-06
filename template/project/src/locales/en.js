@@ -15,8 +15,8 @@ const phrases = {
   clone: 'clone',
   delete: 'delete',
 
-  en: 'English',
-  es: 'Spanish',
+  en: 'english',
+  es: 'español',
   project_explorer: 'project explorer',
 
   // Settings
