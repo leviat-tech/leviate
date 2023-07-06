@@ -1,10 +1,23 @@
 const phrases = {
-  en: 'inglés',
-  es: 'español',
-  project_explorer: 'explorador de proyectos',
+  version: 'versión',
+  built_on: 'Construido en',
+  released: 'lanzado',
+  release_notes: 'Notas de lanzamiento',
+  built_by: 'Construido por',
+  all_rights_reserved: 'Todos los derechos reservados',
+  features: 'características',
+  fixes: 'correcciones',
+  show_more: 'Mostrar más...',
+
+// Actions
+  back: 'atrás',
   edit: 'editar',
   clone: 'clonar',
   delete: 'eliminar',
+
+  en: 'English',
+  es: 'Spanish',
+  project_explorer: 'project explorer',
 
 // Configuración
 
