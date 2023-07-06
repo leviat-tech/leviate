@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import svgLoader from 'vite-svg-loader';
 import 'dotenv/config';
-import manifestPlugin from '@crhio/leviate/server/manifestPlugin';
+import manifestPlugin from '@crhio/leviate/server/manifestPlugin.js';
 
 
 export default defineConfig({
