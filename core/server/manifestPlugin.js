@@ -1,15 +1,15 @@
-import fs from 'fs-extra';
-import { marked } from 'marked';
+const fs = require('fs-extra');
+const { marked } = require('marked');
 
 function generateManifest(root) {
   const { version } = fs.readJsonSync(`${root}/package.json`);
   const manifest = fs.readJsonSync(`${root}/manifest.json`);
 
-  return JSON.stringify({
+  return {
     ...manifest,
     date: Date.now(),
     version,
-  }, null, '  ');
+  };
 }
 
 function stripGitHubReferences(str) {
@@ -68,10 +68,10 @@ function generateUpdates(root) {
     }
   });
 
-  return JSON.stringify(updates, null, '  ');
+  return updates;
 }
 
-export default function manifestPlugin(root = process.cwd()) {
+module.exports = function manifestPlugin(root = process.cwd()) {
   return {
     name: 'manifest',
     configureServer(server) {
@@ -88,6 +88,13 @@ export default function manifestPlugin(root = process.cwd()) {
             return next();
         }
       });
+    },
+    writeBundle({ dir }) {
+      const manifest = generateManifest(root);
+      const updates = generateUpdates(root);
+
+      fs.writeJsonSync(`${dir}/manifest.json`, manifest);
+      fs.writeJsonSync(`${dir}/updates.json`, updates);
     }
   };
 }
