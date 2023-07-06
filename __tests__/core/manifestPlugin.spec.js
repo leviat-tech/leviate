@@ -9,16 +9,20 @@ const manifestPath = `${buildPath}/manifest.json`;
 const updatesPath = `${buildPath}/updates.json`;
 
 beforeAll(() => {
-  // try {
-  //   spawnSync(`npx vite build --force`, {
-  //     cwd: '.cwd/project',
-  //     stdio: 'inherit',
-  //     shell: true
-  //   })
-  // } catch (e) {
-  //   logger.error(e)
-  // }
-})
+  try {
+    spawnSync(`npx vite build --force`, {
+      cwd: '.cwd/project',
+      stdio: 'inherit',
+      shell: true
+    })
+  } catch (e) {
+    logger.error(e)
+  }
+});
+
+afterAll(() => {
+  fs.removeSync('.cwd')
+});
 
 describe('manifestPlugin', () => {
   describe('manifest.json', () => {
