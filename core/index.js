@@ -81,6 +81,9 @@ export async function createApp(projectConfig, env) {
   const host = useHost();
   const initialState = host.getState();
   const context = host.getMeta();
+  // PChan - 20230710 - below code to expand context to include the configuration data,
+  // errors when I test in de, might not be required
+  // const context = { ...host.getMeta(), 'configuration': host.getMeta().configurations[0] };
   initializeStore(store, initialState, context, migrations);
 
   const initialUrl = host.getUrl();
