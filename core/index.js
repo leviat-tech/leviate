@@ -80,7 +80,7 @@ export async function createApp(projectConfig, env) {
   // load initial url and initial state if host provided it
   const host = useHost();
   const initialState = host.getState();
-  const context = { ...host.getMeta(), 'configuration': host.getConfiguration() };
+  const context = { ...host.getMeta(), configuration: host.getConfiguration() };
   initializeStore(store, initialState, context, migrations);
 
   const initialUrl = host.getUrl();
