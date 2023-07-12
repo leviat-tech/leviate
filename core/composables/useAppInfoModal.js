@@ -6,11 +6,7 @@ export default function useAppInfoModal() {
 
   return {
     isAppInfoModalOpen,
-    openAppInfoModal: () => {
-      console.log(isAppInfoModalOpen.value);
-      isAppInfoModalOpen.value = true
-      console.log(isAppInfoModalOpen.value);
-    },
+    openAppInfoModal: () => isAppInfoModalOpen.value = true,
     closeAppInfoModal: () => isAppInfoModalOpen.value = false,
   }
 }

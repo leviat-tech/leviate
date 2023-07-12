@@ -35,8 +35,6 @@ import useAppInfoModal from '../composables/useAppInfoModal.js';
 const manifest = ref({});
 const { isAppInfoModalOpen, closeAppInfoModal } = useAppInfoModal();
 
-console.log(isAppInfoModalOpen);
-
 function getDateString() {
   return new Date(manifest.value.date).toLocaleDateString().replace(/\//g, '-');
 }

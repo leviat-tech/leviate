@@ -17,7 +17,7 @@ afterAll(async () => {
 
 const cwd = '.cwd';
 
-describe.skip('init', () => {
+describe('init', () => {
   it('should initialize in the current directory', async () => {
     const success = await init.run();
 
