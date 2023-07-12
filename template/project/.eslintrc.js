@@ -6,6 +6,7 @@ module.exports = {
   extends: [
     'airbnb-base',
     'plugin:vue/essential',
+    'plugin:cypress/recommended',
   ],
   parserOptions: {
     parser: 'babel-eslint',
