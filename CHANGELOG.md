@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.6.0](https://github.com/leviat-tech/leviate/compare/v3.5.0...v3.6.0) (2023-07-14)
+
+
+### Features
+
+* add cypress config ([#57](https://github.com/leviat-tech/leviate/issues/57)) ([e8af256](https://github.com/leviat-tech/leviate/commit/e8af256ca5efb72d8dea3fa77735d0742e35e6d8))
+
+
+### Bug Fixes
+
+* remove data-cy from production code ([0aacf9c](https://github.com/leviat-tech/leviate/commit/0aacf9cf893ac25f60ce3c720705ea50dda656af))
+
 ## [3.5.0](https://github.com/leviat-tech/leviate/compare/v3.4.0...v3.5.0) (2023-06-28)
 
 
