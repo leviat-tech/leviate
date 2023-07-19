@@ -11,9 +11,12 @@ const settings = reactive({
 
 const data = {
   state: {},
-  meta: {},
   dictionary: {}
 };
+
+const metaData = reactive({  
+  meta: {}, 
+});
 
 export function useMock() {
 
@@ -21,7 +24,7 @@ export function useMock() {
     setUrl() {},
     getUrl: () => window.location.hash.replace(/^#/, ''),
     getState: () => data.state,
-    getMeta: () => data.meta,
+    getMeta: () => metaData.meta,
     getDictionary: () => data.dictionary,
     setState: (newState) => {
       data.state = newState;
@@ -31,11 +34,16 @@ export function useMock() {
       }
     },
     setName: async (name) => logger.log(name),
+    setMeta(newMeta){
+      metaData.meta = Object.assign(metaData.meta, newMeta);
+    },
   };
+
+  window.host = mockApi;
 
   function initialize(mockConfig, locales) {
     data.state = mockConfig.state;
-    data.meta = mockConfig.meta;
+    metaData.meta = mockConfig.meta;
     data.dictionary = locales;
 
     const storedSettings = getStorageItem('settings');
@@ -53,7 +61,7 @@ export function useMock() {
   /****************************** LOCAL STORAGE MANAGEMENT ******************************/
 
   function getStorageKey(name = 'Default') {
-    const stateKey = data.meta.configurator.name;
+    const stateKey = metaData.meta.configurator.name;
     return [stateKey, name].join(':');
   }
 
@@ -121,7 +129,7 @@ export function useMock() {
   }
 
   function clearStorage() {
-    const stateKey = data.meta.configurator.name;
+    const stateKey = metaData.meta.configurator.name;
     const deleteKeys = [];
 
     // Only clear storage for this app
@@ -134,7 +142,7 @@ export function useMock() {
 
     deleteKeys.forEach(key => localStorage.removeItem(key));
 
-    window.location.reload();
+    window.location.reload();    
   }
 
   return {
@@ -143,6 +151,6 @@ export function useMock() {
     loadConfiguration,
     saveConfiguration,
     deleteConfiguration,
-    clearStorage,
+    clearStorage,    
   }
 }
