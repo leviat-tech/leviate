@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.6.1](https://github.com/leviat-tech/leviate/compare/v3.6.0...v3.6.1) (2023-07-19)
+
+
+### Bug Fixes
+
+* added supprt for host meta setting ([#62](https://github.com/leviat-tech/leviate/issues/62)) ([4354ece](https://github.com/leviat-tech/leviate/commit/4354ece7dca5fc0ec498648c902bd74ac4490680))
+
 ## [3.6.0](https://github.com/leviat-tech/leviate/compare/v3.5.0...v3.6.0) (2023-07-14)
 
 
