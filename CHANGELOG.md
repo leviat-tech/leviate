@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.6.2](https://github.com/leviat-tech/leviate/compare/v3.6.1...v3.6.2) (2023-07-20)
+
+
+### Bug Fixes
+
+* bump node version in release-please ([#67](https://github.com/leviat-tech/leviate/issues/67)) ([4025247](https://github.com/leviat-tech/leviate/commit/4025247e1c5fc539f420007429f8798b8b829de6))
+
 ## [3.6.1](https://github.com/leviat-tech/leviate/compare/v3.6.0...v3.6.1) (2023-07-19)
 
 
