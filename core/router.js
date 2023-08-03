@@ -3,7 +3,7 @@ import {
   createRouter as _createRouter,
 } from 'vue-router'
 import { useHost, hostIsConnected } from './plugins/host';
-import LvReleaseNotesPage from './components/LvReleaseNotesPage.vue';
+import LvPageReleaseNotes from './components/LvPageReleaseNotes.vue';
 
 
 export function createRouter(routes) {
@@ -14,7 +14,7 @@ export function createRouter(routes) {
       {
         name: 'release-notes',
         path: '/release-notes',
-        component: LvReleaseNotesPage,
+        component: LvPageReleaseNotes,
       },
       ...routes,
     ],
