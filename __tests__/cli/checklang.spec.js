@@ -1,6 +1,14 @@
 import checklang from '../../cli/commands/checklang'
-
 import { pressAnyKey } from '../../cli/helpers';
+
+vi.mock('../../cli/helpers', async (importOriginal) => {
+  return {
+    pressAnyKey: vi.fn()
+  }
+})
+
+
+const pressAnyKeySpy = vi.fn(pressAnyKey);
 
 describe('checklang', () => {
   it('should have no matching files', async () => {
@@ -37,7 +45,7 @@ describe('checklang', () => {
   });
 
   it('should wait for user input', async () => {
-    const res = await checklang.run({ '0': '__mocks__', page: true, silent: true });
+    const res = await checklang.run({ '0': '__mocks__', page: true, silent: false });
 
     expect(pressAnyKey).toHaveBeenCalled();
   });

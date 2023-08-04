@@ -12,7 +12,7 @@ export const useSettingsStore = defineStore('settings', {
   actions: {
     initialize() {
       // Ensure app renders in saved language
-      useLocalize().setLocale(this.locale);
+      this.locale && useLocalize().setLocale(this.locale);
     },
   }
 });

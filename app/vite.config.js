@@ -2,11 +2,12 @@ import path from 'path';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import svgLoader from 'vite-svg-loader';
+import manifestPlugin from '../core/server/manifestPlugin';
 
 export default defineConfig({
   resolve: {
     alias: {
-      '~': `${path.resolve(__dirname, '../')}`,
+      '~': `${path.resolve(__dirname, '../template/project')}`,
       '@': `${path.resolve(__dirname, '../template/project/src')}`,
       '@crhio/leviate': `${path.resolve(__dirname, '../core')}`,
     },
@@ -44,6 +45,7 @@ export default defineConfig({
   plugins: [
     vue(),
     svgLoader(),
+    manifestPlugin('../template/project'),
   ],
 
   server: {

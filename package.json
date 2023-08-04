@@ -29,7 +29,7 @@
   "dependencies": {
     "@commitlint/cli": "^16.2.4",
     "@commitlint/config-conventional": "^16.2.4",
-    "@crhio/concrete": "^2.0.25",
+    "@crhio/concrete": "^2.7.4",
     "@crhio/inject": "^1.0.13",
     "@crhio/normie": "^1.2.3",
     "ansi-colors": "^4.1.1",
@@ -41,6 +41,7 @@
     "glob": "^7.2.0",
     "line-reader": "^0.4.0",
     "lodash-es": "^4.17.21",
+    "marked": "^5.1.0",
     "md5": "^2.3.0",
     "pdfmake": "^0.1.68",
     "pinia": "^2.0.14",

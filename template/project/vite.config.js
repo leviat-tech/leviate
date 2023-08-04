@@ -5,6 +5,8 @@ import svgLoader from 'vite-svg-loader';
 import getDefaultTemplateCompilerOptions from '@crhio/leviate/server/defaultTemplateCompilerOptions.js'
 
 import 'dotenv/config';
+import manifestPlugin from '@crhio/leviate/server/manifestPlugin.js';
+
 
 export default defineConfig(({ mode }) => ({
   resolve: {
@@ -33,6 +35,7 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     vue(getDefaultTemplateCompilerOptions(mode)),
     svgLoader(),
+    manifestPlugin(),
   ],
 
   server: {

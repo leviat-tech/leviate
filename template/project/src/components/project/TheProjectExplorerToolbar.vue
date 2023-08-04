@@ -25,6 +25,10 @@
              tool-id="settings"
              icon="cog"
              @click="showSettingsModal = true"/>
+      <CTool name="Info"
+             tool-id="info"
+             icon="information-circle"
+             @click="openAppInfoModal"/>
     </CTool-group>
   </CToolbar>
 
@@ -37,9 +41,11 @@ import { ref } from 'vue';
 import { useRootStore } from '@crhio/leviate';
 import LvExportModal from './LvExportModal.vue';
 import LvSettingsModal from './LvSettingsModal.vue';
+import useAppInfoModal from '@crhio/leviate/composables/useAppInfoModal';
 
 const showExportModal = ref(false);
 const showSettingsModal = ref(false);
+const { openAppInfoModal } = useAppInfoModal();
 
 const revision = useRootStore().revision;
 const undoable = revision.undoable;

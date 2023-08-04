@@ -67,7 +67,7 @@
       <div class="host-nav h-12 p-3 border-b">
         Projects > New Project > Item
       </div>
-      <div class="host-container relative h-full pt-12 -mt-12">
+      <div class="host-container relative h-full">
         <App />
       </div>
     </div>

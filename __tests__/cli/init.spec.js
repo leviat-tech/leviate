@@ -1,23 +1,25 @@
 import fs from 'fs-extra'
 import init from '../../cli/commands/init'
-import { prompt } from '../../__mocks__/enquirer';
+import path from 'path';
 
-let answers;
+vi.mock('enquirer');
 
-beforeAll(async() => {
+beforeAll(async () => {
   fs.removeSync('.cwd')
-  answers = await prompt();
 })
 
-afterAll(() => {
-  fs.removeSync('.cwd')
+afterAll(async () => {
+  // new package hasn't been published yet so ensure
+  // that the test project includes the latest core files
+  const root = path.resolve(__dirname, '../../');
+  fs.copySync(`${root}/core`, `${root}/.cwd/project/node_modules/@crhio/leviate/core`);
 })
 
 const cwd = '.cwd';
 
 describe('init', () => {
-  it('should initialize in the current directory', async() => {
-    const success = await init.run()
+  it('should initialize in the current directory', async () => {
+    const success = await init.run();
 
     const packageJSON = fs.readJsonSync(cwd + '/project/package.json');
 
@@ -26,7 +28,7 @@ describe('init', () => {
     expect(packageJSON).toHaveProperty('version', '0.0.1');
   });
 
-  it('should initialize in a new project directory', async() => {
+  it('should initialize in a new project directory', async () => {
     const dirname = 'my-project';
     const success = await init.run([dirname]);
 
@@ -37,7 +39,7 @@ describe('init', () => {
     expect(packageJSON).toHaveProperty('version', '0.0.1');
   });
 
-  it('should prevent initializing a new project in an existing directory', async() => {
+  it('should prevent initializing a new project in an existing directory', async () => {
     const dirname = 'my-project';
     const success = await init.run([dirname]);
 
