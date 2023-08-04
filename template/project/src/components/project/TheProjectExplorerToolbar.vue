@@ -34,7 +34,6 @@
 
   <LvExportModal v-model="showExportModal"/>
   <LvSettingsModal v-model="showSettingsModal"/>
-  <LvModalAppInfo />
 </template>
 
 <script setup>
@@ -42,7 +41,6 @@ import { ref } from 'vue';
 import { useRootStore } from '@crhio/leviate';
 import LvExportModal from './LvExportModal.vue';
 import LvSettingsModal from './LvSettingsModal.vue';
-import LvModalAppInfo from '@crhio/leviate/components/LvModalAppInfo.vue'
 import useAppInfoModal from '@crhio/leviate/composables/useAppInfoModal';
 
 const showExportModal = ref(false);
