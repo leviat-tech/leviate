@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.7.0](https://github.com/leviat-tech/leviate/compare/v3.6.2...v3.7.0) (2023-08-04)
+
+
+### Features
+
+* create manifest and updates json files and components ([c64bc38](https://github.com/leviat-tech/leviate/commit/c64bc381b8ccf574418aa8312a0f9dc826c61aeb))
+
 ## [3.6.2](https://github.com/leviat-tech/leviate/compare/v3.6.1...v3.6.2) (2023-07-20)
 
 
