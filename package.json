@@ -12,7 +12,10 @@
   "scripts": {
     "test": "jest",
     "release": "standard-version",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "app:build": "node scripts/appBuild && cd app && npm i",
+    "app:dev": "node scripts/appDev",
+    "app:clean": "node scripts/appClean"
   },
   "exports": {
     ".": "./core/index.js",
