@@ -3,7 +3,7 @@ import Vue from 'vue';
 const appInfoModal = new Vue({
   data() {
     return {
-      isOpen: true,
+      isOpen: false,
       appName: '',
       appVersion: '',
       buildDate: '',
