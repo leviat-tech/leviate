@@ -1,7 +1,7 @@
 const { white, red, yellow } = require('ansi-colors');
 
 const log = (msg, color = white, level = 'info') => {
-  console.log(color(`leviate: [${level}]: ${msg}`));
+  console.log(color(`leviate [${level}]: ${msg}`));
 }
 
 module.exports = {

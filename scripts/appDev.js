@@ -11,12 +11,15 @@ watcher.on('add', updateFile);
 watcher.on('change', updateFile);
 watcher.on('unlink', removeFile);
 
+logger.log('dev server running in /app');
+logger.log('watching files in /template/project...');
+
 function updateFile(filepath) {
   const appPath = getAppFilePath(filepath);
 
   fs.copySync(filepath, appPath);
 
-  logger.log(`updated ${appPath}`);
+  logger.log(`${appPath} was updated`);
 }
 
 function removeFile(filepath) {
@@ -24,7 +27,7 @@ function removeFile(filepath) {
 
   fs.removeSync(appPath);
 
-  logger.log(`removed ${appPath}`);
+  logger.log(`${appPath} was deleted`);
 }
 
 function getAppFilePath(filepath) {

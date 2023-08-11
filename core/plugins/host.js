@@ -55,7 +55,7 @@ export const useMeta = () => modules.meta
 export const useLocalize = () => modules.localize;
 
 const HostPlugin = {
-  async install(app, { locales, router }) {
+  async install(Vue, { locales, router }) {
     // TODO: use vue2 router
     const setUrl = (url) => {
       if (router.currentRoute.path !== url) {
@@ -89,9 +89,9 @@ const HostPlugin = {
     // Store so module can be imported
     modules.host = $host
     modules.meta = meta
-    modules.localize = { $l, $L };
+    modules.localize = $l;
 
-    Object.assign(app.config.globalProperties, { $host, $l, $L });
+    Object.assign(Vue.prototype, { $host, $l, $L });
 
     _resolve($host)
   },

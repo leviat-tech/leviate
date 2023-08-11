@@ -133,9 +133,9 @@
 import { get, call } from 'vuex-pathify';
 import isEmpty from 'lodash/isEmpty';
 import pickBy from 'lodash/pickBy';
-import search from 'leviate/extensions/search';
-import find from 'leviate/extensions/find';
-import bus from 'leviate/extensions/eventBus';
+import search from '@crhio/leviate/extensions/search';
+import find from '@crhio/leviate/extensions/find';
+import bus from '@crhio/leviate/extensions/eventBus';
 
 
 export default {

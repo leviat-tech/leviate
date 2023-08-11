@@ -2,7 +2,7 @@ import path from 'path';
 import { createVuePlugin } from 'vite-plugin-vue2';
 import JSDraftLoader from '@crhio/rollup-plugin-jsdraft';
 import { createSvgPlugin } from 'vite-plugin-vue2-svg';
-import { createFetchProxyAccessTokenPlugin } from '@crhio/leviate/server/fetch-access-token.js';
+import { createFetchProxyAccessTokenPlugin } from '@crhio/@crhio/leviate/server/fetch-access-token.js';
 import 'dotenv/config';
 
 const config = {

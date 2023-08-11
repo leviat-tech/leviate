@@ -3,7 +3,7 @@ import { sync } from 'vuex-router-sync';
 import Concrete from '@crhio/concrete';
 import search from './directives/v-search';
 import find from './directives/v-find';
-import HostPlugin, { useHost, useLocalize, useMeta } from './plugins/host';
+import HostPlugin, { hostIsConnected, useHost, useLocalize, useMeta } from './plugins/host';
 import { useApiGateway } from './composables/use-api-gateway';
 import { createStore, initializeStore, useStore } from './store';
 import './assets/styles/index.scss';
@@ -77,6 +77,8 @@ async function createApp(projectConfig, env) {
   const router = createRouter(Vue, routes);
 
   sync(store, router);
+
+  await hostIsConnected();
 
   // load initial url and initial state if host provided it
   const host = useHost();

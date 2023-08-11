@@ -22,7 +22,7 @@
 <script>
 import { call, get } from 'vuex-pathify';
 import debounce from 'lodash/debounce';
-import SettingsIcon from 'leviate/assets/icons/cog.svg';
+import SettingsIcon from '@crhio/leviate/assets/icons/cog.svg';
 import InputGroup from '../ui/inputs/input-group.vue';
 
 export default {
