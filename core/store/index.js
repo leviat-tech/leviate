@@ -81,7 +81,7 @@ export const createStore = (vueInstance, projectStoreConfig, models) => {
 
 // function to initialize store given initial state
 export function initializeStore(store, initialState, context, migrations) {
-  const { configurator, project, user } = context;
+  const { configurator, project, user, configuration } = context;
   const migration = new Migration(migrations, initialState);
 
   const latestMigrationName = migration.latestMigrationName;
@@ -100,7 +100,7 @@ export function initializeStore(store, initialState, context, migrations) {
   store.dispatch('transaction/initialize');
   store.dispatch('calculation/initialize');
   store.dispatch('documents/initialize', configurator.documentTemplates);
-  store.dispatch('settings/initialize', { name: project.name, locale: user.locale });
+  store.dispatch('settings/initialize', { name: configuration.name, locale: user.locale });
   store.isInitialized = true;
 }
 

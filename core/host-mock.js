@@ -1,7 +1,16 @@
 import inject from '@crhio/inject';
+import { useLocalStorage } from './plugins/localStorage';
+
 
 export function useMock(mockConfig, locales) {
   let state = mockConfig.state || {};
+
+  const storage = useLocalStorage(mockConfig.meta.configurator.name);
+  const storedSettings = storage.getItem('settings');
+
+  if (storedSettings) {
+    state = storage.getItem(storedSettings.currentConfig)
+  }
 
   const mockApi = {
     setUrl() {
