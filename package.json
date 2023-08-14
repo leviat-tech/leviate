@@ -11,7 +11,7 @@
   "main": "core/index.js",
   "scripts": {
     "test": "jest",
-    "release": "standard-version",
+    "release": "npm publish --tag legacy",
     "prepare": "husky install"
   },
   "exports": {
