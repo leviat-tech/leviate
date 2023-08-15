@@ -23,7 +23,7 @@
   "dependencies": {
     "@commitlint/cli": "^16.2.4",
     "@commitlint/config-conventional": "^16.2.4",
-    "@crhio/concrete": "^0.0.87",
+    "@crhio/concrete": "^0.0.88",
     "@crhio/inject": "^1.0.4",
     "@vuex-orm/core": "^0.36.4",
     "ansi-colors": "^4.1.1",
