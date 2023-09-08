@@ -86,6 +86,25 @@ export function useMock() {
     localStorage.removeItem(key);
   }
 
+  function localStorageBackup(appname) {
+    const configname = settings.currentConfig;
+    var backup = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      var key = localStorage.key(i);
+      var value = localStorage.getItem(key);
+      backup[key] = escape(encodeURIComponent(value));
+    }
+    var json = JSON.stringify(backup);
+    var base = window.btoa(json);
+    var href = 'data:text/javascript;charset=utf-8;base64,' + base;
+    var link = document.createElement('a');
+      link.setAttribute('download', `${appname}_${configname}.json`);
+    link.setAttribute('href', href);
+    document.querySelector('body').appendChild(link);
+    link.click();
+    link.remove();
+  }
+  
   /****************************** SETTINGS MANAGEMENT ******************************/
 
   function setCurrentConfig(name) {
@@ -151,6 +170,7 @@ export function useMock() {
     loadConfiguration,
     saveConfiguration,
     deleteConfiguration,
-    clearStorage,    
+    clearStorage,
+    localStorageBackup,
   }
 }
