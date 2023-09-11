@@ -6,11 +6,15 @@ import { useMessageStore } from './store/message';
 import { transact } from './store';
 import { useLocalize } from './plugins/localize';
 
+const checkSegments = (inputId) => {
+  const segments = inputId.split(':');
+  if (segments.length !== 2) logger.warn(`Input id ${inputId} does not match the format entity_id:path`);
+
+  return segments
+}
 
 const parseInputId = (inputId) => {
-  const segments = inputId.split(':');
-
-  if (segments.length !== 2) logger.warn(`Input id ${inputId} does not match the format entity_id:path`);
+  const segments = checkSegments(inputId);
 
   const [entityId, path] = segments;
   const store = useRootStore();
@@ -19,6 +23,15 @@ const parseInputId = (inputId) => {
   const instance = validate(entityId) ? store.getEntityById(entityId) : store.modules[entityId]?.();
 
   return { instance, path };
+}
+
+
+const parseOptionsFromInputId = (inputId) => {
+  const segments = checkSegments(inputId);
+  const [_entityId, path] = segments;
+  const store = useRootStore();
+
+  return store.currentEntity.coercedSchema.reach(path).options();
 }
 
 export default {
@@ -41,6 +54,9 @@ export default {
     const { instance, path } = parseInputId(id);
 
     return get(instance, path);
+  },
+  inputIdToOptions: (id) => {
+    return parseOptionsFromInputId(id);
   },
   registerInputs: true,
   inputGetStatus: (id) => {
