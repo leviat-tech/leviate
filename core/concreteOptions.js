@@ -6,8 +6,10 @@ import { useMessageStore } from './store/message';
 import { transact } from './store';
 import { useLocalize } from './plugins/localize';
 
+
 const parseInputId = (inputId) => {
   const segments = inputId.split(':');
+
   if (segments.length !== 2) logger.warn(`Input id ${inputId} does not match the format entity_id:path`);
 
   const [entityId, path] = segments;
