@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.8.0](https://github.com/leviat-tech/leviate/compare/v3.7.0...v3.8.0) (2023-09-11)
+
+
+### Features
+
+* backup and restore local storage to/from a file on the client ([#71](https://github.com/leviat-tech/leviate/issues/71)) ([346a76d](https://github.com/leviat-tech/leviate/commit/346a76d82c6f0d20485edca525bb6f499c73b1b9))
+
+
+### Bug Fixes
+
+* update heroicons ([#73](https://github.com/leviat-tech/leviate/issues/73)) ([cf40fe9](https://github.com/leviat-tech/leviate/commit/cf40fe927c92a0fc69de1672bf456e1550e89c97))
+
 ## [3.7.0](https://github.com/leviat-tech/leviate/compare/v3.6.2...v3.7.0) (2023-08-04)
 
 
