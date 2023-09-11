@@ -43,7 +43,7 @@
     "babel-plugin-transform-vite-meta-env": "^1.0.3",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
-    "cypress": "^12.17.1",
+    "cypress": "^13.1.0",
     "dotenv": "^10.0.0",
     "eslint": "^7.20.0",
     "eslint-config-airbnb-base": "^14.2.1",
