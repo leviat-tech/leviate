@@ -25,7 +25,7 @@ const parseInputId = (inputId) => {
 const parseOptionsFromInputId = (inputId) => {
   const {instance, path} = parseInputId(inputId);
 
-  return store.currentEntity.coercedSchema.reach(path).options();
+  return instance.coercedSchema.reach(path).options();
 }
 
 export default {
