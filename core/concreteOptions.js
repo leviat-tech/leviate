@@ -21,6 +21,13 @@ const parseInputId = (inputId) => {
   return { instance, path };
 }
 
+
+const parseOptionsFromInputId = (inputId) => {
+  const {instance, path} = parseInputId(inputId);
+
+  return instance.coercedSchema.reach(path).options();
+}
+
 export default {
   inputHandler: (id, val) => {
     const { instance, path } = parseInputId(id);
@@ -41,6 +48,9 @@ export default {
     const { instance, path } = parseInputId(id);
 
     return get(instance, path);
+  },
+  inputIdToOptions: (id) => {
+    return parseOptionsFromInputId(id);
   },
   registerInputs: true,
   inputGetStatus: (id) => {
