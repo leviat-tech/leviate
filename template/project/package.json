@@ -34,7 +34,7 @@
     "yup": "^0.32.8"
   },
   "devDependencies": {
-    "@crhio/leviat-tailwind-configuration": "^1.0.0",
+    "@crhio/leviat-tailwind-configuration": "^1.1.0",
     "@headlessui/tailwindcss": "^0.1.0",
     "@vitejs/plugin-vue": "^3.0.0",
     "autoprefixer": "^10.3.1",
