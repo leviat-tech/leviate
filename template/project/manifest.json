@@ -1,5 +1,18 @@
 {
   "version": "",
   "name": "Leviate Demo",
-  "description": "Demo application for the leviate framework"
+  "description": "Demo application for the leviate framework",
+  "features": {
+    "core": {
+      "versions": true,
+      "info": true,
+      "settings": true,
+      "explorer": true,
+      "output": true
+    },
+    "project": {
+      "feature1": true,
+      "feature2": false
+    }
+  }
 }
