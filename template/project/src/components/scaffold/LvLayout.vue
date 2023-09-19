@@ -3,22 +3,21 @@
   <div class="h-full flex flex-col text-sm">
     <div class="flex flex-grow">
 
-      <LvProjectPanel />
+      <LvProjectPanel>
+        <LvProjectExplorer>
 
-      <LvProjectExplorer>
+          <template #toolbar>
+            <TheProjectExplorerToolbar />
+          </template>
 
-        <template #toolbar>
-          <TheProjectExplorerToolbar />
-        </template>
+          <TheProjectExplorerContent />
 
-        <TheProjectExplorerContent />
-
-      </LvProjectExplorer>
+        </LvProjectExplorer>
+      </LvProjectPanel>
 
       <div class="flex-1">
         <slot />
       </div>
-
     </div>
   </div>
 

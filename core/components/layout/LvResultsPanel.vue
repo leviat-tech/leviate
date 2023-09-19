@@ -1,7 +1,7 @@
 <template>
-  <LvPanel :expanded="300" panelId="project">
+  <LvPanel :expanded="550" panelId="results" :flip="true">
     <slot>
-      <div>{{ $features }}</div>
+      <div>results</div>
     </slot>
   </LvPanel>
 </template>

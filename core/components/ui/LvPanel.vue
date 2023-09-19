@@ -1,9 +1,9 @@
 <template>
-  <div class="bg-red-300 h-full flex flex-col justify-between" :style="`width:${widthValue}px`">
+  <div class="bg-red-300 h-full flex flex-col justify-between overflow-hidden" :style="`width:${widthValue}px`">
     <slot/>
     <div class="w-full h-10 bg-red-200 flex justify-end items-center px-2 hover:text-steel-dark text-steel-darkest cursor-pointer">
-      <icon-collapse v-if="store.panels[props.panelId].isExpanded" @click="setCollapsed" />
-      <icon-expand v-else  @click="setExpanded" />
+      <icon-collapse v-if="store.panels[props.panelId].isExpanded" @click="setCollapsed" :class="{ 'rotate-180' : flip }" />
+      <icon-expand v-else  @click="setExpanded" :class="{ 'rotate-180' : flip }" />
     </div>
   </div>
 </template>
@@ -22,6 +22,10 @@ const props = defineProps({
   collapsed: {
     type: Number,
     default: 60,
+  },
+  flip: {
+    type: Boolean,
+    default: false,
   },
   panelId: String,
 });
