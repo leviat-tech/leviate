@@ -1,31 +1,47 @@
 <template>
-  <div class="bg-red-300 h-full" :class="widthClass">
-    test
+  <div class="bg-red-300 h-full flex flex-col justify-between" :style="`width:${widthValue}px`">
+    <slot/>
+    <div class="w-full h-10 bg-red-200 flex justify-end items-center px-2 hover:text-steel-dark text-steel-darkest cursor-pointer">
+      <icon-collapse v-if="store.panels[props.panelId].isExpanded" @click="setCollapsed" />
+      <icon-expand v-else  @click="setExpanded" />
+    </div>
   </div>
 </template>
 
 <script setup>
-import App from './App.vue';
-import { useRootStore } from '../store';
+import { useLeviateStore } from '../../store/leviate';
+import iconCollapse from '../icons/iconCollapse.vue';
+import iconExpand from '../icons/iconExpand.vue';
+import { computed } from 'vue';
 
 const props = defineProps({
-  expanded: String,
-  collapsed: String,
+  expanded: {
+    type: Number,
+    default: 300,
+  },
+  collapsed: {
+    type: Number,
+    default: 60,
+  },
   panelId: String,
 });
 
-const store = useRootStore();
+const store = useLeviateStore();
 
-const widthClass = computed(() => {
-  if(store.leviate.panels[panelId].isExpanded) {
+const widthValue = computed(() => {
+  if(store.panels[props.panelId].isExpanded) {
     return props.expanded;
   }
   return props.collapsed;
-})
+});
 
-// need to update collapsed/expanded in a store for the panelId
+const setCollapsed = () => {
+  store.setPanelIsExpanded(props.panelId, false) 
+}
 
-
+const setExpanded = () => {
+  store.setPanelIsExpanded(props.panelId, true) 
+}
 
 
 </script>

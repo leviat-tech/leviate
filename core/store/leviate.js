@@ -15,6 +15,9 @@ export const useLeviateStore = defineStore('leviate', {
     },
   }),
   actions: {
+    setPanelIsExpanded(panelId, value) {
+      this.panels[panelId].isExpanded = value;
+    }
   },
   getters: {
   }

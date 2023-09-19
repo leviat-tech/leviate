@@ -1,5 +1,5 @@
-import LvProject from './layout/LvProject.vue';
+import LvProjectPanel from './layout/LvProjectPanel.vue';
 
 export {
-  LvProject
+  LvProjectPanel
 }

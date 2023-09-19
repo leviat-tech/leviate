@@ -29,4 +29,6 @@
 import LvProjectExplorer from '@/components/scaffold/LvProjectExplorer.vue';
 import TheProjectExplorerToolbar from '@/components/project/TheProjectExplorerToolbar.vue';
 import TheProjectExplorerContent from '@/components/project/TheProjectExplorerContent.vue';
+
+import { LvProjectPanel } from '@crhio/leviate/components'
 </script>
