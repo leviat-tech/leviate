@@ -52,6 +52,7 @@
     "yup": "^0.32.8"
   },
   "devDependencies": {
+    "@vue/test-utils": "^2.4.1",
     "husky": "^8.0.1",
     "vitest": "^0.29.1"
   }
