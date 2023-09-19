@@ -3,6 +3,8 @@
   <div class="h-full flex flex-col text-sm">
     <div class="flex flex-grow">
 
+      <LvProjectPanel />
+
       <LvProjectExplorer>
 
         <template #toolbar>

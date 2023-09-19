@@ -1,5 +1,5 @@
 <template>
-  <div class="" :class="widthClass">
+  <div class="bg-red-300 h-full" :class="widthClass">
     test
   </div>
 </template>
@@ -16,10 +16,8 @@ const props = defineProps({
 
 const store = useRootStore();
 
-
-
 const widthClass = computed(() => {
-  if(store.panels[panelId].isExpanded) {
+  if(store.leviate.panels[panelId].isExpanded) {
     return props.expanded;
   }
   return props.collapsed;
