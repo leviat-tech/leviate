@@ -20,7 +20,7 @@
       <LvViewportPanel>
         <TheViewport class="flex-1" />
       </LvViewportPanel>
-      
+
       <LvResultsPanel>
       </LvResultsPanel>
 
@@ -34,7 +34,7 @@ import { watch } from 'vue';
 import { useRouter } from 'vue-router';
 import useCurrentEntity from '@/composables/useCurrentEntity';
 
-import LvLayout from '@/components/scaffold/LvLayout.vue';
+import LvLayout from '@crhio/leviate/components/layout/LvLayout.vue';
 import TheViewport from '@/components/viewport/TheViewport.vue';
 import LvConfiguration from '@/components/scaffold/LvConfiguration.vue';
 import TheConfigurationToolbar from '@/components/configuration/TheConfigurationToolbar.vue';
