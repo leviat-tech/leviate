@@ -2,7 +2,7 @@
   <Disclosure v-slot="{ open }">
     <DisclosureButton
         @click="leviate.setActiveProjectItem(name)"
-        class="w-full font-bold p-3 mb-px bg-gray-100 flex flex-col justify-center items-center"
+        class="w-full font-bold p-3 border-b flex flex-col justify-center items-center"
         :class="[
           isActive && isExpanded ? 'border-b-blue-500 border-b-2 text-blue-600' : 'bg-gray-100',
           !isExpanded && 'flex-1 text-center',
