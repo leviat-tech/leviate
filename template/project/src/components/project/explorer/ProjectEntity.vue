@@ -12,7 +12,7 @@
     </template>
 
     <ul class="border-t">
-      <LvProjectEntityItem v-for="item in items" :item="item" :key="item.id"></LvProjectEntityItem>
+      <ProjectEntityItem v-for="item in items" :item="item" :key="item.id"></ProjectEntityItem>
     </ul>
 
   </CAccordion>
@@ -22,7 +22,7 @@
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { transact } from '@crhio/leviate';
-import LvProjectEntityItem from './LvProjectEntityItem.vue';
+import ProjectEntityItem from './ProjectEntityItem.vue';
 
 const router = useRouter();
 

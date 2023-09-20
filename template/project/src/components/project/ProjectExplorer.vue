@@ -1,10 +1,10 @@
 <template>
-  <LvProjectEntity :model="ExampleModel"></LvProjectEntity>
+  <ProjectEntity :model="ExampleModel" />
 </template>
 
 <script setup>
 import ExampleModel from '@/models/ExampleModel';
-import LvProjectEntity from './LvProjectEntity.vue';
+import ProjectEntity from './explorer/ProjectEntity.vue';
 
 
 </script>
