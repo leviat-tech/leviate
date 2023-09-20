@@ -1,5 +1,5 @@
 <template>
-  <CToolbar class="flex-1 justify-between">
+  <CToolbar class="h-12 py-2 border-b justify-between">
     <CTool-group>
       <CTool
         name="Undo"

@@ -3,7 +3,6 @@
 
     <div class="h-full flex" v-if="entity">
 
-
       <LvInputPanel>
 
         <LvConfiguration class="flex-1">

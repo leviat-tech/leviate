@@ -20,7 +20,11 @@ export const useLeviateStore = defineStore('leviate', {
       this.panels[panelId].isExpanded = value;
     },
     setActiveProjectItem(name) {
-      this.panels.project.activeItem = name;
+      const { project } = this.panels;
+
+      project.activeItem = name;
+
+      if (!project.isExpanded) project.isExpanded = true;
     }
   },
   getters: {
