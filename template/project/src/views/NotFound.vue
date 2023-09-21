@@ -7,5 +7,5 @@
 </template>
 
 <script setup>
-import LvLayout from '@/components/scaffold/LvLayout.vue';
+import LvLayout from '@crhio/leviate/components/layout/LvLayout.vue';
 </script>
