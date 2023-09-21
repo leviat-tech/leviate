@@ -20,8 +20,8 @@
       <LvViewportPanel>
         <TheViewport class="flex-1" />
       </LvViewportPanel>
-      
-      <LvResultsPanel>
+
+      <LvResultsPanel :disabled="true">
       </LvResultsPanel>
 
     </div>
@@ -48,5 +48,4 @@ const router = useRouter()
 watch(entity, (val) => {
   if (!val) router.replace('/not-found')
 });
-
 </script>
