@@ -1,7 +1,7 @@
 <template>
   <LvInputToolbar :tabs="tabList" />
   <LvInputContent>
-    <ExampleTab v-if="activeTab === 0"/>
+    <ExampleTab v-if="activeTab === 0 || activeTab === null"/>
     <div v-if="activeTab === 1">test</div>
   </LvInputContent>
 </template>
