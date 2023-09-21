@@ -1,6 +1,6 @@
 <template>
   <LvPanel :expanded="300" panelId="project">
-    <div class="h-full flex flex-col justify-start">
+    <div class="h-full flex flex-col justify-start bg-gray-50">
       <LvProjectToolbar />
 
       <LvProjectPanelItem name="versions">
