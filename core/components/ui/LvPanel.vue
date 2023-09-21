@@ -11,7 +11,7 @@
     </div>
 
     <!-- Panel toggle button -->
-    <div class="w-full bg-gray-100 flex items-center px-2"
+    <div class="w-full bg-gray-100 flex items-center px-2 border-t"
          :class="isExpanded ? 'justify-end' : 'justify-center'">
       <button @click="store.setPanelIsExpanded(props.panelId, !isExpanded)"
               class="flex justify-center items-center w-10 h-10 hover:text-steel-dark text-steel-darkest"
