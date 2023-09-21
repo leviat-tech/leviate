@@ -9,10 +9,11 @@
 
 
       <LvViewportPanel>
-        <TheViewport class="flex-1" />
+        <ViewportRoot />
       </LvViewportPanel>
 
       <LvResultsPanel :disabled="true">
+        <ResultsRoot />
       </LvResultsPanel>
 
     </div>
@@ -25,14 +26,11 @@ import { watch } from 'vue';
 import { useRouter } from 'vue-router';
 import useCurrentEntity from '@/composables/useCurrentEntity';
 
-import LvLayout from '@crhio/leviate/components/layout/LvLayout.vue';
-import TheViewport from '@/components/viewport/TheViewport.vue';
-import LvConfiguration from '@/components/scaffold/LvConfiguration.vue';
-import TheConfigurationToolbar from '@/components/configuration/TheConfigurationToolbar.vue';
-import TheConfigurationContent from '@/components/configuration/TheConfigurationContent.vue';
-
 import InputRoot from '@/components/input/InputRoot.vue';
+import ViewportRoot from '@/components/viewport/ViewportRoot.vue';
+import ResultsRoot from '@/components/results/ResultsRoot.vue';
 
+import LvLayout from '@crhio/leviate/components/layout/LvLayout.vue';
 import { LvInputPanel, LvViewportPanel, LvResultsPanel } from '@crhio/leviate/components'
 
 const entity = useCurrentEntity();

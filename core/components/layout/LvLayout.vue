@@ -3,7 +3,7 @@
     <div class="max-h-full flex flex-grow divide-x">
 
       <LvProjectPanel>
-        <ProjectContent />
+        <ProjectRoot />
       </LvProjectPanel>
 
       <div class="flex-1">
@@ -15,6 +15,6 @@
 
 
 <script setup>
-import ProjectContent from '@/components/project/ProjectContent.vue';
+import ProjectRoot from '@/components/project/ProjectRoot.vue';
 import { LvProjectPanel } from '../';
 </script>

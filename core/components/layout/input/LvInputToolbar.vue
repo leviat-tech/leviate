@@ -33,9 +33,7 @@
 
   const clickTab = (index) => {
     if(store.panels.input.isExpanded) {
-      if(store.panels.input.activeTab === index) {
-        store.panels.input.isExpanded = false;
-      } else {
+      if(store.panels.input.activeTab !== index) {
         store.panels.input.activeTab = index;
       }
     } else {

@@ -1,5 +1,5 @@
 <template>
-  <LvToolbarContainer class="flex-limit relative items-center justify-between">
+  <div class="flex-limit relative items-center justify-between">
     <CToolbar default-tool="select" v-model="uiStore.currentTool">
       <CTool-group>
         <CTool name="Select" tool-id="select" icon="pointer-outline" stateful/>
@@ -13,12 +13,11 @@
       <slot />
 
     </CToolbar>
-  </LvToolbarContainer>
+  </div>
 </template>
 
 <script setup>
 import ZoomToFitIcon from '@crhio/leviate/assets/icons/zoom-to-fit.svg';
-import LvToolbarContainer from '@/components/styled/LvToolbarContainer.vue';
 import { useUiStore } from '@/store/ui';
 
 const uiStore = useUiStore();
