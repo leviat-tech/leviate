@@ -20,7 +20,7 @@
         <TheViewport class="flex-1" />
       </LvViewportPanel>
 
-      <LvResultsPanel :disabled="true">
+      <LvResultsPanel :disabled="false">
       </LvResultsPanel>
 
     </div>
