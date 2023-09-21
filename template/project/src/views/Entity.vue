@@ -1,18 +1,10 @@
 <template>
   <LvLayout>
 
-    <div class="h-full flex" v-if="entity">
+    <div class="h-full flex divide-x" v-if="entity">
 
       <LvInputPanel>
-
-        <LvConfiguration class="flex-1">
-          <template #toolbar>
-            <TheConfigurationToolbar />
-          </template>
-
-          <TheConfigurationContent />
-        </LvConfiguration>
-
+        <InputRoot />
       </LvInputPanel>
 
 
@@ -38,6 +30,8 @@ import TheViewport from '@/components/viewport/TheViewport.vue';
 import LvConfiguration from '@/components/scaffold/LvConfiguration.vue';
 import TheConfigurationToolbar from '@/components/configuration/TheConfigurationToolbar.vue';
 import TheConfigurationContent from '@/components/configuration/TheConfigurationContent.vue';
+
+import InputRoot from '@/components/input/InputRoot.vue';
 
 import { LvInputPanel, LvViewportPanel, LvResultsPanel } from '@crhio/leviate/components'
 

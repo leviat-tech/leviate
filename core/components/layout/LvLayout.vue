@@ -1,6 +1,6 @@
 <template>
   <div class="h-full flex flex-col text-sm">
-    <div class="max-h-full flex flex-grow">
+    <div class="max-h-full flex flex-grow divide-x">
 
       <LvProjectPanel>
         <ProjectContent />
