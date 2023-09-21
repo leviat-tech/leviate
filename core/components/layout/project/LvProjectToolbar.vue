@@ -1,6 +1,6 @@
 <template>
-  <CToolbar class="h-12 py-2 border-b justify-between">
-    <CTool-group>
+  <CToolbar class="h-12 py-2 border-b bg-gray-50 justify-between" :class="!isExpanded && `flex flex-col-reverse h-auto`">
+    <CTool-group :class="!isExpanded && `flex flex-col-reverse h-auto`">
       <CTool
         name="Undo"
         tool-id="undo"
@@ -28,10 +28,16 @@
 <script setup>
 import { useRootStore } from '@crhio/leviate';
 import useAppInfoModal from '@crhio/leviate/composables/useAppInfoModal';
+import { useLeviateStore } from '../../../store/leviate.js';
+import { computed } from 'vue';
 
 const { openAppInfoModal } = useAppInfoModal();
 
 const revision = useRootStore().revision;
 const undoable = revision.undoable;
 const redoable = revision.redoable;
+
+const leviate = useLeviateStore();
+
+const isExpanded = computed(() => leviate.panels.project.isExpanded);
 </script>

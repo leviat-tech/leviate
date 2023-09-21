@@ -1,5 +1,7 @@
 <template>
-  <div class="bg-white h-full flex flex-col justify-between overflow-hidden" :style="`width:${widthValue}px`">
+  <div class="bg-white h-full flex flex-col justify-between overflow-hidden"
+       :class="isExpanded || 'flex-none'"
+       :style="`width:${widthValue}px`">
 
     <!-- Panel content -->
     <div class="flex-1 overflow-hidden">
