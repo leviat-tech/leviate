@@ -12,7 +12,8 @@
     <div class="w-full bg-gray-100 flex items-center px-2"
          :class="isExpanded ? 'justify-end' : 'justify-center'">
       <button @click="store.setPanelIsExpanded(props.panelId, !isExpanded)"
-              class="flex justify-center items-center w-10 h-10 hover:text-steel-dark text-steel-darkest">
+              class="flex justify-center items-center w-10 h-10 hover:text-steel-dark text-steel-darkest"
+              :disabled="isDisabled">
         <IconCollapse v-if="store.panels[props.panelId].isExpanded" :class="{ 'rotate-180' : flip }"/>
         <IconExpand v-else :class="{ 'rotate-180' : flip }"/>
       </button>
@@ -37,6 +38,10 @@ const props = defineProps({
     default: 60,
   },
   flip: {
+    type: Boolean,
+    default: false,
+  },
+  isDisabled: {
     type: Boolean,
     default: false,
   },

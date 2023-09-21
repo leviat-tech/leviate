@@ -1,11 +1,10 @@
 <template>
-  <LvPanel :expanded="550" panelId="results" :flip="true" :class="{ 'opacity-50' : disabled }">
+  <LvPanel :expanded="550" panelId="results" :flip="true" :class="{ 'opacity-50' : disabled }" :isDisabled="disabled">
     <div class="flex h-full" @click="togglePanel">
       <div v-if="!store.panels['results'].isExpanded" class="flex h-full items-center justify-center cursor-pointer">
         <p class="-rotate-90">Results</p>
       </div>
       <slot v-else>
-        <div>Result content</div>
       </slot>
     </div>
   </LvPanel>
