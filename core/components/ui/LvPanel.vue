@@ -1,19 +1,29 @@
 <template>
   <div class="bg-white h-full flex flex-col justify-between overflow-hidden" :style="`width:${widthValue}px`">
-    <slot/>
+
+    <!-- Panel content -->
+    <div class="flex-1 overflow-hidden">
+      <div class="h-full">
+        <slot/>
+      </div>
+    </div>
+
+    <!-- Panel toggle button -->
     <div class="w-full bg-gray-100 flex justify-end items-center pr-2 hover:text-steel-dark text-steel-darkest">
-      <button @click="store.setPanelIsExpanded(props.panelId, !isExpanded)" class="flex justify-center items-center w-10 h-10">
-        <icon-collapse v-if="store.panels[props.panelId].isExpanded" :class="{ 'rotate-180' : flip }"/>
-        <icon-expand v-else :class="{ 'rotate-180' : flip }"/>
+      <button @click="store.setPanelIsExpanded(props.panelId, !isExpanded)"
+              class="flex justify-center items-center w-10 h-10">
+        <IconCollapse v-if="store.panels[props.panelId].isExpanded" :class="{ 'rotate-180' : flip }"/>
+        <IconExpand v-else :class="{ 'rotate-180' : flip }"/>
       </button>
     </div>
+
   </div>
 </template>
 
 <script setup>
 import { useLeviateStore } from '../../store/leviate';
-import iconCollapse from '../icons/iconCollapse.vue';
-import iconExpand from '../icons/iconExpand.vue';
+import IconCollapse from '../icons/iconCollapse.vue';
+import IconExpand from '../icons/iconExpand.vue';
 import { computed } from 'vue';
 
 const props = defineProps({
