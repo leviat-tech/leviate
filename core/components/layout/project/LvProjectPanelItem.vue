@@ -1,20 +1,18 @@
 <template>
   <Disclosure v-slot="{ open }">
     <DisclosureButton
-        @click="leviate.setActiveProjectItem(name)"
-        class="w-full font-semibold p-3 border-b flex flex-col justify-center items-center"
-        :class="[
-          isActive && isExpanded ? 'border-b-blue-500 border-b-2 text-blue-600' : 'bg-gray-100',
-          !isExpanded && 'flex-1 text-center',
+      @click="leviate.setActiveProjectItem(name)"
+      class="relative font-semibold p-3 flex flex-col justify-center items-center"
+      :class="[
+          isActive && isExpanded ? '' : 'bg-gray-100',
+          isExpanded ? 'text-base bg-indigo text-white mx-2 mb-2 first-of-type:mt-2' : 'flex-1 text-center text-sm border-b',
           ]">
       <div :class="!isExpanded && '-rotate-90 whitespace-nowrap'">{{ $L(`project_${name}`) }}</div>
+
+      <div v-if="isExpanded && isActive" class="absolute top-0 left-0 h-full w-3 bg-sky"/>
     </DisclosureButton>
 
-    <div v-show="isActive && isExpanded" class="flex-1 overflow-y-auto bg-white border-b">
-      <!--
-        Using the `static` prop, the `DisclosurePanel` is always
-        rendered and the `open` state is ignored.
-      -->
+    <div v-show="isActive && isExpanded" class="flex-1 overflow-y-auto bg-gray-50">
       <DisclosurePanel static>
         <slot/>
       </DisclosurePanel>

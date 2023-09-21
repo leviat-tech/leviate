@@ -1,6 +1,6 @@
 <template>
   <CToolbar class="h-12 py-2 border-b bg-gray-50 justify-between" :class="!isExpanded && `flex flex-col-reverse h-auto`">
-    <CTool-group :class="!isExpanded && `flex flex-col-reverse h-auto`">
+    <CTool-group :class="!isExpanded && `flex flex-col h-auto mt-1`">
       <CTool
         name="Undo"
         tool-id="undo"
