@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="p-4">RESULTS GO HERE
   </div>
 </template>
 
