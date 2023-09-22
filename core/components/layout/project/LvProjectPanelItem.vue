@@ -4,7 +4,6 @@
       @click="leviate.setActiveProjectItem(name)"
       class="relative font-semibold p-3 flex flex-col justify-center items-center"
       :class="[
-          isActive && isExpanded ? '' : 'bg-gray-100',
           isExpanded ? 'text-base bg-indigo text-white mx-2 mb-2 first-of-type:mt-2' : 'flex-1 text-center text-sm border-b',
           ]">
       <div :class="!isExpanded && '-rotate-90 whitespace-nowrap'">{{ $L(`project_${name}`) }}</div>
