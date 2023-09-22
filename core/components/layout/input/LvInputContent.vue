@@ -1,5 +1,5 @@
 <template>
-  <div v-if="store.panels['input'].isExpanded" class="w-full h-full border-b">
+  <div v-if="store.panels['input'].isExpanded" class="w-full h-full">
     <slot />
   </div>  
 </template>      
