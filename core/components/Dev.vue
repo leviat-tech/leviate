@@ -13,7 +13,7 @@
 <template>
   <!-- provide a little host like context -->
   <div class="h-full flex flex-row">
-    <div class="host-bar relative p-6 text-white text-center flex flex-col bg-indigo">
+    <div class="host-bar relative p-6 text-white text-center flex flex-col bg-gradient-to-b from-indigo to-indigo-darkest">
       <img src="../assets/images/leviat-logo.png" class="w-32">
 
       <div class="text-left">

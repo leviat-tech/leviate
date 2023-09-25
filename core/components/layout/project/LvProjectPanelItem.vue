@@ -2,14 +2,15 @@
   <Disclosure v-slot="{ open }">
     <DisclosureButton
       @click="leviate.setActiveProjectItem(name)"
-      class="relative p-3 flex flex-col justify-center items-center"
-      :class="isExpanded
-        ? 'text-base bg-indigo hover:bg-indigo-light text-white mx-2 mb-2 first-of-type:mt-2'
-        : 'flex-1 text-center border-t hover:bg-gray-200'
-        ">
+      class="relative p-3 flex flex-col justify-center items-center bg-indigo text-white"
+      :class="{
+          'text-sm hover:bg-sky text-white mx-1 mb-[2px] first-of-type:mt-2' : isExpanded,
+          'flex-1 text-center border-t hover:bg-indigo-light' : !isExpanded,
+          'bg-sky' : isActive
+        }">
       <LvTabText :is-expanded="isExpanded">{{ $L(`project_${name}`) }}</LvTabText>
 
-      <div v-if="isExpanded && isActive" class="absolute top-0 left-0 h-full w-3 bg-sky"/>
+      <!-- <div v-if="isExpanded && isActive" class="absolute top-0 left-0 h-full w-3 bg-sky"/> -->
     </DisclosureButton>
 
     <div v-show="isActive && isExpanded" class="flex-1 overflow-y-auto bg-gray-50">
