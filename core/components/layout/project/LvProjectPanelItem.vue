@@ -2,10 +2,10 @@
   <Disclosure v-slot="{ open }">
     <DisclosureButton
       @click="leviate.setActiveProjectItem(name)"
-      class="relative p-3 flex flex-col justify-center items-center bg-indigo text-white"
+      class="relative p-3 flex flex-col justify-center items-center bg-indigo text-white hover:bg-sky"
       :class="{
-          'text-sm hover:bg-sky text-white mx-1 mb-[2px] first-of-type:mt-2' : isExpanded,
-          'flex-1 text-center border-t hover:bg-indigo-light' : !isExpanded,
+          'text-sm text-white mx-1 mb-[2px] first-of-type:mt-2' : isExpanded,
+          'flex-1 text-center border-t' : !isExpanded,
           'bg-sky' : isActive
         }">
       <LvTabText :is-expanded="isExpanded">{{ $L(`project_${name}`) }}</LvTabText>
