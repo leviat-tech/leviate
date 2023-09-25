@@ -5,7 +5,7 @@
       class="relative p-3 flex flex-col justify-center items-center"
       :class="isExpanded
         ? 'text-base bg-indigo hover:bg-indigo-light text-white mx-2 mb-2 first-of-type:mt-2'
-        : 'flex-1 text-center border-b hover:bg-gray-200'
+        : 'flex-1 text-center border-t hover:bg-gray-200'
         ">
       <LvTabText :is-expanded="isExpanded">{{ $L(`project_${name}`) }}</LvTabText>
 
