@@ -1,12 +1,13 @@
 <template>
-  <LvPanel :expanded="550" panelId="results" :flip="true" :class="{ 'opacity-50' : disabled }" :isDisabled="disabled">
-    <div class="flex h-full" @click="togglePanel">
-      <div v-if="!store.panels['results'].isExpanded" class="flex h-full items-center justify-center cursor-pointer">
-        <p class="-rotate-90">Results</p>
-      </div>
-      <slot v-else>
-      </slot>
-    </div>
+  <LvPanel :expanded="550" panelId="results" :flip="true" :class="{ 'opacity-50' : disabled }" :disabled="disabled">
+      <button v-if="!isExpanded"
+              class="flex h-full w-full items-center justify-center bg-gray-100 hover:bg-gray-200"
+              :class="disabled && 'cursor-default'"
+              @click="togglePanel"
+      >
+        <LvTabText :is-expanded="isExpanded">Results</LvTabText>
+      </button>
+      <slot v-else />
   </LvPanel>
 </template>
 
@@ -14,11 +15,18 @@
 import { useLeviateStore } from '../../store/leviate';
 import LvPanel from '../ui/LvPanel.vue';
 import { computed } from 'vue';
+import LvTabText from '../ui/LvTabText.vue';
 
 const store = useLeviateStore();
+
+const isExpanded = computed({
+  get: () => store.panels.results.isExpanded,
+  set: (val) => store.panels.results.isExpanded = val
+})
+
 const togglePanel = () => {
   if(!props.disabled){
-    store.panels['results'].isExpanded = !store.panels['results'].isExpanded 
+    isExpanded.value = !isExpanded.value
   }
 }
 

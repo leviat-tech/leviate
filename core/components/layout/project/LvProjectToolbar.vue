@@ -1,5 +1,5 @@
 <template>
-  <div class="py-2 border-b bg-gray-50" :class="isExpanded ? 'h-12' : `h-auto`">
+  <div class="py-2 bg-gray-50" :class="isExpanded ? 'h-12 border-b' : `h-auto`">
     <CToolbar class="justify-between"
               :class="!isExpanded && `flex flex-col-reverse h-auto`">
       <CTool-group :class="!isExpanded && `flex flex-col h-auto mt-1`">

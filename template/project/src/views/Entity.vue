@@ -12,7 +12,7 @@
         <ViewportRoot />
       </LvViewportPanel>
 
-      <LvResultsPanel :disabled="true">
+      <LvResultsPanel :disabled="false">
         <ResultsRoot />
       </LvResultsPanel>
 

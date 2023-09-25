@@ -1,8 +1,8 @@
 <template>
   <div v-if="store.panels['input'].isExpanded" class="w-full h-full">
     <slot />
-  </div>  
-</template>      
+  </div>
+</template>
 
 <script setup>
   import { computed } from 'vue'
