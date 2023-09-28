@@ -14,6 +14,9 @@ export const useLeviateStore = defineStore('leviate', {
       results: {
         isExpanded: false,
       },
+      validation: {
+        isExpanded: true
+      }
     },
   }),
   actions: {

@@ -5,6 +5,7 @@ import LvInputToolbar from './layout/input/LvInputToolbar.vue';
 import LvInputContent from './layout/input/LvInputContent.vue';
 import LvViewportPanel from './layout/LvViewportPanel.vue';
 import LvResultsPanel from './layout/LvResultsPanel.vue';
+import LvValidationPane from './layout/LvValidationPane.vue';
 
 export {
   LvProjectPanel,
@@ -14,4 +15,5 @@ export {
   LvInputContent,
   LvViewportPanel,
   LvResultsPanel,
+  LvValidationPane,
 }
