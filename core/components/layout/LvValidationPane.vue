@@ -17,14 +17,14 @@
         <li
           v-for="(message, index) in messages"
           :key="index"
-          class="flex items-center cursor-pointer text-sm mb-1 p-1 justify-between"
-          :class="{'bg-danger-lightest' : message.type === 'error', 'bg-warning-lightest' : message.type === 'warning'}"
+          class="flex items-center text-sm mb-1 p-1 justify-between"
+          :class="{'bg-danger-lightest' : message.type === 'error', 'bg-warning-lightest' : message.type === 'warning', 'cursor-pointer': message.onClick}"
         >
-          <div class="flex">
+          <div class="flex w-full" @click="message.onClick">
             <CIcon :type="iconType(message.type)" :color="iconStyle(message.type)" class="w-5 mr-2" />
             <span class="text-indigo">{{ message.text }}</span>
           </div>
-          <CIcon v-if="message.type === 'warning'" type="plus" color="warning" class="rotate-45 justify-end" @click="removeWarning(index)" />
+          <CIcon v-if="message.isDismissable === true" type="plus" color="warning" class="rotate-45 justify-end" @click="dismissWarning(index)" />
         </li>
       </ul>
     </div>
@@ -40,7 +40,6 @@ import { computed } from 'vue';
 import { ref } from 'vue'
 
 const store = useLeviateStore()
-let warningNumber = ref()
 const messages = ref(props.messages)
 
 const props = defineProps({
@@ -68,7 +67,7 @@ const iconStyle = (type) => {
   else if(type  === "warning") return 'warning'
 }
 
-const removeWarning = (index) => {
+const dismissWarning = (index) => {
   messages.value.splice(index,1)
 }
 
