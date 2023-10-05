@@ -45,11 +45,11 @@ export const useMessageStore = defineStore('messages', {
     },
 
     setConfigWarning(text) {
-      return this.setWarning(text, { category: 'config' });
+      return this.setWarning(text, { category: 'config', type: 'warning', isDismissable: true, onClick: () => {} });
     },
 
     setConfigError(text) {
-      return this.setError(text, { category: 'config' });
+      return this.setError(text, { category: 'config', type: 'error', isDismissable: false });
     },
 
     setGlobalWarning(text) {

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="messages.length" class="flex flex-col border-t" panelId="validation">
+  <div class="flex flex-col border-t" panelId="validation">
     <div class="flex px-3 text-white bg-danger">
       <div class="flex items-center">Validate</div>
       <div class="w-full flex items-center justify-end">
@@ -36,17 +36,14 @@
 import IconCollapse from '../icons/iconCollapse.vue';
 import IconExpand from '../icons/iconExpand.vue';
 import { useLeviateStore } from '../../store/leviate';
-import { computed } from 'vue';
-import { ref } from 'vue'
+import { useMessageStore } from '@crhio/leviate';
+import { computed, ref, onMounted } from 'vue';
+import { CONFIG_ERRORS, CONFIG_WARNINGS } from '@/constants';
 
 const store = useLeviateStore()
-const messages = ref(props.messages)
+const messageStore = useMessageStore()
+const messages = ref([])
 
-const props = defineProps({
-  messages: {
-    type: Array,
-  }
-});
 
 const isExpanded = computed({
   get: () => store.panels.validation.isExpanded,
@@ -70,5 +67,11 @@ const iconStyle = (type) => {
 const dismissWarning = (index) => {
   messages.value.splice(index,1)
 }
+
+onMounted(() => {
+  CONFIG_WARNINGS.forEach(err => { messageStore.setConfigWarning(err) })
+  CONFIG_ERRORS.forEach(err => { messageStore.setConfigError(err) })
+  messages.value = [...messageStore.configErrors]
+})
 
 </script>
