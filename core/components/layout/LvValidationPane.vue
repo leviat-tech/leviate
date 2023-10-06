@@ -36,7 +36,7 @@ import IconCollapse from '../icons/iconCollapse.vue';
 import IconExpand from '../icons/iconExpand.vue';
 import { useLeviateStore } from '../../store/leviate';
 import { useMessageStore } from '@crhio/leviate';
-import computed  from 'vue';
+import { computed }  from 'vue';
 
 const store = useLeviateStore()
 const messageStore = useMessageStore()
@@ -46,9 +46,7 @@ const isExpanded = computed({
   set: (val) => store.panels.validation.isExpanded = val
 })
 
-const messages = computed({
-  get: () => [...messageStore.configErrors]
-})
+const messages = computed(() => messageStore.configErrors);
 
 const togglePanel = () => {
     isExpanded.value = !isExpanded.value
