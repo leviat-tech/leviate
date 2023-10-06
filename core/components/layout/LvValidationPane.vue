@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col border-t" panelId="validation">
+  <div v-if="messages.length" class="flex flex-col border-t" panelId="validation">
     <div class="flex px-3 text-white bg-danger">
       <div class="flex items-center">Validate</div>
       <div class="w-full flex items-center justify-end">
@@ -24,30 +24,30 @@
             <CIcon :type="iconType(message.type)" :color="iconStyle(message.type)" class="w-5 mr-2" />
             <span class="text-indigo">{{ message.text }}</span>
           </div>
-          <CIcon v-if="message.isDismissable === true" type="plus" color="warning" class="rotate-45 justify-end" @click="dismissWarning(index)" />
+          <CIcon v-if="message.isDismissable === true" type="plus" color="warning" class="rotate-45 justify-end cursor-pointer" @click="dismissWarning(index)" />
         </li>
       </ul>
     </div>
   </div> 
 </template>
 
-
 <script setup>
 import IconCollapse from '../icons/iconCollapse.vue';
 import IconExpand from '../icons/iconExpand.vue';
 import { useLeviateStore } from '../../store/leviate';
 import { useMessageStore } from '@crhio/leviate';
-import { computed, ref, onMounted } from 'vue';
-import { CONFIG_ERRORS, CONFIG_WARNINGS } from '@/constants';
+import computed  from 'vue';
 
 const store = useLeviateStore()
 const messageStore = useMessageStore()
-const messages = ref([])
-
 
 const isExpanded = computed({
   get: () => store.panels.validation.isExpanded,
   set: (val) => store.panels.validation.isExpanded = val
+})
+
+const messages = computed({
+  get: () => [...messageStore.configErrors]
 })
 
 const togglePanel = () => {
@@ -65,13 +65,8 @@ const iconStyle = (type) => {
 }
 
 const dismissWarning = (index) => {
-  messages.value.splice(index,1)
+  const msg = messages.value[index];
+  messageStore.removeMessage(msg.id);
 }
-
-onMounted(() => {
-  CONFIG_WARNINGS.forEach(err => { messageStore.setConfigWarning(err) })
-  CONFIG_ERRORS.forEach(err => { messageStore.setConfigError(err) })
-  messages.value = [...messageStore.configErrors]
-})
 
 </script>

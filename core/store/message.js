@@ -44,12 +44,12 @@ export const useMessageStore = defineStore('messages', {
       return this.setMessage(text, 'error', additionalData);
     },
 
-    setConfigWarning(text) {
-      return this.setWarning(text, { category: 'config', type: 'warning', isDismissable: true, onClick: () => {} });
+    setConfigWarning(text, options = { isDismissable: true, onClick: null }) {
+      return this.setWarning(text, { category: 'config', isDismissable: options.isDismissable, onClick: options.onClick });
     },
 
-    setConfigError(text) {
-      return this.setError(text, { category: 'config', type: 'error', isDismissable: false });
+    setConfigError(text, options = { isDismissable: false, onClick: null }) {
+      return this.setError(text, { category: 'config', isDismissable: options.isDismissable, onClick: options.onClick });
     },
 
     setGlobalWarning(text) {
