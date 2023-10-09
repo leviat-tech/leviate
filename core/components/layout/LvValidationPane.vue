@@ -55,8 +55,8 @@ const count = computed(() => {
 
   const { error, warning } = groupBy(messages.value, 'type');
 
-  const errorCount = error.length;
-  const warningCount = warning.length;
+  const errorCount = error?.length || 0;
+  const warningCount = warning?.length || 0;
 
   const errorKey = errorCount === 1 ? 'error' : 'errors';
   const warningKey = warningCount === 1 ? 'warning' : 'warnings';
