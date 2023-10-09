@@ -13,6 +13,4 @@
 import ViewportToolbar from './ViewportToolbar.vue';
 import ViewportDrawing from './ViewportDrawing.vue';
 import { LvValidationPane } from '@crhio/leviate/components'
-import { computed } from 'vue';
-
 </script>

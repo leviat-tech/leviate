@@ -1,5 +1,5 @@
 <template>
-  <LvPanel :expanded="550" panelId="input">
+  <LvPanel :expanded="440" panelId="input">
     <div class="h-full flex flex-col justify-start">
       <InputRoot />
     </div>

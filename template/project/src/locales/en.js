@@ -24,6 +24,12 @@ const phrases = {
   project_explorer: 'project explorer',
   project_output: 'output',
 
+  validation: 'validation',
+  error: 'error',
+  errors: 'errors',
+  warning: 'warning',
+  warnings: 'warnings',
+
   // Settings
 
   config_name: 'config name',

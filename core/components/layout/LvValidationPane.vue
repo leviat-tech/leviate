@@ -1,18 +1,18 @@
 <template>
-  <div v-if="messages.length" class="flex flex-col border-t" panelId="validation">
-    <div class="flex px-3 text-white bg-danger">
-      <div class="flex items-center">Validate</div>
+  <div v-if="messages.length" class="flex flex-col border-t" :class="isExpanded || 'border-danger-dark'">
+    <div class="flex px-3" :class="isExpanded ? 'bg-gray-100' : 'bg-danger text-white' ">
+      <div class="flex items-center whitespace-nowrap h-10">{{ $L('validation') }} ({{ count }})</div>
       <div class="w-full flex items-center justify-end">
           <button @click="togglePanel"
-            class="flex justify-center items-center text-white hover:text-black"
-            :class="isExpanded ? 'w-6 h-6' : 'w-10 h-10'"
+            class="flex justify-center items-center w-10 h-10"
+            :class="isExpanded ? 'text-steel-darkest hover:text-black' : ' hover:opacity-60'"
           >
           <IconCollapse v-if="isExpanded" class="-rotate-90"/>
           <IconExpand v-else class="-rotate-90"/>
         </button>
         </div>
     </div>
-    <div v-if="isExpanded" class="p-2 max-h-28 flex-1 overflow-y-auto">
+    <div v-if="isExpanded" class="p-2 max-h-40 flex-1 border-t overflow-y-auto">
       <ul>
         <li
           v-for="(message, index) in messages"
@@ -28,18 +28,21 @@
         </li>
       </ul>
     </div>
-  </div> 
+  </div>
 </template>
 
 <script setup>
+import { computed } from 'vue';
+import { useLocalize, useMessageStore } from '../..';
 import IconCollapse from '../icons/iconCollapse.vue';
 import IconExpand from '../icons/iconExpand.vue';
 import { useLeviateStore } from '../../store/leviate';
-import { useMessageStore } from '@crhio/leviate';
-import { computed }  from 'vue';
+import { groupBy } from 'lodash-es';
+
 
 const store = useLeviateStore()
 const messageStore = useMessageStore()
+const { $l } = useLocalize();
 
 const isExpanded = computed({
   get: () => store.panels.validation.isExpanded,
@@ -47,6 +50,20 @@ const isExpanded = computed({
 })
 
 const messages = computed(() => messageStore.configErrors);
+const count = computed(() => {
+  if (messages.value.length === 0) return '';
+
+  const { error, warning } = groupBy(messages.value, 'type');
+
+  const errorCount = error.length;
+  const warningCount = warning.length;
+
+  const errorKey = errorCount === 1 ? 'error' : 'errors';
+  const warningKey = warningCount === 1 ? 'warning' : 'warnings';
+
+  return `${errorCount} ${$l(errorKey)}, ${warningCount} ${$l(warningKey)}`
+});
+const warnings = computed(() => messages.value.filter(item => item.type === 'warning').length);
 
 const togglePanel = () => {
     isExpanded.value = !isExpanded.value
@@ -67,4 +84,9 @@ const dismissWarning = (index) => {
   messageStore.removeMessage(msg.id);
 }
 
+messageStore.setConfigError('Error')
+messageStore.setConfigError('Error')
+messageStore.setConfigError('Error')
+messageStore.setConfigError('Error')
+messageStore.setConfigWarning('Error')
 </script>
