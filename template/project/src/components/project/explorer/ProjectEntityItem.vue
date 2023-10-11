@@ -1,5 +1,5 @@
 <template>
-  <li class="project__entity-item flex border-b p-2 pl-4 bg-white" :class="isActive && 'bg-gray-100 text-indigo'">
+  <li class="project__entity-item flex border-b p-2 pl-6 bg-white" :class="isActive && 'bg-gray-100 text-indigo'">
 
     <router-link :to="getItemRoute(item.id)" class="flex-1">
       <div

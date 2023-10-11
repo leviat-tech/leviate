@@ -2,15 +2,19 @@
   <Disclosure v-slot="{ open }">
     <DisclosureButton
       @click="leviate.setActiveProjectItem(name)"
-      class="relative p-3 flex flex-col justify-center items-center bg-indigo text-white"
+      class="relative p-3 flex flex-col justify-center items-start pl-6"
       :class="{
-          'text-sm text-white mx-1 mb-[2px] first-of-type:mt-2' : isExpanded,
-          'flex-1 text-center border-t' : !isExpanded,
-          'bg-sky' : isActive
+          'text-sm text-white mx-1 mb-[2px] first-of-type:mt-2 bg-indigo text-white' : isExpanded,
+          'flex-1 text-center bg-gray-50 text-indigo border-t border-t-gray-200' : !isExpanded,
+          'border-r-4 border-indigo' : !isExpanded && !isActive,
+          'border-r-4 border-sky text-sky' : !isExpanded && isActive,
+          'bg-sky' : isActive && isExpanded
         }">
       <LvTabText :is-expanded="isExpanded">{{ $L(`project_${name}`) }}</LvTabText>
 
-      <!-- <div v-if="isExpanded && isActive" class="absolute top-0 left-0 h-full w-3 bg-sky"/> -->
+      <!-- <div v-if="!isExpanded && isActive" class="absolute top-1 right-0 h-full border-t-2 w-1 bg-sky"/> -->
+
+      <div v-if="isExpanded && isActive" class="triangle-down absolute top-11 left-5"/>
     </DisclosureButton>
 
     <div v-show="isActive && isExpanded" class="flex-1 overflow-y-auto bg-gray-50">
@@ -36,3 +40,15 @@ const leviate = useLeviateStore();
 const isExpanded = computed(() => leviate.panels.project.isExpanded);
 const isActive = computed(() => leviate.panels.project.activeItem === props.name);
 </script>
+
+
+<style scoped>
+ .triangle-down {
+      width: 0;
+      height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-top: 10px solid #05C3DD;
+    }
+  
+</style>

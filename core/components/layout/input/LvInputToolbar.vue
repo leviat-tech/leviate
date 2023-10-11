@@ -1,16 +1,17 @@
 <template>
   <div class="flex w-full items-center" :class="{'h-12' : isExpanded, 'flex-col h-full' : !isExpanded }">
     <slot />
-    <div v-if="!isExpanded" class="h-12 border-b w-full"></div>
+    <div v-if="!isExpanded" class="h-12 w-full"></div>
     <div v-if="tabs.length > 0"
-         class="flex justify-between w-full border-b"
-         :class="{ 'divide-x h-12' : isExpanded, 'flex-col flex-grow divide-y divide-y-reverse font-semibold -mb-1' : !isExpanded  }">
+         class="flex justify-between w-full"
+         :class="{ 'h-12' : isExpanded, 'flex-col flex-grow divide-y font-semibold -mb-1 bg-gray-50' : !isExpanded}">
       <button v-for="(tab, index) in tabs" :key="index"
         @click.stop="clickTab(index)"
-        class="text-center w-full h-full flex justify-center cursor-pointer px-1 py-1 items-center text-xs hover:bg-gray-200"
-        :class="[
-          isExpanded && activeTab === index ? 'bg-white' : 'bg-gray-100'
-        ]"
+        class="text-center w-full h-full flex justify-center cursor-pointer px-1 py-1 items-center text-xs"
+        :class="{
+          'bg-gray-50 border-b border-b-indigo border-r border-r-gray-200': isExpanded && activeTab !== index,
+          'bg-white border border-indigo border-b-0' : isExpanded && activeTab === index
+        }"
       >
         <LvTabText :is-expanded="isExpanded">{{ tab }}</LvTabText>
       </button>
