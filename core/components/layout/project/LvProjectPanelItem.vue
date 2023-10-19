@@ -4,11 +4,11 @@
       @click="leviate.setActiveProjectItem(name)"
       class="relative p-3 flex flex-col justify-center items-start pl-6"
       :class="{
-          'text-sm text-white mx-1 mb-[2px] first-of-type:mt-2 bg-indigo text-white' : isExpanded,
+          'text-md text-white mx-1 mb-[2px] first-of-type:mt-2 bg-indigo' : isExpanded,
           'flex-1 text-center bg-gray-50 text-indigo border-t border-t-gray-200' : !isExpanded,
           'border-r-4 border-indigo' : !isExpanded && !isActive,
-          'border-r-4 border-sky text-sky' : !isExpanded && isActive,
-          'bg-sky' : isActive && isExpanded
+          'border-r-4 border-sky' : !isExpanded && isActive,
+          'border-b-4 border-sky text-indigo' : isExpanded && isActive
         }">
       <LvTabText :is-expanded="isExpanded">{{ $L(`project_${name}`) }}</LvTabText>
 
@@ -44,11 +44,11 @@ const isActive = computed(() => leviate.panels.project.activeItem === props.name
 
 <style scoped>
  .triangle-down {
-      width: 0;
-      height: 0;
-      border-left: 7px solid transparent;
-      border-right: 7px solid transparent;
-      border-top: 10px solid #05C3DD;
-    }
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 18px solid #05C3DD;
+  }
   
 </style>
