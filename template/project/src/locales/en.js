@@ -21,7 +21,7 @@ const phrases = {
   project_versions: 'version history',
   project_info: 'project info',
   project_settings: 'settings',
-  project_explorer: 'project explorer',
+  project_explorer: 'design',
   project_output: 'output',
 
   validation: 'validation',

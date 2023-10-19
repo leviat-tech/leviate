@@ -68,6 +68,7 @@ export function useMock() {
   function getStorageItem(name) {
     const key = getStorageKey(name);
     const storedJSON = localStorage.getItem(key);
+    console.log(key)
 
     try {
       return JSON.parse(storedJSON);
@@ -77,6 +78,7 @@ export function useMock() {
   }
 
   function setStorageItem(name, data) {
+    console.log(data);
     const key = getStorageKey(name);
     localStorage.setItem(key, JSON.stringify(data));
   }
@@ -125,16 +127,20 @@ export function useMock() {
 
     setCurrentConfig(name);
     mockApi.setState(state);
-
     return state;
   }
 
   function saveConfiguration(name, newState) {
     const configName = name || settings.currentConfig || 'Default';
-    settings.configurations = uniq([
-      ...settings.configurations,
-      configName
-    ]);
+    const id = 4
+    const createdAt = new Date().toDateString()
+    const versions = []
+    settings.configurations = [{
+      configName,
+      id,
+      createdAt,
+      versions
+    }];
     setStorageItem(configName, newState);
     setCurrentConfig(configName);
 
@@ -164,6 +170,48 @@ export function useMock() {
     window.location.reload();    
   }
 
+  function getVersions (name) {
+    const state = getStorageItem(name);
+
+    if (!state) return;
+
+    setCurrentConfig(name);
+    mockApi.setState(state);
+
+    console.log(state);
+
+    return state;
+  }
+
+  // function createVersion (name, newState) {
+  //   const configName = name || settings.currentConfig || 'Default';
+   
+  //   settings.configurations = uniq([
+  //     ...settings.configurations,
+  //     configName,
+  //   ]);
+
+  //   setStorageItem(configName, newState);
+  //   setCurrentConfig(configName);
+
+  //   logger.log(`Configuration '${configName}' saved`);
+  // }
+
+  function createVersion (name, fromId) {
+    //TODO: throw an error if fromId isn't associated with this configuration
+    const from = fromId
+      ? settings.configurations.value.versions.find(version => version.id === fromId)
+      : settings.configurations.value
+    console.log('creating version')
+    //post({ ...from, name, parentId: rootId })
+  }
+
+  function deleteVersion (name) {
+    settings.configurations = settings.configurations.filter(configuration => configuration !== name);
+    saveSettings();
+    removeStorageItem(name);
+  }
+
   return {
     settings,
     initialize,
@@ -172,5 +220,8 @@ export function useMock() {
     deleteConfiguration,
     clearStorage,
     localStorageBackup,
+    getVersions,
+    createVersion,
+    deleteVersion
   }
 }
