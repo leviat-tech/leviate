@@ -57,8 +57,9 @@ const HostPlugin = {
     const $host = (await inject.attach({ setUrl, setState })).call
     for (const key in $host) {
       if (key.startsWith('get')) {
-        const value = await $host[key]()
-        $host[key] = () => value;
+        const getValue = $host[key];
+        const value = await getValue()
+        $host[key] = (getCachedValue = true) => getCachedValue ? value : getValue();
       }
     }
 

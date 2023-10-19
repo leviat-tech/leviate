@@ -37,6 +37,25 @@ export function useMock() {
     setMeta(newMeta){
       metaData.meta = Object.assign(metaData.meta, newMeta);
     },
+
+    getVersions() {
+      return settings.configurations;
+    },
+
+    createVersion (name, fromId) {
+      //TODO: throw an error if fromId isn't associated with this configuration
+      const from = fromId
+        ? settings.configurations.value.versions.find(version => version.id === fromId)
+        : settings.configurations.value
+
+      // TODO: fix inject to prevent passing args as an array
+      saveConfiguration(name[0]);
+    },
+
+    deleteVersion: (id) => {
+      // TODO: fix inject to prevent passing args as an array
+      deleteConfiguration(id[0]);
+    }
   };
 
   window.host = mockApi;
@@ -131,26 +150,23 @@ export function useMock() {
   }
 
   function saveConfiguration(name, newState) {
-    const configName = name || settings.currentConfig || 'Default';
-    const id = 4
-    const createdAt = new Date().toDateString()
-    const versions = []
-    settings.configurations = [{
-      configName,
-      id,
-      createdAt,
-      versions
-    }];
-    setStorageItem(configName, newState);
-    setCurrentConfig(configName);
+    // Generate a random-ish id
+    const newVersion = {
+      id: Date.now().toString(32),
+      name,
+      createdAt: new Date(),
+    };
+    settings.configurations.push(newVersion);
+    setStorageItem(name, newState);
+    setCurrentConfig(newVersion.id);
 
-    logger.log(`Configuration '${configName}' saved`);
+    logger.log(`Configuration '${name}' saved`);
   }
 
-  function deleteConfiguration(name) {
-    settings.configurations = settings.configurations.filter(configuration => configuration !== name);
+  function deleteConfiguration(id) {
+    settings.configurations = settings.configurations.filter(configuration => configuration.id !== id);
     saveSettings();
-    removeStorageItem(name);
+    removeStorageItem(id);
   }
 
   function clearStorage() {
@@ -202,7 +218,7 @@ export function useMock() {
     const from = fromId
       ? settings.configurations.value.versions.find(version => version.id === fromId)
       : settings.configurations.value
-    console.log('creating version')
+    console.log('creating version', from)
     //post({ ...from, name, parentId: rootId })
   }
 

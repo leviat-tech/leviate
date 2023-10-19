@@ -26,7 +26,7 @@
 
           <div class="mb-3 pb-3 border-b" v-if="settings.configurations.length > 0">
             <div class="text-lg mb-4 pb-2 border-b">Saved Configurations</div>
-            <div v-for="name in settings.configurations">
+            <div v-for="{ configName: name } in settings.configurations">
               <div class="flex items-center mb-2 px-2">
                 <div class="w-1 h-6 bg-gray-600 mr-2" :class="{ 'bg-green-600': name === settings.currentConfig }" />
                 <button class="flex-grow text-left" :class="{ 'font-bold': name === settings.currentConfig }"

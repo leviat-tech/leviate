@@ -6,7 +6,8 @@
             <div class="">{{version.name}}</div>
             <div class="" >
               <button class="mr-2"><CIcon type="copy" size="sm" /></button>
-               <button class="w-4 h-4" @click="deleteVersion(version.name)">
+              {{ version.id }}
+               <button class="w-4 h-4" @click="onDelete(version.id)">
                   <CIcon type="trash" size="sm" />
                 </button>
             </div>
@@ -15,15 +16,15 @@
         </div>
     </div>
     <div class="flex flex-1  flex-row">
-      <input  placeholder="Create a new version" v-model="configNameInputVal" class="mr-4 p-2 border" />
-      <CButton class="w-24" @click="onSave()">Save</CButton>
+      <input placeholder="Create a new version" v-model="configNameInputVal" class="mr-4 p-2 border" @keydown.enter="onSave"/>
+      <CButton class="w-24" @click="onSave">Save</CButton>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, nextTick } from 'vue';
-import { useMock } from '../../../host-mock.js';
+import { ref } from 'vue';
+import { useHost } from '@crhio/leviate';
 import { useRootStore } from '../../../store';
 import { useRoute } from 'vue-router';
 
@@ -32,50 +33,23 @@ const fromId = useRoute().params.id
 const configNameInputVal = ref('');
 const store = useRootStore();
 const {
-  settings,
   getVersions,
   createVersion,
   deleteVersion,
-  clearStorage,
-  localStorageBackup,
-} = useMock();
+} = useHost();
 
 
 async function onSave() {
   const configName = configNameInputVal.value;
-  //const newState = store.toJSON();
-  createVersion(configName, fromId);
+  createVersion(configName);
   configNameInputVal.value = '';
+  versions.value = await getVersions(false);
 }
 
+async function onDelete(id) {
+  deleteVersion(id);
+  versions.value = await getVersions(false);
+}
 
-const versions = ref(
-  [
-  {
-    "id": 4,
-    "createdAt": "2023-10-16T12:55:39.601Z",
-    "name": "test",
-    "number": "123",
-    "ownerId": 1,
-    "projectId": 1,
-    "customerId": 1,
-    "configuratorId": 3,
-    "parentId": 1,
-    "state": {}
-  },
-  {
-    "id": 5,
-    "createdAt": "2023-10-16T12:56:19.682Z",
-    "name": "test",
-    "number": "123",
-    "ownerId": 1,
-    "projectId": 1,
-    "customerId": 1,
-    "configuratorId": 3,
-    "parentId": 1,
-    "state": {}
-  }
-]
-)
-
+const versions = ref(getVersions(false))
 </script>
