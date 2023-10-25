@@ -3,14 +3,14 @@
     <slot />
     <div v-if="!isExpanded" class="h-12 w-full"></div>
     <div v-if="tabs.length > 0"
-         class="flex justify-between w-full"
-         :class="{ 'h-12' : isExpanded, 'flex-col flex-grow divide-y font-semibold -mb-1 bg-gray-50' : !isExpanded}">
+        class="flex justify-between w-full text-gray-500"
+        :class="{ 'h-12' : isExpanded, 'flex-col flex-grow divide-y font-semibold -mb-1 bg-gray-50' : !isExpanded}">
       <button v-for="(tab, index) in tabs" :key="index"
         @click.stop="clickTab(index)"
-        class="text-center w-full h-full flex justify-center cursor-pointer px-1 py-1 items-center text-xs"
+        class="text-center w-full h-full flex justify-center cursor-pointer px-1 py-1 items-center text-xs font-semibold bg-gray-50 "
         :class="{
-          'bg-gray-50 border-b border-b-indigo border-r border-r-gray-200': isExpanded && activeTab !== index,
-          'bg-white border border-indigo border-b-0' : isExpanded && activeTab === index
+          'border-b-2 border-b-indigo text-indigo' : isExpanded && activeTab === index,
+          'border-r-4 border-r-indigo text-indigo' : !isExpanded && activeTab === index
         }"
       >
         <LvTabText :is-expanded="isExpanded">{{ tab }}</LvTabText>
