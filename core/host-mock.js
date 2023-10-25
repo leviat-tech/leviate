@@ -1,7 +1,6 @@
 import inject from '@crhio/inject';
 import logger from './extensions/logger.js';
 import { reactive } from 'vue';
-import { uniq } from 'lodash-es';
 
 const settings = reactive({
   autosave: false,
@@ -17,6 +16,10 @@ const data = {
 const metaData = reactive({  
   meta: {}, 
 });
+
+// function jsonifyNestedProxies (obj) {
+//   return JSON.parse(JSON.stringify(obj))
+// }
 
 export function useMock() {
 
@@ -37,6 +40,11 @@ export function useMock() {
     setMeta(newMeta){
       metaData.meta = Object.assign(metaData.meta, newMeta);
     },
+    
+    getConfiguration() {
+        console.log(settings.configurations[0]);
+        return settings.configurations[0];
+    },
 
     getVersions() {
       return settings.configurations;
@@ -47,7 +55,7 @@ export function useMock() {
       const from = fromId
         ? settings.configurations.value.versions.find(version => version.id === fromId)
         : settings.configurations.value
-
+      
       // TODO: fix inject to prevent passing args as an array
       saveConfiguration(name[0]);
     },
@@ -55,6 +63,16 @@ export function useMock() {
     deleteVersion: (id) => {
       // TODO: fix inject to prevent passing args as an array
       deleteConfiguration(id[0]);
+    },
+
+    loadConfiguration(id) {
+      const state = getStorageItem(id);
+
+      if (!state) return;
+
+      setCurrentConfig(id);
+      setState(state);
+      return state;
     }
   };
 
@@ -85,6 +103,7 @@ export function useMock() {
   }
 
   function getStorageItem(name) {
+    console.log(name);
     const key = getStorageKey(name);
     const storedJSON = localStorage.getItem(key);
     console.log(key)
@@ -150,6 +169,7 @@ export function useMock() {
   }
 
   function saveConfiguration(name, newState) {
+    mockApi.getConfiguration(name)
     // Generate a random-ish id
     const newVersion = {
       id: Date.now().toString(32),
@@ -157,6 +177,7 @@ export function useMock() {
       createdAt: new Date(),
     };
     settings.configurations.push(newVersion);
+    console.log(settings.configurations);
     setStorageItem(name, newState);
     setCurrentConfig(newVersion.id);
 
@@ -186,48 +207,6 @@ export function useMock() {
     window.location.reload();    
   }
 
-  function getVersions (name) {
-    const state = getStorageItem(name);
-
-    if (!state) return;
-
-    setCurrentConfig(name);
-    mockApi.setState(state);
-
-    console.log(state);
-
-    return state;
-  }
-
-  // function createVersion (name, newState) {
-  //   const configName = name || settings.currentConfig || 'Default';
-   
-  //   settings.configurations = uniq([
-  //     ...settings.configurations,
-  //     configName,
-  //   ]);
-
-  //   setStorageItem(configName, newState);
-  //   setCurrentConfig(configName);
-
-  //   logger.log(`Configuration '${configName}' saved`);
-  // }
-
-  function createVersion (name, fromId) {
-    //TODO: throw an error if fromId isn't associated with this configuration
-    const from = fromId
-      ? settings.configurations.value.versions.find(version => version.id === fromId)
-      : settings.configurations.value
-    console.log('creating version', from)
-    //post({ ...from, name, parentId: rootId })
-  }
-
-  function deleteVersion (name) {
-    settings.configurations = settings.configurations.filter(configuration => configuration !== name);
-    saveSettings();
-    removeStorageItem(name);
-  }
-
   return {
     settings,
     initialize,
@@ -236,8 +215,5 @@ export function useMock() {
     deleteConfiguration,
     clearStorage,
     localStorageBackup,
-    getVersions,
-    createVersion,
-    deleteVersion
   }
 }
