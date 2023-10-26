@@ -56,4 +56,13 @@ export default {
       name: 'CRH Technology Studio',
     },
   },
+  configuration: {
+    "id": 1,
+    "createdAt": "2023-10-15T10:13:34.729Z",
+    "name": "My Configuration",
+    "parentId": null,
+    "state": {
+      "example": "state"
+    }
+  }
 };
