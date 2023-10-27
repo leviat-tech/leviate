@@ -18,10 +18,6 @@ const metaData = reactive({
   meta: {}, 
 });
 
-// function jsonifyNestedProxies (obj) {
-//   return JSON.parse(JSON.stringify(obj))
-// }
-
 export function useMock() {
 
   const mockApi = {
@@ -68,7 +64,7 @@ export function useMock() {
         id: newId,
         parentId: id,
         name,
-        createdAt: new Date(),
+        createdAt: new Date().toDateString(),
       };
       settings.configurations.push(newVersion);
       setStorageItem(newId, state);

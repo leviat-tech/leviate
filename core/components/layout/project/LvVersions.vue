@@ -1,10 +1,9 @@
 <template>
   <div class="flex flex-col h-full justify-between p-4" >
     <div class="flex-1">
-      <!-- Display root version -->
-
         <div v-for="version in versions" :key="version.id"
-             class="p-2 mb-2 border-b border-indigo-light"
+             class="p-2 mb-2 border-b border-indigo-lightest last:border-b-0"
+             :class="rootVersionId !== version.id && 'ml-3'"
         >
           <div class="flex justify-between">
             <div class="cursor-pointer"
@@ -18,7 +17,7 @@
             <div class="" >
               <!-- Add edit button. Autofocus editable div and call host.setName on enter and blur -->
               <button class="mr-2"><CIcon type="copy" size="sm" @click="onDuplicate(version.id)"/></button>
-              <button class="w-4 h-4" @click="deleteVersion(version.id)">
+              <button  v-if="rootVersionId !== version.id" class="w-4 h-4" @click="deleteVersion(version.id)">
                 <CIcon type="trash" size="sm"/>
               </button>
             </div>
@@ -47,6 +46,7 @@ const {
   loadVersion,
   createVersion,
   deleteVersion,
+  rootVersionId,
 } = useVersions();
 
 const isEditing = ref(false);

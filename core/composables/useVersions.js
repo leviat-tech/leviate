@@ -6,8 +6,14 @@ let isInitialized = false;
 
 const versions = ref([]);
 const activeVersionId = ref(null);
+
 const activeVersion = computed(() => {
   return versions.find(version => version.id === activeVersionId.value);
+});
+
+const rootVersionId = computed(() => {
+  const rootVersion =  versions.value.find(version => version.id === versions.value[0].id);
+  return rootVersion.id;
 });
 
 async function loadVersion(id) {
@@ -31,6 +37,7 @@ export default function useVersions() {
     versions,
     activeVersion,
     activeVersionId,
+    rootVersionId,
     getActiveVersion: () => activeVersion.value,
     getActiveVersionId: () => activeVersionId.value,
     getVersionById: (id) => {
