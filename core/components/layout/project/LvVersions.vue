@@ -31,7 +31,6 @@
       <input placeholder="Create a new version" v-model="configNameInputVal" class="mr-4 p-2 border" @keydown.enter="onSave"/>
       <CButton class="w-24" @click="onSave">Save</CButton>
     </div>
-      {{ activeVersionId }}
   </div>
 </template>
 
@@ -79,6 +78,7 @@ const onDuplicate = async (id) => {
 }
 
 async function onDelete(id) {
+  console.log(id)
   deleteVersion(id);
   versions.value = await getVersions(false);
 }

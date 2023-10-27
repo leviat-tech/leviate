@@ -30,10 +30,9 @@ export function useMock() {
     getState: () => data.state,
     getMeta: () => metaData.meta,
     getDictionary: () => data.dictionary,
-    setState: (state) => {
+    setState: (state, versionId) => {
+      // TODO: ensure the version id is passed in
       
-      console.log(settings.currentConfigId)
-
       const newState = Array.isArray(state) ? state[0] : state;
 
       data.state = newState;
@@ -81,6 +80,7 @@ export function useMock() {
     },
 
     deleteVersion: (_id) => {
+      console.log(_id)
       // TODO: fix inject to prevent passing args as an array
       const [id] = _id;
 
@@ -95,8 +95,6 @@ export function useMock() {
       
       const state = getStorageItem(id);
       
-      console.log(state)
-
       if (!state) return;
 
       setcurrentConfigId(id);
@@ -136,7 +134,6 @@ export function useMock() {
   }
 
   function getStorageItem(id) {
-    console.log(id);
     const key = getStorageKey(id);
     const storedJSON = localStorage.getItem(key);
 
