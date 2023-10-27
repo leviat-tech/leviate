@@ -6,7 +6,6 @@ import revision from './plugins/revision';
 import BaseModel from '../BaseModel';
 import { useLocalize } from '../plugins/localize';
 import logger from '../extensions/logger.js';
-import { useLeviateStore } from './leviate';
 
 
 class TransactionError extends Error {
@@ -210,7 +209,6 @@ function initializeStore(initialState, migrations, models) { // eslint-disable-l
   const useEntityStore = normie(defineStore, Object.values(models));
   const modules = storeConfig.modules.concat(useEntityStore);
   modules.forEach(rootStore._registerModule);
-  rootStore._registerModule(useLeviateStore);
 
   performMigration(rootStore, initialState, migrations)
 
