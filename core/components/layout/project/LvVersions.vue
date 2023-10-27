@@ -30,12 +30,15 @@
       <input placeholder="Create a new version" v-model="configNameInputVal" class="mr-4 p-2 border" @keydown.enter="onSave"/>
       <CButton class="w-24" @click="onSave">Save</CButton>
     </div>
+
+    <LvVersionsDev />
   </div>
 </template>
 
 <script setup>
 import { nextTick, ref } from 'vue';
 import useVersions from '@crhio/leviate/composables/useVersions.js';
+import LvVersionsDev from '@crhio/leviate/components/layout/project/LvVersionsDev.vue';
 
 const configNameInputVal = ref('');
 

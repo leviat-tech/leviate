@@ -20,6 +20,7 @@ const phrases = {
 
   project_versions: 'versions',
   project_info: 'project info',
+  client_info: 'client info',
   project_settings: 'settings',
   project_explorer: 'design',
   project_output: 'output',

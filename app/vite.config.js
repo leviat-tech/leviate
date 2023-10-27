@@ -3,6 +3,9 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import svgLoader from 'vite-svg-loader';
 import manifestPlugin from '../core/server/manifestPlugin';
+import { version } from '../package.json';
+
+process.env.VITE_LEVIATE_VERSION = version;
 
 export default defineConfig({
   resolve: {

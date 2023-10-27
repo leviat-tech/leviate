@@ -26,6 +26,8 @@ export default {
 
     project: {
       name: 'My Project',
+      number: '1234',
+      designer: 'John Doe',
       account: {
         name: 'Fake Glazing Company',
       },
@@ -54,6 +56,19 @@ export default {
 
     company: {
       name: 'CRH Technology Studio',
+    },
+    customer: {
+      company: 'Fake Glazing Company',
+      phone: '123-456-7890',
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'glazing@company.com',
+      address: {
+        street: '1234 Address Blvd',
+        postcode: '12345',
+        city: 'New York',
+        country: 'USA',
+      },
     },
   },
   configuration: {

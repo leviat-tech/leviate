@@ -1,21 +1,23 @@
 import inject from '@crhio/inject';
 import logger from './extensions/logger.js';
-import { reactive } from 'vue';
+import { reactive, watchEffect } from 'vue';
+import useVersions from './composables/useVersions';
 
-const settings = reactive({
-  autosave: false,
-  configurations: [],
-  currentConfigId: null,
-});
+
+const localSettings = {
+  versionIds: [],
+  activeVersionId: null,
+};
 
 const data = {
   state: {},
   configuration: {},
+  versions: [],
   dictionary: {}
 };
 
-const metaData = reactive({  
-  meta: {}, 
+const metaData = reactive({
+  meta: {},
 });
 
 export function useMock() {
@@ -28,14 +30,12 @@ export function useMock() {
     getDictionary: () => data.dictionary,
     setState: (state, versionId) => {
       // TODO: ensure the version id is passed in
-      
+
       const newState = Array.isArray(state) ? state[0] : state;
 
       data.state = newState;
 
-      // if (settings.autosave) {
-        saveConfiguration(settings.currentConfigId, newState)
-      // }
+      setStorageItem(settings.currentConfigId, newState)
     },
     setName: async (name, versionId) => {
       // Set the name of the specified version
@@ -43,13 +43,13 @@ export function useMock() {
     setMeta(newMeta){
       metaData.meta = Object.assign(metaData.meta, newMeta);
     },
-    
+
     getConfiguration() {
         return data.configuration;
     },
 
     getVersions() {
-      return settings.configurations;
+      return data.versions;
     },
 
     // TODO: fix inject to prevent passing args as an array
@@ -66,7 +66,7 @@ export function useMock() {
         name,
         createdAt: new Date().toDateString(),
       };
-      settings.configurations.push(newVersion);
+      data.versions.push(newVersion);
       setStorageItem(newId, state);
       setcurrentConfigId(newVersion.id);
 
@@ -80,7 +80,8 @@ export function useMock() {
       // TODO: fix inject to prevent passing args as an array
       const [id] = _id;
 
-      settings.configurations = settings.configurations.filter(configuration => configuration.id !== id);
+      data.versions = data.versions.filter(configuration => configuration.id !== id);
+      localSettings.versionIds = localSettings.versionIds.filter(versionId => versionId !== id);
       saveSettings();
       removeStorageItem(id);
     },
@@ -88,9 +89,9 @@ export function useMock() {
     loadConfiguration(_id) {
       // TODO: fix inject to prevent passing args as an array
       const [id] = _id;
-      
+
       const state = getStorageItem(id);
-      
+
       if (!state) return;
 
       setcurrentConfigId(id);
@@ -113,20 +114,21 @@ export function useMock() {
       Object.assign(settings, storedSettings);
       loadConfiguration(mockConfig.configuration.id);
     } else {
-      settings.currentConfigId = mockConfig.configuration.id;
+      localSettings.currentConfigId = mockConfig.configuration.id;
       saveSettings();
     }
 
     if (!inject.hosted) {
       inject.mock(mockApi);
     }
+
   }
 
   /****************************** LOCAL STORAGE MANAGEMENT ******************************/
 
-  function getStorageKey(name = 'Default') {
-    const stateKey = metaData.meta.configurator.name;
-    return [stateKey, name].join(':');
+  function getStorageKey() {
+    const appNameSlug = metaData.meta.configurator.name.replace(/\s/g, '-').toLowerCase();
+    return [appNameSlug, name].join(':');
   }
 
   function getStorageItem(id) {
@@ -168,7 +170,7 @@ export function useMock() {
     link.click();
     link.remove();
   }
-  
+
   /****************************** SETTINGS MANAGEMENT ******************************/
 
   function setcurrentConfigId(name) {
@@ -196,10 +198,6 @@ export function useMock() {
     setStorageItem(id, state);
   }
 
-  function createConfiguration(name, newState) {
-
-  }
-
   function clearStorage() {
     const stateKey = metaData.meta.configurator.name;
     const deleteKeys = [];
@@ -214,7 +212,7 @@ export function useMock() {
 
     deleteKeys.forEach(key => localStorage.removeItem(key));
 
-    window.location.reload();    
+    window.location.reload();
   }
 
   return {
