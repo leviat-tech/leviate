@@ -10,6 +10,7 @@
         class="text-center w-full h-full flex justify-center cursor-pointer px-1 py-1 items-center text-xs font-semibold bg-gray-50 "
         :class="{
           'border-b-2 border-b-indigo text-indigo' : isExpanded && activeTab === index,
+          'border-b-2 border-b-transparent' : isExpanded && activeTab !== index,
           'border-r-4 border-r-indigo text-indigo' : !isExpanded && activeTab === index
         }"
       >
