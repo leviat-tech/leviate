@@ -23,7 +23,7 @@
 
       <div class="dev__ui absolute bottom-0 left-0 w-full text-left">
         <div class="mx-2">
-
+<!---->
           <div class="mb-3 pb-3 border-b" v-if="settings.configurations.length > 0">
             <div class="text-lg mb-4 pb-2 border-b">Saved Configurations</div>
             <div v-for="{ configName: name } in settings.configurations">
@@ -38,15 +38,15 @@
               </div>
             </div>
           </div>
-
+<!---->
           <div class="flex items-center justify-between">
             <label for="dev__autosave" class="flex-grow py-2 cursor-pointer">Autosave</label>
             <input id="dev__autosave" type="checkbox" v-model="settings.autosave" />
           </div>
-
+<!---->
           <input class="w-full px-2 py-2 text-black outline-none text-sm" v-model="configNameInputVal"
             @keydown.enter="onSave" placeholder="Save as">
-
+<!---->
           <div class="dev__buttons flex my-3">
             <div class="w-1/2 pr-1">
               <CButton class="w-full  transition duration-150 btn__save" color="sky" @click="onSave">Save</CButton>
@@ -68,7 +68,7 @@
               </CButton>
             </div>
           </div>
-
+<!---->
         </div>
       </div>
     </div>
@@ -136,7 +136,7 @@ function onRestoreFromFile(e) {
     alert('Failed to load file');
   }
 
-  window.location.reload();    
+  window.location.reload();
 }
 
 function onLoad(name) {

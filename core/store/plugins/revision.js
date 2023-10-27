@@ -1,5 +1,6 @@
 import Revision from '../../extensions/Revision';
 import { useHost } from '../../plugins/host';
+import useVersions from '../../composables/useVersions';
 import { markRaw } from 'vue';
 
 const revision = new Revision(25, {
@@ -13,8 +14,10 @@ const revision = new Revision(25, {
   },
   committed(snapshot) {
     const host = useHost();
+    const versionId = useVersions().getActiveVersionId();
+
     if (host.setState) {
-      host.setState(snapshot);
+      host.setState(snapshot, versionId);
     }
   },
 });

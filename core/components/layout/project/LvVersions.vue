@@ -10,7 +10,7 @@
             <div class="cursor-pointer"
               :class="version.id === activeVersionId && 'font-bold'"
               ref="inputRef"
-              @click="onLoad(version.id)"
+              @click="loadVersion(version.id)"
               :contenteditable="isEditing"
             >
                 {{version.name}}
@@ -18,8 +18,8 @@
             <div class="" >
               <!-- Add edit button. Autofocus editable div and call host.setName on enter and blur -->
               <button class="mr-2"><CIcon type="copy" size="sm" @click="onDuplicate(version.id)"/></button>
-              <button class="w-4 h-4" @click="onDelete(version.id)">
-                <CIcon type="trash" size="sm" />
+              <button class="w-4 h-4" @click="deleteVersion(version.id)">
+                <CIcon type="trash" size="sm"/>
               </button>
             </div>
           </div>
@@ -35,56 +35,36 @@
 </template>
 
 <script setup>
-import { ref, nextTick, computed } from 'vue';
-import { useHost } from '@crhio/leviate';
-import { useRootStore } from '../../../store';
-import { useRoute } from 'vue-router';
-
-const fromId = useRoute().params.id
+import { nextTick, ref } from 'vue';
+import useVersions from '@crhio/leviate/composables/useVersions.js';
 
 const configNameInputVal = ref('');
-const store = useRootStore();
+
 const {
-  getVersions,
+  versions,
+  activeVersionId,
+  getVersionById,
+  loadVersion,
   createVersion,
   deleteVersion,
-  getConfiguration,
-  loadConfiguration
-} = useHost();
+} = useVersions();
 
 const isEditing = ref(false);
 const inputRef = ref(null);
 
-const getVersionById = (id) => {
-  return versions.value.find(version => version.id === id)
-}
-
 async function onSave() {
   const configName = configNameInputVal.value;
-  if (configName){
-    const fromId = activeVersionId.value;
-    createVersion(configName, fromId);
-    configNameInputVal.value = '';
-    versions.value = await getVersions(false);
 
-    // TODO: set new version as active
-  }
+  if (!configName) return;
+
+  createVersion(configName);
+  configNameInputVal.value = '';
 }
 
 const onDuplicate = async (id) => {
   const name = 'Copy of ' + getVersionById(id).name;
   createVersion(name, id);
-  versions.value = await getVersions(false);
 }
-
-async function onDelete(id) {
-  console.log(id)
-  deleteVersion(id);
-  versions.value = await getVersions(false);
-}
-
-const versions = ref(getVersions(true));
-const activeVersionId = ref(getConfiguration().id);
 
 const onEdit = async () => {
   if (isEditing.value) return;
@@ -92,11 +72,4 @@ const onEdit = async () => {
   await nextTick();
   const input = inputRef.value;
 };
-
-const onLoad = async (id) => {
-  const newState = await loadConfiguration(id);
-  // TODO: fix panel tab minimising when loading new version
-  store.replaceState(newState);
-  activeVersionId.value = id;
-}
 </script>

@@ -18,11 +18,13 @@ const phrases = {
   en: 'english',
   es: 'español',
 
-  project_versions: 'version history',
+  project_versions: 'versions',
   project_info: 'project info',
   project_settings: 'settings',
   project_explorer: 'design',
   project_output: 'output',
+
+
 
   validation: 'validation',
   error: 'error',
