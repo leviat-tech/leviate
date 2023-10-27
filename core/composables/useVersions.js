@@ -23,6 +23,7 @@ async function fetchVersions() {
 
 export default function useVersions() {
   if (!isInitialized) {
+    isInitialized = true;
     activeVersionId.value = useHost().getConfiguration().id;
     fetchVersions();
   }
