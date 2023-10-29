@@ -14,10 +14,11 @@ const revision = new Revision(25, {
   },
   committed(snapshot) {
     const host = useHost();
-    const versionId = useVersions().getActiveVersionId();
+    const { activeVersion, activeVersionId } = useVersions();
 
     if (host.setState) {
-      host.setState(snapshot, versionId);
+      host.setState(snapshot, activeVersionId.value);
+      activeVersion.value.state = snapshot;
     }
   },
 });

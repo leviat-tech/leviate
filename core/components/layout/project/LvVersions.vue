@@ -22,7 +22,7 @@
               </button>
             </div>
           </div>
-          <div class="flex justify-end text-[12px] text-steel-dark">Created: {{version.createdAt}}</div>
+          <div class="flex justify-end text-[12px] text-steel-dark">Created: {{new Date(version.createdAt).toDateString() }}</div>
         </div>
     </div>
 
@@ -37,7 +37,7 @@
 
 <script setup>
 import { nextTick, ref } from 'vue';
-import useVersions from '@crhio/leviate/composables/useVersions.js';
+import useVersions from '@crhio/leviate/composables/useVersions';
 import LvVersionsDev from '@crhio/leviate/components/layout/project/LvVersionsDev.vue';
 
 const configNameInputVal = ref('');
@@ -55,16 +55,16 @@ const {
 const isEditing = ref(false);
 const inputRef = ref(null);
 
-async function onSave() {
+function onSave() {
   const configName = configNameInputVal.value;
 
   if (!configName) return;
 
-  createVersion(configName);
   configNameInputVal.value = '';
+  createVersion(configName);
 }
 
-const onDuplicate = async (id) => {
+const onDuplicate = (id) => {
   const name = 'Copy of ' + getVersionById(id).name;
   createVersion(name, id);
 }

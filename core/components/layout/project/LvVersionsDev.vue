@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { useMock } from '@crhio/leviate/host-mock.js';
+import { useMock } from '@crhio/leviate/host-mock';
 import { useHost } from '@crhio/leviate';
 
 const buttonProps = {
@@ -39,7 +39,22 @@ const {
 
 async function onDownLoadFile() {
   const appname = useHost().getMeta().configurator.name;
-  localStorageBackup(appname);
+  const configname = localSettings.activeVersionId;
+  var backup = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    var key = localStorage.key(i);
+    var value = localStorage.getItem(key);
+    backup[key] = escape(encodeURIComponent(value));
+  }
+  var json = JSON.stringify(backup);
+  var base = window.btoa(json);
+  var href = 'data:text/javascript;charset=utf-8;base64,' + base;
+  var link = document.createElement('a');
+  link.setAttribute('download', `${appname}_${configname}.json`);
+  link.setAttribute('href', href);
+  document.querySelector('body').appendChild(link);
+  link.click();
+  link.remove();
 }
 
 function onRestoreFromFile(e) {
