@@ -6,7 +6,6 @@ import { cloneDeep } from 'lodash-es';
 
 
 const data = {
-  state: {},
   meta: {},
   configuration: {},
   dictionary: {}
@@ -17,13 +16,11 @@ export function useMock() {
   const mockApi = {
     setUrl() {},
     getUrl: () => window.location.hash.replace(/^#/, ''),
-    getState: () => data.state,
+    getState: () => data.configuration.state,
     getMeta: () => data.meta,
     getDictionary: () => data.dictionary,
     setState: (state, versionId) => {
-      // TODO: ensure the version id is passed in
-
-      data.state = Array.isArray(state) ? state[0] : state;
+      data.configuration.state = state;
 
       syncVersionsData();
     },
@@ -43,9 +40,7 @@ export function useMock() {
       return getStoredData()?.versions || [];
     },
 
-    // TODO: fix inject to prevent passing args as an array
-    async createVersion ([name, fromId]) {
-      //TODO: throw an error if fromId isn't associated with this configuration
+    async createVersion (name, fromId) {
       const state = cloneDeep(getVersionById(fromId).state);
 
       const { id } = mockApi.getConfiguration();
@@ -66,10 +61,7 @@ export function useMock() {
       return newVersion;
     },
 
-    deleteVersion: (_id) => {
-      // TODO: fix inject to prevent passing args as an array
-      const [id] = _id;
-
+    deleteVersion: (id) => {
       modifyVersions(versions => versions.filter(version => version.id !== id));
     },
   };
@@ -77,25 +69,32 @@ export function useMock() {
   window.host = mockApi;
 
   function initialize(mockConfig, locales) {
-    data.state = mockConfig.state;
-    data.configuration = { ...mockConfig.configuration, state: mockConfig.state };
-    data.meta = mockConfig.meta;
-    data.dictionary = locales;
+    const { state, configuration, meta } = mockConfig;
+
+    Object.assign(data, {
+      meta,
+      configuration: { ...configuration, state },
+      dictionary: locales,
+    });
 
     const storedData = getStoredData();
 
     if (storedData) {
-      data.state = storedData.versions.find(version => version.id === storedData.activeVersionId).state;
+      data.configuration.state = storedData.versions.find(version => version.id === storedData.activeVersionId).state;
       activeVersionId.value = storedData.activeVersionId;
     } else {
+      const rootVersionId = configuration.id
+      const rootVersion = {
+        ...data.configuration,
+        createdAt: new Date().toISOString(),
+      }
+
       saveDataToLocalStorage({
-        versions: [
-          { ...mockConfig.configuration, state: mockConfig.state },
-        ],
-        activeVersionId: mockConfig.configuration.id
+        versions: [rootVersion],
+        activeVersionId: rootVersionId
       });
 
-      activeVersionId.value = mockConfig.configuration.id;
+      activeVersionId.value = rootVersionId;
     }
 
     if (!inject.hosted) {
