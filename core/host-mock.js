@@ -22,6 +22,15 @@ export function useMock() {
     setState: (state, versionId) => {
       data.configuration.state = state;
 
+      const { activeVersion } = useVersions();
+
+      if (!activeVersion.value) {
+        logger.error('Active version not set');
+        return;
+      }
+
+      activeVersion.value.state = state;
+
       syncVersionsData();
     },
     setName: async (name, versionId) => {
@@ -61,7 +70,7 @@ export function useMock() {
       return newVersion;
     },
 
-    deleteVersion: (id) => {
+    deleteVersion: async(id) => {
       modifyVersions(versions => versions.filter(version => version.id !== id));
     },
   };
@@ -80,8 +89,9 @@ export function useMock() {
     const storedData = getStoredData();
 
     if (storedData) {
-      data.configuration.state = storedData.versions.find(version => version.id === storedData.activeVersionId).state;
-      activeVersionId.value = storedData.activeVersionId;
+      const activeVersion = storedData.versions.find(version => version.id === storedData.activeVersionId);
+      data.configuration.state = activeVersion?.state || state;
+      activeVersionId.value = activeVersion ? storedData.activeVersionId : configuration.id;
     } else {
       const rootVersionId = configuration.id
       const rootVersion = {

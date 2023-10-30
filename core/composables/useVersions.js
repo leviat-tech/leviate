@@ -53,7 +53,10 @@ export default function useVersions() {
       loadVersion(newVersion.id);
     },
     deleteVersion: async (id) => {
-      useHost().deleteVersion(id);
+      const nextActiveVersionIndex = versions.value.findIndex(version => version.id === id) - 1;
+      const nextActiveVersionId = versions.value[nextActiveVersionIndex].id;
+      await useHost().deleteVersion(id);
+      loadVersion(nextActiveVersionId);
       fetchVersions();
     }
   }
