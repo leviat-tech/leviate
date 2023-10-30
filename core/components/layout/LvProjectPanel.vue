@@ -13,8 +13,20 @@
 </template>
 
 <script setup>
+import { watchEffect } from 'vue';
+import { useRoute } from 'vue-router';
+import { useLeviateStore } from '@crhio/leviate/store/leviate.js';
+
 import LvPanel from '../ui/LvPanel.vue';
 import LvProjectPanelItem from './project/LvProjectPanelItem.vue';
 import LvVersions from './project/LvVersions.vue';
 import LvProjectToolbar from './project/LvProjectToolbar.vue';
+
+const route = useRoute();
+const leviate = useLeviateStore();
+
+watchEffect(() => {
+  const tabName = route.query.projectTab;
+  leviate.setActiveProjectItem(tabName);
+});
 </script>

@@ -1,7 +1,7 @@
 <template>
   <Disclosure v-slot="{ open }">
     <DisclosureButton
-      @click="leviate.setActiveProjectItem(name)"
+      @click="onClick(name)"
       class="relative p-2 flex flex-col justify-center items-start pl-6"
       :class="{
           'text-md text-white mx-1 mb-[2px] first-of-type:mt-2 bg-indigo' : isExpanded,
@@ -27,13 +27,21 @@ import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
 import { useLeviateStore } from '../../../store/leviate.js';
 import { computed } from 'vue';
 import LvTabText from '../../ui/LvTabText.vue';
+import { useRouter } from 'vue-router';
+
 
 const props = defineProps({
   name: String,
 });
 
+const router = useRouter();
 const leviate = useLeviateStore();
 
 const isExpanded = computed(() => leviate.panels.project.isExpanded);
 const isActive = computed(() => leviate.panels.project.activeItem === props.name);
+
+function onClick(name) {
+  leviate.setActiveProjectItem(name);
+  router.replace({ query: { projectTab: name } });
+}
 </script>
