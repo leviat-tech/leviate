@@ -11,12 +11,13 @@
               ref="inputRef"
               @click="loadVersion(version.id)"
               :contenteditable="isEditing"
+              @keydown.enter.prevent="onEnter(version.id, i)"
             >
                 {{version.name}}
             </div>
             <div class="" >
               <!-- Add edit button. Autofocus editable div and call host.setName on enter and blur -->
-              <button class="mr-2"><CIcon type="edit" size="sm" @click="updateVersion(i)"/></button>
+              <button class="mr-2"><CIcon type="edit" size="sm" @click="updateVersion(i, version.id)"/></button>
               <button class="mr-2"><CIcon type="copy" size="sm" @click="onDuplicate(version.id)"/></button>
               <button  v-if="rootVersionId !== version.id" class="w-4 h-4" @click="deleteVersion(version.id)">
                 <CIcon type="trash" size="sm"/>
@@ -51,10 +52,11 @@ const {
   createVersion,
   deleteVersion,
   rootVersionId,
+  setName,
 } = useVersions();
 
 const isEditing = ref(false);
-const inputRef = ref(null);
+const inputRef = ref([]);
 
 function onSave() {
   const configName = configNameInputVal.value;
@@ -74,17 +76,15 @@ const updateVersion = async (index) => {
   if (isEditing.value) return;
   isEditing.value = true;
   await nextTick();
-
   const inputElement = inputRef.value[index];
-  const value = inputElement.innerHTML;
   inputElement.focus();
-  console.log(value);
 }
 
-// const onEdit = async () => {
-//   if (isEditing.value) return;
-//   isEditing.value = true;
-//   await nextTick();
-//   const input = inputRef.value;
-// };
+const onEnter = (versionId, index) => {
+  const inputElement = inputRef.value[index];
+  const name = inputElement.innerHTML;
+  setName(name, versionId);
+  isEditing.value = false;
+};
+
 </script>
