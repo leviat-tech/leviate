@@ -12,6 +12,7 @@
               @click="loadVersion(version.id)"
               :contenteditable="isEditing"
               @keydown.enter.prevent="onEnter(version.id, i)"
+              @focusout="isEditing = false"
             >
                 {{version.name}}
             </div>
