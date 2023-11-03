@@ -36,7 +36,7 @@ export function useMock() {
     setName: async (name, versionId) => {
       const version =  useVersions().getVersionById(versionId);
 
-      if (!version.value) {
+      if (!version) {
         logger.error(`Error setting name. Could not find version with id: ${versionId}`);
         return;
       }
