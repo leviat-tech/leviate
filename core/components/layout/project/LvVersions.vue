@@ -33,14 +33,22 @@
       <CButton class="w-24" @click="onSave">Save</CButton>
     </div>
 
-    <LvVersionsDev />
+    <component v-if="!isProduction && devToolsComponent" :is="devToolsComponent" />
   </div>
 </template>
 
 <script setup>
-import { nextTick, ref } from 'vue';
+import { markRaw, nextTick, ref } from 'vue';
 import useVersions from '@crhio/leviate/composables/useVersions';
-import LvVersionsDev from '@crhio/leviate/components/layout/project/LvVersionsDev.vue';
+
+const isProduction = import.meta.env === 'production';
+const devToolsComponent = ref();
+
+if (!isProduction) {
+  import('@crhio/leviate/components/layout/project/LvVersionsDev.vue').then(module => {
+    devToolsComponent.value = markRaw(module.default);
+  })
+}
 
 const configNameInputVal = ref('');
 
