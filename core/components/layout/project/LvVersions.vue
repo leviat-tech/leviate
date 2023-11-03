@@ -86,6 +86,7 @@ const updateVersion = async (index) => {
   await nextTick();
   const inputElement = inputRef.value[index];
   inputElement.focus();
+  document.execCommand('selectAll',false,null)
 }
 
 const onEnter = (versionId, index) => {
