@@ -46,6 +46,10 @@ export default function useVersions() {
     getActiveVersionId: () => activeVersionId.value,
     getVersionById,
     loadVersion,
+    setName: async (name, id) => {
+      await useHost().setName(name, id);
+      fetchVersions();
+    },
     createVersion: async (name, fromId) => {
       const id = fromId || activeVersionId.value;
       const newVersion = await useHost().createVersion(name, id);

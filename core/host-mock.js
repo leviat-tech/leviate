@@ -34,7 +34,16 @@ export function useMock() {
       syncVersionsData();
     },
     setName: async (name, versionId) => {
-      // Set the name of the specified version
+      const version =  useVersions().getVersionById(versionId);
+
+      if (!version.value) {
+        logger.error(`Error setting name. Could not find version with id: ${versionId}`);
+        return;
+      }
+
+      version.name = name;
+
+      syncVersionsData();
     },
     setMeta(newMeta){
       data.meta = Object.assign(data.meta, newMeta);
