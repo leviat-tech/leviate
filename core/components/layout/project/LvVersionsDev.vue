@@ -7,7 +7,7 @@
       <div>Save</div>
     </CButton>
 
-    <label>
+    <label class="flex-1">
       <input @change="onRestoreFromFile" type="file" ref="uploadfile" hidden />
       <CButton v-bind="buttonProps" @click="$refs.uploadfile.click()" title="Upload design from a file">
         <CIcon type="upload" size="sm" />
@@ -27,7 +27,7 @@ import { useMock } from '@crhio/leviate/host-mock';
 import { useHost } from '@crhio/leviate';
 
 const buttonProps = {
-  class: 'flex flex-1 items-center space-x-1 !px-3 font-bold',
+  class: 'w-full flex flex-1 items-center justify-center space-x-1 !px-0 font-bold',
   color: 'sky',
   size: 'xs'
 }
