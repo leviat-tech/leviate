@@ -57,13 +57,12 @@ const HostPlugin = {
     const $host = (await inject.attach({ setUrl, setState })).call
     for (const key in $host) {
       if (key.startsWith('get')) {
-        const getValue = $host[key];
-        const value = await getValue()
-        $host[key] = (getCachedValue = true) => getCachedValue ? value : getValue();
+        const syncKey = key.replace(/get(\w)/, (match, p1) => p1.toLowerCase());
+        $host[syncKey] = await $host[key]();
       }
     }
 
-    const meta = $host.getMeta();
+    const meta = $host.meta;
 
     useLocalize().setLocale(meta.user.locale);
 
