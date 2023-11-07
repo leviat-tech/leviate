@@ -18,7 +18,7 @@
 
       <div class="text-left">
         <div class="text-xl opacity-50 my-4">DEVELOPMENT</div>
-        {{ $host.getMeta().configurator.name }}
+        {{ $host.meta.configurator.name }}
       </div>
 
       <div class="dev__ui absolute bottom-4 left-0 px-6 w-full text-center text-xs">

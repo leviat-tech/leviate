@@ -25,6 +25,7 @@ export default {
     },
 
     project: {
+      id: 'project_id',
       name: 'My Project',
       number: '1234',
       designer: 'John Doe',
@@ -70,6 +71,8 @@ export default {
         country: 'USA',
       },
     },
+    origin: window.location.origin,
+
   },
   configuration: {
     "id": 1,
@@ -79,5 +82,5 @@ export default {
     "state": {
       "example": "state"
     }
-  }
+  },
 };

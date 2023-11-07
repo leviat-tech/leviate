@@ -2,25 +2,31 @@
   <div class="flex flex-col h-full justify-between p-4" >
     <div class="flex-1">
         <div v-for="(version,i) in versions" :key="version.id"
-             class="p-2 mb-2 border-b border-indigo-lightest last:border-b-0"
+             class="py-2 mb-2 border-b border-indigo-lightest last:border-b-0"
              :class="rootVersionId !== version.id && 'ml-3'"
         >
           <div class="flex justify-between">
-            <div class="cursor-pointer"
-              :class="version.id === activeVersionId && 'font-bold'"
-              ref="inputRef"
-              @click="loadVersion(version.id)"
-              :contenteditable="isEditing"
-              @keydown.enter.prevent="onEnter(version.id, i)"
-              @focusout="isEditing = false"
-            >
-                {{version.name}}
-            </div>
-            <div class="" >
-              <!-- Add edit button. Autofocus editable div and call host.setName on enter and blur -->
-              <button class="mr-2"><CIcon type="edit" size="sm" @click="updateVersion(i, version.id)"/></button>
-              <button class="mr-2"><CIcon type="copy" size="sm" @click="onDuplicate(version.id)"/></button>
-              <button  v-if="rootVersionId !== version.id" class="w-4 h-4" @click="deleteVersion(version.id)">
+            <LvEditableDiv class="outline-none flex-1 mr-4"
+                           :class="[
+                             version.id === activeVersionId && 'font-bold',
+                             editId === version.id ? 'ring-2 ring-offset-2 ring-offset-gray-50' : 'cursor-pointer'
+                           ]"
+                           @click="onClick(version.id)"
+                           :is-editable="editId === version.id"
+                           :model-value="version.id"
+                           @update:modelValue="updateVersion(version.id, $event)"
+                           @blur="editId = null"
+                           autofocus
+            />
+
+            <div>
+              <button @click="editId = version.id" class="p-0.5 rounded outline-none focus-visible:bg-indigo-lightest">
+                <CIcon type="edit" size="sm" />
+              </button>
+              <button @click="onDuplicate(version.id)" class="p-0.5 rounded outline-none focus-visible:bg-indigo-lightest">
+                <CIcon type="copy" size="sm"/>
+              </button>
+              <button v-if="rootVersionId !== version.id" @click="deleteVersion(version.id)" class="p-0.5 rounded outline-none focus-visible:bg-indigo-lightest">
                 <CIcon type="trash" size="sm"/>
               </button>
             </div>
@@ -30,8 +36,8 @@
     </div>
 
     <div class="flex flex-1  flex-row">
-      <input placeholder="Create a new version" v-model="configNameInputVal" class="mr-4 p-2 border" @keydown.enter="onSave"/>
-      <CButton class="w-24" @click="onSave">Save</CButton>
+      <CTextInput placeholder="Create a new version" v-model="configNameInputVal" class="mr-4" @keydown.enter="onSaveNewVersion"/>
+      <CButton class="w-24 outline-none focus:ring-2 ring-offset-1 ring-indigo-light" @click="onSaveNewVersion">Save</CButton>
     </div>
 
     <component v-if="!isProduction && devToolsComponent" :is="devToolsComponent" />
@@ -41,6 +47,7 @@
 <script setup>
 import { markRaw, nextTick, ref } from 'vue';
 import useVersions from '@crhio/leviate/composables/useVersions';
+import LvEditableDiv from '@crhio/leviate/components/ui/LvEditableDiv.vue';
 
 const isProduction = import.meta.env === 'production';
 const devToolsComponent = ref();
@@ -64,10 +71,13 @@ const {
   setName,
 } = useVersions();
 
-const isEditing = ref(false);
-const inputRef = ref([]);
+const editId = ref(null);
 
-function onSave() {
+function onClick(id) {
+  if (editId.value !== id) loadVersion(id);
+}
+
+function onSaveNewVersion() {
   const configName = configNameInputVal.value;
 
   if (!configName) return;
@@ -81,20 +91,9 @@ const onDuplicate = (id) => {
   createVersion(name, id);
 }
 
-const updateVersion = async (index) => {
-  if (isEditing.value) return;
-  isEditing.value = true;
-  await nextTick();
-  const inputElement = inputRef.value[index];
-  inputElement.focus();
-  document.execCommand('selectAll',false,null)
-}
-
-const onEnter = (versionId, index) => {
-  const inputElement = inputRef.value[index];
-  const name = inputElement.innerHTML;
+const updateVersion = (versionId, name) => {
   setName(name, versionId);
-  isEditing.value = false;
+  editId.value = null;
 };
 
 </script>

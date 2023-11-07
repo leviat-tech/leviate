@@ -27,13 +27,12 @@ function loadVersion(id) {
 }
 
 async function fetchVersions() {
-  versions.value = await useHost().getVersions(false);
+  versions.value = await useHost().getVersions();
 }
 
 export default function useVersions() {
   if (!isInitialized) {
     isInitialized = true;
-    // activeVersionId.value = useHost().getConfiguration().id;
     fetchVersions();
   }
 

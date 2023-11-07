@@ -67,8 +67,8 @@ export async function createApp(projectConfig, Root, isStandalone) {
 
   await hostIsConnected();
   const host = useHost()
-  const initialState = host.getState();
-  const initialUrl = host.getUrl();
+  const initialState = await host.getState();
+  const initialUrl = await host.getUrl();
 
   initializeStore(initialState, migrations, models);
 

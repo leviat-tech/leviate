@@ -4,37 +4,45 @@
     <div class="text-sky-dark font-bold text-lg mb-2">{{ $L('project_info') }}</div>
 
     <div class="ml-2">
-      <div class="flex justify-between mb-1 font-bold">
+      <div class="flex justify-between mb-1 text-gray-500 text-base font-bold border-b pb-1 mb-2">
         <div>{{ name }}</div>
         <div>#{{ number }}</div>
       </div>
 
-      <address class="not-italic">
-        <template v-for="field in projectAddressFields">
-          {{ project.address[field] }}<br>
-        </template>
-      </address>
+      <LvAddress :data="project.address"
+                 :fields="['name', 'address', 'city', 'postalCode', 'country']"
+                 :bold-fields="['name']"/>
 
     </div>
 
-    <div class="text-sky-dark font-bold text-lg mt-6">{{ $L('client_info') }}</div>
+    <template v-if="customer">
 
-    <div class="ml-2">
+      <div class="text-sky-dark font-bold text-lg mt-6">{{ $L('client_info') }}</div>
 
-      <div class="text-gray-500 font-semibold mt-2 border-b pb-1 mb-2">Address</div>
+      <div class="ml-2">
 
-      <div class="font-bold">{{ company }}</div>
+        <div class="text-gray-500 font-semibold mt-2 border-b pb-1 mb-2">Address</div>
 
-      <address class="not-italic">
-        <template v-for="field in customerAddressFields">
-          {{ client.address[field] }}<br>
-        </template>
-      </address>
+        <div class="font-bold">{{ company }}</div>
 
-      <div class="text-gray-500 font-semibold mt-4 border-b pb-1 mb-2">Primary Contact</div>
-      <div class="">{{ primaryContact }}</div>
-      <div><a :href="`mailto:$email`">{{ email }}</a></div>
-      <div>{{ phone }}</div>
+        <LvAddress v-if="customer"
+                   :data="customer.address"
+                   :fields="['street', 'city', 'postcode', 'country']"
+                   :bold-fields="['name']"/>
+
+        <div class="text-gray-500 font-semibold mt-4 border-b pb-1 mb-2">Primary Contact</div>
+
+        <address class="not-italic">
+          <span class="font-bold">{{ firstName }} {{ lastName }}</span><br>
+          <span class="text-sky-dark"><a :href="`mailto:${email}`">{{ email }}</a></span><br>
+          <span>{{ phone }}</span>
+        </address>
+      </div>
+
+    </template>
+
+    <div class="text-right">
+      <CButton color="sky" size="sm" @click="openProjectSettings">{{ $L('edit') }}</CButton>
     </div>
 
   </div>
@@ -42,31 +50,16 @@
 
 <script setup>
 import { useHost } from '@crhio/leviate';
-import { computed } from 'vue';
+import LvAddress from '@crhio/leviate/components/layout/project/LvAddress.vue';
 
 const $host = useHost();
-const { project, customer } = $host.getMeta();
-const customerBlank = {
-  company: 'No Company Info',
-  phone: '',
-  firstName: '',
-  lastName: '',
-  email: '',
-  address: {
-    street: '',
-    postcode: '',
-    city: '',
-    country: '',
-  },
-};
-const client = customer || customerBlank;
+const { project, customer, origin } = $host.meta;
 
-const { name, address: projectAddress, number, designer } = project;
-const { company, address: clientAddress, firstName, lastName, email, phone } = client;
-const primaryContact = computed(() => {
-  return `${firstName} ${lastName}`;
-});
+const { name, number } = project;
+const { company, firstName, lastName, email, phone } = customer;
 
-const projectAddressFields = ['name', 'address', 'city', 'postalCode', 'country'];
-const customerAddressFields = ['street', 'city', 'postcode', 'country'];
+function openProjectSettings() {
+  const projectEditUrl = `${origin}/projects/${[project.id]}`;
+  window.open(projectEditUrl)
+}
 </script>

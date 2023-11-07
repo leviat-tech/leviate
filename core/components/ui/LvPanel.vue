@@ -11,15 +11,14 @@
     </div>
 
     <!-- Panel toggle button -->
-    <div v-if="!disabled" class="w-full bg-gray-100 flex items-center px-2 border-t"
+    <div v-if="!disabled" class="w-full bg-gray-100 flex items-center border-t"
          :class="isExpanded ? 'justify-end' : 'justify-center'">
       <button @click="store.setPanelIsExpanded(props.panelId, !isExpanded)"
-              class="flex justify-center items-center w-10 h-10 text-steel-darkest hover:text-black">
+              class="flex justify-center items-center w-[59px] h-10 text-steel-darkest hover:text-black outline-none focus-visible:bg-sky focus-visible:text-white">
         <IconCollapse v-if="store.panels[props.panelId].isExpanded" :class="{ 'rotate-180' : flip }"/>
         <IconExpand v-else :class="{ 'rotate-180' : flip }"/>
       </button>
     </div>
-
   </div>
 </template>
 
@@ -56,12 +55,4 @@ const isExpanded = computed(() => store.panels[props.panelId].isExpanded);
 const widthValue = computed(() => {
   return isExpanded.value ? props.expanded : props.collapsed;
 });
-
-const setCollapsed = () => {
-  store.setPanelIsExpanded(props.panelId, false);
-};
-
-const setExpanded = () => {
-  store.setPanelIsExpanded(props.panelId, true);
-};
 </script>

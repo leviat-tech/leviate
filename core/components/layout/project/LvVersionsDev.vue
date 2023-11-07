@@ -27,7 +27,7 @@ import { useMock } from '@crhio/leviate/host-mock';
 import { useHost } from '@crhio/leviate';
 
 const buttonProps = {
-  class: 'w-full flex flex-1 items-center justify-center space-x-1 !px-0 font-bold',
+  class: 'w-full flex flex-1 items-center justify-center space-x-1 !px-0 font-bold outline-none focus-visible:bg-sky-dark',
   color: 'sky',
   size: 'xs'
 }
@@ -38,7 +38,7 @@ const {
 } = useMock();
 
 async function onDownLoadFile() {
-  const appname = useHost().getMeta().configurator.name;
+  const appname = useHost().meta.configurator.name;
   const configname = localSettings.activeVersionId;
   var backup = {};
   for (let i = 0; i < localStorage.length; i++) {

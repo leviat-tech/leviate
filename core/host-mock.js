@@ -120,7 +120,10 @@ export function useMock() {
       inject.mock(mockApi);
     }
 
-    watch(activeVersionId, syncVersionsData);
+    // Use timeout to prevent race conditions when deleting the active version
+    // Otherwise deleting the active version will update the activeVersionId
+    // and trigger the sync handler before the version has been deleted from storage
+    watch(activeVersionId, () => setTimeout(syncVersionsData));
   }
 
   /****************************** LOCAL STORAGE MANAGEMENT ******************************/
