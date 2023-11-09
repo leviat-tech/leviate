@@ -5,7 +5,7 @@ export const useLeviateStore = defineStore('leviate', {
     panels: {
       project: {
         isExpanded: true,
-        activeItem: 'explorer',
+        activeItem: 'design',
       },
       input: {
         isExpanded: true,

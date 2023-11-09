@@ -19,10 +19,11 @@ const phrases = {
   es: 'español',
 
   project_versions: 'versions',
-  project_info: 'project info',
+  project_info: 'information',
+  project_info_heading: ' project information',
   client_info: 'client info',
   project_settings: 'settings',
-  project_explorer: 'design',
+  project_design: 'design',
   project_output: 'output',
 
 

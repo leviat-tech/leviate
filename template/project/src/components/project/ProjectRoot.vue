@@ -13,12 +13,12 @@ import { LvProjectPanelItem } from '@crhio/leviate/components'
 import ProjectInfo from './ProjectInfo.vue';
 import ProjectSettings from './ProjectSettings.vue';
 import ProjectOutput from './ProjectOutput.vue';
-import ProjectExplorer from './ProjectExplorer.vue';
+import ProjectDesign from './ProjectDesign.vue';
 
 const projectPanelItemsMap = {
   info: ProjectInfo,
   settings: ProjectSettings,
-  explorer: ProjectExplorer,
+  design: ProjectDesign,
   output: ProjectOutput,
 };
 

@@ -26,6 +26,6 @@ const route = useRoute();
 const leviate = useLeviateStore();
 
 watch(() => route.query.projectTab, tabName => {
-  leviate.setActiveProjectItem(tabName);
+  leviate.setActiveProjectItem(tabName || 'design');
 }, { immediate: true });
 </script>

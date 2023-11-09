@@ -41,7 +41,7 @@ export default function useVersions() {
     activeVersion,
     activeVersionId,
     rootVersionId,
-    getActiveVersion: () => activeVersion.value,
+    getActiveVersion: () => activeVersion.value || useHost().configuration,
     getActiveVersionId: () => activeVersionId.value,
     getVersionById,
     loadVersion,

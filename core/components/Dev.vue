@@ -18,7 +18,7 @@
 
       <div class="text-left">
         <div class="text-xl opacity-50 my-4">DEVELOPMENT</div>
-        {{ $host.meta.configurator.name }}
+        {{ meta.configurator.name }}
       </div>
 
       <div class="dev__ui absolute bottom-4 left-0 px-6 w-full text-center text-xs">
@@ -27,7 +27,7 @@
     </div>
     <div class="h-full w-full flex flex-col">
       <div class="host-nav h-12 p-3 border-b">
-        Projects > New Project > Item
+        Projects > {{ meta.project.name }} > {{ configuration.name }}
       </div>
       <div class="host-container relative h-full">
         <App />
@@ -38,6 +38,9 @@
 
 <script setup>
 import App from './App.vue';
+import { useHost } from '@crhio/leviate';
 
 const frameworkVersion = import.meta.env.VITE_LEVIATE_VERSION;
+
+const { meta, configuration } = useHost();
 </script>

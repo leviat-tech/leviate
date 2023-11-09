@@ -1,7 +1,7 @@
 <template>
   <div class="h-full p-4">
 
-    <div class="text-sky-dark font-bold text-lg mb-2">{{ $L('project_info') }}</div>
+    <div class="text-sky-dark font-bold text-lg mb-2">{{ $L('project_info_heading') }}</div>
 
     <div class="ml-2">
       <div class="flex justify-between mb-1 text-gray-500 text-base font-bold border-b pb-1 mb-2">

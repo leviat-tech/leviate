@@ -3,7 +3,7 @@
 
     <template #title="{ open }">
       <div class="flex items-center justify-stretch px-2 pt-6 pb-2">
-        <!-- <CIcon type="chevron-right" size="sm" :class="open && 'transition transform rotate-90'"/> -->
+         <CIcon type="chevron-right" size="sm" :class="open && 'transform rotate-90'"/>
         <div class="font-bold ml-2 flex-grow capitalize">{{ $L(model.id) }}</div>
         <button title="Add" @click.stop="addItem">
           <CIcon type="plus" size="sm"></CIcon>

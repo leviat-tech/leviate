@@ -13,7 +13,7 @@
                            ]"
                            @click="onClick(version.id)"
                            :is-editable="editId === version.id"
-                           :model-value="version.id"
+                           :model-value="version.name"
                            @update:modelValue="updateVersion(version.id, $event)"
                            @blur="editId = null"
                            autofocus
