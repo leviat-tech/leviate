@@ -1,6 +1,7 @@
 import LvLayout from './layout/LvLayout.vue';
 import LvProjectPanel from './layout/LvProjectPanel.vue';
 import LvProjectPanelItem from './layout/project/LvProjectPanelItem.vue';
+import LvProjectInfo from './layout/project/info/LvProjectInfo.vue';
 import LvInputPanel from './layout/LvInputPanel.vue';
 import LvInputToolbar from './layout/input/LvInputToolbar.vue';
 import LvInputContent from './layout/input/LvInputContent.vue';
@@ -12,6 +13,7 @@ export {
   LvLayout,
   LvProjectPanel,
   LvProjectPanelItem,
+  LvProjectInfo,
   LvInputPanel,
   LvInputToolbar,
   LvInputContent,

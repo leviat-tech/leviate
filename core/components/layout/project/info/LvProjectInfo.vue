@@ -15,7 +15,7 @@
 
     </div>
 
-    <LvClientInfo v-if="customer" v-bind="customer">
+    <LvClientInfo v-if="customer" v-bind="customer" />
 
     <div class="text-right">
       <CButton color="sky" size="sm" @click="openProjectSettings">{{ $L('edit') }}</CButton>
