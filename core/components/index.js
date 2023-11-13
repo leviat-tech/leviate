@@ -1,3 +1,4 @@
+import LvLayout from './layout/LvLayout.vue';
 import LvProjectPanel from './layout/LvProjectPanel.vue';
 import LvProjectPanelItem from './layout/project/LvProjectPanelItem.vue';
 import LvInputPanel from './layout/LvInputPanel.vue';
@@ -8,6 +9,7 @@ import LvResultsPanel from './layout/LvResultsPanel.vue';
 import LvValidationPane from './layout/LvValidationPane.vue';
 
 export {
+  LvLayout,
   LvProjectPanel,
   LvProjectPanelItem,
   LvInputPanel,

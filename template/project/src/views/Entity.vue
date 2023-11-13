@@ -7,7 +7,6 @@
         <InputRoot />
       </LvInputPanel>
 
-
       <LvViewportPanel>
         <ViewportRoot />
       </LvViewportPanel>
@@ -30,8 +29,7 @@ import InputRoot from '@/components/input/InputRoot.vue';
 import ViewportRoot from '@/components/viewport/ViewportRoot.vue';
 import ResultsRoot from '@/components/results/ResultsRoot.vue';
 
-import LvLayout from '@crhio/leviate/components/layout/LvLayout.vue';
-import { LvInputPanel, LvViewportPanel, LvResultsPanel } from '@crhio/leviate/components'
+import { LvLayout, LvInputPanel, LvViewportPanel, LvResultsPanel } from '@crhio/leviate/components'
 
 const entity = useCurrentEntity();
 const router = useRouter()
