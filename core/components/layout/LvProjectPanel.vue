@@ -1,5 +1,5 @@
 <template>
-  <LvPanel :expanded="300" panelId="project">
+  <LvPanel :expanded="300" :collapsed="70" panelId="project">
     <div class="h-full flex flex-col justify-start bg-gray-50">
       <LvProjectToolbar />
 

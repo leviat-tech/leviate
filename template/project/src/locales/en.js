@@ -26,7 +26,11 @@ const phrases = {
   project_design: 'design',
   project_output: 'output',
 
-
+  // Input Panel
+  example: 'example',
+  test: 'test',
+  load_case: 'load case',
+  reinforcement: 'reinforcement',
 
   validation: 'validation',
   error: 'error',

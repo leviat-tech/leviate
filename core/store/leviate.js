@@ -9,7 +9,7 @@ export const useLeviateStore = defineStore('leviate', {
       },
       input: {
         isExpanded: true,
-        activeTab: 0,
+        activeTab: null,
       },
       results: {
         isExpanded: false,
@@ -32,5 +32,7 @@ export const useLeviateStore = defineStore('leviate', {
     }
   },
   getters: {
+    activeProjectItem: state => state.panels.project.activeItem,
+    activeInputTab: state => state.panels.input.activeTab,
   }
 });

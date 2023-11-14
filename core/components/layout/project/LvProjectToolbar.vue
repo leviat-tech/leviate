@@ -1,8 +1,8 @@
 <template>
-  <div class="py-2 bg-gray-50" :class="isExpanded ? 'h-12 border-b' : `h-auto`">
+  <div class="bg-gray-50 h-12 border-b" :class="isExpanded && 'py-2'">
     <CToolbar class="justify-between"
               :class="!isExpanded && `flex flex-col-reverse h-auto`">
-      <CTool-group :class="!isExpanded && `flex flex-col h-auto mt-1`">
+      <CTool-group :class="!isExpanded && `flex mt-1 -space-x-1`">
         <CTool
           name="Undo"
           tool-id="undo"
@@ -18,7 +18,7 @@
           :disabled="!redoable"
         />
       </CTool-group>
-      <CTool-group>
+      <CTool-group v-if="isExpanded">
         <CTool name="Info"
                tool-id="info"
                icon="information-circle"

@@ -3,6 +3,6 @@
 </template>
 
 <script setup>
-import LvProjectInfo from '@crhio/leviate/components/layout/project/LvProjectInfo.vue';
+import { LvProjectInfo } from '@crhio/leviate/components';
 
 </script>

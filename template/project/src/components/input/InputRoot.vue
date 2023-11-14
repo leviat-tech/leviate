@@ -1,24 +1,18 @@
 <template>
-  <LvInputToolbar :tabs="tabList" />
   <LvInputContent>
-    <ExampleTab v-if="activeTab === 0 || activeTab === null"/>
-    <div v-if="activeTab === 1">test</div>
+    <ExampleTab v-if="store.activeInputTab === 'example'"/>
+    <div v-else class="text-xl font-bold p-4">
+      {{ $L(snakeCase(store.activeInputTab)) }}
+    </div>
   </LvInputContent>
 </template>
 
 <script setup>
-import { LvInputToolbar, LvInputContent } from '@crhio/leviate/components'
+import { snakeCase } from 'lodash-es';
+import { LvInputContent } from '@crhio/leviate/components'
 import ExampleTab from '@/components/input/tabs/ExampleTab.vue';
 
 import { useLeviateStore } from '@crhio/leviate';
-import { computed } from 'vue';
 
 const store = useLeviateStore();
-const activeTab = computed(() => store.panels.input.activeTab);
-
-const tabList = ['Example', 'Test', 'Load Case', 'Reinforcement'];
-
-
-
-
 </script>

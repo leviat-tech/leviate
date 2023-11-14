@@ -3,10 +3,10 @@
     <DisclosureButton
       @click="onClick(name)"
       @keydown.enter="onClick(name)"
-      class="relative p-2 flex flex-col justify-center items-start pl-6 focus-visible:bg-sky focus-visible:text-white outline-none"
+      class="relative p-2 flex flex-col justify-center px-4 focus-visible:bg-sky focus-visible:text-white outline-none"
       :class="{
-          'text-md text-white mx-1 mb-[2px] first-of-type:mt-1 last-of-type:mb-1 bg-indigo' : isExpanded,
-          'flex-1 text-center bg-gray-50 border-t border-t-gray-200' : !isExpanded,
+          'text-md text-white mx-1 mb-[2px] first-of-type:mt-1 last-of-type:mb-1 bg-indigo items-start' : isExpanded,
+          'flex-1 text-center bg-gray-50 border-t border-t-gray-200 items-center first-of-type:border-none' : !isExpanded,
           'text-gray-500' : !isExpanded && !isActive,
           'border-r-4 border-indigo text-indigo' : !isExpanded && isActive,
         }">

@@ -3,7 +3,7 @@
 
     <div class="h-full flex divide-x" v-if="entity">
 
-      <LvInputPanel>
+      <LvInputPanel :tabs="tabs">
         <InputRoot />
       </LvInputPanel>
 
@@ -37,4 +37,6 @@ const router = useRouter()
 watch(entity, (val) => {
   if (!val) router.replace('/not-found')
 });
+
+const tabs = ['example', 'test', 'load-case', 'reinforcement'];
 </script>
