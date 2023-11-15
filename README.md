@@ -1,6 +1,6 @@
 # leviate
 
-A tool for building Single Page Applications to be hosted on the Host platform - aka Host Plugins.
+A tool for building Single Page Applications (plugins) to be hosted on the Leviat Design Studio platform.
 
 In essence this module can be broken down into three separate parts:
 
@@ -12,4 +12,22 @@ In essence this module can be broken down into three separate parts:
 
 Full documentation can be found at [https://leviate-docs.netlify.app/](https://leviate-docs.netlify.app/)
 
-[CONTRIBUTING](CONTRIBUTING.MD)
+## Running the development app
+
+```
+# install the core project dependencies
+npm i
+
+# install the development app dependencies
+cd app
+npm i
+
+# run the app
+npm run dev
+```
+
+## Editing core and template files
+
+Once the app is running you shouldn't need to edit anything in the /app folder. Everything is pulled in from
+- `/core` - the equivalent of installing `@crhio/leviate` in a project
+- `/template/project` - the template project files
