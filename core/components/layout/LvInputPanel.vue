@@ -1,5 +1,5 @@
 <template>
-  <LvPanel :expanded="440" panelId="input">
+  <LvPanel :expanded="width" panelId="input">
     <div class="h-full flex flex-col justify-start -mx-px">
       <LvInputToolbar :tabs="tabs" />
       <slot />
@@ -15,6 +15,10 @@ import { useLeviateStore } from '@crhio/leviate/store/leviate.js';
 const store = useLeviateStore();
 
 const props = defineProps({
+  width: {
+    type: Number,
+    default: 440,
+  },
   tabs: {
     type: Array,
     default: ['input'],

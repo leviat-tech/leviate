@@ -1,5 +1,5 @@
 <template>
-  <LvPanel :expanded="550" panelId="results" :flip="true" :class="{ 'opacity-50' : disabled }" :disabled="disabled">
+  <LvPanel :expanded="width" panelId="results" :flip="true" :class="{ 'opacity-50' : disabled }" :disabled="disabled">
       <button v-if="!isExpanded"
               class="flex h-full w-full items-center justify-center bg-gray-100 hover:bg-gray-200 focus-visible:bg-sky focus-visible:text-white outline-none"
               :class="disabled && 'cursor-default'"
@@ -31,6 +31,10 @@ const togglePanel = () => {
 }
 
 const props = defineProps({
+  width: {
+    type: Number,
+    default: 550,
+  },
   disabled: {
     type: Boolean,
     default: false,
