@@ -3,14 +3,14 @@
     <div class="flex px-3" :class="isExpanded ? 'bg-gray-100' : 'bg-danger text-white' ">
       <div class="flex items-center whitespace-nowrap h-10">{{ $L('validation') }} ({{ count }})</div>
       <div class="w-full flex items-center justify-end">
-          <button @click="togglePanel"
-            class="flex justify-center items-center w-10 h-10"
-            :class="isExpanded ? 'text-steel-darkest hover:text-black' : ' hover:opacity-60'"
-          >
+        <button @click="togglePanel"
+                class="flex justify-center items-center w-10 h-10"
+                :class="isExpanded ? 'text-steel-darkest hover:text-black' : ' hover:opacity-60'"
+        >
           <IconCollapse v-if="isExpanded" class="-rotate-90"/>
           <IconExpand v-else class="-rotate-90"/>
         </button>
-        </div>
+      </div>
     </div>
     <div v-if="isExpanded" class="p-2 max-h-40 flex-1 border-t overflow-y-auto">
       <ul>
@@ -21,10 +21,11 @@
           :class="{'bg-danger-lightest' : message.type === 'error', 'bg-warning-lightest' : message.type === 'warning', 'cursor-pointer': message.onClick}"
         >
           <div class="flex w-full" @click="message.onClick">
-            <CIcon :type="iconType(message.type)" :color="iconStyle(message.type)" class="w-5 mr-2" />
+            <CIcon :type="iconType(message.type)" :color="iconStyle(message.type)" class="w-5 mr-2"/>
             <span class="text-indigo">{{ message.text }}</span>
           </div>
-          <CIcon v-if="message.isDismissable === true" type="plus" color="warning" class="rotate-45 justify-end cursor-pointer" @click="dismissWarning(index)" />
+          <CIcon v-if="message.isDismissable === true" type="plus" color="warning"
+                 class="rotate-45 justify-end cursor-pointer" @click="dismissWarning(index)"/>
         </li>
       </ul>
     </div>
@@ -39,6 +40,13 @@ import IconExpand from '../icons/iconExpand.vue';
 import { useLeviateStore } from '../../store/leviate';
 import { groupBy } from 'lodash-es';
 
+const props = defineProps({
+  messages: {
+    type: Array,
+    default: [],
+  },
+})
+
 
 const store = useLeviateStore()
 const messageStore = useMessageStore()
@@ -49,11 +57,10 @@ const isExpanded = computed({
   set: (val) => store.panels.validation.isExpanded = val
 })
 
-const messages = computed(() => messageStore.configErrors);
 const count = computed(() => {
-  if (messages.value.length === 0) return '';
+  if (props.messages.value.length === 0) return '';
 
-  const { error, warning } = groupBy(messages.value, 'type');
+  const { error, warning } = groupBy(props.messages.value, 'type');
 
   const errorCount = error?.length || 0;
   const warningCount = warning?.length || 0;
@@ -63,30 +70,23 @@ const count = computed(() => {
 
   return `${errorCount} ${$l(errorKey)}, ${warningCount} ${$l(warningKey)}`
 });
-const warnings = computed(() => messages.value.filter(item => item.type === 'warning').length);
 
 const togglePanel = () => {
-    isExpanded.value = !isExpanded.value
+  isExpanded.value = !isExpanded.value
 }
 
 const iconType = (type) => {
-  if(type  === "error") return 'error'
-  else if(type  === "warning") return 'warning'
+  if (type === 'error') return 'error'
+  else if (type === 'warning') return 'warning'
 }
 
 const iconStyle = (type) => {
-  if(type === "error") return 'danger'
-  else if(type  === "warning") return 'warning'
+  if (type === 'error') return 'danger'
+  else if (type === 'warning') return 'warning'
 }
 
 const dismissWarning = (index) => {
-  const msg = messages.value[index];
+  const msg = props.messages.value[index];
   messageStore.removeMessage(msg.id);
 }
-
-messageStore.setConfigError('Error')
-messageStore.setConfigError('Error')
-messageStore.setConfigError('Error')
-messageStore.setConfigError('Error')
-messageStore.setConfigWarning('Error')
 </script>
