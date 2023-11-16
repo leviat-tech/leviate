@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.9.0](https://github.com/leviat-tech/leviate/compare/v3.8.0...v3.9.0) (2023-10-09)
+
+
+### Features
+
+* add inputIdToOptions callback function ([1e94013](https://github.com/leviat-tech/leviate/commit/1e94013567989bf360dba614e979a3e897724016))
+* update concrete to enable defaultSpinner option ([f4037f1](https://github.com/leviat-tech/leviate/commit/f4037f1dd9f4a2654c20605bd94e1de1d8739dbd))
+
 ## [3.8.0](https://github.com/leviat-tech/leviate/compare/v3.7.0...v3.8.0) (2023-09-11)
 
 
