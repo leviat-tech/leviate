@@ -25,7 +25,10 @@ export default {
     },
 
     project: {
+      id: 'project_id',
       name: 'My Project',
+      number: '1234',
+      designer: 'John Doe',
       account: {
         name: 'Fake Glazing Company',
       },
@@ -55,5 +58,29 @@ export default {
     company: {
       name: 'CRH Technology Studio',
     },
+    customer: {
+      company: 'Fake Glazing Company',
+      phone: '123-456-7890',
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'glazing@company.com',
+      address: {
+        street: '1234 Address Blvd',
+        postcode: '12345',
+        city: 'New York',
+        country: 'USA',
+      },
+    },
+    origin: window.location.origin,
+
+  },
+  configuration: {
+    "id": 1,
+    "createdAt": "2023-10-15T10:13:34.729Z",
+    "name": "My Configuration",
+    "parentId": null,
+    "state": {
+      "example": "state"
+    }
   },
 };

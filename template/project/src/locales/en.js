@@ -17,7 +17,26 @@ const phrases = {
 
   en: 'english',
   es: 'español',
-  project_explorer: 'project explorer',
+
+  project_versions: 'versions',
+  project_info: 'information',
+  project_info_heading: ' project information',
+  client_info: 'client info',
+  project_settings: 'settings',
+  project_design: 'design',
+  project_output: 'output',
+
+  // Input Panel
+  example: 'example',
+  test: 'test',
+  load_case: 'load case',
+  reinforcement: 'reinforcement',
+
+  validation: 'validation',
+  error: 'error',
+  errors: 'errors',
+  warning: 'warning',
+  warnings: 'warnings',
 
   // Settings
 

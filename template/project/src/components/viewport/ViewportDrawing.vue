@@ -26,8 +26,8 @@
 
 <script setup>
 import { ref } from 'vue';
-import DrawingTop from './DrawingTop.vue';
-import DrawingSide from './DrawingSide.vue';
+import DrawingTop from './drawings/DrawingTop.vue';
+import DrawingSide from './drawings/DrawingSide.vue';
 import useCurrentEntity from '@/composables/useCurrentEntity';
 
 

@@ -1,0 +1,99 @@
+<template>
+  <div class="flex flex-col h-full justify-between p-4" >
+    <div class="flex-1">
+        <div v-for="(version,i) in versions" :key="version.id"
+             class="py-2 mb-2 border-b border-indigo-lightest last:border-b-0"
+             :class="rootVersionId !== version.id && 'ml-3'"
+        >
+          <div class="flex justify-between">
+            <LvEditableDiv class="outline-none flex-1 mr-4"
+                           :class="[
+                             version.id === activeVersionId && 'font-bold',
+                             editId === version.id ? 'ring-2 ring-offset-2 ring-offset-gray-50' : 'cursor-pointer'
+                           ]"
+                           @click="onClick(version.id)"
+                           :is-editable="editId === version.id"
+                           :model-value="version.name"
+                           @update:modelValue="updateVersion(version.id, $event)"
+                           @blur="editId = null"
+                           autofocus
+            />
+
+            <div>
+              <button @click="editId = version.id" class="p-0.5 rounded outline-none focus-visible:bg-indigo-lightest">
+                <CIcon type="edit" size="sm" />
+              </button>
+              <button @click="onDuplicate(version.id)" class="p-0.5 rounded outline-none focus-visible:bg-indigo-lightest">
+                <CIcon type="copy" size="sm"/>
+              </button>
+              <button v-if="rootVersionId !== version.id" @click="deleteVersion(version.id)" class="p-0.5 rounded outline-none focus-visible:bg-indigo-lightest">
+                <CIcon type="trash" size="sm"/>
+              </button>
+            </div>
+          </div>
+          <div class="flex justify-end text-[12px] text-steel-dark">Created: {{new Date(version.createdAt).toDateString() }}</div>
+        </div>
+    </div>
+
+    <div class="flex flex-1  flex-row">
+      <CTextInput placeholder="Create a new version" v-model="configNameInputVal" class="mr-4" @keydown.enter="onSaveNewVersion"/>
+      <CButton class="w-24 outline-none focus:ring-2 ring-offset-1 ring-indigo-light" @click="onSaveNewVersion">Save</CButton>
+    </div>
+
+    <component v-if="!isProduction && devToolsComponent" :is="devToolsComponent" />
+  </div>
+</template>
+
+<script setup>
+import { markRaw, nextTick, ref } from 'vue';
+import useVersions from '@crhio/leviate/composables/useVersions';
+import LvEditableDiv from '@crhio/leviate/components/ui/LvEditableDiv.vue';
+
+const isProduction = import.meta.env === 'production';
+const devToolsComponent = ref();
+
+if (!isProduction) {
+  import('@crhio/leviate/components/layout/project/LvVersionsDev.vue').then(module => {
+    devToolsComponent.value = markRaw(module.default);
+  })
+}
+
+const configNameInputVal = ref('');
+
+const {
+  versions,
+  activeVersionId,
+  getVersionById,
+  loadVersion,
+  createVersion,
+  deleteVersion,
+  rootVersionId,
+  setName,
+} = useVersions();
+
+const editId = ref(null);
+
+function onClick(id) {
+  if (editId.value !== id) loadVersion(id);
+}
+
+function onSaveNewVersion() {
+  const configName = configNameInputVal.value;
+
+  if (!configName) return;
+
+  configNameInputVal.value = '';
+  createVersion(configName);
+}
+
+const onDuplicate = (id) => {
+  const name = 'Copy of ' + getVersionById(id).name;
+  createVersion(name, id);
+}
+
+const updateVersion = (versionId, name) => {
+  setName(name, versionId);
+  editId.value = null;
+};
+
+</script>

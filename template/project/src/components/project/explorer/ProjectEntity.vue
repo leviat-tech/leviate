@@ -2,8 +2,8 @@
   <CAccordion default-open>
 
     <template #title="{ open }">
-      <div class="flex items-center justify-stretch p-4 pb-2">
-        <CIcon type="chevron-right" size="sm" :class="open && 'transition transform rotate-90'"/>
+      <div class="flex items-center justify-stretch px-2 pt-6 pb-2">
+         <CIcon type="chevron-right" size="sm" :class="open && 'transform rotate-90'"/>
         <div class="font-bold ml-2 flex-grow capitalize">{{ $L(model.id) }}</div>
         <button title="Add" @click.stop="addItem">
           <CIcon type="plus" size="sm"></CIcon>
@@ -12,7 +12,7 @@
     </template>
 
     <ul class="border-t">
-      <LvProjectEntityItem v-for="item in items" :item="item" :key="item.id"></LvProjectEntityItem>
+      <ProjectEntityItem v-for="item in items" :item="item" :key="item.id"></ProjectEntityItem>
     </ul>
 
   </CAccordion>
@@ -22,7 +22,7 @@
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { transact } from '@crhio/leviate';
-import LvProjectEntityItem from './LvProjectEntityItem.vue';
+import ProjectEntityItem from './ProjectEntityItem.vue';
 
 const router = useRouter();
 

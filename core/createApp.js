@@ -6,6 +6,7 @@ import { createStore, initializeStore } from './store';
 import { createRouter } from './router';
 import concreteDefaultOptions from './concreteOptions';
 import './assets/styles/index.css';
+import { FeaturesPlugin } from './composables/useFeature';
 
 function installPlugins(app, { concreteOptions, endpoints, locales, plugins, globalConfig, store, router }) {
   plugins?.forEach((plugin) => loadPlugin(app, plugin));
@@ -14,6 +15,7 @@ function installPlugins(app, { concreteOptions, endpoints, locales, plugins, glo
   app.use(Concrete, concreteConfig);
   app.use(LocalizePlugin, { locales });
   app.use(HostPlugin, { router });
+  app.use(FeaturesPlugin);
 
   if (globalConfig) {
     app.config.globalProperties.$config = globalConfig;
@@ -65,8 +67,8 @@ export async function createApp(projectConfig, Root, isStandalone) {
 
   await hostIsConnected();
   const host = useHost()
-  const initialState = host.getState();
-  const initialUrl = host.getUrl();
+  const initialState = await host.getState();
+  const initialUrl = await host.getUrl();
 
   initializeStore(initialState, migrations, models);
 

@@ -1,17 +1,19 @@
 <template>
   <LvLayout>
 
-    <div class="h-full flex" v-if="entity">
+    <div class="h-full flex divide-x" v-if="entity">
 
-      <LvConfiguration class="flex-1">
-        <template #toolbar>
-          <TheConfigurationToolbar />
-        </template>
+      <LvInputPanel :tabs="tabs">
+        <InputRoot />
+      </LvInputPanel>
 
-        <TheConfigurationContent />
-      </LvConfiguration>
+      <LvViewportPanel>
+        <ViewportRoot />
+      </LvViewportPanel>
 
-      <TheViewport class="flex-1" />
+      <LvResultsPanel :disabled="false">
+        <ResultsRoot />
+      </LvResultsPanel>
 
     </div>
 
@@ -23,11 +25,11 @@ import { watch } from 'vue';
 import { useRouter } from 'vue-router';
 import useCurrentEntity from '@/composables/useCurrentEntity';
 
-import LvLayout from '@/components/scaffold/LvLayout.vue';
-import TheViewport from '@/components/viewport/TheViewport.vue';
-import LvConfiguration from '@/components/scaffold/LvConfiguration.vue';
-import TheConfigurationToolbar from '@/components/configuration/TheConfigurationToolbar.vue';
-import TheConfigurationContent from '@/components/configuration/TheConfigurationContent.vue';
+import InputRoot from '@/components/input/InputRoot.vue';
+import ViewportRoot from '@/components/viewport/ViewportRoot.vue';
+import ResultsRoot from '@/components/results/ResultsRoot.vue';
+
+import { LvLayout, LvInputPanel, LvViewportPanel, LvResultsPanel } from '@crhio/leviate/components'
 
 const entity = useCurrentEntity();
 const router = useRouter()
@@ -36,4 +38,5 @@ watch(entity, (val) => {
   if (!val) router.replace('/not-found')
 });
 
+const tabs = ['example', 'test', 'load-case', 'reinforcement'];
 </script>

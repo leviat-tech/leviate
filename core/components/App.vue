@@ -11,7 +11,7 @@ body {
 </style>
 
 <template>
-  <div class="absolute inset-0 overflow-y-scroll">
+  <div class="absolute inset-0 overflow-y-auto">
     <RouterView :key="appKey"/>
   </div>
 
