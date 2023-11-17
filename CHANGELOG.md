@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/leviat-tech/leviate/compare/v3.9.0...v4.0.0) (2023-11-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* revert to async host getters and directly attach static properties
+
+### Features
+
+* revert to async host getters and directly attach static properties ([d449f72](https://github.com/leviat-tech/leviate/commit/d449f72ccc68668c22d1c92f9e576c02cb565d22))
+* sync host-mock with versions component ([9ba5998](https://github.com/leviat-tech/leviate/commit/9ba59984a6f9a5a77c7d76c1bd4344874b71df06))
+* versions history - init ([e34ca8a](https://github.com/leviat-tech/leviate/commit/e34ca8ae382f810aaeb72b82155203f91d406cb1))
+
+
+### Bug Fixes
+
+* error setting version name ([5b9fae6](https://github.com/leviat-tech/leviate/commit/5b9fae65df081504eeabb5f74854b0faac1820d4))
+* error when dismissing error/warning ([96e6d74](https://github.com/leviat-tech/leviate/commit/96e6d74c1afeedb909f81e16061fa773588c5a19))
+* issue with versions initializing ([e94b2fc](https://github.com/leviat-tech/leviate/commit/e94b2fcf5abf393e7be05ddbdcba49687664ab60))
+* prevent ui panel state saving ([17b8067](https://github.com/leviat-tech/leviate/commit/17b806753a2105f940e5b745ff071e62a898b90d))
+* save, load, duplicate and delete versions ([4dad324](https://github.com/leviat-tech/leviate/commit/4dad324b231a4373ce6a7132afdbd5cbb3489eac))
+* update inject version ([0774aed](https://github.com/leviat-tech/leviate/commit/0774aedcc44e02d4b59260161a408c3394da47d1))
+
 ## [3.9.0](https://github.com/leviat-tech/leviate/compare/v3.8.0...v3.9.0) (2023-10-09)
 
 
