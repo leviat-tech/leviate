@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.1](https://github.com/leviat-tech/leviate/compare/v4.0.0...v4.0.1) (2023-11-21)
+
+
+### Bug Fixes
+
+* add cypress attributes to input tabs ([eea40fb](https://github.com/leviat-tech/leviate/commit/eea40fb27dcea39a9a91a4c02fdfdc51ce22314d))
+* add cypress attributes to panels ([ca70758](https://github.com/leviat-tech/leviate/commit/ca70758ef541a4e216be554f835ed4a4a6dc5107))
+
 ## [4.0.0](https://github.com/leviat-tech/leviate/compare/v3.9.0...v4.0.0) (2023-11-17)
 
 
