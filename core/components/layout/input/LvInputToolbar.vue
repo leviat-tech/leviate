@@ -6,6 +6,7 @@
          class="flex w-full text-gray-400"
          :class="{ 'h-12' : isExpanded, 'flex-col flex-grow divide-y font-semibold -mb-1 bg-gray-50' : !isExpanded}">
       <button v-for="tabId in tabs" :key="tabId"
+              :data-cy="`input-tab__${tabId}`"
               @click.stop="clickTab(tabId)"
               @keyup.enter="$event.target.blur()"
               class="text-center flex-grow h-full flex justify-center cursor-pointer px-1 py-1 items-center text-xs font-semibold bg-gray-50 outline-none focus-visible:bg-sky focus-visible:text-white"
