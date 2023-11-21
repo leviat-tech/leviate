@@ -3,6 +3,7 @@
     <DisclosureButton
       @click="onClick(name)"
       @keydown.enter="onClick(name)"
+      :data-cy="`project__${name}`"
       class="relative p-2 flex flex-col justify-center px-4 focus-visible:bg-sky focus-visible:text-white outline-none"
       :class="{
           'text-md text-white mx-1 mb-[2px] first-of-type:mt-1 last-of-type:mb-1 bg-indigo items-start' : isExpanded,
