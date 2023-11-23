@@ -27,7 +27,7 @@
 import { useLeviateStore } from '../../store/leviate';
 import IconCollapse from '../icons/iconCollapse.vue';
 import IconExpand from '../icons/iconExpand.vue';
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 
 const props = defineProps({
   expanded: {
@@ -55,5 +55,9 @@ const isExpanded = computed(() => store.panels[props.panelId].isExpanded);
 
 const widthValue = computed(() => {
   return isExpanded.value ? props.expanded : props.collapsed;
+});
+
+watch(isExpanded, () => {
+  window.dispatchEvent(new Event('resize'));
 });
 </script>
