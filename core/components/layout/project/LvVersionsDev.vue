@@ -39,7 +39,7 @@
 <script setup>
 import { useMock } from '@crhio/leviate/host-mock';
 import { useHost } from '@crhio/leviate';
-import { activeVersion } from '@crhio/leviate/composables/useVersions';
+import useVersions from '@crhio/leviate/composables/useVersions';
 
 const buttonProps = {
   class:
@@ -62,7 +62,11 @@ async function onDownLoadFile() {
   var base = window.btoa(json);
   var href = 'data:text/javascript;charset=utf-8;base64,' + base;
   var link = document.createElement('a');
-  link.setAttribute('download', `${appname}_${activeVersion.name}.json`);
+
+  link.setAttribute(
+    'download',
+    `${appname}_${useVersions().activeVersion.name}.json`
+  );
   link.setAttribute('href', href);
   document.querySelector('body').appendChild(link);
   link.click();
