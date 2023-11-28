@@ -33,6 +33,7 @@
       <CIcon type="sync" size="sm" />
       <div>Reset</div>
     </CButton>
+    
   </div>
 </template>
 
