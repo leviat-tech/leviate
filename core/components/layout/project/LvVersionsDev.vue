@@ -1,21 +1,35 @@
 <template>
-  <div class="mt-6 bg-danger text-white p-0.5 text-center text-xs font-bold">Development tools</div>
+  <div class="mt-6 bg-danger text-white p-0.5 text-center text-xs font-bold">
+    Development tools
+  </div>
 
   <div class="flex space-x-1 mt-1">
-    <CButton v-bind="buttonProps" title="Save this design to a file" @click="onDownLoadFile">
+    <CButton
+      v-bind="buttonProps"
+      title="Save this design to a file"
+      @click="onDownLoadFile"
+    >
       <CIcon type="download" size="sm" />
       <div>Save</div>
     </CButton>
 
     <label class="flex-1">
       <input @change="onRestoreFromFile" type="file" ref="uploadfile" hidden />
-      <CButton v-bind="buttonProps" @click="$refs.uploadfile.click()" title="Upload design from a file">
+      <CButton
+        v-bind="buttonProps"
+        @click="$refs.uploadfile.click()"
+        title="Upload design from a file"
+      >
         <CIcon type="upload" size="sm" />
         <div>Restore</div>
       </CButton>
     </label>
 
-    <CButton v-bind="buttonProps" @click="clearStorage" title="Reset local storage">
+    <CButton
+      v-bind="buttonProps"
+      @click="clearStorage"
+      title="Reset local storage"
+    >
       <CIcon type="sync" size="sm" />
       <div>Reset</div>
     </CButton>
@@ -28,14 +42,13 @@ import { useHost } from '@crhio/leviate';
 import { activeVersion } from '@crhio/leviate/composables/useVersions';
 
 const buttonProps = {
-  class: 'w-full flex flex-1 items-center justify-center space-x-1 !px-0 font-bold outline-none focus-visible:bg-sky-dark',
+  class:
+    'w-full flex flex-1 items-center justify-center space-x-1 !px-0 font-bold outline-none focus-visible:bg-sky-dark',
   color: 'sky',
-  size: 'xs'
-}
+  size: 'xs',
+};
 
-const {
-  clearStorage,
-} = useMock();
+const { clearStorage } = useMock();
 
 async function onDownLoadFile() {
   const appname = useHost().meta.configurator.name;
@@ -49,7 +62,6 @@ async function onDownLoadFile() {
   var base = window.btoa(json);
   var href = 'data:text/javascript;charset=utf-8;base64,' + base;
   var link = document.createElement('a');
-
   link.setAttribute('download', `${appname}_${activeVersion.name}.json`);
   link.setAttribute('href', href);
   document.querySelector('body').appendChild(link);
@@ -58,7 +70,7 @@ async function onDownLoadFile() {
 }
 
 function onRestoreFromFile(e) {
-  const f = e.target.files[0]
+  const f = e.target.files[0];
   if (f) {
     var reader = new FileReader();
     reader.onload = function (e) {
