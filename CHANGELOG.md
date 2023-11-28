@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.2](https://github.com/leviat-tech/leviate/compare/v4.0.1...v4.0.2) (2023-11-28)
+
+
+### Bug Fixes
+
+* tidied ([9a4bc40](https://github.com/leviat-tech/leviate/commit/9a4bc404b406abb2d1a655db8db42c8d45024d33))
+* tidied ([9d22a12](https://github.com/leviat-tech/leviate/commit/9d22a128a46e3924df85efb8bfc73283d69d70c4))
+* tidied ([60e1e6b](https://github.com/leviat-tech/leviate/commit/60e1e6b6540063a905b9c4952b570715db425de6))
+* version save bug fixed ([497bd0c](https://github.com/leviat-tech/leviate/commit/497bd0c593f34eb1aa80b0eb81f2777475c39d4b))
+
 ## [4.0.1](https://github.com/leviat-tech/leviate/compare/v4.0.0...v4.0.1) (2023-11-21)
 
 
