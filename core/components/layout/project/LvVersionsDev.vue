@@ -25,6 +25,7 @@
 <script setup>
 import { useMock } from '@crhio/leviate/host-mock';
 import { useHost } from '@crhio/leviate';
+import { activeVersion } from '@crhio/leviate/composables/useVersions';
 
 const buttonProps = {
   class: 'w-full flex flex-1 items-center justify-center space-x-1 !px-0 font-bold outline-none focus-visible:bg-sky-dark',
@@ -34,12 +35,10 @@ const buttonProps = {
 
 const {
   clearStorage,
-  localStorageBackup,
 } = useMock();
 
 async function onDownLoadFile() {
   const appname = useHost().meta.configurator.name;
-  const configname = localSettings.activeVersionId;
   var backup = {};
   for (let i = 0; i < localStorage.length; i++) {
     var key = localStorage.key(i);
@@ -50,7 +49,8 @@ async function onDownLoadFile() {
   var base = window.btoa(json);
   var href = 'data:text/javascript;charset=utf-8;base64,' + base;
   var link = document.createElement('a');
-  link.setAttribute('download', `${appname}_${configname}.json`);
+
+  link.setAttribute('download', `${appname}_${activeVersion.name}.json`);
   link.setAttribute('href', href);
   document.querySelector('body').appendChild(link);
   link.click();
