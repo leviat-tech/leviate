@@ -41,25 +41,25 @@
                 <MenuItem v-else v-slot="{ active }">
                   <a
                     :href="item.url"
-                    class="w-full flex items-center px-3 py-2 whitespace-nowrap text-left"
-                    :class="active && 'bg-steel-light'"
+                    :class="[menuItemClass, item.className, active && 'bg-steel-light']"
                     :data-cy="`toolbar__info_link_${item.name}`"
                     target="_blank"
-                  >{{ $l(item.name) }}</a>
+                  >
+                    <CIcon v-if="item.icon" :type="item.icon" size="sm"/>
+                    <span>{{ $l(item.name) }}</span>
+                  </a>
 
                 </MenuItem>
               </template>
 
-
               <hr v-if="$config.helpMenu.length > 0" class="my-2" />
 
               <MenuItem v-slot="{ active }" :class="menuItemClass">
-                <div class="flex items-center space-x-2" :class="active && 'bg-steel-light'">
-                  <CIcon type="information-circle" />
-                  <button @click="openAppInfoModal" class="w-full text-left whitespace-nowrap">
-                    {{ $L('about') }} {{ manifest.name }}
-                  </button>
-                </div>
+                <button @click="openAppInfoModal"
+                        :class="[menuItemClass, active && 'bg-steel-light']">
+                  <CIcon type="information-circle" class="!w-5"/>
+                  <span>{{ $L('about') }} {{ manifest.name }}</span>
+                </button>
               </MenuItem>
             </MenuItems>
           </Transition>
@@ -86,5 +86,5 @@ const leviate = useLeviateStore();
 
 const isExpanded = computed(() => leviate.panels.project.isExpanded);
 
-const menuItemClass = 'py-1.5 pl-4 pr-6';
+const menuItemClass = 'w-full flex items-center space-x-2 pl-3 pr-6 py-2 whitespace-nowrap text-left';
 </script>
