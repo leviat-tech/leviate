@@ -5,22 +5,25 @@ export default {
     // - `this` in the Options API
     // inject('$config') in the Composition API
     helpMenu: [
+      // Example:
+      // normal link
       {
-        name: 'product_info',
-        url: 'https://www.halfen.com/en_DE/product-ranges/concrete/fixing-systems/cast-in-channels',
+        name: 'translate_key_1',
+        url: 'https://www.example1.com',
       },
+      // Link with icon
       {
-        name: 'cad_bim_object_and_software',
-        url: 'https://www.halfen.com/en_DE/downloads/software-cad-bim',
+        icon: 'expand', // CIcon "type" prop
+        name: 'translate_key_2',
+        url: 'https://www.example2.com',
       },
+      // renders a divider
       null,
+      // Link with custom classes
       {
-        name: 'product_info',
-        url: 'https://www.halfen.com/en_DE/product-ranges/concrete/fixing-systems/cast-in-channels',
-      },
-      {
-        name: 'cad_bim_object_and_software',
-        url: 'https://www.halfen.com/en_DE/downloads/software-cad-bim',
+        className: 'bg-blue-500 text-white',
+        name: 'translate_key_3',
+        url: 'https://www.example3.com',
       },
     ],
   },
