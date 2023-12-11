@@ -14,7 +14,7 @@
   <!-- provide a little host like context -->
   <div class="h-full flex flex-row">
     <div class="host-bar relative p-6 text-white text-center flex flex-col bg-gradient-to-b from-indigo to-indigo-darkest">
-      <img src="../assets/images/leviat-logo.png" class="w-32">
+      <LvLogo width="160" class="" inverted/>
 
       <div class="text-left">
         <div class="text-xl opacity-50 my-4">DEVELOPMENT</div>
@@ -39,6 +39,7 @@
 <script setup>
 import App from './App.vue';
 import { useHost } from '@crhio/leviate';
+import LvLogo from '@crhio/leviate/components/ui/LvLogo.vue';
 
 const frameworkVersion = import.meta.env.VITE_LEVIATE_VERSION;
 

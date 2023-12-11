@@ -3,13 +3,13 @@
     <div class="flex -m-6 p-6 bg-gray-100">
       <div class="flex-grow flex flex-col justify-between mr-24 text-xs leading-5">
         <div>
-          <img src="https://leviatcdn.blob.core.windows.net/static/branding/logo.png" width="180" class="mb-1"/>
+          <LvLogo width="200" class="mb-1" />
           <div>{{ $l('built_by') }} Leviat Digital Engineering</div>
         </div>
 
         <div>
           <div>{{ $L('version') }} {{ manifest.version }}</div>
-          <div> {{ $l('built_on') }} {{ getDateString() }}
+          <div> {{ $l('built_on') }} {{ manifest.date }}
           </div>
           <RouterLink to="/release-notes" class="text-indigo" @click="closeAppInfoModal">
             ({{ $l('release_notes') }})
@@ -22,25 +22,16 @@
 
       </div>
       <div>
-        <img src="/thumbnail.png" width="200" class="p-4 border rounded bg-white"/>
+        <img src="/thumbnail.png" width="220" height="220" class="border rounded bg-white"/>
       </div>
     </div>
   </CModal>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import useAppInfoModal from '../composables/useAppInfoModal.js';
+import useAppInfo from '../composables/useAppInfo.js';
+import LvLogo from '@crhio/leviate/components/ui/LvLogo.vue';
 
-const manifest = ref({});
-const { isAppInfoModalOpen, closeAppInfoModal } = useAppInfoModal();
-
-function getDateString() {
-  return new Date(manifest.value.date).toLocaleDateString().replace(/\//g, '-');
-}
-
-fetch('/manifest.json')
-.then(res => res.json())
-.then(manifestJson => manifest.value = manifestJson);
+const { isAppInfoModalOpen, closeAppInfoModal, manifest } = useAppInfo();
 
 </script>
