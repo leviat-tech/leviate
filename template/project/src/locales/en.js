@@ -1,4 +1,5 @@
 const phrases = {
+  about: 'about',
   version: 'version',
   built_on: 'Built on',
   released: 'released',

@@ -9,6 +9,8 @@ import LvViewportPanel from './layout/LvViewportPanel.vue';
 import LvResultsPanel from './layout/LvResultsPanel.vue';
 import LvValidationPane from './layout/LvValidationPane.vue';
 
+import LvLogo from './ui/LvLogo.vue';
+
 export {
   LvLayout,
   LvProjectPanel,
@@ -20,4 +22,6 @@ export {
   LvViewportPanel,
   LvResultsPanel,
   LvValidationPane,
+
+  LvLogo,
 }

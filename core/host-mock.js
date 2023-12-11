@@ -97,7 +97,7 @@ export function useMock() {
 
     const storedData = getStoredData();
 
-    if (storedData) {
+    if (storedData && storedData.versions?.length > 0) {
       const activeVersion = storedData.versions.find(version => version.id === storedData.activeVersionId);
       data.configuration.state = activeVersion?.state || state;
       activeVersionId.value = activeVersion ? storedData.activeVersionId : configuration.id;
