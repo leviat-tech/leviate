@@ -26,7 +26,7 @@
             class="flex items-center p-1 relative ring-0"
           >
             <slot v-if="$slots.button" name="button"/>
-            <CIcon type="question-circle"/>
+            <CIcon type="question-circle" size="md"/>
           </MenuButton>
 
           <!-- Content -->
