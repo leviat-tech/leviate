@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.1.0](https://github.com/leviat-tech/leviate/compare/v4.0.2...v4.1.0) (2023-12-12)
+
+
+* enable adding items to project help menu ([62c4eca](https://github.com/leviat-tech/leviate/commit/62c4eca4cf051a35599470411215462a892239ce))
+* enable icons and custom classes in help menu ([0545a52](https://github.com/leviat-tech/leviate/commit/0545a52ce856031bb15a747403312ddda7206dcb))
+
 ## [4.0.2](https://github.com/leviat-tech/leviate/compare/v4.0.1...v4.0.2) (2023-11-28)
 
 
