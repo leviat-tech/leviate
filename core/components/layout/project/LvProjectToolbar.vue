@@ -33,7 +33,7 @@
           <Transition enter-from-class="scale-95 opacity-0" leave-to-class="opacity-0">
             <MenuItems
               as="div"
-              class="absolute text-black top-3 right-3 z-20 py-2 bg-white shadow-xl transition duration-150 origin-top-right outline-none">
+              class="absolute w-[260px] text-black top-3 right-3 z-20 py-2 bg-white shadow-xl transition duration-150 origin-top-right outline-none">
 
               <template v-for="item in $config.helpMenu">
                 <hr v-if="item === null" class="my-2" />
@@ -86,5 +86,5 @@ const leviate = useLeviateStore();
 
 const isExpanded = computed(() => leviate.panels.project.isExpanded);
 
-const menuItemClass = 'w-full flex items-center space-x-2 pl-3 pr-6 py-2 whitespace-nowrap text-left';
+const menuItemClass = 'w-full flex items-center space-x-2 pl-3 pr-6 py-2 text-left';
 </script>
