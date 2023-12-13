@@ -8,6 +8,8 @@
       </LvProjectPanelItem>
 
       <slot />
+
+      <div class="flex-1 bg-gray-200 mx-1 -mt-px mb-1" />
     </div>
   </LvPanel>
 </template>
@@ -26,6 +28,6 @@ const route = useRoute();
 const leviate = useLeviateStore();
 
 watch(() => route.query.projectTab, tabName => {
-  leviate.setActiveProjectItem(tabName || 'design');
+  leviate.setActiveProjectItem(tabName);
 }, { immediate: true });
 </script>

@@ -15,7 +15,7 @@
 
     </DisclosureButton>
 
-    <div v-show="isActive && isExpanded" class="flex-1 overflow-y-auto bg-gray-50">
+    <div v-show="isActive && isExpanded" class="overflow-y-auto bg-gray-50">
       <DisclosurePanel static>
         <slot/>
       </DisclosurePanel>
@@ -28,7 +28,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
 import { useLeviateStore } from '../../../store/leviate.js';
 import { computed } from 'vue';
 import LvTabText from '../../ui/LvTabText.vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 
 const props = defineProps({
@@ -36,13 +36,20 @@ const props = defineProps({
 });
 
 const router = useRouter();
+const route = useRoute();
 const leviate = useLeviateStore();
 
 const isExpanded = computed(() => leviate.panels.project.isExpanded);
 const isActive = computed(() => leviate.panels.project.activeItem === props.name);
 
 function onClick(name) {
-  leviate.setActiveProjectItem(name);
-  router.replace({ query: { projectTab: name } });
+  if (isActive.value) {
+    leviate.setActiveProjectItem(null);
+    const { projectTab, ...query } = route.query;
+    router.replace({ query });
+  } else {
+    leviate.setActiveProjectItem(name);
+    router.replace({ query: { projectTab: name } });
+  }
 }
 </script>
