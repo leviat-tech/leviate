@@ -13,15 +13,7 @@ function generateManifest(root) {
 }
 
 function stripGitHubReferences(str) {
-  const matches = str.match(/(.+)\(\[\w+]\(.+\)$/);
-
-  const textOnlyMatch = matches?.[1];
-
-  if (textOnlyMatch) return textOnlyMatch.trim();
-
-  console.warn(`Update in unexpected format: ${str}`);
-
-  return str;
+  return str.replace(/\(\[.+]\(.+\)\)/, '').trim();
 }
 
 
