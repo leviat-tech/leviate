@@ -1,12 +1,14 @@
 <template>
-  <div v-if="store.panels.input.isExpanded" class="w-full h-full">
+  <div
+    v-if="store.panels.input.isExpanded"
+    class="w-full h-full overflow-y-auto"
+  >
     <slot />
   </div>
 </template>
 
 <script setup>
-  import { useLeviateStore } from '../../../store/leviate';
+import { useLeviateStore } from '../../../store/leviate';
 
-  const store = useLeviateStore();
+const store = useLeviateStore();
 </script>
-
