@@ -58,6 +58,9 @@ const widthValue = computed(() => {
 });
 
 watch(isExpanded, () => {
-  window.dispatchEvent(new Event('resize'));
+  // Ensure panel is closed before triggering any handlers that subscribe to the resize event
+  setTimeout(() => {
+    window.dispatchEvent(new Event('resize'));
+  });
 });
 </script>
