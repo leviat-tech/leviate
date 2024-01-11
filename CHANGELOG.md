@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.1.1](https://github.com/leviat-tech/leviate/compare/v4.1.0...v4.1.1) (2024-01-11)
+
+
+* added overflow auto to input panel ([#95](https://github.com/leviat-tech/leviate/issues/95)) ([d51d007](https://github.com/leviat-tech/leviate/commit/d51d0079a3dce04e1e7e031f7d58be91f38ed332))
+* defer window resize event when toggling panels ([4d9b0fb](https://github.com/leviat-tech/leviate/commit/4d9b0fbea4c6d95123965ce1c99b266cddd9d5a1))
+* enable closing project panel items ([afafad6](https://github.com/leviat-tech/leviate/commit/afafad647424854e39f16e203925e16da766cfe0))
+* ensure multiple links are stripped from changelog items ([b76954a](https://github.com/leviat-tech/leviate/commit/b76954a0e5c1b75c0ccf806cfa9a2c5b36df233c))
+* ensure toolbar help icon is correct size ([89a93e9](https://github.com/leviat-tech/leviate/commit/89a93e9889439b37d920848e77f6f7078e367e08))
+* help menu width ([af817c9](https://github.com/leviat-tech/leviate/commit/af817c9bc8047a4ec577b00c2c966d48f1ca46d1))
+* update template version ([00aecaf](https://github.com/leviat-tech/leviate/commit/00aecafc0f2d4282537fc4e16945f9e8620c9dae))
+
 ## [4.1.0](https://github.com/leviat-tech/leviate/compare/v4.0.2...v4.1.0) (2023-12-12)
 
 
