@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.2.1](https://github.com/leviat-tech/leviate/compare/v4.2.0...v4.2.1) (2024-01-11)
+
+
+* updated normie ([deacb51](https://github.com/leviat-tech/leviate/commit/deacb519a8a4d5ae9686fd800adfdf812d2d1cdb))
+* updated vars ([3ef3cf6](https://github.com/leviat-tech/leviate/commit/3ef3cf67246db9072c6b0b3a5dda94b02a1eab5a))
+
 ## [4.2.0](https://github.com/leviat-tech/leviate/compare/v4.1.2...v4.2.0) (2024-01-11)
 
 
