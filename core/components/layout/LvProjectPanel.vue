@@ -9,7 +9,7 @@
 
       <slot />
 
-      <div class="flex-1 bg-gray-200 mx-1 -mt-px mb-1" />
+      <div v-if="leviate.panels.project.isExpanded" class="flex-1 bg-gray-200 mx-1 -mt-px mb-1" />
     </div>
   </LvPanel>
 </template>

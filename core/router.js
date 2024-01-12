@@ -21,6 +21,17 @@ export function createRouter(routes) {
   })
 
   router.beforeEach((to, from) => {
+    const hasPathChanged = to.path !== from.path;
+
+    // Ensure projectTab query param is not lost on navigation
+    // If the path has not changed then the project tab has been toggled
+    if (hasPathChanged) {
+      const { projectTab } = from.query;
+      if (projectTab) {
+        to.query.projectTab = projectTab
+      }
+    }
+
     if (to.meta.before) {
       return to.meta.before(to, from);
     }
