@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.2.2](https://github.com/leviat-tech/leviate/compare/v4.2.1...v4.2.2) (2024-01-12)
+
+
+* project panel minimised styling and preserve projectTab query param ([89934b2](https://github.com/leviat-tech/leviate/commit/89934b2e85b3238390ec28c6ddb919676bda7621))
+
 ## [4.2.1](https://github.com/leviat-tech/leviate/compare/v4.2.0...v4.2.1) (2024-01-11)
 
 
