@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.2.3](https://github.com/leviat-tech/leviate/compare/v4.2.2...v4.2.3) (2024-01-16)
+
+
+* design-tab-bug ([97f65cd](https://github.com/leviat-tech/leviate/commit/97f65cd427ee158edf8f1c87b1697636002425d6))
+
 ## [4.2.2](https://github.com/leviat-tech/leviate/compare/v4.2.1...v4.2.2) (2024-01-12)
 
 
