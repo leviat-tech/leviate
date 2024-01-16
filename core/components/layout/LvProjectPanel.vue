@@ -4,18 +4,21 @@
       <LvProjectToolbar />
 
       <LvProjectPanelItem name="versions">
-        <LvVersions/>
+        <LvVersions />
       </LvProjectPanelItem>
 
       <slot />
 
-      <div v-if="leviate.panels.project.isExpanded" class="flex-1 bg-gray-200 mx-1 -mt-px mb-1" />
+      <div
+        v-if="leviate.panels.project.isExpanded"
+        class="flex-1 bg-gray-200 mx-1 -mt-px mb-1"
+      />
     </div>
   </LvPanel>
 </template>
 
 <script setup>
-import { watch, watchEffect } from 'vue';
+import { watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useLeviateStore } from '@crhio/leviate/store/leviate.js';
 
@@ -27,7 +30,11 @@ import LvProjectToolbar from './project/LvProjectToolbar.vue';
 const route = useRoute();
 const leviate = useLeviateStore();
 
-watch(() => route.query.projectTab, tabName => {
-  leviate.setActiveProjectItem(tabName);
-}, { immediate: true });
+watch(
+  () => route.query.projectTab,
+  (tabName) => {
+    leviate.setActiveProjectItem(!tabName ? 'design' : tabName);
+  },
+  { immediate: true }
+);
 </script>
