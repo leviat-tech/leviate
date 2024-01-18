@@ -59,7 +59,7 @@ export default {
     }
   },
   mounted() {
-    fetch('/updates.json')
+    fetch('updates.json')
     .then(res => res.json())
     .then(json => (this.allReleases = json));
   }

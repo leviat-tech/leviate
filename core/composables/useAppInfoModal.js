@@ -10,7 +10,7 @@ const appInfoModal = new Vue({
     }
   },
   created() {
-    fetch('/manifest.json')
+    fetch('manifest.json')
       .then(res => res.json())
       .then(manifestJson => {
         this.appName = manifestJson.name;

@@ -77,10 +77,10 @@ module.exports = function manifestPlugin(root = process.cwd()) {
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         switch (req.url) {
-          case '/manifest.json':
+          case 'manifest.json':
             const manifest = JSON.stringify(generateManifest(root));
             return res.end(manifest);
-          case '/updates.json':
+          case 'updates.json':
             const updates = JSON.stringify(generateUpdates(root));
             return res.end(updates);
 
