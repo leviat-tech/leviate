@@ -1,6 +1,6 @@
 {
   "name": "@crhio/leviate",
-  "version": "1.3.9",
+  "version": "1.3.10",
   "description": "A project template, core library and CLI for building single page Vue apps",
   "homepage": "https://github.com/leviat-tech/leviate#readme",
   "repository": {
