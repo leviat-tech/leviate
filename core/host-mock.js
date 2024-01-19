@@ -1,6 +1,10 @@
+import axios from 'axios';
 import inject from '@crhio/inject';
 import { useLocalStorage } from './plugins/localStorage';
 
+export const instance = axios.create({
+  baseURL: import.meta.env.VITE_SERVICE_URL + '/api'
+});
 
 export function useMock(mockConfig, locales) {
   let state = mockConfig.state || {};
@@ -13,6 +17,13 @@ export function useMock(mockConfig, locales) {
   }
 
   const mockApi = {
+    makeApiGatewayRequest ({ method, url, data, options }) {
+      const headers = {
+        'x-service-key': import.meta.env.VITE_SERVICE_KEY
+      };
+
+      return instance[method](url, data, { ...options, headers });
+    },
     setUrl() {
     },
     getUrl() {
