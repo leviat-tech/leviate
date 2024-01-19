@@ -45,8 +45,4 @@ export function useApiGateway(serviceName) {
       }
     };
   }, {});
-};
-
-const api = useApiGateway('spa-calc');
-const res = await api.post('/route', data)
-const res2 = await api.post(data);
+}
