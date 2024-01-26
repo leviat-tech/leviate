@@ -42,7 +42,7 @@ export function useMock(mockConfig, locales) {
     async makeApiGatewayRequest({ method, url, data, options }) {
       const fetchUrl = ['/api/service', url].join('/').replace(/\/\//, '/');
 
-      return axios({ url: fetchUrl, method, data, ...options }).catch(e => {
+      const res = await axios({ url: fetchUrl, method, data, ...options }).catch(e => {
         const { data } = e.response;
         const errorJSON = e.toJSON();
         return {
@@ -52,7 +52,9 @@ export function useMock(mockConfig, locales) {
           message: errorJSON.message,
           status: errorJSON.status,
         }
-      })
+      });
+
+      return res.data || res;
     }
   };
 
