@@ -1,10 +1,7 @@
-import axios from 'axios';
 import inject from '@crhio/inject';
 import { useLocalStorage } from './plugins/localStorage';
+import axios from 'axios';
 
-export const instance = axios.create({
-  baseURL: import.meta.env.VITE_SERVICE_URL + '/api'
-});
 
 export function useMock(mockConfig, locales) {
   let state = mockConfig.state || {};
@@ -17,13 +14,6 @@ export function useMock(mockConfig, locales) {
   }
 
   const mockApi = {
-    makeApiGatewayRequest ({ method, url, data, options }) {
-      const headers = {
-        'x-service-key': import.meta.env.VITE_SERVICE_KEY
-      };
-
-      return instance[method](url, data, { ...options, headers });
-    },
     setUrl() {
     },
     getUrl() {
@@ -49,6 +39,21 @@ export function useMock(mockConfig, locales) {
     async setName(name) {
       console.log(name);
     },
+    async makeApiGatewayRequest({ method, url, data, options }) {
+      const fetchUrl = ['/api/service', url].join('/').replace(/\/\//, '/');
+
+      return axios({ url: fetchUrl, method, data, ...options }).catch(e => {
+        const { data } = e.response;
+        const errorJSON = e.toJSON();
+        return {
+          isError: true,
+          data,
+          code: errorJSON.code,
+          message: errorJSON.message,
+          status: errorJSON.status,
+        }
+      })
+    }
   };
 
   if (!inject.hosted) {

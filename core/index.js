@@ -4,7 +4,7 @@ import Concrete from '@crhio/concrete';
 import search from './directives/v-search';
 import find from './directives/v-find';
 import HostPlugin, { hostIsConnected, useHost, useLocalize, useMeta } from './plugins/host';
-import { useApiGateway } from './composables/use-api-gateway';
+import { useApiGateway } from './composables/useApiGateway';
 import { createStore, initializeStore, useStore } from './store';
 import './assets/styles/index.scss';
 import { createRouter } from './router.js';
