@@ -54,7 +54,7 @@ export function useMock(mockConfig, locales) {
         }
       });
 
-      return res.data || res;
+      return (res.isError) ? res : res.data;
     }
   };
 
