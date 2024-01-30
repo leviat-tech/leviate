@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.2.5](https://github.com/leviat-tech/leviate/compare/v4.2.4...v4.2.5) (2024-01-30)
+
+
+* reload on config change. local storage trap ([d838953](https://github.com/leviat-tech/leviate/commit/d838953ff6c9793b55a20ec6b50cdf6c12ae84a3))
+
 ## [4.2.4](https://github.com/leviat-tech/leviate/compare/v4.2.3...v4.2.4) (2024-01-16)
 
 
