@@ -1,18 +1,16 @@
 import inject from '@crhio/inject';
 import logger from './extensions/logger.js';
-import { watch} from 'vue';
+import { watch } from 'vue';
 import useVersions, { activeVersionId } from './composables/useVersions';
 import { cloneDeep } from 'lodash-es';
-
 
 const data = {
   meta: {},
   configuration: {},
-  dictionary: {}
+  dictionary: {},
 };
 
 export function useMock() {
-
   const mockApi = {
     setUrl() {},
     getUrl: () => window.location.hash.replace(/^#/, ''),
@@ -34,10 +32,12 @@ export function useMock() {
       syncVersionsData();
     },
     setName: async (name, versionId) => {
-      const version =  useVersions().getVersionById(versionId);
+      const version = useVersions().getVersionById(versionId);
 
       if (!version) {
-        logger.error(`Error setting name. Could not find version with id: ${versionId}`);
+        logger.error(
+          `Error setting name. Could not find version with id: ${versionId}`
+        );
         return;
       }
 
@@ -45,12 +45,12 @@ export function useMock() {
 
       syncVersionsData();
     },
-    setMeta(newMeta){
+    setMeta(newMeta) {
       data.meta = Object.assign(data.meta, newMeta);
     },
 
     getConfiguration() {
-        return data.configuration;
+      return data.configuration;
     },
 
     async getVersions() {
@@ -58,7 +58,7 @@ export function useMock() {
       return getStoredData()?.versions || [];
     },
 
-    async createVersion (name, fromId) {
+    async createVersion(name, fromId) {
       const state = cloneDeep(getVersionById(fromId).state);
 
       const { id } = mockApi.getConfiguration();
@@ -72,15 +72,17 @@ export function useMock() {
         state,
       };
 
-      modifyVersions(versions => [...versions, newVersion]);
+      modifyVersions((versions) => [...versions, newVersion]);
 
       logger.log(`Configuration '${name}' saved`);
 
       return newVersion;
     },
 
-    deleteVersion: async(id) => {
-      modifyVersions(versions => versions.filter(version => version.id !== id));
+    deleteVersion: async (id) => {
+      modifyVersions((versions) =>
+        versions.filter((version) => version.id !== id)
+      );
     },
   };
 
@@ -98,19 +100,23 @@ export function useMock() {
     const storedData = getStoredData();
 
     if (storedData && storedData.versions?.length > 0) {
-      const activeVersion = storedData.versions.find(version => version.id === storedData.activeVersionId);
+      const activeVersion = storedData.versions.find(
+        (version) => version.id === storedData.activeVersionId
+      );
       data.configuration.state = activeVersion?.state || state;
-      activeVersionId.value = activeVersion ? storedData.activeVersionId : configuration.id;
+      activeVersionId.value = activeVersion
+        ? storedData.activeVersionId
+        : configuration.id;
     } else {
-      const rootVersionId = configuration.id
+      const rootVersionId = configuration.id;
       const rootVersion = {
         ...data.configuration,
         createdAt: new Date().toISOString(),
-      }
+      };
 
       saveDataToLocalStorage({
         versions: [rootVersion],
-        activeVersionId: rootVersionId
+        activeVersionId: rootVersionId,
       });
 
       activeVersionId.value = rootVersionId;
@@ -133,7 +139,9 @@ export function useMock() {
    * @returns {string}
    */
   function getStorageKey() {
-    const appNameSlug = data.meta.configurator.name.replace(/\s/g, '-').toLowerCase();
+    const appNameSlug = data.meta.configurator.name
+      .replace(/\s/g, '-')
+      .toLowerCase();
     return ['leviat', appNameSlug].join(':');
   }
 
@@ -147,7 +155,7 @@ export function useMock() {
 
     try {
       return JSON.parse(storedJSON);
-    } catch(e) {
+    } catch (e) {
       logger.log(`Cannot get item: '${key}'`, e);
     }
   }
@@ -155,7 +163,7 @@ export function useMock() {
   function getVersionById(id) {
     const { versions } = getStoredData();
 
-    return versions.find(version => version.id === id);
+    return versions.find((version) => version.id === id);
   }
 
   /**
@@ -176,7 +184,7 @@ export function useMock() {
     const { versions, activeVersionId } = useVersions();
     const dataToStore = {
       activeVersionId: activeVersionId.value,
-      versions: versions.value
+      versions: versions.value,
     };
 
     saveDataToLocalStorage(dataToStore);
@@ -190,7 +198,13 @@ export function useMock() {
     const key = getStorageKey();
     const prevData = getStoredData() || {};
     const dataToStore = Object.assign({}, prevData, data);
-    localStorage.setItem(key, JSON.stringify(dataToStore));
+    try {
+      localStorage.setItem(key, JSON.stringify(dataToStore));
+    } catch (error) {
+      logger.error(
+        `UNABLE TO PERSIST TO LOCAL STORAGE, REASON: ${error.message}`
+      );
+    }
   }
 
   /**
@@ -207,5 +221,5 @@ export function useMock() {
   return {
     initialize,
     clearStorage,
-  }
+  };
 }
