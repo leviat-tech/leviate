@@ -24,6 +24,7 @@ function loadVersion(id) {
   const newState = getVersionById(id).state;
   useRootStore().replaceState(newState);
   activeVersionId.value = id;
+  window.location.reload();
 }
 
 async function fetchVersions() {
