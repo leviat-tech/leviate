@@ -49,6 +49,24 @@ export function useMock() {
       data.meta = Object.assign(data.meta, newMeta);
     },
 
+    async makeApiGatewayRequest({ method, url, data, options }) {
+      const fetchUrl = ['/api/service', url].join('/').replace(/\/\//, '/');
+
+      const res = await axios({ url: fetchUrl, method, data, ...options }).catch(e => {
+        const { data } = e.response;
+        const errorJSON = e.toJSON();
+        return {
+          isError: true,
+          data,
+          code: errorJSON.code,
+          message: errorJSON.message,
+          status: errorJSON.status,
+        }
+      });
+
+      return (res.isError) ? res : res.data;
+    },
+
     getConfiguration() {
       return data.configuration;
     },

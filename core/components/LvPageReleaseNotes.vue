@@ -67,6 +67,6 @@ async function showMore() {
   el.value.parentNode.scrollTo({ top: newItemHeader.offsetTop, behavior: 'smooth' });
 }
 
-fetch('/updates.json').then(res => res.json()).then(json => allReleases.value = json);
+fetch('updates.json').then(res => res.json()).then(json => allReleases.value = json);
 
 </script>
