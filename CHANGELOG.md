@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.0](https://github.com/leviat-tech/leviate/compare/v4.2.5...v5.0.0) (2024-02-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* update to enable design studio integration
+
+* **deps:** bump postcss from 8.4.24 to 8.4.31 ([d490d36](https://github.com/leviat-tech/leviate/commit/d490d36a420abd40ce806ebca415c7446e5570f9))
+* update to enable design studio integration ([6d05d10](https://github.com/leviat-tech/leviate/commit/6d05d10a516d60553bb001f49b454f9063aa2822))
+
 ## [4.2.5](https://github.com/leviat-tech/leviate/compare/v4.2.4...v4.2.5) (2024-01-30)
 
 
