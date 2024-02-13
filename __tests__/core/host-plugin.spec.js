@@ -1,7 +1,7 @@
 import HostPlugin, { api, useHost } from '@/core/plugins/host';
 import { useMock } from '@/core/host-mock';
 
-useMock(null, {});
+useMock({});
 
 function installHost(endpointBase) {
   HostPlugin.install({ prototype: {} }, {

@@ -1,4 +1,4 @@
-import BaseModel from 'leviate/BaseModel';
+import BaseModel from '@crhio/leviate/BaseModel';
 import schema from '@/schema/sample-schema';
 
 

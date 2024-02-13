@@ -91,11 +91,11 @@
 
 <script>
 import { sync, get, call } from 'vuex-pathify';
-import LayerGroupIcon from 'leviate/assets/icons/layer-group.svg';
-import PointerPlusIcon from 'leviate/assets/icons/pointer-plus.svg';
-import PointerMinusIcon from 'leviate/assets/icons/pointer-minus.svg';
-import ZoomToFitIcon from 'leviate/assets/icons/zoom-to-fit.svg';
-import SearchPlusIcon from 'leviate/assets/icons/search-plus.svg';
+import LayerGroupIcon from '@crhio/leviate/assets/icons/layer-group.svg';
+import PointerPlusIcon from '@crhio/leviate/assets/icons/pointer-plus.svg';
+import PointerMinusIcon from '@crhio/leviate/assets/icons/pointer-minus.svg';
+import ZoomToFitIcon from '@crhio/leviate/assets/icons/zoom-to-fit.svg';
+import SearchPlusIcon from '@crhio/leviate/assets/icons/search-plus.svg';
 
 export default {
   name: 'viewport-toolbar',

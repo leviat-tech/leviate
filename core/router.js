@@ -1,11 +1,19 @@
 import VueRouter from 'vue-router';
 import { useHost } from './plugins/host';
+import LvPageReleaseNotes from './components/LvPageReleaseNotes.vue';
 
 export function createRouter(_Vue, routes) {
   _Vue.use(VueRouter);
 
   const router = new VueRouter({
-    routes,
+    routes: [
+      {
+        path: '/release-notes',
+        component: LvPageReleaseNotes,
+      },
+      ...routes,
+
+    ],
   });
 
   router.beforeEach((to, from, next) => {

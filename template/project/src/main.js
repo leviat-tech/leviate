@@ -1,4 +1,4 @@
-import { createApp } from 'leviate';
+import { createApp } from '@crhio/leviate';
 
 // Project imports
 import defaultConfig from './defaultConfig';

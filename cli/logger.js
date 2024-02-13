@@ -1,12 +1,10 @@
-import { white, red, yellow } from 'ansi-colors'
+const { white, red, yellow } = require('ansi-colors');
 
-const prefix = 'leviate: ';
 const log = (msg, color = white, level = 'info') => {
   console.log(color(`leviate [${level}]: ${msg}`));
 }
 
-export default {
-
+module.exports = {
   error(msg) {
     log(msg, red, 'error');
   },

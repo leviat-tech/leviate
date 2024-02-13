@@ -1,19 +1,23 @@
 <style lang="scss">
-  html,
-  body {
-    height: 100%;
-    margin: 0;
-  }
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
 </style>
 
 <template>
-  <router-view></router-view>
+  <span>
+    <router-view/>
+    <lv-modal-app-info/>
+  </span>
 </template>
 
 <script>
-
+import LvModalAppInfo from './components/LvModalAppInfo.vue';
 
 export default {
   name: 'App',
+  components: { LvModalAppInfo },
 };
 </script>

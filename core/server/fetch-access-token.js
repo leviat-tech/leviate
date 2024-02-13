@@ -21,9 +21,7 @@ function createFetchProxyAccessTokenPlugin() {
   return {
     name: 'createFetchAccessToken',
     async config(config, env) {
-      if (env.mode === 'development') {
-        process.env.VITE_PROXY_ACCESS_TOKEN = await fetchProxyAccessToken();
-      }
+      process.env.VITE_PROXY_ACCESS_TOKEN = await fetchProxyAccessToken();
     },
   };
 }

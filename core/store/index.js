@@ -1,7 +1,7 @@
 import Vuex from 'vuex';
 import pathify, { make } from 'vuex-pathify';
 import VuexORM from '@vuex-orm/core';
-import { isEmpty, cloneDeep } from 'lodash';
+import { isEmpty } from 'lodash-es';
 import Migration from '../extensions/migration';
 import revision from './plugins/revision';
 import transaction from './transaction';
