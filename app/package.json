@@ -21,11 +21,11 @@
     "husky": "^8.0.1",
     "jest": "^28.0.1",
     "jest-environment-jsdom": "^28.0.2",
-    "postcss": "^8.4.31",
+    "postcss": "^8.4.35",
     "sass": "^1.54.7",
     "standard-version": "^9.3.2",
     "tailwindcss": "^3.1.8",
-    "vite": "^3.2.8",
+    "vite": "^5.1.5",
     "vite-svg-loader": "^3.5.0"
   },
   "dependencies": {
