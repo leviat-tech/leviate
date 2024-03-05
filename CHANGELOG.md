@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.1](https://github.com/leviat-tech/leviate/compare/v5.0.0...v5.0.1) (2024-03-05)
+
+
+* add missing axios import and update useApiGateway tests ([2a1c2f6](https://github.com/leviat-tech/leviate/commit/2a1c2f6c103f7b280fff4f90291381a777998acc))
+* **deps-dev:** bump @babel/traverse from 7.18.13 to 7.24.0 in /app ([4177429](https://github.com/leviat-tech/leviate/commit/4177429f0cb1cdd8f085eacfc8efe323c472e853))
+* **deps-dev:** bump the npm_and_yarn group group ([eaac052](https://github.com/leviat-tech/leviate/commit/eaac0525aa497ee9a24185502003846aede154c6))
+* **deps:** bump the npm_and_yarn group across 4 directories with 4 updates ([65ca69b](https://github.com/leviat-tech/leviate/commit/65ca69bced64ed51b3485f8e5480fb5d17898542))
+* **deps:** bump the npm_and_yarn group across 4 directories with 7 updates ([4c9d34e](https://github.com/leviat-tech/leviate/commit/4c9d34e727b0bcd1844ea86f065b75e68c56c1ee))
+* **deps:** bump the npm_and_yarn group across 4 directories with 8 updates ([96cb9ad](https://github.com/leviat-tech/leviate/commit/96cb9ada9bda1dd2fc171ba5aacc368f8026649a))
+
 ## [5.0.0](https://github.com/leviat-tech/leviate/compare/v4.2.5...v5.0.0) (2024-02-13)
 
 
