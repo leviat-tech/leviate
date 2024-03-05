@@ -26,7 +26,6 @@ class ApiGatewayRequestError extends Error {
  * }}
  */
 export function useApiGateway(servicePath) {
-  const rxLeadingTrailingSlash = /^\/|\/$/g
   const methods = ['get', 'put', 'post', 'delete'];
 
   return methods.reduce((api, method) => {
@@ -34,21 +33,21 @@ export function useApiGateway(servicePath) {
       ...api,
       [method]: async (...args) => {
         const specifyPath = (typeof args[0] === 'string');
-        // Remove any leading and training slashes from the base path
-        let fullPath = servicePath.replace(rxLeadingTrailingSlash, '');
+        let fullPath = servicePath;
         let [data, options] = args;
 
         if (specifyPath) {
-          // Remove leading and training slashes from specified path and encode remaining slashes
-          const specifiedPath = args[0]//.replace(rxLeadingTrailingSlash, '');
+          const specifiedPath = args[0];
           fullPath = [servicePath, specifiedPath].join('/');
 
           data = args[1];
           options = args[2];
         }
 
+        const rxDoubleSlash = /\/+/g
+        const url = fullPath.replace(rxDoubleSlash, '/')
         const { makeApiGatewayRequest } = useHost();
-        const res = await makeApiGatewayRequest({ method, url: fullPath, data, options });
+        const res = await makeApiGatewayRequest({ method, url, data, options });
 
         if (res.isError) throw new ApiGatewayRequestError(res);
 
