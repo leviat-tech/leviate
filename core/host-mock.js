@@ -3,6 +3,8 @@ import logger from './extensions/logger.js';
 import { watch } from 'vue';
 import useVersions, { activeVersionId } from './composables/useVersions';
 import { cloneDeep } from 'lodash-es';
+import axios from 'axios';
+
 
 const data = {
   meta: {},

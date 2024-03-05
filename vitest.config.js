@@ -13,6 +13,7 @@ class TestSequencer {
 export default defineConfig({
   resolve: {
     alias: {
+      '@crhio/leviate': path.resolve(__dirname, 'core'),
       '@': path.resolve(__dirname),
       '~': path.resolve(__dirname, 'template/project'),
     },
