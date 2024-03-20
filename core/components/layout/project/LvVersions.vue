@@ -49,7 +49,7 @@ import { markRaw, nextTick, ref } from 'vue';
 import useVersions from '@crhio/leviate/composables/useVersions';
 import LvEditableDiv from '@crhio/leviate/components/ui/LvEditableDiv.vue';
 
-const isProduction = import.meta.env === 'production';
+const isProduction = import.meta.env.PROD && !window.location.host.startsWith('test');
 const devToolsComponent = ref();
 
 if (!isProduction) {
