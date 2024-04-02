@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.3](https://github.com/leviat-tech/leviate/compare/v5.0.2...v5.0.3) (2024-04-02)
+
+
+* set min width on LvPanel ([#132](https://github.com/leviat-tech/leviate/issues/132)) ([300a4f3](https://github.com/leviat-tech/leviate/commit/300a4f35465147eac7cd011903a682c41d8b7a67))
+* set min width on LvProjectPanel ([f72830c](https://github.com/leviat-tech/leviate/commit/f72830c3801dbc3182db3dd2d66c0439cc09fa25))
+
 ## [5.0.2](https://github.com/leviat-tech/leviate/compare/v5.0.1...v5.0.2) (2024-03-20)
 
 
