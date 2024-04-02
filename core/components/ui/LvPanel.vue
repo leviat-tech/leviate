@@ -2,7 +2,7 @@
   <div class="bg-white h-full flex flex-col justify-between overflow-hidden"
        :data-cy="`panel__${panelId}`"
        :class="isExpanded || 'flex-none'"
-       :style="`min-width:${widthValue}px`">
+       :style="`width:${widthValue}px`">
 
     <!-- Panel content -->
     <div class="flex-1 overflow-hidden">
