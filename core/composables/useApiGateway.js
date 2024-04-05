@@ -16,13 +16,12 @@ class ApiGatewayRequestError extends Error {
 }
 
 /**
- *
  * @param servicePath
  * @return {{
- *   get: (path: string, [options: object]) => Promise<{data: object}>,
- *   put: (path: string, data: any, [options: object]) => Promise<{data: object}>,
- *   post: (path: string, data: any, [options: object]) => Promise<{data: object}>,
- *   delete: (path: string, [options: object]) => Promise<{data: object}>,
+ *   get: (path: string, options?: object) => Promise<*>,
+ *   put: (pathOrData: string | object, dataOrOptions: any, object?: options) => Promise<*>,
+ *   post: (pathOrData: string | object, dataOrOptions: any, object?: options) => Promise<*>,
+ *   delete: (path: string, options: object) => Promise<*>,
  * }}
  */
 export function useApiGateway(servicePath) {
@@ -34,16 +33,19 @@ export function useApiGateway(servicePath) {
       [method]: async (...args) => {
         const specifyPath = (typeof args[0] === 'string');
         let fullPath = servicePath;
-        let [data, options] = args;
+        let [unsanitizedData, options] = args;
 
         if (specifyPath) {
           const specifiedPath = args[0];
           fullPath = [servicePath, specifiedPath].join('/');
 
-          data = args[1];
+          unsanitizedData = args[1];
           options = args[2];
         }
 
+        // If req data contains Proxy objects then the postmessage handler will fail
+        // Solve this by ensuring that data is a POJO before POSTing
+        const data = unsanitizedData ? JSON.parse(JSON.stringify(unsanitizedData)) : undefined;
         const rxDoubleSlash = /\/+/g
         const url = fullPath.replace(rxDoubleSlash, '/')
         const { makeApiGatewayRequest } = useHost();

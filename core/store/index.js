@@ -24,6 +24,9 @@ function transact(cb) {
 }
 
 const initialState = {
+  // used to determine whether realtime updates are external or a downstream reflection of local changes
+  sessionId: null,
+  // used to determine which migrations to perform
   serialization_version: null,
   transactionDepth: 0,
 };
