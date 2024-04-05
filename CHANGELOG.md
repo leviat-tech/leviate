@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.1.0](https://github.com/leviat-tech/leviate/compare/v5.0.3...v5.1.0) (2024-04-05)
+
+
+* add usePdfGenerator and useFile composables ([0ae0fc7](https://github.com/leviat-tech/leviate/commit/0ae0fc7d6002824fcd12b0ea28071a3bccb4034c))
+
 ## [5.0.3](https://github.com/leviat-tech/leviate/compare/v5.0.2...v5.0.3) (2024-04-02)
 
 
