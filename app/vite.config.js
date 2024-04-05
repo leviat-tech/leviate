@@ -38,11 +38,7 @@ export default defineConfig({
       // 'pinia',
       // 'vue',
       // 'vue-router',
-    ],
-    include: [
-      '@crhio/leviate > axios',
-      'axios/lib/adapters/http',
-    ],
+    ]
   },
 
   plugins: [
