@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.1.1](https://github.com/leviat-tech/leviate/compare/v5.1.0...v5.1.1) (2024-04-10)
+
+
+* align mock config and LvProjectInfo.vue with LDS data structure ([#138](https://github.com/leviat-tech/leviate/issues/138)) ([b79b2a4](https://github.com/leviat-tech/leviate/commit/b79b2a4fd1adb7f33cec29a9dfb3d45cee3d882f))
+
 ## [5.1.0](https://github.com/leviat-tech/leviate/compare/v5.0.3...v5.1.0) (2024-04-05)
 
 
