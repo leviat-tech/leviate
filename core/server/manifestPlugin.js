@@ -68,7 +68,8 @@ module.exports = function manifestPlugin(root = process.cwd()) {
     name: 'manifest',
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
-        switch (req.url) {
+        const filename = req.url.split('/').pop();
+        switch (filename) {
           case 'manifest.json':
             const manifest = JSON.stringify(generateManifest(root));
             return res.end(manifest);

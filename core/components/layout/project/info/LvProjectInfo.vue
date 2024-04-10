@@ -13,7 +13,7 @@
 
     <LvAddress
       :data="project.address"
-      :fields="['name', 'address', 'city', 'postalCode', 'country']"
+      :fields="['name', 'street', 'city', 'postcode', 'country']"
       :bold-fields="['name']"
     />
 

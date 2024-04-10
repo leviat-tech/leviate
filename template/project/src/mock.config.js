@@ -29,15 +29,12 @@ export default {
       name: 'My Project',
       number: '1234',
       designer: 'John Doe',
-      account: {
-        name: 'Fake Glazing Company',
-      },
       address: {
-        address: '1234 Address Blvd',
+        street: '1234 Address Blvd',
         city: 'New York',
         country: 'USA',
         name: 'Shop Address',
-        postalCode: '12345',
+        postcode: '12345',
       },
       assignments: [
         { id: 1, userId: 3 },
