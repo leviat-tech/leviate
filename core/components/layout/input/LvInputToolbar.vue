@@ -38,23 +38,34 @@ const props = defineProps({
   tabs: {
     type: Array,
     default: ['input'],
+  },
+  panel: {
+    type: String,
+    default: 'input'
   }
 })
 
 const store = useLeviateStore();
+const activePanel = props.panel;
 
-const isExpanded = computed(() => store.panels.input.isExpanded);
-const activeTab = computed(() => store.activeInputTab);
+const isExpanded = computed(() => store.panels[activePanel].isExpanded);
+const activeTab = computed(() => store.panels[activePanel].activeTab);
 
 const clickTab = (tabId) => {
-  store.panels.input.activeTab = tabId;
+  store.panels[activePanel].activeTab = tabId;
 
   if (!store.panels.input.isExpanded) {
-    store.panels.input.isExpanded = true;
+    store.panels[activePanel].isExpanded = true;
   }
 
-  const query = { ...route.query, inputTab: tabId }
-  router.push({ query })
+  const query = { ...route.query };
+
+  if (activePanel === 'input') {
+    query.inputTab = tabId;
+  } else {
+    query.resultTab = tabId;
+  }
+  router.push({ query });
 }
 
 if (props.tabs.length > 0 && !props.tabs.includes(activeTab.value)) {
