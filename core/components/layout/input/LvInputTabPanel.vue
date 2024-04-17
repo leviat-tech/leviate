@@ -1,5 +1,5 @@
 <template>
-  <div v-if="store.activeInputTab === tabId">
+  <div v-if="store.panels[panel].activeTab === tabId">
     <slot />
   </div>
 </template>
@@ -9,6 +9,10 @@ import { useLeviateStore } from '@crhio/leviate/store/leviate.js';
 
 const props = defineProps({
   tabId: String,
+  panel: {
+    type: String,
+    default: 'input'
+  }
 });
 
 const store = useLeviateStore();
