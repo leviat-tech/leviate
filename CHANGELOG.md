@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.2.0](https://github.com/leviat-tech/leviate/compare/v5.1.1...v5.2.0) (2024-04-18)
+
+
+* configure tabs for results panel ([cc436b1](https://github.com/leviat-tech/leviate/commit/cc436b13e5dc515ee1a4ea61381ecc53fa92ea2a))
+
 ## [5.1.1](https://github.com/leviat-tech/leviate/compare/v5.1.0...v5.1.1) (2024-04-10)
 
 
