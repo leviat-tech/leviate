@@ -21,10 +21,9 @@
 
       <span class="pl-3"
         >{{ $l('warning_app_mismatch') }}
-        <RouterLink to="/release-notes" class="font-bold">
-          {{ $l('release_notes') }}
-        </RouterLink>
-        .</span
+        <RouterLink to="/release-notes" class="font-bold lowercase">
+          {{ $l('release_notes') }} </RouterLink
+        >.</span
       >
     </div>
     <div class="max-h-full flex flex-grow divide-x">

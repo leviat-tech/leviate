@@ -18,7 +18,7 @@ function localize(phrase, options = {}) {
     if (fallback) {
       translation = fallback;
       console.error(
-        `${error}, English fallback phrase "${fallback}" used instead.`
+        `${error}, English fallback phrase: "${fallback}" used instead`
       );
     } else {
       console.error(error);
