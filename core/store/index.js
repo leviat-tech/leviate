@@ -1,4 +1,5 @@
 import { defineStore, createPinia } from 'pinia';
+import { ref } from 'vue';
 import { normie } from '@crhio/normie';
 import { isEmpty, get, last, range, each } from 'lodash-es';
 import Migration from '../extensions/migration';
@@ -6,7 +7,7 @@ import revision from './plugins/revision';
 import BaseModel from '../BaseModel';
 import { useLocalize } from '../plugins/localize';
 import logger from '../extensions/logger.js';
-
+import useAppInfo from '../composables/useAppInfo.js';
 
 class TransactionError extends Error {
   constructor() {
@@ -29,6 +30,7 @@ const initialState = {
   // used to determine which migrations to perform
   serialization_version: null,
   transactionDepth: 0,
+  appVersion: null,
 };
 
 const initialActions = {
@@ -46,7 +48,7 @@ const initialActions = {
 
       return res;
     } catch (e) {
-      this._onTransactionError(e)
+      this._onTransactionError(e);
       return false;
     }
   },
@@ -56,9 +58,11 @@ const initialActions = {
       logger.error(e);
     }
 
-    if (this.transactionDepth > 1) { // if we're in a nested transaction, propagate an error;
+    if (this.transactionDepth > 1) {
+      // if we're in a nested transaction, propagate an error;
       throw new TransactionError();
-    } else { // otherwise, undo to the last committed state;
+    } else {
+      // otherwise, undo to the last committed state;
       this.revision.undo();
       this.transactionDepth = 0;
     }
@@ -90,9 +94,9 @@ const initialActions = {
 
       const useModule = this.modules[key];
       if (useModule) {
-        useModule().$patch(newState[key])
+        useModule().$patch(newState[key]);
       } else {
-        logger.error(`Store module ${key} does not exist`)
+        logger.error(`Store module ${key} does not exist`);
       }
     });
 
@@ -102,7 +106,7 @@ const initialActions = {
   toJSON() {
     const { ...state } = this.$state;
 
-    Object.keys(this.modules).forEach(id => {
+    Object.keys(this.modules).forEach((id) => {
       state[id] = this.modules[id]().$state;
     });
 
@@ -111,10 +115,9 @@ const initialActions = {
 };
 
 function getEntryFromId(state) {
-
   const { $L } = useLocalize();
 
-  return function(id) {
+  return function (id) {
     const [entityId, path] = id.split(':');
     const instance = this.getEntityById(entityId);
 
@@ -122,12 +125,16 @@ function getEntryFromId(state) {
       .filter((i) => path[i] === '.')
       .map((i) => path.slice(0, i));
 
-    const entitySubpaths = allSubpaths.filter((subpath) => get(instance, subpath) instanceof BaseModel);
+    const entitySubpaths = allSubpaths.filter(
+      (subpath) => get(instance, subpath) instanceof BaseModel
+    );
     const entityPath = entitySubpaths.map((subpath) => get(instance, subpath));
     const displayPath = entityPath.map((entity) => entity.name).join(' > ');
 
     const entity = last(entityPath) || instance;
-    const termPath = entitySubpaths ? path.replace(last(entitySubpaths), '') : path;
+    const termPath = entitySubpaths
+      ? path.replace(last(entitySubpaths), '')
+      : path;
 
     let term;
     if (get(instance, path) instanceof BaseModel) {
@@ -137,11 +144,11 @@ function getEntryFromId(state) {
       term = $L(term, { capitalize: true });
     }
     return displayPath ? `${term} (${displayPath})` : term;
-  }
+  };
 }
 
 function generateCurrentGetter(router) {
-  return function(state) {
+  return function (state) {
     const { entity, id } = router.currentRoute.value.params;
 
     if (!entity || !id) return null;
@@ -153,13 +160,26 @@ function generateCurrentGetter(router) {
 function getModel(state) {
   return (entityName) => {
     return state.modules?.entities?.().models[entityName];
+  };
+}
+
+async function detectAppVersionMismatch(state) {
+  const rootStore = useRootStore();
+  const appInfo = useAppInfo();
+
+  const manifest = await appInfo.fetchManifest();
+
+  if (manifest.version && !rootStore.appVersion) {
+    rootStore.appVersion = manifest.version;
   }
+
+  return manifest.version !== rootStore.appVersion;
 }
 
 function getEntity(state) {
   return (entityName, entityId) => {
     return getModel(state)(entityName)?.find(entityId);
-  }
+  };
 }
 
 function idToEntityName(state) {
@@ -168,17 +188,17 @@ function idToEntityName(state) {
   each(state.modules.entities?.().$state, ({ dataById }, entityName) => {
     Object.keys(dataById).forEach((key) => {
       map[key] = entityName;
-    })
+    });
   });
 
   return map;
 }
 
 function getEntityById(state) {
-  return function(id) {
+  return function (id) {
     const entityName = this.idToEntityName[id];
     return this.getEntity(entityName, id);
-  }
+  };
 }
 
 function getStoreConfig(storeConfig, router) {
@@ -193,19 +213,21 @@ function getStoreConfig(storeConfig, router) {
     getModel,
     getEntity,
     currentEntity,
-    ...storeConfig.getters
+    detectAppVersionMismatch,
+    ...storeConfig.getters,
   };
 
   return {
     state,
     actions,
     getters,
-    modules
+    modules,
   };
 }
 
 // function to initialize store given initial state
-function initializeStore(initialState, migrations, models) { // eslint-disable-line
+async function initializeStore(initialState, migrations, models) {
+  // eslint-disable-line
   const rootStore = useRootStore();
 
   // Register user modules and normie entities module in the root store
@@ -213,20 +235,20 @@ function initializeStore(initialState, migrations, models) { // eslint-disable-l
   const modules = storeConfig.modules.concat(useEntityStore);
   modules.forEach(rootStore._registerModule);
 
-  performMigration(rootStore, initialState, migrations)
+  performMigration(rootStore, initialState, migrations);
 
   // Initialize each module after migration has taken place
-  Object.values(rootStore.modules).forEach(useStore => {
+  Object.values(rootStore.modules).forEach((useStore) => {
     const store = useStore();
-    if (
-      useStore.$id !== 'entities' &&
-      typeof store.initialize === 'function'
-    ) store.initialize();
-  })
+    if (useStore.$id !== 'entities' && typeof store.initialize === 'function')
+      store.initialize();
+  });
 
   rootStore.$patch({ transactionDepth: 0 });
 
   if (typeof rootStore.initialize === 'function') rootStore.initialize();
+
+  await detectAppVersionMismatch();
 }
 
 function performMigration(rootStore, initialState, migrations) {
@@ -259,10 +281,4 @@ function createStore(projectStoreConfig, router) {
   return pinia;
 }
 
-export {
-  transact,
-  getStoreConfig,
-  useRootStore,
-  createStore,
-  initializeStore,
-}
+export { transact, getStoreConfig, useRootStore, createStore, initializeStore };
