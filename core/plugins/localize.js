@@ -14,7 +14,7 @@ function localize(phrase, options = {}) {
 
   if (translation === undefined) {
     const fallback = fallbackPhraseDictionary[phrase];
-    let error = `Unable to translate "${phrase}"`;
+    let error = `Unable to translate phrase: "${phrase}"`;
     if (fallback) {
       translation = fallback;
       console.error(
