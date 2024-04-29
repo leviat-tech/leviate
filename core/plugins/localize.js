@@ -1,28 +1,37 @@
 import { get } from 'lodash-es';
 import { ref } from 'vue';
 import logger from '../extensions/logger';
-
+import { fallbackPhraseDictionary } from '../fallbackPhraseDictionary';
 
 const locale = ref('en');
-const dictionary = {};
+let dictionary = {};
 let availableLanguages = [];
 
 function localize(phrase, options = {}) {
-  const capitalize = string => string.replace(/(^|\s)\S/g, l => l.toUpperCase());
-  const translation = get(dictionary, [locale.value, phrase])
-    || options.default
+  const capitalize = (string) =>
+    string.replace(/(^|\s)\S/g, (l) => l.toUpperCase());
+  let translation = get(dictionary, [locale.value, phrase]) || options.default;
 
   if (translation === undefined) {
-    console.error(`Unable to translate ${phrase}`);
-    return `{${phrase}}`;
+    const fallback = fallbackPhraseDictionary[phrase];
+    let error = `Unable to translate phrase: "${phrase}"`;
+    if (fallback) {
+      translation = fallback;
+      console.error(
+        `${error}, English fallback phrase: "${fallback}" used instead`
+      );
+    } else {
+      console.error(error);
+      return `{${phrase}}`;
+    }
   }
-  return options.capitalize
-    ? capitalize(translation)
-    : translation;
+
+  return options.capitalize ? capitalize(translation) : translation;
 }
 
-const $l = (phrase, options) => localize(phrase, options)
-const $L = (phrase, options) => localize(phrase, { ...options, capitalize: true })
+const $l = (phrase, options) => localize(phrase, options);
+const $L = (phrase, options) =>
+  localize(phrase, { ...options, capitalize: true });
 
 export const useLocalize = () => {
   return {
@@ -38,16 +47,18 @@ export const useLocalize = () => {
     locale,
     $l,
     $L,
-  }
-}
+  };
+};
 
 export default {
   install(app, { locales }) {
     Object.assign(dictionary, locales);
     availableLanguages = Object.keys(dictionary);
 
-    // TODO: merge app locales with global translations
-
-    Object.assign(app.config.globalProperties, { $availableLanguages: availableLanguages, $l, $L });
-  }
-}
+    Object.assign(app.config.globalProperties, {
+      $availableLanguages: availableLanguages,
+      $l,
+      $L,
+    });
+  },
+};
