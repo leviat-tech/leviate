@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.3.1](https://github.com/leviat-tech/leviate/compare/v5.3.0...v5.3.1) (2024-05-07)
+
+
+* add layer toggle ([#144](https://github.com/leviat-tech/leviate/issues/144)) ([66e352f](https://github.com/leviat-tech/leviate/commit/66e352f7e2dded03da1f7d330af1133c6aa48b47))
+
 ## [5.3.0](https://github.com/leviat-tech/leviate/compare/v5.2.0...v5.3.0) (2024-04-29)
 
 
