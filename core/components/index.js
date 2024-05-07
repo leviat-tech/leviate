@@ -11,6 +11,8 @@ import LvValidationPane from './layout/LvValidationPane.vue';
 
 import LvLogo from './ui/LvLogo.vue';
 
+import LvLayersToggle from './viewport/LvLayersToggle.vue';
+
 export {
   LvLayout,
   LvProjectPanel,
@@ -24,4 +26,6 @@ export {
   LvValidationPane,
 
   LvLogo,
+
+  LvLayersToggle
 }
