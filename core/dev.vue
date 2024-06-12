@@ -1,24 +1,4 @@
 <style scoped lang="scss">
-.host-bar {
-  position: relative;
-  padding: 30px;
-  color: white;
-  background: #3c3f48;
-  width: 256px;
-}
-.host-nav {
-  color: #94979e;
-  background: #f5f5f5;
-  border-bottom: 1px solid #dfe0e3;
-  height: 48px;
-  padding: 12px;
-  z-index: 10;
-}
-.host-container {
-  overflow-y: auto;
-  padding-top: 48px;
-  margin-top: -48px;
-}
 
 .dev__ui {
   position: absolute;
@@ -45,10 +25,9 @@
 
 <template>
   <!-- provide a little host like context -->
-  <div class="h-full flex flex-row">
-    <div class="host-bar text-center flex flex-col justify-between">
+  <div class="h-screen w-screen flex">
+    <div class="h-full w-64 pl-8 pr-4 py-8  text-center flex flex-col justify-between flex-none">
       <div class="flex-grow">TECH STUDIO</div>
-
       <div class="dev__ui text-left">
         <div class="mx-2">
 
@@ -93,11 +72,15 @@
       </div>
     </div>
     <div class="h-full w-full flex flex-col">
-      <div class="host-nav">
+      <div class="flex justify-between pr-6 border-b border-gray-200 items-center flex-none h-12">
         Projects > New Project > Item
       </div>
-      <div class="host-container relative h-full">
-        <application></application>
+      <div class="flex flex-col h-full w-full overflow-auto">
+        <div class="relative w-full h-full">
+          <div class="w-full h-full overflow-hidden">
+            <application></application>
+          </div>
+        </div>
       </div>
     </div>
   </div>
