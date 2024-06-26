@@ -23,7 +23,7 @@ const parseInputId = (inputId) => {
 
 
 const parseOptionsFromInputId = (inputId) => {
-  const {instance, path} = parseInputId(inputId);
+  const { instance, path } = parseInputId(inputId);
 
   return instance.coercedSchema.reach(path).options();
 }
@@ -57,7 +57,12 @@ export default {
     if (!id) return;
 
     const { inputStatus } = useMessageStore();
-    const [entityId, path] = id.split(':');
+    let [entityId, path] = id.split(':');
+
+    if (path) {
+      path = path.replaceAll('.[', '[')
+    }
+
     const errors = inputStatus[entityId]?.[path];
 
     if (!errors) return;
