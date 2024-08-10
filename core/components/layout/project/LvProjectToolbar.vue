@@ -87,4 +87,21 @@ const leviate = useLeviateStore();
 const isExpanded = computed(() => leviate.panels.project.isExpanded);
 
 const menuItemClass = 'w-full flex items-center space-x-2 pl-3 pr-6 py-2 text-left';
+
+window.addEventListener('keydown', (e) => {
+  if (!e.ctrlKey) return;
+
+  switch (e.key) {
+    case 'z':
+      if (undoable) {
+        revision.undo();
+      }
+      break;
+    case 'y':
+      if (redoable) {
+        return revision.redo();
+      }
+      break;
+  }
+})
 </script>
