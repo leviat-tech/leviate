@@ -1,6 +1,6 @@
 <template>
   <div class="bg-gray-50 h-12 border-b" :class="isExpanded && 'py-2'">
-    <CToolbar class="justify-between"
+    <CToolbar class="justify-between !min-h-0"
               :class="!isExpanded && `flex flex-col-reverse h-auto`">
       <CTool-group :class="!isExpanded && `flex mt-1 -space-x-1`">
         <CTool
@@ -93,12 +93,12 @@ window.addEventListener('keydown', (e) => {
 
   switch (e.key) {
     case 'z':
-      if (undoable) {
+      if (undoable.value) {
         revision.undo();
       }
       break;
     case 'y':
-      if (redoable) {
+      if (redoable.value) {
         return revision.redo();
       }
       break;
