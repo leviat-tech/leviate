@@ -2,7 +2,7 @@
   <div class="absolute bottom-0 w-full flex flex-col border-t overflow-hidden"
        :class="isExpanded ? 'h-48' : 'h-[41px]'">
     <div class="flex px-3 bg-gray-100 font-semibold" :class="!isExpanded && errors?.length > 0 && 'text-danger' ">
-      <div class="flex items-center whitespace-nowrap h-10">{{ $L('validation') }} ({{ count }})</div>
+      <div class="flex items-center whitespace-nowrap h-10">{{ $L('validation') }} {{ count }}</div>
       <div class="w-full flex items-center justify-end">
         <button @click="togglePanel"
                 class="flex justify-center items-center w-10 h-[41px] text-steel-darkest hover:text-black"
@@ -56,13 +56,15 @@ const errors = computed(() => grouped.value.error);
 const warnings = computed(() => grouped.value.warning);
 
 const count = computed(() => {
+  if (props.messages.length === 0) return;
+
   const errorCount = errors.value?.length || 0;
   const warningCount = warnings.value?.length || 0;
 
   const errorKey = errorCount === 1 ? 'error' : 'errors';
   const warningKey = warningCount === 1 ? 'warning' : 'warnings';
 
-  return `${errorCount} ${$l(errorKey)}, ${warningCount} ${$l(warningKey)}`
+  return `(${errorCount} ${$l(errorKey)}, ${warningCount} ${$l(warningKey)})`;
 });
 
 const togglePanel = () => {

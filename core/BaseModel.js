@@ -1,7 +1,6 @@
 import { Entity } from '@crhio/normie'
 import logger from './extensions/logger';
-import { useMessageStore } from './store/message';
-import { isEmpty, each } from 'lodash-es';
+import { useRootStore } from './store';
 
 class BaseModel extends Entity {
   constructor(props) {
@@ -16,6 +15,11 @@ class BaseModel extends Entity {
 
   static get baseFields() {
     return {
+      errors: {
+        input: {},
+        config: {},
+        calculation: {},
+      },
       created_at: new Date().getTime(),
       updated_at: new Date().getTime(),
     };
@@ -31,15 +35,20 @@ class BaseModel extends Entity {
   }
 
   $validate() {
-    const { inputStatus } = useMessageStore();
-    const errors = this.constructor.schema.$validate(this);
-    const { id } = this;
-
-    if (isEmpty(errors)) {
-      // Remove any remaining errors in the store
-      if (inputStatus[id]) delete inputStatus[id];
-    } else {
-      inputStatus[id] = errors;
+    try {
+      this.constructor.schema.validateSync(this.$toJSON(), { abortEarly: false });
+      // Clear errors if validation succeeds
+      this.errors.input = {};
+    } catch (e) {
+      this.errors.input = e.inner.reduce((errors, error) => ({
+        ...errors,
+        [error.path]: [
+          ...(errors[error.path] || []),
+          error.path !== ''
+            ? error.message.replace(`${error.path} `, '')
+            : error.message,
+        ],
+      }), {});
     }
   }
 

@@ -11,8 +11,6 @@ function entityGuard(to, from) {
   const current = store.getEntity(entity, id);
 
   if (!current) return { name: 'home' };
-
-  current.$validate();
 }
 
 const routes = [
