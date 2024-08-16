@@ -62,8 +62,6 @@ export default {
 
     if (!errors) return;
 
-    console.log(errors);
-
     return {
       type: 'error',
       message: errors[0],
