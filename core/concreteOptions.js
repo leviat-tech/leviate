@@ -58,13 +58,13 @@ export default {
 
     const { instance, path } = parseInputId(id);
 
-    const errors = instance.errors.input[path];
+    const error = instance.getInputErrorByPath(path);
 
-    if (!errors) return;
+    if (!error) return;
 
     return {
       type: 'error',
-      message: errors[0],
+      message: error.text,
     }
   },
   labelFormatter: (props) => {

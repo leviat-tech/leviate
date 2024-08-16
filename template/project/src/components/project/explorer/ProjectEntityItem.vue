@@ -40,7 +40,7 @@ const model = item.constructor;
 
 const isEditing = ref(false);
 const inputRef = ref(null);
-const isActive = computed(() => useRoute().params.id === item.id);
+const isActive = computed(() => route.params.id === item.id);
 
 const getItemRoute = (itemId) => `/entities/${model.id}/${itemId}`;
 

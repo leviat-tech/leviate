@@ -4,7 +4,7 @@
       <ViewportToolbar />
     </div>
     <ViewportDrawing />
-    <LvValidationPane :messages="messageStore.configErrors" auto-appear/>
+    <LvValidationPane :messages="entity?.errors" @dismiss="entity.deleteError($event)" />
   </div>
 </template>
 
@@ -13,13 +13,11 @@
 import ViewportToolbar from './ViewportToolbar.vue';
 import ViewportDrawing from './ViewportDrawing.vue';
 import { LvValidationPane } from '@crhio/leviate/components';
-import { useMessageStore } from '@crhio/leviate';
+import { useRootStore } from '@crhio/leviate';
+import { computed } from 'vue';
 
-const messageStore = useMessageStore();
+const rootStore = useRootStore();
 
-// setTimeout(() => {
-//
-// messageStore.setConfigError('This is a calculation error message')
-// messageStore.setConfigWarning('This is a calculation error warning')
-// }, 2000);
+const entity = computed(() => rootStore.currentEntity);
+
 </script>

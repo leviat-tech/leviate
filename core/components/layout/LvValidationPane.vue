@@ -19,8 +19,8 @@
         :text="message.text"
         :status="message.type"
       >
-        <CIcon v-if="message.isDismissable === true" type="plus" color="warning"
-               class="w-4 flex-none rotate-45 justify-end cursor-pointer" @click="dismissWarning(index)"/>
+        <CIcon v-if="message.isDismissable === true" type="plus"
+               class="w-4 flex-none rotate-45 justify-end cursor-pointer" @click="$emit('dismiss', message.id)"/>
       </CStatusMessage>
     </div>
   </div>
@@ -42,8 +42,9 @@ const props = defineProps({
   autoAppear: Boolean,
 });
 
+const emit = defineEmits(['dismiss']);
+
 const store = useLeviateStore()
-const messageStore = useMessageStore()
 const { $l } = useLocalize();
 
 const isExpanded = computed({
@@ -71,9 +72,9 @@ const togglePanel = () => {
   isExpanded.value = !isExpanded.value
 }
 
-const dismissWarning = (index) => {
-  const msg = props.messages.value[index];
-  messageStore.removeMessage(msg.id);
+const dismissMessage = (index) => {
+  const msg = props.messages[index];
+  emit('dismiss', msg);
 }
 
 if (props.autoAppear) {
