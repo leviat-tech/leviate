@@ -38,9 +38,9 @@ class BaseModel extends Entity {
     this.clearInputErrors();
 
     try {
-      this.constructor.schema.validateSync(this.$toJSON(), { abortEarly: false });
+      this.constructor.schema.validateSync(this, { abortEarly: false });
     } catch (e) {
-      e.inner.forEach(error => {
+      e.inner?.forEach(error => {
         this.createError('input', error.path, error.message, false);
       });
     }
