@@ -1,6 +1,5 @@
 import { Entity } from '@crhio/normie'
 import logger from './extensions/logger';
-import { useRootStore } from './store';
 
 class BaseModel extends Entity {
   constructor(props) {
@@ -55,7 +54,6 @@ class BaseModel extends Entity {
   get coercedSchema() {
     return this.constructor.schema.coerce(this);
   }
-
 }
 
 export default BaseModel;
