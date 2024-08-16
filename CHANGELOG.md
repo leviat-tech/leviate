@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.4.0](https://github.com/leviat-tech/leviate/compare/v5.3.2...v5.4.0) (2024-08-16)
+
+
+* undo/redo keyboard shortcuts ([c45d6e1](https://github.com/leviat-tech/leviate/commit/c45d6e10cb7e55151d4f0b02bbc750646116b7d2))
+* validation pane ([b002a46](https://github.com/leviat-tech/leviate/commit/b002a46e5b40bcc89d924c6ec26469a8d43ad4cb))
+
 ## [5.3.2](https://github.com/leviat-tech/leviate/compare/v5.3.1...v5.3.2) (2024-06-26)
 
 
