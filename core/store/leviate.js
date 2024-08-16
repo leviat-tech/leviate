@@ -16,7 +16,7 @@ export const useLeviateStore = defineStore('leviate', {
         activeTab: null,
       },
       validation: {
-        isExpanded: true
+        isExpanded: false
       }
     },
   }),

@@ -56,16 +56,13 @@ export default {
   inputGetStatus: (id) => {
     if (!id) return;
 
-    const { inputStatus } = useMessageStore();
-    let [entityId, path] = id.split(':');
+    const { instance, path } = parseInputId(id);
 
-    if (path) {
-      path = path.replaceAll('.[', '[')
-    }
-
-    const errors = inputStatus[entityId]?.[path];
+    const errors = instance.errors.input[path];
 
     if (!errors) return;
+
+    console.log(errors);
 
     return {
       type: 'error',
