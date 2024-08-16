@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.4.2](https://github.com/leviat-tech/leviate/compare/v5.4.1...v5.4.2) (2024-08-16)
+
+
+* remove unused import ([aaba495](https://github.com/leviat-tech/leviate/commit/aaba495ba2119f802111beb58c90d67f048376b4))
+
 ## [5.4.1](https://github.com/leviat-tech/leviate/compare/v5.4.0...v5.4.1) (2024-08-16)
 
 
