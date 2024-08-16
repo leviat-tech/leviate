@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.4.1](https://github.com/leviat-tech/leviate/compare/v5.4.0...v5.4.1) (2024-08-16)
+
+
+* validation pane hidden by default ([aa038df](https://github.com/leviat-tech/leviate/commit/aa038df3283af7304d73553e7c61f19af90078d1))
+
 ## [5.4.0](https://github.com/leviat-tech/leviate/compare/v5.3.2...v5.4.0) (2024-08-16)
 
 
