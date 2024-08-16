@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.4.4](https://github.com/leviat-tech/leviate/compare/v5.4.3...v5.4.4) (2024-08-16)
+
+
+* update error handling in model ([8cc22c4](https://github.com/leviat-tech/leviate/commit/8cc22c4d6f0a8516058a660c1923571a1bdf05d2))
+
 ## [5.4.3](https://github.com/leviat-tech/leviate/compare/v5.4.2...v5.4.3) (2024-08-16)
 
 
