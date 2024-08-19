@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.4.5](https://github.com/leviat-tech/leviate/compare/v5.4.4...v5.4.5) (2024-08-19)
+
+
+* allow arbitrary input ids ([d55bdc9](https://github.com/leviat-tech/leviate/commit/d55bdc9a52a226805e18204d9e4e7bd6cc75a85f))
+
 ## [5.4.4](https://github.com/leviat-tech/leviate/compare/v5.4.3...v5.4.4) (2024-08-16)
 
 
