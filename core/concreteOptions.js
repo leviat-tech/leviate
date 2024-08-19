@@ -10,7 +10,9 @@ import { useLocalize } from './plugins/localize';
 const parseInputId = (inputId) => {
   const segments = inputId.split(':');
 
-  if (segments.length !== 2) logger.warn(`Input id ${inputId} does not match the format entity_id:path`);
+  if (segments.length !== 2) {
+    return {};
+  }
 
   const [entityId, path] = segments;
   const store = useRootStore();
@@ -21,16 +23,11 @@ const parseInputId = (inputId) => {
   return { instance, path };
 }
 
-
-const parseOptionsFromInputId = (inputId) => {
-  const { instance, path } = parseInputId(inputId);
-
-  return instance.coercedSchema.reach(path).options();
-}
-
 export default {
   inputHandler: (id, val) => {
     const { instance, path } = parseInputId(id);
+
+    if (!instance) return;
 
     const pathSegments = path.split('.');
 
@@ -47,16 +44,24 @@ export default {
   inputIdToValue: (id) => {
     const { instance, path } = parseInputId(id);
 
+    if (!instance) return;
+
     return get(instance, path);
   },
   inputIdToOptions: (id) => {
-    return parseOptionsFromInputId(id);
+    const { instance, path } = parseInputId(id);
+
+    if (!instance) return;
+
+    return instance.coercedSchema.reach(path).options();
   },
   registerInputs: true,
   inputGetStatus: (id) => {
     if (!id) return;
 
     const { instance, path } = parseInputId(id);
+
+    if (!instance) return;
 
     const error = instance.getInputErrorByPath(path);
 
