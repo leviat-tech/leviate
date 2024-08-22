@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.4.6](https://github.com/leviat-tech/leviate/compare/v5.4.5...v5.4.6) (2024-08-22)
+
+
+* add .npmrc to demo app for proper private packages installation ([105f51d](https://github.com/leviat-tech/leviate/commit/105f51d2de23447e5621c7f05fb211689662be8b))
+* add read-only banner ([6c20d72](https://github.com/leviat-tech/leviate/commit/6c20d72d0e6afe54a2bf54c5f03f8ec4b2dfe647))
+
 ## [5.4.5](https://github.com/leviat-tech/leviate/compare/v5.4.4...v5.4.5) (2024-08-19)
 
 
