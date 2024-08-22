@@ -1,6 +1,7 @@
 import { defineStore, createPinia } from 'pinia';
 import { ref } from 'vue';
 import { normie } from '@crhio/normie';
+import { useMeta } from '@crhio/leviate';
 import { isEmpty, get, last, range, each } from 'lodash-es';
 import Migration from '../extensions/migration';
 import revision from './plugins/revision';
@@ -21,6 +22,10 @@ let storeConfig = {};
 let useRootStore = () => logger.log('Root store has not been initialized');
 
 function transact(cb) {
+  if (useMeta().isReadOnly) {
+    console.log('Transaction skipped: Read-only mode.');
+    return;
+  }
   return useRootStore().transact(cb);
 }
 

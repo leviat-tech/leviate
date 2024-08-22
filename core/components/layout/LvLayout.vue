@@ -1,5 +1,6 @@
 <template>
   <div class="h-full flex flex-col text-sm">
+    <LvReadOnlyBanner v-if="$host.meta.isReadOnly" />
     <div
       v-if="appVersionsHaveMismatch"
       class="flex w-full h-fit p-2 bg-steel-light justify-center items-center"
@@ -44,6 +45,7 @@ import { useRootStore } from '@crhio/leviate';
 
 import ProjectRoot from '@/components/project/ProjectRoot.vue';
 import { LvProjectPanel } from '../';
+import LvReadOnlyBanner from './LvReadOnlyBanner.vue'
 
 const appVersionsHaveMismatch = ref(false);
 
