@@ -10,6 +10,9 @@ const phrases = {
   fixes: 'fixes',
   show_more: 'Show more...',
 
+  // UI
+  read_only_banner: 'This design is in read-only mode. Any changes you make will not be saved.',
+
   // Actions
   back: 'back',
   edit: 'edit',
