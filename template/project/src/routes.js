@@ -1,6 +1,7 @@
 import Entity from '@/views/Entity.vue';
 import NotFound from '@/views/NotFound.vue';
 import Home from '@/views/Home.vue';
+import Import from '@/views/Import.vue';
 import { useRootStore } from '@crhio/leviate';
 
 
@@ -26,6 +27,11 @@ const routes = [
     name: 'home',
     path: '/',
     component: Home,
+  },
+  {
+    name: 'import',
+    path: '/import',
+    component: Import,
   },
   {
     name: 'not-found',
