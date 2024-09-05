@@ -10,6 +10,7 @@ import LvResultsPanel from './layout/LvResultsPanel.vue';
 import LvValidationPane from './layout/LvValidationPane.vue';
 import LvPopupMenu from './ui/LvPopupMenu.vue';
 import LvSlotRenderer from './LvSlotRenderer.vue';
+import ImportTest from './import/test.vue'
 
 import LvLogo from './ui/LvLogo.vue';
 
@@ -26,7 +27,7 @@ export {
   LvViewportPanel,
   LvResultsPanel,
   LvValidationPane,
-
+  ImportTest,
   LvLogo,
   LvPopupMenu,
   
