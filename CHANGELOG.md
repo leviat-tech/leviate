@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.4.7](https://github.com/leviat-tech/leviate/compare/v5.4.6...v5.4.7) (2024-09-13)
+
+
+* refactor $host -&gt; host in template ([6cb93b0](https://github.com/leviat-tech/leviate/commit/6cb93b0bf06a69edda7e78b8841c6717c0a41793))
+
 ## [5.4.6](https://github.com/leviat-tech/leviate/compare/v5.4.5...v5.4.6) (2024-08-22)
 
 
