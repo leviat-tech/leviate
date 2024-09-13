@@ -18,9 +18,10 @@ const parseInputId = (inputId) => {
   const store = useRootStore();
   // If the entityId is a uuid then get the instance from the entities store
   // Otherwise entityId is a store module
-  const instance = validate(entityId) ? store.getEntityById(entityId) : store.modules[entityId]?.();
+  const isModel = validate(entityId);
+  const instance = isModel ? store.getEntityById(entityId) : store.modules[entityId]?.();
 
-  return { instance, path };
+  return { instance, path, isModel };
 }
 
 export default {
@@ -59,9 +60,9 @@ export default {
   inputGetStatus: (id) => {
     if (!id) return;
 
-    const { instance, path } = parseInputId(id);
+    const { instance, path, isModel } = parseInputId(id);
 
-    if (!instance) return;
+    if (!instance || !isModel) return;
 
     const error = instance.getInputErrorByPath(path);
 
