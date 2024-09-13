@@ -68,9 +68,9 @@ const HostPlugin = {
 
     // Store so module can be imported
     modules.host = $host;
-    modules.meta = meta
+    modules.meta = meta;
 
-    Object.assign(app.config.globalProperties, { $host });
+    app.config.globalProperties.host = $host;
 
     _resolve($host)
   },
