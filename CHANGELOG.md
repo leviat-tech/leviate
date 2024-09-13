@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.4.8](https://github.com/leviat-tech/leviate/compare/v5.4.7...v5.4.8) (2024-09-13)
+
+
+* input status for store modules ([844810e](https://github.com/leviat-tech/leviate/commit/844810e1e5f93308ebd292e65b6b69819dc35cd4))
+
 ## [5.4.7](https://github.com/leviat-tech/leviate/compare/v5.4.6...v5.4.7) (2024-09-13)
 
 
