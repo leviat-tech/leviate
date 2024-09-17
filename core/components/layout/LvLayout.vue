@@ -1,6 +1,6 @@
 <template>
   <div class="h-full flex flex-col text-sm">
-    <LvReadOnlyBanner v-if="host.meta.isReadOnly" />
+    <LvReadOnlyBanner v-if="host?.meta.isReadOnly" />
     <div
       v-if="appVersionsHaveMismatch"
       class="flex w-full h-fit p-2 bg-steel-light justify-center items-center"
