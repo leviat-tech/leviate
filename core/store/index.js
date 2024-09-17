@@ -5,7 +5,7 @@ import { useMeta } from '@crhio/leviate';
 import { isEmpty, get, last, range, each } from 'lodash-es';
 import Migration from '../extensions/migration';
 import revision from './plugins/revision';
-import BaseModel from '../BaseModel';
+import BaseModel from '../models/BaseModel';
 import { useLocalize } from '../plugins/localize';
 import logger from '../extensions/logger.js';
 import useAppInfo from '../composables/useAppInfo.js';
