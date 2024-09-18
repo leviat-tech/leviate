@@ -17,7 +17,7 @@ class CoreLayerModel extends BaseModel {
     return super.create(data);
   }
 
-  static get coreFields() {
+  static get coreLayerFields() {
     return {
       ...this.baseFields,
       name: defaultName,
