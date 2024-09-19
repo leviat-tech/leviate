@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.4.9](https://github.com/leviat-tech/leviate/compare/v5.4.8...v5.4.9) (2024-09-19)
+
+
+* create core models ([6b67319](https://github.com/leviat-tech/leviate/commit/6b673196eff817c4f756904363436d2535f7f36d))
+* pr comments ([eeb7421](https://github.com/leviat-tech/leviate/commit/eeb7421e7382edae8c2ac1679ed74cfb4c499979))
+
 ## [5.4.8](https://github.com/leviat-tech/leviate/compare/v5.4.7...v5.4.8) (2024-09-13)
 
 
