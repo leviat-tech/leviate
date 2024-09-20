@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.4.10](https://github.com/leviat-tech/leviate/compare/v5.4.9...v5.4.10) (2024-09-20)
+
+
+* add layer schema ([#166](https://github.com/leviat-tech/leviate/issues/166)) ([4364d64](https://github.com/leviat-tech/leviate/commit/4364d64abf020534f0bdf2fe68c9b86e24edd26d))
+
 ## [5.4.9](https://github.com/leviat-tech/leviate/compare/v5.4.8...v5.4.9) (2024-09-19)
 
 
