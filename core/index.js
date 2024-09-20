@@ -11,7 +11,7 @@ import { usePdfGenerator } from './composables/usePdfGenerator';
 import { useLocalize } from './plugins/localize';
 import { useHost, useMeta } from './plugins/host';
 
-import BaseModel from './models/BaseModel';
+import BaseModel from './BaseModel';
 import CoreLayerModel from './models/CoreLayerModel';
 import CorePositionModel from './models/CorePositionModel';
 
