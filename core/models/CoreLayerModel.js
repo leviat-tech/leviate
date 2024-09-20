@@ -1,10 +1,11 @@
-import BaseModel from './BaseModel';
-import coreLayersSchema from '../schema/coreLayersSchema';
+import BaseModel from '../BaseModel';
+import { useHost } from '../plugins/host';
+import coreLayerSchema from '../schema/coreLayerSchema';
 
 const defaultName = 'Project Layer';
 
 class CoreLayerModel extends BaseModel {
-  static schema = coreLayersSchema;
+  static schema = coreLayerSchema;
 
   static maxDepth = 3;
 
@@ -29,7 +30,7 @@ class CoreLayerModel extends BaseModel {
 
   static afterCreate(instance) {
     if (instance.isRoot) {
-      instance.addColumn();
+      instance.addPosition();
       instance.name = useHost().configuration.name;
     }
 

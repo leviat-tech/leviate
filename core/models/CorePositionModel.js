@@ -1,6 +1,6 @@
 import { useLocalize } from '../plugins/localize';
 
-import BaseModel from './BaseModel';
+import BaseModel from '../BaseModel';
 
 const { $L } = useLocalize();
 
