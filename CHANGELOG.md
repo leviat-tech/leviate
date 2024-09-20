@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.4.11](https://github.com/leviat-tech/leviate/compare/v5.4.10...v5.4.11) (2024-09-20)
+
+
+* replace BaseModel ([#168](https://github.com/leviat-tech/leviate/issues/168)) ([20f034a](https://github.com/leviat-tech/leviate/commit/20f034afd83277812c105dff9fbba2c7539df04b))
+
 ## [5.4.10](https://github.com/leviat-tech/leviate/compare/v5.4.9...v5.4.10) (2024-09-20)
 
 
