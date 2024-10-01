@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.5.1](https://github.com/leviat-tech/leviate/compare/v5.5.0...v5.5.1) (2024-10-01)
+
+
+* restore the fix in PR [#148](https://github.com/leviat-tech/leviate/issues/148) (show correct error messages for array items) ([#172](https://github.com/leviat-tech/leviate/issues/172)) ([b82b5d7](https://github.com/leviat-tech/leviate/commit/b82b5d75f11e958aeacf6bf1259f75b89767b0a3))
+
 ## [5.5.0](https://github.com/leviat-tech/leviate/compare/v5.4.11...v5.5.0) (2024-09-30)
 
 
