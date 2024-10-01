@@ -14,7 +14,7 @@ const parseInputId = (inputId) => {
     return {};
   }
 
-  const [entityId, path] = segments;
+  let [entityId, path] = segments;
   const store = useRootStore();
   // If the entityId is a uuid then get the instance from the entities store
   // Otherwise entityId is a store module
