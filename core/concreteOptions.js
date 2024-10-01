@@ -20,7 +20,9 @@ const parseInputId = (inputId) => {
   // Otherwise entityId is a store module
   const isModel = validate(entityId);
   const instance = isModel ? store.getEntityById(entityId) : store.modules[entityId]?.();
-
+  if (path) {
+    path = path.replaceAll('.[', '[')
+  }
   return { instance, path, isModel };
 }
 
