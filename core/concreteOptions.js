@@ -14,15 +14,13 @@ const parseInputId = (inputId) => {
     return {};
   }
 
-  let [entityId, path] = segments;
+  const [entityId, path] = segments;
   const store = useRootStore();
   // If the entityId is a uuid then get the instance from the entities store
   // Otherwise entityId is a store module
   const isModel = validate(entityId);
   const instance = isModel ? store.getEntityById(entityId) : store.modules[entityId]?.();
-  if (path) {
-    path = path.replaceAll('.[', '[')
-  }
+
   return { instance, path, isModel };
 }
 
@@ -66,7 +64,8 @@ export default {
 
     if (!instance || !isModel) return;
 
-    const error = instance.getInputErrorByPath(path);
+    const errorPath = path?.replaceAll('.[', '[');
+    const error = instance.getInputErrorByPath(errorPath);
 
     if (!error) return;
 
