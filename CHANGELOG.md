@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.5.3](https://github.com/leviat-tech/leviate/compare/v5.5.2...v5.5.3) (2024-10-02)
+
+
+* modify the property path of model for array items ([#176](https://github.com/leviat-tech/leviate/issues/176)) ([ba3829a](https://github.com/leviat-tech/leviate/commit/ba3829adbf5766ce68c84d1c830685395ec31968))
+
 ## [5.5.2](https://github.com/leviat-tech/leviate/compare/v5.5.1...v5.5.2) (2024-10-02)
 
 
