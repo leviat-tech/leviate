@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.5.2](https://github.com/leviat-tech/leviate/compare/v5.5.1...v5.5.2) (2024-10-02)
+
+
+* assignment to constant path ([#174](https://github.com/leviat-tech/leviate/issues/174)) ([30c8b48](https://github.com/leviat-tech/leviate/commit/30c8b48bdd92b6b86950471b9ea44ab6c36bc51d))
+
 ## [5.5.1](https://github.com/leviat-tech/leviate/compare/v5.5.0...v5.5.1) (2024-10-01)
 
 
