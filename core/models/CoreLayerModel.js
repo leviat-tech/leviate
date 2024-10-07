@@ -1,8 +1,22 @@
+import { omit } from 'lodash-es';
+
 import BaseModel from '../BaseModel';
 import { useHost } from '../plugins/host';
 import coreLayerSchema from '../schema/coreLayerSchema';
 
 const defaultName = 'Project Layer';
+
+const arrayMoveItem = (array, itemToMove, moveToIndex) => {
+  if (array[moveToIndex] === itemToMove) return array;
+
+  return array.reduce((items, item, i) => {
+    if (item === itemToMove) return items;
+
+    const isDragUp = array.indexOf(itemToMove) > moveToIndex;
+    const sortedItems = isDragUp ? [...items, itemToMove, item] : [...items, item, itemToMove];
+    return i === moveToIndex ? sortedItems : [...items, item];
+  }, []);
+};
 
 class CoreLayerModel extends BaseModel {
   static schema = coreLayerSchema;
