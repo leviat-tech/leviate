@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.5.4](https://github.com/leviat-tech/leviate/compare/v5.5.3...v5.5.4) (2024-10-07)
+
+
+* missing functions declaration ([#178](https://github.com/leviat-tech/leviate/issues/178)) ([3546321](https://github.com/leviat-tech/leviate/commit/3546321d6923ea01701f6c64c8ff432fe374d286))
+
 ## [5.5.3](https://github.com/leviat-tech/leviate/compare/v5.5.2...v5.5.3) (2024-10-02)
 
 
