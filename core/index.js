@@ -12,12 +12,14 @@ import { useLocalize } from './plugins/localize';
 import { useHost, useMeta } from './plugins/host';
 
 import BaseModel from './BaseModel';
+import CloneModule from './models/CloneModule';
 import CoreLayerModel from './models/CoreLayerModel';
 import CorePositionModel from './models/CorePositionModel';
 
 export {
   transact,
   BaseModel,
+  CloneModule,
   CoreLayerModel,
   CorePositionModel,
   useHost,
