@@ -118,7 +118,7 @@ class CoreLayerModel extends BaseModel {
     return depth;
   }
 
-  get dataToClone() {
+  dataToClone() {
     const fieldsToOmit = [
       'id',
       'created_at',
@@ -131,20 +131,18 @@ class CoreLayerModel extends BaseModel {
     return omit(this.$toJSON(), fieldsToOmit);
   }
 
-  clone() {
+  clone(cloneModule) {
     if (this.isRoot) {
       throw new Error('Root layer cannot be cloned');
     }
 
-    const newLayer = this.insertAfter(this.dataToClone, false);
+    const newLayer = this.insertAfter(this.dataToClone(), false);
 
-    this.clonePositions(newLayer, this.orderedPositionIds);
+    cloneModule.clonePositions(newLayer, this.orderedPositionIds);
 
-    this.cloneLayers(newLayer, this.orderedLayerIds);
+    cloneModule.cloneLayers(newLayer, this.orderedLayerIds);
 
-    this.cloneNestedStructure(newLayer, this.orderedLayerIds);
-
-    return newLayer;
+    cloneModule.cloneNestedStructure(newLayer, this.orderedLayerIds);
   }
 
   insertAfter(data, shouldCreatePosition = true) {
