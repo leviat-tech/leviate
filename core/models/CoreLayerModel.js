@@ -118,7 +118,7 @@ class CoreLayerModel extends BaseModel {
     return depth;
   }
 
-  get dataToClone() {
+  dataToClone() {
     const fieldsToOmit = [
       'id',
       'created_at',
@@ -131,20 +131,46 @@ class CoreLayerModel extends BaseModel {
     return omit(this.$toJSON(), fieldsToOmit);
   }
 
-  clone() {
+  clone(PositionsModel, LayersModel) {
     if (this.isRoot) {
       throw new Error('Root layer cannot be cloned');
     }
 
-    const newLayer = this.insertAfter(this.dataToClone, false);
+    const newLayer = this.insertAfter(this.dataToClone(), false);
 
-    this.clonePositions(newLayer, this.orderedPositionIds);
+    clonePositions(newLayer, this.orderedPositionIds);
+    cloneLayers(newLayer, this.orderedLayerIds);
+    cloneNestedStructure(newLayer, this.orderedLayerIds);
 
-    this.cloneLayers(newLayer, this.orderedLayerIds);
+    function clonePositions(layer, positionIds) {
+      positionIds.forEach((positionId) => {
+        const positionData = PositionsModel.find(positionId).dataToClone();
+        layer.addPosition(positionData);
+      });
+    }
 
-    this.cloneNestedStructure(newLayer, this.orderedLayerIds);
+    function cloneLayers(layer, layerIds) {
+      layerIds.forEach((layerId) => {
+        const layerData = LayersModel.find(layerId).dataToClone();
+        layer.addLayer(layerData, false);
+      });
+    }
 
-    return newLayer;
+    function cloneNestedStructure(destination, layerIds) {
+      if (!destination.orderedLayerIds.length) {
+        return;
+      }
+
+      layerIds?.forEach((layerId, index) => {
+        const sourceLayer = LayersModel.find(layerId);
+        const destinationLayer = LayersModel.find(destination.orderedLayerIds[index]);
+
+        cloneLayers(destinationLayer, sourceLayer.orderedLayerIds);
+        clonePositions(destinationLayer, sourceLayer.orderedPositionIds);
+
+        cloneNestedStructure(destinationLayer, sourceLayer.orderedLayerIds);
+      });
+    }
   }
 
   insertAfter(data, shouldCreatePosition = true) {

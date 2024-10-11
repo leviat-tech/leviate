@@ -39,7 +39,7 @@ class CorePositionModel extends BaseModel {
   }
 
   clone() {
-    return this.insertAfter(this.dataToClone);
+    return this.insertAfter(this.dataToClone());
   }
 }
 
