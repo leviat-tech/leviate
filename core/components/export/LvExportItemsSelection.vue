@@ -1,8 +1,8 @@
 <template>
   <div class="my-6">
-    <div v-if="isWarningVisible" class="flex p-2 bg-warning-lightest align-items">
+    <div v-if="warningMessage?.length" class="flex p-2 bg-warning-lightest align-items">
       <CIcon type="warning" size="lg" class="mr-4 text-danger"></CIcon>
-      {{ $l('uncalculated_columns_detected') }}
+      {{ $l(warningMessage) }}
     </div>
   </div>
 
@@ -17,9 +17,6 @@
       type: String,
       default: 'position_selection',
     },
-    isWarningVisible: {
-      type: Boolean,
-      default: false,
-    },
+    warningMessage: String
   });
 </script>
