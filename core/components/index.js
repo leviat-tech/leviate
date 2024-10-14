@@ -20,7 +20,6 @@ import LvProjectRoot from './layout/LvProjectRoot.vue';
 import LvExportLayout from './export/LvExportLayout.vue';
 import LvProjectOutput from './export/LvProjectOutput.vue';
 import LvExportItemsSelection from './export/LvExportItemsSelection.vue';
-import LvExportDocumentTypes from './export/LvExportDocumentTypes.vue';
 
 export {
   LvLogo,
@@ -40,6 +39,5 @@ export {
   LvViewportPanel,
   LvValidationPane,
   LvProjectPanelItem,
-  LvExportDocumentTypes,
   LvExportItemsSelection
 };
