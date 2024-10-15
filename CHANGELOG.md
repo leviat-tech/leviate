@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.5.6](https://github.com/leviat-tech/leviate/compare/v5.5.5...v5.5.6) (2024-10-15)
+
+
+* add index.d.ts ([#183](https://github.com/leviat-tech/leviate/issues/183)) ([82ed6c7](https://github.com/leviat-tech/leviate/commit/82ed6c7ee1480aaec9e625e84f885aa508fd65fb))
+
 ## [5.5.5](https://github.com/leviat-tech/leviate/compare/v5.5.4...v5.5.5) (2024-10-14)
 
 
