@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.5.7](https://github.com/leviat-tech/leviate/compare/v5.5.6...v5.5.7) (2024-10-15)
+
+
+* clone  ([#187](https://github.com/leviat-tech/leviate/issues/187)) ([804fe10](https://github.com/leviat-tech/leviate/commit/804fe10e108985090ae11a8726874f7902706b71))
+* Revert "Clone ([#180](https://github.com/leviat-tech/leviate/issues/180))" ([#185](https://github.com/leviat-tech/leviate/issues/185)) ([96bbceb](https://github.com/leviat-tech/leviate/commit/96bbcebed3391347fcec6dd9d6a4970431a1a0f4))
+
 ## [5.5.6](https://github.com/leviat-tech/leviate/compare/v5.5.5...v5.5.6) (2024-10-15)
 
 
