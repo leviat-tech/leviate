@@ -20,7 +20,7 @@ class CorePositionModel extends BaseModel {
     return [this.layer.getNameSuffix(), positionNumber].join('.');
   }
 
-  dataToClone(fieldsToOmit = ['id', 'positionId', 'created_at', 'layerId', 'created_at']) {
+  getDataToClone(fieldsToOmit = ['id', 'positionId', 'created_at', 'layerId', 'created_at']) {
     return omit(
       {
         ...this.$toJSON(''),
@@ -39,7 +39,7 @@ class CorePositionModel extends BaseModel {
   }
 
   clone() {
-    return this.insertAfter(this.dataToClone());
+    return this.insertAfter(this.getDataToClone());
   }
 }
 

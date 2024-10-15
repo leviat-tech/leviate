@@ -118,7 +118,7 @@ class CoreLayerModel extends BaseModel {
     return depth;
   }
 
-  dataToClone() {
+  getDataToClone() {
     const fieldsToOmit = [
       'id',
       'created_at',
@@ -131,46 +131,47 @@ class CoreLayerModel extends BaseModel {
     return omit(this.$toJSON(), fieldsToOmit);
   }
 
-  clone(PositionsModel, LayersModel) {
+  clone() {
     if (this.isRoot) {
       throw new Error('Root layer cannot be cloned');
     }
 
-    const newLayer = this.insertAfter(this.dataToClone(), false);
+    const newLayer = this.insertAfter(this.getDataToClone(), false);
 
-    clonePositions(newLayer, this.orderedPositionIds);
-    cloneLayers(newLayer, this.orderedLayerIds);
-    cloneNestedStructure(newLayer, this.orderedLayerIds);
+    this.clonePositions(newLayer, this.orderedPositionIds);
+    this.cloneLayers(newLayer, this.orderedLayerIds);
+    this.cloneNestedStructure(newLayer, this.orderedLayerIds);
+  }
 
-    function clonePositions(layer, positionIds) {
-      positionIds.forEach((positionId) => {
-        const positionData = PositionsModel.find(positionId).dataToClone();
-        layer.addPosition(positionData);
-      });
+  clonePositions(layer, positionIds) {
+    positionIds.forEach((positionId) => {
+      const positionData = this.constructor.positionsModel.find(positionId).getDataToClone();
+
+      layer.addPosition(positionData);
+    });
+  }
+
+  cloneLayers(layer, layerIds) {
+    layerIds.forEach((layerId) => {
+      const layerData = this.constructor.find(layerId).getDataToClone();
+      layer.addLayer(layerData, false);
+    });
+  }
+
+  cloneNestedStructure(destination, layerIds) {
+    if (!destination.orderedLayerIds.length) {
+      return;
     }
 
-    function cloneLayers(layer, layerIds) {
-      layerIds.forEach((layerId) => {
-        const layerData = LayersModel.find(layerId).dataToClone();
-        layer.addLayer(layerData, false);
-      });
-    }
+    layerIds?.forEach((layerId, index) => {
+      const sourceLayer = this.constructor.find(layerId);
+      const destinationLayer = this.constructor.find(destination.orderedLayerIds[index]);
 
-    function cloneNestedStructure(destination, layerIds) {
-      if (!destination.orderedLayerIds.length) {
-        return;
-      }
+      this.cloneLayers(destinationLayer, sourceLayer.orderedLayerIds);
+      this.clonePositions(destinationLayer, sourceLayer.orderedPositionIds);
 
-      layerIds?.forEach((layerId, index) => {
-        const sourceLayer = LayersModel.find(layerId);
-        const destinationLayer = LayersModel.find(destination.orderedLayerIds[index]);
-
-        cloneLayers(destinationLayer, sourceLayer.orderedLayerIds);
-        clonePositions(destinationLayer, sourceLayer.orderedPositionIds);
-
-        cloneNestedStructure(destinationLayer, sourceLayer.orderedLayerIds);
-      });
-    }
+      this.cloneNestedStructure(destinationLayer, sourceLayer.orderedLayerIds);
+    });
   }
 
   insertAfter(data, shouldCreatePosition = true) {
