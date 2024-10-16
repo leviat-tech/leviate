@@ -29,9 +29,10 @@ class BaseModel extends Entity {
 
   static afterUpdate(instance) {
     if (instance.lastUpdatedFields.includes('errors')) return;
+    const lastNonErorUpdate = instance.lastUpdatedFields.reduce((patch, field) => ({ ...patch, [field]: instance[field] }),{})
 
     instance.$validate();
-    instance.afterUpdate?.();
+    instance.afterUpdate?.(lastNonErorUpdate);
   }
 
   $validate() {
