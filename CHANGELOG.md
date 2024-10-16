@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.6.0](https://github.com/leviat-tech/leviate/compare/v5.5.7...v5.6.0) (2024-10-16)
+
+
+* pass last non error update to offspring models ([#188](https://github.com/leviat-tech/leviate/issues/188)) ([a2188c0](https://github.com/leviat-tech/leviate/commit/a2188c0b709e1edec04d81d276d231e23df43ad0))
+
 ## [5.5.7](https://github.com/leviat-tech/leviate/compare/v5.5.6...v5.5.7) (2024-10-15)
 
 
