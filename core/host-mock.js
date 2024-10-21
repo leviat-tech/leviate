@@ -2,7 +2,7 @@ import inject from '@crhio/inject';
 import logger from './extensions/logger.js';
 import { watch } from 'vue';
 import useVersions, { activeVersionId } from './composables/useVersions';
-import { cloneDeep } from 'lodash-es';
+import { assign, cloneDeep, each, set } from 'lodash-es';
 import axios from 'axios';
 
 
@@ -19,10 +19,15 @@ export function useMock() {
     getState: () => data.configuration.state,
     getMeta: () => data.meta,
     getDictionary: () => data.dictionary,
-    setState: (state, versionId) => {
-      data.configuration.state = state;
-
+    setState: (patch, versionId) => {
       const { activeVersion } = useVersions();
+      const { state } = activeVersion.value;
+
+      each(patch, (val, key) => {
+        set(state, key, val);
+      });
+
+      data.configuration.state = state;
 
       if (!activeVersion.value) {
         logger.error('Active version not set');
@@ -133,6 +138,8 @@ export function useMock() {
         ...data.configuration,
         createdAt: new Date().toISOString(),
       };
+
+      console.log(rootVersion.state);
 
       saveDataToLocalStorage({
         versions: [rootVersion],

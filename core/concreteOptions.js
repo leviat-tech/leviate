@@ -32,7 +32,7 @@ export default {
 
     const pathSegments = path.split('.');
 
-    transact(() => {
+    transact(instance, () => {
       if (pathSegments.length === 1) {
         return set(instance, path, val);
       }

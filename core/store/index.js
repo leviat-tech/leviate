@@ -1,5 +1,4 @@
 import { defineStore, createPinia } from 'pinia';
-import { ref } from 'vue';
 import { normie } from '@crhio/normie';
 import { useMeta } from '@crhio/leviate';
 import { isEmpty, get, last, range, each } from 'lodash-es';
@@ -9,6 +8,7 @@ import BaseModel from '../BaseModel';
 import { useLocalize } from '../plugins/localize';
 import logger from '../extensions/logger.js';
 import useAppInfo from '../composables/useAppInfo.js';
+import useVersions from '../composables/useVersions';
 
 class TransactionError extends Error {
   constructor() {
@@ -21,12 +21,39 @@ let storeConfig = {};
 
 let useRootStore = () => logger.log('Root store has not been initialized');
 
-function transact(cb) {
+let transactionUpdates = [];
+
+function transact(instanceOrModuleName, cb) {
   if (useMeta().isReadOnly) {
-    console.log('Transaction skipped: Read-only mode.');
+    logger.log('Transaction skipped: Read-only mode.');
     return;
   }
-  return useRootStore().transact(cb);
+
+  if (typeof instanceOrModuleName === 'function') {
+    logger.error('Could not execute transaction. First argument must be a model instance or name of a store module');
+  }
+
+  let stateKeys = [instanceOrModuleName];
+
+  if (typeof instanceOrModuleName === 'object') {
+    const entityName = instanceOrModuleName.constructor.id;
+    const { id } = instanceOrModuleName;
+    const baseKey =  `entities.${entityName}`;
+    stateKeys = [
+      `${baseKey}.dataById.${id}`,
+      `${baseKey}.idsByForeignKey`,
+    ];
+  }
+
+  return useRootStore().transact(cb, stateKeys);
+}
+
+function getPatch(state, stateKeys) {
+  if (!stateKeys) return state;
+
+  return stateKeys.reduce((acc, key) => {
+    return { ...acc, [key]: get(state, key) }
+  }, {});
 }
 
 const initialState = {
@@ -39,17 +66,35 @@ const initialState = {
 };
 
 const initialActions = {
-  async transact(cb) {
+  async transact(cb, stateKeys) {
+    if (this.transactionDepth === 0) {
+      transactionUpdates = [];
+    }
+
     this.transactionDepth++;
 
     try {
+      const oldState = this.toJSON();
+      const oldValue = getPatch(oldState, stateKeys);
+
       const res = cb();
+
+      this.transactionDepth --;
 
       if (res instanceof Promise) {
         await res.catch(this._onTransactionError);
       }
 
-      this.transactionDepth = 0;
+      const newState = this.toJSON();
+      const newValue = getPatch(newState, stateKeys);
+
+      const { activeVersion, activeVersionId } = useVersions();
+      host.setState(newValue, activeVersionId.value);
+      transactionUpdates.unshift({ oldValue, newValue });
+
+      if (this.transactionDepth === 0) {
+        this.revision.commit(transactionUpdates);
+      }
 
       return res;
     } catch (e) {
@@ -232,7 +277,7 @@ function getStoreConfig(storeConfig, router) {
 
 // function to initialize store given initial state
 async function initializeStore(initialState, migrations, models) {
-  // eslint-disable-line
+    // eslint-disable-line
   const rootStore = useRootStore();
 
   // Register user modules and normie entities module in the root store
@@ -252,6 +297,8 @@ async function initializeStore(initialState, migrations, models) {
   rootStore.$patch({ transactionDepth: 0 });
 
   if (typeof rootStore.initialize === 'function') rootStore.initialize();
+
+  rootStore.revision.initialize();
 
   await detectAppVersionMismatch();
 }
