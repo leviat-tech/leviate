@@ -14,9 +14,7 @@
         'border-r-4 border-indigo text-indigo': !isExpanded && isActive,
       }"
     >
-      <LvTabText :is-expanded="isExpanded">{{
-        $L(`project_${name}`)
-      }}</LvTabText>
+      <LvTabText :is-expanded="isExpanded">{{ $L(`project_${name}`) }}</LvTabText>
     </DisclosureButton>
 
     <div v-show="isActive && isExpanded" class="overflow-y-auto bg-gray-50">
@@ -43,18 +41,14 @@ const route = useRoute();
 const leviate = useLeviateStore();
 
 const isExpanded = computed(() => leviate.panels.project.isExpanded);
-const isActive = computed(
-  () => leviate.panels.project.activeItem === props.name
-);
+const isActive = computed(() => leviate.panels.project.activeItem === props.name);
 
 function onClick(name) {
   if (isActive.value) {
-    leviate.setActiveProjectItem(null);
-    const query = { ...route.query, projectTab: 'none' };
-    router.replace({ query });
-  } else {
-    leviate.setActiveProjectItem(name);
-    router.replace({ query: { projectTab: name } });
+    return;
   }
+
+  leviate.setActiveProjectItem(name);
+  router.replace({ query: { projectTab: name } });
 }
 </script>
