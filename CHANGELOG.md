@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.7.0](https://github.com/leviat-tech/leviate/compare/v5.6.1...v5.7.0) (2024-10-23)
+
+
+* sync patches instead of entire state ([#190](https://github.com/leviat-tech/leviate/issues/190)) ([5231486](https://github.com/leviat-tech/leviate/commit/52314860f3da95996d9585c5421e22b8e2f91c75))
+
 ## [5.6.1](https://github.com/leviat-tech/leviate/compare/v5.6.0...v5.6.1) (2024-10-23)
 
 
