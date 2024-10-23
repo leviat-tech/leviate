@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.7.2](https://github.com/leviat-tech/leviate/compare/v5.7.1...v5.7.2) (2024-10-23)
+
+
+* replace arrays when patching state ([0891011](https://github.com/leviat-tech/leviate/commit/0891011c97e4d3b378a29bcc40e7088b260cc0d5))
+
 ## [5.7.1](https://github.com/leviat-tech/leviate/compare/v5.7.0...v5.7.1) (2024-10-23)
 
 
