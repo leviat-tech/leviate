@@ -46,7 +46,7 @@ const reset = () => {
 }
 
 const save = () => {
-  transact('settings', () => {
+  transact(() => {
     settings.clientNotes = data.clientNotes;
     settings.internalNotes = data.internalNotes;
     settings.configName = data.configName;

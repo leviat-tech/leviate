@@ -1,5 +1,5 @@
 import { computed, reactive } from 'vue';
-import { each, map, set } from 'lodash-es';
+import { each, map, set, unset } from 'lodash-es';
 
 
 class Revision {
@@ -11,10 +11,6 @@ class Revision {
 
     this.redoable = computed(() => this.redos.length > 0);
     this.undoable = computed(() => this.undos.length > 0);
-  }
-
-  initialize() {
-    this.initialState = this.store.toJSON();
   }
 
   // save current state to undo stack
@@ -54,7 +50,11 @@ class Revision {
 
     updates.forEach(patch => {
       each(patch, (val, key) => {
-        set(state, key, val);
+        if (val === undefined) {
+          unset(state, key);
+        } else {
+          set(state, key, val);
+        }
       });
     });
 

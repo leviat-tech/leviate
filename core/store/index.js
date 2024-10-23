@@ -1,7 +1,7 @@
 import { defineStore, createPinia } from 'pinia';
 import { normie } from '@crhio/normie';
 import { useMeta } from '@crhio/leviate';
-import { isEmpty, get, last, range, each } from 'lodash-es';
+import { isEmpty, get, last, range, each, omit } from 'lodash-es';
 import Migration from '../extensions/migration';
 import revision from './plugins/revision';
 import BaseModel from '../BaseModel';
@@ -23,29 +23,13 @@ let useRootStore = () => logger.log('Root store has not been initialized');
 
 let transactionUpdates = [];
 
-function transact(instanceOrModuleName, cb) {
+function transact(cb) {
   if (useMeta().isReadOnly) {
     logger.log('Transaction skipped: Read-only mode.');
     return;
   }
 
-  if (typeof instanceOrModuleName === 'function') {
-    logger.error('Could not execute transaction. First argument must be a model instance or name of a store module');
-  }
-
-  let stateKeys = [instanceOrModuleName];
-
-  if (typeof instanceOrModuleName === 'object') {
-    const entityName = instanceOrModuleName.constructor.id;
-    const { id } = instanceOrModuleName;
-    const baseKey =  `entities.${entityName}`;
-    stateKeys = [
-      `${baseKey}.dataById.${id}`,
-      `${baseKey}.idsByForeignKey`,
-    ];
-  }
-
-  return useRootStore().transact(cb, stateKeys);
+  return useRootStore().transact(cb);
 }
 
 function getPatch(state, stateKeys) {
@@ -65,8 +49,52 @@ const initialState = {
   appVersion: null,
 };
 
+function deepDiff(obj1, obj2) {
+  const result = {
+    oldValue: {},
+    newValue: {},
+  };
+
+  function storeResult(path, oldValue, newValue) {
+
+  }
+
+  function compare(item1, item2, path = '') {
+    if (typeof item1 !== typeof item2) {
+      result.oldValue[path] = item1;
+      result.newValue[path] = item2;
+      return;
+    }
+
+    if (typeof item1 !== 'object' || item1 === null || item2 === null) {
+      if (item1 !== item2) {
+        result.oldValue[path] = item1;
+        result.newValue[path] = item2;
+      }
+      return;
+    }
+
+    const keys1 = Object.keys(item1);
+    const keys2 = Object.keys(item2);
+
+    for (const key of keys1) {
+      compare(item1[key], item2[key], path ? `${path}.${key}` : key);
+    }
+
+    for (const key of keys2) {
+      if (!keys1.includes(key)) {
+        compare(undefined, item2[key], path ? `${path}.${key}` : key);
+      }
+    }
+  }
+
+  compare(obj1, obj2);
+
+  return omit(result, 'transactionDepth');
+}
+
 const initialActions = {
-  async transact(cb, stateKeys) {
+  async transact(cb) {
     if (this.transactionDepth === 0) {
       transactionUpdates = [];
     }
@@ -75,9 +103,10 @@ const initialActions = {
 
     try {
       const oldState = this.toJSON();
-      const oldValue = getPatch(oldState, stateKeys);
 
-      const res = cb();
+      let res = cb();
+
+      const newState = this.toJSON();
 
       this.transactionDepth --;
 
@@ -85,12 +114,11 @@ const initialActions = {
         await res.catch(this._onTransactionError);
       }
 
-      const newState = this.toJSON();
-      const newValue = getPatch(newState, stateKeys);
+      const diff = deepDiff(oldState, newState);
 
       const { activeVersion, activeVersionId } = useVersions();
-      host.setState(newValue, activeVersionId.value);
-      transactionUpdates.unshift({ oldValue, newValue });
+      host.setState(diff.newValue, activeVersionId.value);
+      transactionUpdates.unshift(diff);
 
       if (this.transactionDepth === 0) {
         this.revision.commit(transactionUpdates);
@@ -144,7 +172,8 @@ const initialActions = {
 
       const useModule = this.modules[key];
       if (useModule) {
-        useModule().$patch(newState[key]);
+        const module = useModule();
+          module.$state = newState[key];
       } else {
         logger.error(`Store module ${key} does not exist`);
       }
@@ -297,8 +326,6 @@ async function initializeStore(initialState, migrations, models) {
   rootStore.$patch({ transactionDepth: 0 });
 
   if (typeof rootStore.initialize === 'function') rootStore.initialize();
-
-  rootStore.revision.initialize();
 
   await detectAppVersionMismatch();
 }

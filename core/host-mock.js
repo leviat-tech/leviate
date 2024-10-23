@@ -24,6 +24,7 @@ export function useMock() {
       const { state } = activeVersion.value;
 
       each(patch, (val, key) => {
+        // Don't need to handle undefined values in localStorage
         set(state, key, val);
       });
 
