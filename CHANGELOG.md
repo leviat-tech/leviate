@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.6.1](https://github.com/leviat-tech/leviate/compare/v5.6.0...v5.6.1) (2024-10-23)
+
+
+* keep one tab always open ([#191](https://github.com/leviat-tech/leviate/issues/191)) ([f3eed7f](https://github.com/leviat-tech/leviate/commit/f3eed7f4dff33d02954fb5c293f111d897cf2546))
+
 ## [5.6.0](https://github.com/leviat-tech/leviate/compare/v5.5.7...v5.6.0) (2024-10-16)
 
 
