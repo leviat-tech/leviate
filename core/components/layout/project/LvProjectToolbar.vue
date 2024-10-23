@@ -91,8 +91,6 @@ const menuItemClass = 'w-full flex items-center space-x-2 pl-3 pr-6 py-2 text-le
 function onKeyUp(e) {
   if (!e.ctrlKey) return;
 
-  console.log('keyup');
-
   switch (e.key) {
     case 'z':
       if (undoable.value) {
