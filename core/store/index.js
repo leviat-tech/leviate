@@ -9,6 +9,7 @@ import { useLocalize } from '../plugins/localize';
 import logger from '../extensions/logger.js';
 import useAppInfo from '../composables/useAppInfo.js';
 import useVersions from '../composables/useVersions';
+import { useHost } from '../plugins/host';
 
 class TransactionError extends Error {
   constructor() {
@@ -105,7 +106,7 @@ const initialActions = {
       const diff = deepDiff(oldState, newState);
 
       const { activeVersion, activeVersionId } = useVersions();
-      host.setState(diff.newValue, activeVersionId.value);
+      useHost().setState(diff.newValue, activeVersionId.value);
       transactionUpdates.unshift(diff);
 
       if (this.transactionDepth === 0) {
