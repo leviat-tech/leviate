@@ -28,6 +28,7 @@ import { computed, nextTick, ref } from 'vue';
 import { omit } from 'lodash-es';
 import { useRoute, useRouter } from 'vue-router';
 import ProjectEntityItemButton from './ProjectEntityItemButton.vue';
+import { transact } from '@crhio/leviate';
 
 const router = useRouter();
 const route = useRoute();
@@ -65,14 +66,18 @@ const onBlur = () => {
 };
 
 const onClone = () => {
-  const newData = omit(item.$toJSON(), ['id', 'name']);
-  const newItem = model.create(newData);
+  transact(() => {
+    const newData = omit(item.$toJSON(), ['id', 'name']);
+    const newItem = model.create(newData);
 
-  router.push(getItemRoute(newItem.id));
+    router.push(getItemRoute(newItem.id));
+  });
 };
 
 const onDelete = () => {
-  item.$delete();
+  transact(() => {
+    item.$delete();
+  })
 };
 
 </script>

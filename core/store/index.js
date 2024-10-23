@@ -1,14 +1,14 @@
 import { defineStore, createPinia } from 'pinia';
-import { ref } from 'vue';
 import { normie } from '@crhio/normie';
 import { useMeta } from '@crhio/leviate';
-import { isEmpty, get, last, range, each } from 'lodash-es';
+import { isEmpty, get, last, range, each, omit } from 'lodash-es';
 import Migration from '../extensions/migration';
 import revision from './plugins/revision';
 import BaseModel from '../BaseModel';
 import { useLocalize } from '../plugins/localize';
 import logger from '../extensions/logger.js';
 import useAppInfo from '../composables/useAppInfo.js';
+import useVersions from '../composables/useVersions';
 
 class TransactionError extends Error {
   constructor() {
@@ -21,11 +21,14 @@ let storeConfig = {};
 
 let useRootStore = () => logger.log('Root store has not been initialized');
 
+let transactionUpdates = [];
+
 function transact(cb) {
   if (useMeta().isReadOnly) {
-    console.log('Transaction skipped: Read-only mode.');
+    logger.log('Transaction skipped: Read-only mode.');
     return;
   }
+
   return useRootStore().transact(cb);
 }
 
@@ -38,18 +41,76 @@ const initialState = {
   appVersion: null,
 };
 
+function deepDiff(obj1, obj2) {
+  const result = {
+    oldValue: {},
+    newValue: {},
+  };
+
+  function compare(item1, item2, path = '') {
+    if (typeof item1 !== typeof item2) {
+      result.oldValue[path] = item1;
+      result.newValue[path] = item2;
+      return;
+    }
+
+    if (typeof item1 !== 'object' || item1 === null || item2 === null) {
+      if (item1 !== item2) {
+        result.oldValue[path] = item1;
+        result.newValue[path] = item2;
+      }
+      return;
+    }
+
+    const keys1 = Object.keys(item1);
+    const keys2 = Object.keys(item2);
+
+    for (const key of keys1) {
+      compare(item1[key], item2[key], path ? `${path}.${key}` : key);
+    }
+
+    for (const key of keys2) {
+      if (!keys1.includes(key)) {
+        compare(undefined, item2[key], path ? `${path}.${key}` : key);
+      }
+    }
+  }
+
+  compare(obj1, obj2);
+
+  return omit(result, 'transactionDepth');
+}
+
 const initialActions = {
   async transact(cb) {
+    if (this.transactionDepth === 0) {
+      transactionUpdates = [];
+    }
+
     this.transactionDepth++;
 
     try {
-      const res = cb();
+      const oldState = this.toJSON();
+
+      let res = cb();
+
+      const newState = this.toJSON();
+
+      this.transactionDepth --;
 
       if (res instanceof Promise) {
         await res.catch(this._onTransactionError);
       }
 
-      this.transactionDepth = 0;
+      const diff = deepDiff(oldState, newState);
+
+      const { activeVersion, activeVersionId } = useVersions();
+      host.setState(diff.newValue, activeVersionId.value);
+      transactionUpdates.unshift(diff);
+
+      if (this.transactionDepth === 0) {
+        this.revision.commit(transactionUpdates);
+      }
 
       return res;
     } catch (e) {
@@ -99,7 +160,8 @@ const initialActions = {
 
       const useModule = this.modules[key];
       if (useModule) {
-        useModule().$patch(newState[key]);
+        const module = useModule();
+          module.$state = newState[key];
       } else {
         logger.error(`Store module ${key} does not exist`);
       }

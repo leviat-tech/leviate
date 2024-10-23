@@ -3,14 +3,14 @@
     <CFormSection stacked>
       <div class="space-y-4">
 
-        <CTextInput label="config_name" no-translate v-model="data.localConfigName"/>
+        <CTextInput label="config_name" no-translate v-model="data.configName"/>
         <CListbox v-model="data.locale"
                   label="locale"
                   :options="$availableLanguages"
                   :formatter="$L"
         />
-        <CTextArea label="client_notes" v-model="data.localClientNotes" :rows="4"/>
-        <CTextArea label="internal_notes" v-model="data.localInternalNotes" :rows="4"/>
+        <CTextArea label="client_notes" v-model="data.clientNotes" :rows="4"/>
+        <CTextArea label="internal_notes" v-model="data.internalNotes" :rows="4"/>
 
         <div class='flex space-x-4 mt-8'>
           <CButton class="w-full" @click="save">Save</CButton>
@@ -24,41 +24,40 @@
 
 <script setup>
 import { reactive } from 'vue';
-import { useLocalize } from '@crhio/leviate';
+import { useLocalize, transact } from '@crhio/leviate';
 import { useSettingsStore } from '@/store/settings';
 
 const localize = useLocalize();
 const settings = useSettingsStore();
 
-const props = defineProps({
-  modelValue: Boolean
-});
-
-const emit = defineEmits(['update:modelValue']);
-
 const data = reactive({
-  localConfigName: settings.configName,
-  localClientNotes: settings.clientNotes,
-  localInternalNotes: settings.internalNotes,
+  configName: settings.configName,
+  clientNotes: settings.clientNotes,
+  internalNotes: settings.internalNotes,
   locale: localize.locale.value,
 });
 
 const reset = () => {
   Object.assign(data, {
-    localConfigName: '',
-    localClientNotes: '',
-    localInternalNotes: '',
+    configName: '',
+    clientNotes: '',
+    internalNotes: '',
   })
 }
 
 const save = () => {
-  settings.clientNotes = data.localClientNotes;
-  settings.internalNotes = data.localInternalNotes;
-  settings.configName = data.localConfigName;
-  settings.locale = localize.locale.value;
-  localize.setLocale(data.locale);
-  emit('update:modelValue', false);
+  transact(() => {
+    settings.clientNotes = data.clientNotes;
+    settings.internalNotes = data.internalNotes;
+    settings.configName = data.configName;
+    settings.locale = localize.locale.value;
+    localize.setLocale(data.locale);
+  });
 }
+
+settings.$subscribe(() => {
+  Object.assign(data, settings.$state);
+});
 
 const debug = () => console.log(data);
 </script>

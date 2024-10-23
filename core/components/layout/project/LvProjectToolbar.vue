@@ -74,7 +74,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import { useRootStore } from '@crhio/leviate';
 import useAppInfo from '@crhio/leviate/composables/useAppInfo';
 import { useLeviateStore } from '../../../store/leviate.js';
-import { computed } from 'vue';
+import { computed, onMounted, onUnmounted } from 'vue';
 
 const { openAppInfoModal, manifest } = useAppInfo();
 
@@ -88,7 +88,7 @@ const isExpanded = computed(() => leviate.panels.project.isExpanded);
 
 const menuItemClass = 'w-full flex items-center space-x-2 pl-3 pr-6 py-2 text-left';
 
-window.addEventListener('keydown', (e) => {
+function onKeyUp(e) {
   if (!e.ctrlKey) return;
 
   switch (e.key) {
@@ -103,5 +103,13 @@ window.addEventListener('keydown', (e) => {
       }
       break;
   }
-})
+}
+
+onMounted(() => {
+  window.addEventListener('keyup', onKeyUp);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('keyup', onKeyUp);
+});
 </script>
