@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.7.1](https://github.com/leviat-tech/leviate/compare/v5.7.0...v5.7.1) (2024-10-23)
+
+
+* import host plugin to store ([d0590ec](https://github.com/leviat-tech/leviate/commit/d0590ecf7beaa126a522df31690e9fc565bec4d0))
+
 ## [5.7.0](https://github.com/leviat-tech/leviate/compare/v5.6.1...v5.7.0) (2024-10-23)
 
 
