@@ -32,14 +32,6 @@ function transact(cb) {
   return useRootStore().transact(cb);
 }
 
-function getPatch(state, stateKeys) {
-  if (!stateKeys) return state;
-
-  return stateKeys.reduce((acc, key) => {
-    return { ...acc, [key]: get(state, key) }
-  }, {});
-}
-
 const initialState = {
   // used to determine whether realtime updates are external or a downstream reflection of local changes
   sessionId: null,
