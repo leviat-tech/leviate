@@ -55,10 +55,6 @@ function deepDiff(obj1, obj2) {
     newValue: {},
   };
 
-  function storeResult(path, oldValue, newValue) {
-
-  }
-
   function compare(item1, item2, path = '') {
     if (typeof item1 !== typeof item2) {
       result.oldValue[path] = item1;
@@ -306,7 +302,7 @@ function getStoreConfig(storeConfig, router) {
 
 // function to initialize store given initial state
 async function initializeStore(initialState, migrations, models) {
-    // eslint-disable-line
+  // eslint-disable-line
   const rootStore = useRootStore();
 
   // Register user modules and normie entities module in the root store
