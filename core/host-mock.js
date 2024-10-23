@@ -140,8 +140,6 @@ export function useMock() {
         createdAt: new Date().toISOString(),
       };
 
-      console.log(rootVersion.state);
-
       saveDataToLocalStorage({
         versions: [rootVersion],
         activeVersionId: rootVersionId,
