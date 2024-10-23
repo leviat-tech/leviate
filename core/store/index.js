@@ -1,7 +1,7 @@
 import { defineStore, createPinia } from 'pinia';
 import { normie } from '@crhio/normie';
 import { useMeta } from '@crhio/leviate';
-import { isEmpty, get, last, range, each, omit } from 'lodash-es';
+import { isEmpty, get, last, range, each, omit, isEqual } from 'lodash-es';
 import Migration from '../extensions/migration';
 import revision from './plugins/revision';
 import BaseModel from '../BaseModel';
@@ -61,6 +61,15 @@ function deepDiff(obj1, obj2) {
         result.newValue[path] = item2;
       }
       return;
+    }
+
+    // Check if both items are arrays
+    if (Array.isArray(item1) && Array.isArray(item2)) {
+      if (item1.length !== item2.length || !item1.every((item, index) => isEqual(item, item2[index]))) {
+        result.oldValue[path] = item1;
+        result.newValue[path] = item2;
+      }
+      return; // Don't iterate over array elements individually
     }
 
     const keys1 = Object.keys(item1);
