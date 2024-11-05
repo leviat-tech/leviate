@@ -104,13 +104,13 @@ const initialActions = {
 
       let res = cb();
 
-      const newState = this.toJSON();
-
       this.transactionDepth --;
 
       if (res instanceof Promise) {
         await res.catch(this._onTransactionError);
       }
+
+      const newState = this.toJSON();
 
       const diff = deepDiff(oldState, newState);
 
