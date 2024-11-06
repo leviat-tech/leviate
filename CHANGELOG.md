@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.7.3](https://github.com/leviat-tech/leviate/compare/v5.7.2...v5.7.3) (2024-11-06)
+
+
+* ensure transaction promise resolves before comparing state ([4f1c761](https://github.com/leviat-tech/leviate/commit/4f1c76124d503658c552734c60fbc1ab35aeb5a8))
+
 ## [5.7.2](https://github.com/leviat-tech/leviate/compare/v5.7.1...v5.7.2) (2024-10-23)
 
 
