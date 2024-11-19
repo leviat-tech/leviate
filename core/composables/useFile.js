@@ -55,6 +55,8 @@ function downloadFile(fileUrl, filename, extension, content, appendDate) {
     generatedFilename += '_' + new Date().toLocaleDateString(null, dateOptions);
   }
 
+  generatedFilename = generatedFilename.replace(/\./g, '_');
+
   const link = document.createElement('a');
 
   // Ensure link is not visible, and does not shift the page content
