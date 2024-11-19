@@ -1,7 +1,7 @@
 import { createApp as _createApp } from 'vue';
 import Concrete from '@crhio/concrete';
 import HostPlugin, { useHost, hostIsConnected } from './plugins/host';
-import LocalizePlugin from './plugins/localize';
+import LocalizePlugin, { useLocalize } from './plugins/localize';
 import { createStore, initializeStore } from './store';
 import { createRouter } from './router';
 import concreteDefaultOptions from './concreteOptions';
@@ -69,6 +69,7 @@ export async function createApp(projectConfig, Root, isStandalone) {
   const host = useHost()
   const initialState = await host.getState();
   const initialUrl = await host.getUrl();
+  host.meta?.hostLanguage && useLocalize().setLocale(host.meta.hostLanguage);
 
   initializeStore(initialState, migrations, models);
 
