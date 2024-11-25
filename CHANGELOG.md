@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.8.0](https://github.com/leviat-tech/leviate/compare/v5.7.3...v5.8.0) (2024-11-25)
+
+
+* enable setting locale from host selected language ([18daf7d](https://github.com/leviat-tech/leviate/commit/18daf7d7843f879c9d6661f1dc9a8344274a4fb8))
+* replace dots with underscores in file name ([2e1b4a3](https://github.com/leviat-tech/leviate/commit/2e1b4a3c8c5896c8457abf101a1710755d8ea0dd))
+
 ## [5.7.3](https://github.com/leviat-tech/leviate/compare/v5.7.2...v5.7.3) (2024-11-06)
 
 
