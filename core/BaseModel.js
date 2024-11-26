@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Entity } from '@crhio/normie'
 import logger from './extensions/logger';
 import { find, reject } from 'lodash-es';
+import { useRootStore } from './store';
 
 class BaseModel extends Entity {
   constructor(props) {
@@ -22,7 +23,15 @@ class BaseModel extends Entity {
     };
   }
 
-  static beforeUpdate(patch) {
+  static beforeAll(actionType, data) {
+    const { transactionDepth } = useRootStore();
+
+    if (transactionDepth === 0) {
+      logger.warn(`${this.name} ${actionType} called outside transact(). Data will not be persisted`, data)
+    }
+  }
+
+  static beforeUpdate(patch, id) {
     patch.lastUpdatedFields = Object.keys(patch);
     patch.updated_at = new Date().getTime();
   }
@@ -52,7 +61,10 @@ class BaseModel extends Entity {
   }
 
   clearInputErrors() {
-    this.errors = reject({ category: 'input' });
+    const clearedErrors = reject({ category: 'input' });
+    if (clearedErrors.length !== this.errors.length) {
+      this.errors = clearedErrors;
+    }
   }
 
   createError(category = 'input', path, text, isDismissable = false) {
