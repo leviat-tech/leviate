@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.8.1](https://github.com/leviat-tech/leviate/compare/v5.8.0...v5.8.1) (2024-11-27)
+
+
+* revert clearInputErrors ([218b971](https://github.com/leviat-tech/leviate/commit/218b97105b9a19639d15b119b030b16f2d23f194))
+* warn if transact not used when updating entities ([cd3f8d1](https://github.com/leviat-tech/leviate/commit/cd3f8d1cb5a3a6a7685bd8674df32b05e5d17b9b))
+
 ## [5.8.0](https://github.com/leviat-tech/leviate/compare/v5.7.3...v5.8.0) (2024-11-25)
 
 
