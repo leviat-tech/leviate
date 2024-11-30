@@ -2,17 +2,15 @@
   <LvLayout>
     <div class="flex">
     <!--{{ $l('import') }}-->
-      <LvInputPanel>
+      <div>
         <!--Custom event listens for emit when JSON has been sorted by layer and triggers function to capture it-->
        <LvFileSelector @layersSorted="receiveJSON"/>
        <!--Renders tree if data has been accepted-->
        <LvImportTree v-if="layerSortedJSON" :layerSortedJSON="layerSortedJSON"/>
-      </LvInputPanel>
-
+      </div>  
       <LvViewportPanel>
       </LvViewportPanel>
 
-      <LvInputPanel/>
     </div>
   </LvLayout>
 </template>
