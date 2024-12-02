@@ -13,7 +13,7 @@ import LvLogo from './ui/LvLogo.vue';
 import LvPopupMenu from './ui/LvPopupMenu.vue';
 
 import LvSlotRenderer from './LvSlotRenderer.vue';
-import LvFileSelector from './import/LvFileSelector.vue'
+import LvImport from './import/LvImport.vue'
 
 import LvLayersToggle from './viewport/LvLayersToggle.vue';
 
@@ -41,12 +41,5 @@ export {
   LvValidationPane,
   LvProjectPanelItem,
   LvExportItemsSelection,
-  ImportTest,
-  LvFileSelector,
-  LvLogo,
-  LvPopupMenu,
-
-  LvLayersToggle,
-
-  LvSlotRenderer,
+  LvImport,
 };
