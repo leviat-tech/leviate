@@ -31,7 +31,6 @@ function onDrop(e) {
   active.value = false;
   const file = e.dataTransfer.files[0];
   emit('select', file);
-  console.log(file);
 }
 
 </script>
