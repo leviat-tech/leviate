@@ -4,7 +4,7 @@
       <CCheckbox
         size="xs"
         v-model="shapes[i].isSelected"
-        :label="shape.annotationText || `Shape ${i + 1}: ${shape.type}`"
+        :label="shape.annotationText || `${$L('import_shape')} ${i + 1}`"
         :label-formatter="val => val.label"
       />
     </div>
