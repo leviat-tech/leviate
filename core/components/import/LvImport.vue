@@ -22,7 +22,7 @@ import useShapeSelect from '../../composables/useShapeSelect';
 import LvImportToolbar from './LvImportToolbar.vue';
 import LvImportFileSelect from './LvImportFileSelect.vue';
 
-const emit = defineEmits(['importShapes']);
+defineEmits(['importShapes']);
 
 const { selectedShapes } = useShapeSelect();
 
