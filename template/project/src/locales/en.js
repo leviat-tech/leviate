@@ -30,6 +30,10 @@ const phrases = {
   project_design: 'design',
   project_output: 'output',
 
+  import_shape: 'shape',
+  import_drag: 'Drag file to upload or',
+  import_select: 'Select File',
+
   // Input Panel
   example: 'example',
   test: 'test',

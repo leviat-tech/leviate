@@ -1,7 +1,6 @@
 <template>
-  <LvInputFileDrop @select="selectFile">
-    <div>Drag file to upload or</div>
-    <LvInputFileSelect @select="selectFile" accept=".dxf,.pdf" class="py-2"/>
+  <LvInputFileDrop @select="selectFile" :label="$l('import_drag')">
+    <LvInputFileSelect @select="selectFile" accept=".dxf,.pdf" class="py-2" :label="$L('import_select')"/>
     <div>{{ filename }}&nbsp;</div>
   </LvInputFileDrop>
 </template>
