@@ -9,7 +9,24 @@ const shapeUnitPrecision = ref(4);
 
 const selectedShapes = computed(() => filter(shapes.value, { isSelected: true }));
 
+/**
+ * @typedef Vertex
+ * @property { number } x
+ * @property { number } y
+ * @property { number } [bulge]
+ */
 
+/**
+ * @typedef { Vertex[] } Vertices
+ */
+
+/**
+ * Normalise the position of a shape by translating vertices to minimum x,y position of 0.
+ * Scale coordinates if specified e.g. when determining actual measurements from positions of points on a pdf page
+ * @param { Vertices } vertices
+ * @param { number } scale - the amount to scale each coordinate by
+ * @returns { Vertices }
+ */
 function getNormalizedVertices(vertices, scale = 1) {
   const xOnly = vertices.map(pt => pt.x);
   const yOnly = vertices.map(pt => pt.y);
@@ -27,6 +44,11 @@ function getNormalizedVertices(vertices, scale = 1) {
   });
 }
 
+/**
+ * Format a number according to the shapeUnits and shapeUnitsPrecision values
+ * @param {number} value
+ * @returns {number}
+ */
 function getFormattedValue(value) {
   const precision = shapeUnitPrecision.value;
   const units = shapeUnits.value;
@@ -35,6 +57,10 @@ function getFormattedValue(value) {
   return convertToSI(roundedValue, units);
 }
 
+/**
+ * Format all vertices in a shape according to the shapeUnits and shapeUnitsPrecision values
+ * @returns {Vertices}
+ */
 function getFormattedVertices(vertices) {
   return vertices.map(pt => {
     const { x, y, bulge } = pt;
@@ -43,7 +69,7 @@ function getFormattedVertices(vertices) {
       x: getFormattedValue(x),
       y: getFormattedValue(y),
       bulge,
-  };
+    };
   });
 }
 
@@ -114,7 +140,6 @@ const pdfConverter = {
 
         if (scale) {
           const vertices = getNormalizedVertices(currentShape.vertices, scale);
-          console.log(currentShape.vertices, vertices, scale);
           shapes.push({ ...currentShape, vertices });
           currentShape = null;
         }
@@ -132,11 +157,16 @@ const dxfConverter = {
   ],
   getUnits(dxfUnitType) {
     switch (dxfUnitType) {
-      case 1: return 'in';
-      case 2: return 'ft';
-      case 4: return 'mm';
-      case 5: return 'cm';
-      case 6: return 'm';
+      case 1:
+        return 'in';
+      case 2:
+        return 'ft';
+      case 4:
+        return 'mm';
+      case 5:
+        return 'cm';
+      case 6:
+        return 'm';
       default:
         console.warn('No units specified. Default "m" will be used')
         return 'm';
@@ -187,7 +217,7 @@ export default function useShapeSelect() {
       const converter = fileTypeConverterMap[fileData.type];
 
       if (!converter) {
-        console.log('File format not supported');
+        console.log(`File format "${fileData.type}" not supported`);
         return;
       }
 
