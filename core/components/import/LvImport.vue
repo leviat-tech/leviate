@@ -7,7 +7,7 @@
       </div>
 
       <div class="w-full flex flex-col relative">
-        <LvImportToolbar @importShapes="$emit('importShapes', selectedShapes)" />
+        <LvImportToolbar @importShapes="$emit('importShapes', $event)" />
         <LvImportShapes/>
       </div>
     </div>
@@ -18,12 +18,9 @@
 import LvLayout from '../layout/LvLayout.vue';
 import LvImportTree from './LvImportTree.vue';
 import LvImportShapes from './LvImportShapes.vue';
-import useShapeSelect from '../../composables/useShapeSelect';
 import LvImportToolbar from './LvImportToolbar.vue';
 import LvImportFileSelect from './LvImportFileSelect.vue';
 
 defineEmits(['importShapes']);
-
-const { selectedShapes } = useShapeSelect();
 
 </script>

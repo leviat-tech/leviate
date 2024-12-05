@@ -6,8 +6,8 @@
     <div class="absolute inset-4 bottom-12" v-html="svg" />
 
     <div class="absolute inset-x-4 bottom-1.5 text-left font-mono text-xs">
-      <div>W = {{ width.toFixed(2) }}</div>
-      <div>H = {{ height.toFixed(2) }}</div>
+      <div>W = {{ formatValue(width) }}</div>
+      <div>H = {{ formatValue(height) }}</div>
     </div>
 
     <div class="absolute bottom-0 right-0 flex items-center justify-center w-6 h-6"
@@ -27,7 +27,7 @@ const props = defineProps({
   shape: Object,
 });
 
-const { getShapeParams } = useShapeSelect();
+const { getShapeParams, shapeUnits, shapeUnitPrecision } = useShapeSelect();
 
 const indigo = '#201547';
 const gray = '#aaaaaa';
@@ -39,6 +39,12 @@ const svg = ref('');
 const width =  ref(null);
 const height =  ref(null);
 
+function formatValue(val) {
+  const rounded = val.toFixed(shapeUnitPrecision.value);
+
+  return parseFloat(rounded) + shapeUnits.value;
+}
+
 watchEffect(() => {
     const strokeColor = props.shape.isSelected ? indigo : gray;
     const fillColor = props.shape.isSelected ? indigo : black;
@@ -46,7 +52,7 @@ watchEffect(() => {
       fill: { color: fillColor, opacity: 0.05 },
       stroke: { color: strokeColor, opacity: 0.8 }
     };
-    const sketch = new Sketch().polyface(...params).style(style);
+    const sketch = new Sketch().polyface(...params).join().style(style);
 
     // Calculate padding of 1px to prevent clipping
     const { xmin, xmax, ymin, ymax } = sketch.extents;
