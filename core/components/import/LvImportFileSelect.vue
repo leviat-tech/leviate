@@ -1,7 +1,16 @@
 <template>
-  <LvInputFileDrop @select="selectFile" :label="$l('import_drag')">
-    <LvInputFileSelect @select="selectFile" accept=".dxf,.pdf" class="py-2" :label="$L('import_select')"/>
-    <div>{{ filename }}&nbsp;</div>
+  <LvInputFileDrop
+    :label="$l('import_drag_file')"
+    accept=".dxf,.pdf"
+    @error="onError"
+    @select="selectFile">
+    <LvInputFileSelect
+      @select="selectFile"
+      accept=".dxf,.pdf"
+      class="py-2"
+      :label="$L('import_select_file')"
+    />
+    <div :class="error && 'text-danger'">{{ error || filename }}&nbsp;</div>
   </LvInputFileDrop>
 </template>
 
@@ -10,12 +19,19 @@ import LvInputFileDrop from './LvInputFileDrop.vue';
 import LvInputFileSelect from './LvInputFileSelect.vue';
 import useShapeSelect from '../../composables/useShapeSelect';
 import { ref } from 'vue';
+import { useLocalize } from '../../plugins/localize';
 
-const { setShapesFromFile } = useShapeSelect();
+const { setShapesFromFile, clearShapes } = useShapeSelect();
 
 const filename = ref('');
+const error = ref('');
+const { $l } = useLocalize();
 
 async function selectFile(file) {
+  if (!file) return;
+
+  error.value = '';
+
   const { name } = file;
   const type = name.split('.').pop();
   filename.value = name;
@@ -35,5 +51,11 @@ function getFileContent(file) {
       resolve(e.target.result);
     };
   });
+}
+
+function onError(msg) {
+  clearShapes();
+  error.value = $l(msg);
+
 }
 </script>

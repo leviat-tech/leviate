@@ -31,8 +31,11 @@ const phrases = {
   project_output: 'output',
 
   import_shape: 'shape',
-  import_drag: 'Drag file to upload or',
-  import_select: 'Select File',
+  import_drag_file: 'Drag file to upload or',
+  import_select_file: 'Select file',
+  import_select_units: 'Select units',
+  import_select_precision: 'Precision',
+  import_error_unsupported_file_type: 'Unsupported file type',
 
   // Input Panel
   example: 'example',

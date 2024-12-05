@@ -24,20 +24,31 @@
 <script setup>
 import { ref } from 'vue';
 
-defineProps({
+const props = defineProps({
   label: String,
-})
+  accept: { type: String, required: true },
+});
 
-const emit = defineEmits(['select']);
+const emit = defineEmits(['select', 'error']);
 
 const active = ref(false);
 
 const isMouseActive = ref(false);
+const acceptedExtensions = props.accept.replace(/\./g, '').split(',');
 
 function onDrop(e) {
   active.value = false;
   const file = e.dataTransfer.files[0];
-  emit('select', file);
+
+  const extension = file.name.split('.').pop();
+  const isAccepted = acceptedExtensions.includes(extension);
+
+  if (isAccepted) {
+    emit('select', file);
+  } else {
+    emit('error', 'import_error_unsupported_file_type');
+  }
+
 }
 
 </script>
