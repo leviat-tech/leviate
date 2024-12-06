@@ -1,5 +1,5 @@
 <template>
-  <LvImport @importShapes="onImportShapes"/>
+  <LvImport @importShapes="onImportShapes" :title="$l('import_title')" />
 </template>
 
 <script setup>
