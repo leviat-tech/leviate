@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.9.1](https://github.com/leviat-tech/leviate/compare/v5.9.0...v5.9.1) (2024-12-06)
+
+
+* remove stray character from import template ([2377af3](https://github.com/leviat-tech/leviate/commit/2377af372aca6b3337d1e848ec8e9d649b08d9d5))
+
 ## [5.9.0](https://github.com/leviat-tech/leviate/compare/v5.8.1...v5.9.0) (2024-12-06)
 
 
