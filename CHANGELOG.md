@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.9.0](https://github.com/leviat-tech/leviate/compare/v5.8.1...v5.9.0) (2024-12-06)
+
+
+* add jsdocs to useShapeSelect ([b7411f7](https://github.com/leviat-tech/leviate/commit/b7411f7c81fe0177d58adef0b5b958e090d5f029))
+* add missing translation ([27ff9ff](https://github.com/leviat-tech/leviate/commit/27ff9ffdd06567447b35f7d7d43498e4b4ec34a9))
+* add scaffold ([5935656](https://github.com/leviat-tech/leviate/commit/593565642b3b6f80f84a182117a02b6207a1104c))
+* add title text to import page ([af8fb61](https://github.com/leviat-tech/leviate/commit/af8fb6116a295e41b526bd580b9030e4d8d74178))
+* add translations to import components ([e634fc0](https://github.com/leviat-tech/leviate/commit/e634fc0bb010770d64481473c106b01c4bd183fa))
+* add unit and precision options to shape import ([406b2e0](https://github.com/leviat-tech/leviate/commit/406b2e0fa223bcf0235eaef21e02cc13a655517f))
+* added dxf parsing functionality ([e850e69](https://github.com/leviat-tech/leviate/commit/e850e69295d77374c0c6d8eab214971046b7d167))
+* cleaned up parsed dxf data and normalised coordinates for polylines ([7843edb](https://github.com/leviat-tech/leviate/commit/7843edbd5c9c07acdf3286d0568aece006b494b0))
+* fix file drop input ([47817f8](https://github.com/leviat-tech/leviate/commit/47817f887b60ad1116f1c5e3670454522d325758))
+* init branch setup ([024aa79](https://github.com/leviat-tech/leviate/commit/024aa79125dcc5454e489958fa198180d3c6e6e0))
+* rebase ([2fb767e](https://github.com/leviat-tech/leviate/commit/2fb767e8dda6047c1679caf15cad29e5019611ed))
+* remove console.log ([8b39da2](https://github.com/leviat-tech/leviate/commit/8b39da225e876f48a0301b616d99c088277efb2a))
+* update file import ui ([3ed86a7](https://github.com/leviat-tech/leviate/commit/3ed86a7f1e330ebf7476da3a2e48400702e9fe1b))
+
 ## [5.8.1](https://github.com/leviat-tech/leviate/compare/v5.8.0...v5.8.1) (2024-11-27)
 
 
