@@ -30,6 +30,7 @@ const phrases = {
   project_design: 'design',
   project_output: 'output',
 
+  import_title: 'Import from a PDF or DXF file',
   import_shape: 'shape',
   import_drag_file: 'Drag file to upload or',
   import_select_file: 'Select file',

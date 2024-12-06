@@ -2,6 +2,7 @@
   <LvLayout>
     <div class="flex h-full relative">
       <div class="border-r w-[450px]">
+`        <div v-if="title" class="px-4 pt-4 text-lg font-bold text-sky-dark">{{ title }}</div>
         <LvImportFileSelect />
         <LvImportTree/>
       </div>
@@ -20,6 +21,10 @@ import LvImportTree from './LvImportTree.vue';
 import LvImportShapes from './LvImportShapes.vue';
 import LvImportToolbar from './LvImportToolbar.vue';
 import LvImportFileSelect from './LvImportFileSelect.vue';
+
+defineProps({
+  title: String,
+})
 
 defineEmits(['importShapes']);
 
