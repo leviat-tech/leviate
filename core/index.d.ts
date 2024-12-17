@@ -26,14 +26,13 @@ import {
     LvSlotRenderer,
     LvProjectPanel,
     LvResultsPanel,
-    LvExportLayout,
     LvInputContent,
     LvInputTabPanel,
-    LvProjectOutput,
     LvViewportPanel,
     LvValidationPane,
+    LvExportDocument,
     LvProjectPanelItem,
-    LvExportItemsSelection
+    LvExportConfigurator,
 } from './components/'
 
 export {
@@ -65,12 +64,11 @@ export {
     LvSlotRenderer,
     LvProjectPanel,
     LvResultsPanel,
-    LvExportLayout,
     LvInputContent,
     LvInputTabPanel,
-    LvProjectOutput,
     LvViewportPanel,
     LvValidationPane,
+    LvExportDocument,
     LvProjectPanelItem,
-    LvExportItemsSelection
+    LvExportConfigurator
 };
