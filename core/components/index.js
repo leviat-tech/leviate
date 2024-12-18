@@ -9,6 +9,9 @@ import LvInputTabPanel from './layout/input/LvInputTabPanel.vue';
 import LvProjectInfo from './layout/project/info/LvProjectInfo.vue';
 import LvProjectPanelItem from './layout/project/LvProjectPanelItem.vue';
 
+import LvExportDocument from './export/LvExportDocument.vue';
+import LvExportConfigurator from './export/LvExportConfigurator.vue';
+
 import LvLogo from './ui/LvLogo.vue';
 import LvPopupMenu from './ui/LvPopupMenu.vue';
 
@@ -18,9 +21,6 @@ import LvImport from './import/LvImport.vue'
 import LvLayersToggle from './viewport/LvLayersToggle.vue';
 
 import LvProjectRoot from './layout/LvProjectRoot.vue';
-import LvExportLayout from './export/LvExportLayout.vue';
-import LvProjectOutput from './export/LvProjectOutput.vue';
-import LvExportItemsSelection from './export/LvExportItemsSelection.vue';
 
 export {
   LvLogo,
@@ -33,13 +33,12 @@ export {
   LvSlotRenderer,
   LvProjectPanel,
   LvResultsPanel,
-  LvExportLayout,
   LvInputContent,
   LvInputTabPanel,
-  LvProjectOutput,
   LvViewportPanel,
+  LvExportDocument,
   LvValidationPane,
   LvProjectPanelItem,
-  LvExportItemsSelection,
+  LvExportConfigurator,
   LvImport,
 };
