@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.10.0](https://github.com/leviat-tech/leviate/compare/v5.9.1...v5.10.0) (2024-12-18)
+
+
+* export configuration page ([#208](https://github.com/leviat-tech/leviate/issues/208)) ([0106bce](https://github.com/leviat-tech/leviate/commit/0106bce1f1e0aeb9fde9be4a7fd9a91e78876fd2))
+
 ## [5.9.1](https://github.com/leviat-tech/leviate/compare/v5.9.0...v5.9.1) (2024-12-06)
 
 
