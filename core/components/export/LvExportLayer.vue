@@ -13,14 +13,14 @@
             no-wrap
             label-class="text-xs"
             :disabled="isDisabled"
-            @change="handleLayerSelection()"
+            @change="handleLayerSelection"
           />
 
           <button
             v-else
             class="flex justify-center ml-2 items-center w-4 h-4 border text-indigo"
             data-cy="export_layer__partialy_selected_layer"
-            @click="handleLayerSelection()"
+            @click="handleLayerSelection"
           >
             <div class="w-2 h-0.5 bg-indigo"></div>
           </button>
@@ -81,8 +81,6 @@
 
   const isDisabled = computed(() => {
     const isSomePositionCalculated = layer?.orderedPositionIds.some((id) => {
-      console.log(positionModel?.find(id).status);
-
       return isPositionCalculated(id);
     });
 
