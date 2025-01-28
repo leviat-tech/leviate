@@ -5,7 +5,7 @@
             :class="disabled && 'cursor-default'"
             @click="togglePanel"
     >
-      <LvTabText :is-expanded="isExpanded">Results</LvTabText>
+      <LvTabText :is-expanded="isExpanded">{{ $L('results') }}</LvTabText>
     </button>
     <div v-else-if="tabs" class="h-full flex flex-col justify-start -mx-px">
       <LvInputToolbar :tabs="tabs" panel="results" />

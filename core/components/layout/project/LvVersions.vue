@@ -36,8 +36,8 @@
     </div>
 
     <div class="flex flex-1  flex-row">
-      <CTextInput placeholder="Create a new version" v-model="configNameInputVal" class="mr-4" @keydown.enter="onSaveNewVersion"/>
-      <CButton class="w-24 outline-none focus:ring-2 ring-offset-1 ring-indigo-light" @click="onSaveNewVersion">Save</CButton>
+      <CTextInput :placeholder="$l('create_a_new_version')" v-model="configNameInputVal" class="mr-4" @keydown.enter="onSaveNewVersion"/>
+      <CButton class="w-24 outline-none focus:ring-2 ring-offset-1 ring-indigo-light" @click="onSaveNewVersion">{{ $L('save') }}</CButton>
     </div>
 
     <component v-if="!isProduction && devToolsComponent" :is="devToolsComponent" />

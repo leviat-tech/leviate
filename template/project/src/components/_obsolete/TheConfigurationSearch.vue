@@ -1,6 +1,6 @@
 <template>
   <div class="relative transition-all duration-150">
-    <CAutoComplete placeholder="Search"
+    <CAutoComplete :placeholder="$L('search')"
                    v-model="query"
                    :options="options"
                    @change="onSelect"
