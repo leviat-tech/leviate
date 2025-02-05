@@ -4,6 +4,7 @@ import { useLeviateStore } from './store/leviate';
 
 import { useEnum } from './composables/useEnum';
 import { useFile } from './composables/useFile';
+import useVersions from './composables/useVersions';
 import { useFeature } from './composables/useFeature';
 import { useApiGateway } from './composables/useApiGateway';
 import { usePdfGenerator } from './composables/usePdfGenerator';
@@ -26,6 +27,7 @@ export {
   useMeta,
   useFeature,
   useLocalize,
+  useVersions,
   useRootStore,
   useApiGateway,
   useMessageStore,
