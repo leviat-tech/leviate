@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.10.4](https://github.com/leviat-tech/leviate/compare/v5.10.3...v5.10.4) (2025-02-07)
+
+
+* layers pop-up window's position ([#216](https://github.com/leviat-tech/leviate/issues/216)) ([580f41b](https://github.com/leviat-tech/leviate/commit/580f41b2e08c8b9e5909a5805414c30cab1d46be))
+
 ## [5.10.3](https://github.com/leviat-tech/leviate/compare/v5.10.2...v5.10.3) (2025-02-07)
 
 
