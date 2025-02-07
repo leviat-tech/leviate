@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.10.3](https://github.com/leviat-tech/leviate/compare/v5.10.2...v5.10.3) (2025-02-07)
+
+
+* warnings for export ([#214](https://github.com/leviat-tech/leviate/issues/214)) ([a376b83](https://github.com/leviat-tech/leviate/commit/a376b833846f8cdd56749f47b57010fe00b3e3c2))
+
 ## [5.10.2](https://github.com/leviat-tech/leviate/compare/v5.10.1...v5.10.2) (2025-02-05)
 
 
