@@ -34,7 +34,7 @@
     "yup": "^0.32.8"
   },
   "devDependencies": {
-    "@crhio/leviat-tailwind-configuration": "^1.1.0",
+    "@crhio/leviat-tailwind-configuration": "^1.2.1",
     "@headlessui/tailwindcss": "^0.1.0",
     "@vitejs/plugin-vue": "^3.0.0",
     "autoprefixer": "^10.3.1",
@@ -55,7 +55,7 @@
     "s3-folder-upload": "^2.3.5",
     "sass": "1.32",
     "start-server-and-test": "^2.0.0",
-    "tailwindcss": "^3.0.24",
+    "tailwindcss": "^3.4.17",
     "vite": "^3.0.9",
     "vite-svg-loader": "^3.3.0"
   }

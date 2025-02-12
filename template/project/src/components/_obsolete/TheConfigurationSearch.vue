@@ -7,7 +7,7 @@
                    size="sm"
     >
       <template #suffix>
-        <div class="absolute z-30 w-8 h-8 p-1.5 right-0 text-gray-400">
+        <div class="absolute z-30 w-8 h-8 p-1.5 right-0 text-base-400">
           <CIcon type="search"/>
         </div>
       </template>
