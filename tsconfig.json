@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@crhio/normie": ["./node_modules/@crhio/normie/dist"],
+    },
+    "allowJs": true,
+    "esModuleInterop": true
+  },
+  "exclude": ["node_modules/"]
+}
