@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.10.5](https://github.com/leviat-tech/leviate/compare/v5.10.4...v5.10.5) (2025-02-12)
+
+
+* retain non-input errors on entities when validating ([#218](https://github.com/leviat-tech/leviate/issues/218)) ([fe17020](https://github.com/leviat-tech/leviate/commit/fe170203987208eb73495c56ab673745c79e1e1e))
+
 ## [5.10.4](https://github.com/leviat-tech/leviate/compare/v5.10.3...v5.10.4) (2025-02-07)
 
 
