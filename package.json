@@ -29,7 +29,7 @@
   "dependencies": {
     "@commitlint/cli": "^16.2.4",
     "@commitlint/config-conventional": "^16.2.4",
-    "@crhio/concrete": "^2.26.3",
+    "@crhio/concrete": "^3.0.3",
     "@crhio/inject": "^1.0.15",
     "@crhio/jsdraft": "^0.0.55",
     "@crhio/normie": "^1.3.3",
@@ -54,6 +54,7 @@
     "yup": "^0.32.8"
   },
   "devDependencies": {
+    "@crhio/leviat-tailwind-configuration": "^1.2.1",
     "@vue/test-utils": "^2.4.1",
     "husky": "^8.0.1",
     "vitest": "^0.29.1"

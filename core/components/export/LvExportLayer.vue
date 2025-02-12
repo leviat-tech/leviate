@@ -18,11 +18,11 @@
 
           <button
             v-else
-            class="flex justify-center ml-2 items-center w-4 h-4 border text-indigo"
+            class="flex justify-center ml-2 items-center w-4 h-4 border text-brand-700"
             data-cy="export_layer__partialy_selected_layer"
             @click="handleLayerSelection"
           >
-            <div class="w-2 h-0.5 bg-indigo"></div>
+            <div class="w-2 h-0.5 bg-brand-700"></div>
           </button>
 
           <label class="font-semibold py-1 pl-2" :on-beforeinput="layer?.id">{{ layerName }}</label>

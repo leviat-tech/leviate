@@ -14,7 +14,6 @@ body {
   <div class="absolute inset-0 overflow-y-auto">
     <RouterView :key="appKey"/>
   </div>
-
   <LvModalAppInfo />
 </template>
 

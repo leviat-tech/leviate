@@ -1,6 +1,6 @@
 <template>
   <LvPanel :expanded="width" panelId="input">
-    <div class="h-full flex flex-col justify-start -mx-px">
+    <div class="h-full flex flex-col justify-start">
       <LvInputToolbar :tabs="tabs" />
       <slot />
     </div>
