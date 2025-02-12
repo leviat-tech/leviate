@@ -1,5 +1,5 @@
 <template>
-  <div class="import__toolbar relative z-10 bg-gray-50 h-12 border-b flex items-center justify-between px-1">
+  <div class="import__toolbar relative z-10 bg-base-50 h-12 border-b flex items-center justify-between px-1">
 
     <template v-if="shapes.length > 0">
       <div class="flex items-center pl-2">

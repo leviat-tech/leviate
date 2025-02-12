@@ -1,36 +1,36 @@
 <template>
-  <div class="mt-6 bg-danger text-white p-0.5 text-center text-xs font-bold">
+  <div class="mt-6 bg-status-danger text-white p-1 text-center text-xs font-bold">
     Development tools
   </div>
 
-  <div class="flex space-x-1 mt-1">
+  <div class="flex justify-between mt-1">
     <CButton
-      v-bind="buttonProps"
+      size="xs"
       title="Save this design to a file"
       @click="onDownLoadFile"
     >
-      <CIcon type="download" size="sm" />
+      <CIcon type="download" size="xs" />
       <div>Save</div>
     </CButton>
 
-    <label class="flex-1">
+    <label class="">
       <input @change="onRestoreFromFile" type="file" ref="uploadfile" hidden />
       <CButton
-        v-bind="buttonProps"
+        size="xs"
         @click="$refs.uploadfile.click()"
         title="Upload design from a file"
       >
-        <CIcon type="upload" size="sm" />
+        <CIcon type="upload" size="xs" />
         <div>Restore</div>
       </CButton>
     </label>
 
     <CButton
-      v-bind="buttonProps"
+      size="xs"
       @click="clearStorage"
       title="Reset local storage"
     >
-      <CIcon type="sync" size="sm" />
+      <CIcon type="sync" size="xs" />
       <div>Reset</div>
     </CButton>
     
@@ -41,13 +41,6 @@
 import { useMock } from '@crhio/leviate/host-mock';
 import { useHost } from '@crhio/leviate';
 import useVersions from '@crhio/leviate/composables/useVersions';
-
-const buttonProps = {
-  class:
-    'w-full flex flex-1 items-center justify-center space-x-1 !px-0 font-bold outline-none focus-visible:bg-sky-dark',
-  color: 'sky',
-  size: 'xs',
-};
 
 const { clearStorage } = useMock();
 
