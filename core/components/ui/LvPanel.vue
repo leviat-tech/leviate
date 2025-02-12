@@ -6,37 +6,44 @@
 
     <!-- Panel content -->
     <div class="flex-1 overflow-hidden">
-      <div class="h-full" :class="isExpanded">
+      <div class="h-full flex flex-col" :class="isExpanded" v-if="isExpanded">
         <slot/>
       </div>
-    </div>
-
-    <!-- Panel toggle button -->
-    <div v-if="!disabled" class="w-full bg-gray-100 flex items-center border-t"
-         :class="isExpanded ? 'justify-end' : 'justify-center'">
-      <button @click="store.setPanelIsExpanded(panelId, !isExpanded)"
-              class="flex justify-center items-center w-[59px] h-10 text-steel-darkest hover:text-black outline-none focus-visible:bg-sky focus-visible:text-white">
-        <IconCollapse v-if="store.panels[panelId].isExpanded" :class="{ 'rotate-180' : flip }"/>
-        <IconExpand v-else :class="{ 'rotate-180' : flip }"/>
+      
+      <button
+        v-if="!isExpanded"
+        class="flex h-full w-full items-center justify-center bg-base-50 hover:bg-base-100 outline-none"
+        :class="disabled && 'cursor-default'"
+        @click="(!disabled) ? store.setPanelIsExpanded(panelId, !isExpanded) : null"
+      >
+        <div :class="{'text-xs font-semibold [writing-mode:vertical-lr] whitespace-nowrap rotate-180' : !isExpanded }">
+          {{ $L(panelId) }}
+        </div>
       </button>
     </div>
+    
+    <!-- Panel toggle button -->
+    <div v-if="!disabled" class="w-full bg-base-50 flex items-center border-t border-base-300 h-12"
+         :class="(isExpanded && !flip) ? 'justify-end' : 'justify-start'">
+      <button @click="store.setPanelIsExpanded(panelId, !isExpanded)" class="flex justify-center items-center w-[59px] h-10 text-base-600 hover:text-base-800 outline-none">
+        <ChevronLeftIcon v-if="isExpanded" class="h-6 w-6" :class="{ 'rotate-180' : flip }" />
+        <ChevronRightIcon v-else class="h-6 w-6" :class="{ 'rotate-180' : flip }"/>
+      </button>
+    </div>
+
+
   </div>
 </template>
 
 <script setup>
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/20/solid';
 import { useLeviateStore } from '../../store/leviate';
-import IconCollapse from '../icons/iconCollapse.vue';
-import IconExpand from '../icons/iconExpand.vue';
 import { computed, watch } from 'vue';
 
 const props = defineProps({
   expanded: {
     type: Number,
     default: 300,
-  },
-  collapsed: {
-    type: Number,
-    default: 60,
   },
   flip: {
     type: Boolean,
@@ -54,7 +61,7 @@ const store = useLeviateStore();
 const isExpanded = computed(() => store.panels[props.panelId].isExpanded);
 
 const widthValue = computed(() => {
-  return isExpanded.value ? props.expanded : props.collapsed;
+  return isExpanded.value ? props.expanded : 60;
 });
 
 watch(isExpanded, () => {
