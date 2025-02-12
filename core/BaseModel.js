@@ -61,7 +61,7 @@ class BaseModel extends Entity {
   }
 
   clearInputErrors() {
-    this.errors = reject({ category: 'input' });
+    this.errors = reject(this.errors, { category: 'input' });
   }
 
   createError(category = 'input', path, text, isDismissable = false) {
