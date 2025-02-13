@@ -20,12 +20,12 @@ const threeReloadPlugin = () => ({
   },
 });
 
-module.exports = function getSharedConfig({ projectName, mode, dir, projectConfig = {} }) {
+module.exports = function getSharedConfig({ mode, projectConfig = {} }) {
   const sharedConfig = {
     resolve: {
       alias: {
-        '~': `${path.resolve(dir)}`,
-        '@': `${path.resolve(dir, 'src')}`,
+        '~': `${path.resolve(process.cwd())}`,
+        '@': `${path.resolve(process.cwd(), 'src')}`,
         '@crhio/leviate': '/node_modules/@crhio/leviate/core',
       },
     },
@@ -42,7 +42,7 @@ module.exports = function getSharedConfig({ projectName, mode, dir, projectConfi
       manifestPlugin(),
       threeReloadPlugin(),
       vue(getDefaultTemplateCompilerOptions(mode)),
-      translationPlugin(projectName)
+      translationPlugin()
     ],
 
     build: {
