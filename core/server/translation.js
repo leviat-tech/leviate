@@ -2,17 +2,18 @@ const fs = require('fs');
 const axios = require('axios');
 const merge = require('lodash/merge');
 
-const translationUrl = 'https://leviatdesignstudio.com/service/translations/api/translations'; // TODO: get the url from env
+const translationUrl = 'https://leviatdesignstudio.com/service/translations/api/translations';
 const localesFolderName = 'src/locales';
 
-export default async function translationPlugin(projectName) {
+module.exports = async function translationPlugin(projectName) {
+  console.log('translationPlugin')
   try {
     if (!fs.existsSync(localesFolderName)) {
       fs.mkdirSync(localesFolderName);
     }
     if (!projectName.length) {
       throw new Error(
-        'Please specify the app name in the script by adding argument. Example build:translation "Project Name"',
+        'Make sure that you specify the project name in order to get translations keys',
       );
     }
   } catch (err) {
@@ -22,7 +23,7 @@ export default async function translationPlugin(projectName) {
   let jsonData = {};
   const fileName = `${localesFolderName}/index.json`;
   const languages_data = await axios.get(translationUrl);
-  const languages = languages_data.data.filter(app => app.name === projectName[0])[0].dictionaries;
+  const languages = languages_data.data.filter(app => app.name === projectName)[0].dictionaries;
   const countries = languages_data.data.filter(app => app.name === 'Countries')[0].dictionaries;
 
   Object.keys(languages).forEach(translation => {
