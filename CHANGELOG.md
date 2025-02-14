@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.10.6](https://github.com/leviat-tech/leviate/compare/v5.10.5...v5.10.6) (2025-02-13)
+
+
+* add entity ts support for models ([a0f3292](https://github.com/leviat-tech/leviate/commit/a0f329204d321bcaf7f54a18e690391ba5859c1b))
+* add shared config data ([323b47e](https://github.com/leviat-tech/leviate/commit/323b47e54d9564b497a355d03049e5649dbde665))
+* pull project name from manifest file ([1a9825e](https://github.com/leviat-tech/leviate/commit/1a9825e58d3aef0569e97016763ad403466a93f6))
+* small fix ([dfb8a94](https://github.com/leviat-tech/leviate/commit/dfb8a942850fef346108833f3b1ce9480f467f0b))
+
 ## [5.10.5](https://github.com/leviat-tech/leviate/compare/v5.10.4...v5.10.5) (2025-02-12)
 
 
