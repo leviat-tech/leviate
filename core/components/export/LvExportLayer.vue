@@ -8,7 +8,7 @@
               areAllNestedCalulatedPositionsSelected ||
               (!areAllNestedCalulatedPositionsSelected && !areSomeNestedPositionsCalculated)
             "
-            v-model="isSelected"
+            :modelValue="isSelected"
             size="xs"
             no-wrap
             label-class="text-xs"
@@ -25,7 +25,7 @@
             <div class="w-2 h-0.5 bg-indigo"></div>
           </button>
 
-          <label class="font-semibold py-1 pl-2" :on-beforeinput="layer?.id">{{ layerName }}</label>
+          <div class="font-semibold py-1 pl-2">{{ layerName }}</div>
         </div>
       </template>
 

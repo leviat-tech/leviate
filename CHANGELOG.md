@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.10.6](https://github.com/leviat-tech/leviate/compare/v5.10.5...v5.10.6) (2025-02-13)
+
+
+* add entity ts support for models ([a0f3292](https://github.com/leviat-tech/leviate/commit/a0f329204d321bcaf7f54a18e690391ba5859c1b))
+* add shared config data ([323b47e](https://github.com/leviat-tech/leviate/commit/323b47e54d9564b497a355d03049e5649dbde665))
+* pull project name from manifest file ([1a9825e](https://github.com/leviat-tech/leviate/commit/1a9825e58d3aef0569e97016763ad403466a93f6))
+* small fix ([dfb8a94](https://github.com/leviat-tech/leviate/commit/dfb8a942850fef346108833f3b1ce9480f467f0b))
+
+## [5.10.5](https://github.com/leviat-tech/leviate/compare/v5.10.4...v5.10.5) (2025-02-12)
+
+
+* retain non-input errors on entities when validating ([#218](https://github.com/leviat-tech/leviate/issues/218)) ([fe17020](https://github.com/leviat-tech/leviate/commit/fe170203987208eb73495c56ab673745c79e1e1e))
+
+## [5.10.4](https://github.com/leviat-tech/leviate/compare/v5.10.3...v5.10.4) (2025-02-07)
+
+
+* layers pop-up window's position ([#216](https://github.com/leviat-tech/leviate/issues/216)) ([580f41b](https://github.com/leviat-tech/leviate/commit/580f41b2e08c8b9e5909a5805414c30cab1d46be))
+
+## [5.10.3](https://github.com/leviat-tech/leviate/compare/v5.10.2...v5.10.3) (2025-02-07)
+
+
+* warnings for export ([#214](https://github.com/leviat-tech/leviate/issues/214)) ([a376b83](https://github.com/leviat-tech/leviate/commit/a376b833846f8cdd56749f47b57010fe00b3e3c2))
+
+## [5.10.2](https://github.com/leviat-tech/leviate/compare/v5.10.1...v5.10.2) (2025-02-05)
+
+
+* export useVersions ([#212](https://github.com/leviat-tech/leviate/issues/212)) ([af74942](https://github.com/leviat-tech/leviate/commit/af749421316c7c1a6e0cd7b8cfd3513e390af0a8))
+
 ## [5.10.1](https://github.com/leviat-tech/leviate/compare/v5.10.0...v5.10.1) (2025-01-28)
 
 

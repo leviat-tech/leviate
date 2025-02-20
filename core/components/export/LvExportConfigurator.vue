@@ -32,8 +32,8 @@
   import AVAILABLE_EXPORT_TYPES from './availableExportTypes';
 
   const props = defineProps({
-    positionModel: Object,
-    layersModel: Object,
+    positionModel: Function,
+    layersModel: Function,
     availableDocTypes: {
       type: Array<{ type: string; configuration?: { size: string; ext: string; label: string } }>,
       required: true,

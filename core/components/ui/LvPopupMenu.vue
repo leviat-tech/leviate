@@ -13,7 +13,7 @@
     <Transition enter-from-class="scale-95 opacity-0" leave-to-class="opacity-0">
       <MenuItems
         as="div"
-        :class="`absolute text-black top-3 right-3 z-20 w-44 py-2 bg-white shadow-xl transition duration-150 origin-top-right ${menuContainerClasses}`"
+        :class="`absolute text-black top-5 left-3 z-20 w-44 py-2 bg-white shadow-xl transition duration-150 origin-top-right ${menuContainerClasses}`"
       >
         <MenuItem v-for="(slot, i) in $slots.default?.()" :key="i" as="div">
           <LvSlotRenderer :child="slot" />
