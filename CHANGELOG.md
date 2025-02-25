@@ -2,11 +2,6 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [5.11.0](https://github.com/leviat-tech/leviate/compare/v5.10.6...v5.11.0) (2025-02-25)
-
-
-* add generic category getErrorByPath to BaseModel ([#223](https://github.com/leviat-tech/leviate/issues/223)) ([d688974](https://github.com/leviat-tech/leviate/commit/d688974065f2ab49c50a94c3cf81c4bc71d6e054))
-
 ## [5.10.6](https://github.com/leviat-tech/leviate/compare/v5.10.5...v5.10.6) (2025-02-13)
 
 
