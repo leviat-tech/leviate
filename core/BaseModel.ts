@@ -79,13 +79,8 @@ class BaseModel extends Entity {
     this.errors = reject(this.errors, { id });
   }
 
-  getErrorByPath(path: string, category = 'input') {
-    return find(this.errors, { category, path });
-  }
-
-//for backwards compatibility
-  getInputErrorByPath(path: string) {
-    this.getErrorByPath(path)
+  getInputErrorByPath(path) {
+    return find(this.errors, { category: 'input', path });
   }
 }
 
