@@ -2,11 +2,12 @@ const fs = require('fs-extra');
 const { marked } = require('marked');
 
 function generateManifest(root) {
-  const { version } = fs.readJsonSync(`${root}/package.json`);
+  const { version, name: packageName } = fs.readJsonSync(`${root}/package.json`);
   const manifest = fs.readJsonSync(`${root}/manifest.json`);
 
   return {
     ...manifest,
+    packageName,
     date: Date.now(),
     version,
   };
