@@ -4,6 +4,7 @@ const vue = require('@vitejs/plugin-vue');
 const svgLoader = require('vite-svg-loader');
 const getDefaultTemplateCompilerOptions = require('./server/defaultTemplateCompilerOptions');
 const manifestPlugin = require('./server/manifestPlugin');
+const authPlugin = require('./server/authPlugin');
 const translationPlugin = require('./server/translation');
 
 /**
@@ -39,6 +40,7 @@ module.exports = function getSharedConfig({ mode, projectConfig = {} }) {
 
     plugins: [
       svgLoader(),
+      authPlugin(),
       manifestPlugin(),
       threeReloadPlugin(),
       vue(getDefaultTemplateCompilerOptions(mode)),
@@ -52,10 +54,10 @@ module.exports = function getSharedConfig({ mode, projectConfig = {} }) {
     server: {
       port: 8080,
       proxy: {
-        '/api': {
+        '/service': {
           target: process.env.SERVICE_URL,
           headers: {
-            'x-service-key': process.env.SERVICE_KEY,
+            'x-app-id': process.env.npm_package_name + ' (development)'
           },
           changeOrigin: true,
         },
