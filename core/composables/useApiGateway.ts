@@ -72,6 +72,17 @@ interface ApiGateway {
   delete: <T = any>(path: string, options?: AxiosRequestConfig) => Promise<T>;
 }
 
+function getSanitizedData(unsanitizedData: any): any | undefined {
+  // Data is not preset e.g. GET request
+  if (!unsanitizedData) return undefined;
+
+  // Don't sanitize formdata
+  if (unsanitizedData instanceof FormData) return unsanitizedData;
+
+  // Cast data to a POJO (strip functions and circular references etc)
+  return JSON.parse(JSON.stringify(unsanitizedData));
+}
+
 export function useApiGateway(servicePath: string): ApiGateway {
   const methods: (keyof ApiGateway)[] = ['get', 'put', 'post', 'delete'];
 
@@ -95,7 +106,7 @@ export function useApiGateway(servicePath: string): ApiGateway {
           options = args[1];
         }
 
-        const data = unsanitizedData ? JSON.parse(JSON.stringify(unsanitizedData)) : undefined;
+        const data = getSanitizedData(unsanitizedData);
         const rxDoubleSlash = /\/+/g;
         const url = '/service/' + fullPath.replace(rxDoubleSlash, '/');
 
