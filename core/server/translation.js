@@ -24,6 +24,7 @@ module.exports = async function translationPlugin() {
   let jsonData = {};
   const fileName = `${localesFolderName}/index.json`;
   const languages_data = await axios.get(translationUrl);
+  
   const languages = languages_data.data.filter(app => app.name === translationName)[0].dictionaries;
   const countries = languages_data.data.filter(app => app.name === 'Countries')[0].dictionaries;
 

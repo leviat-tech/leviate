@@ -54,11 +54,6 @@ module.exports = function getSharedConfig({ mode, projectConfig = {} }) {
       proxy: {
         '/api': {
           target: process.env.SERVICE_URL,
-          rewrite: (path) => {
-            return process.env.SERVICE_URL.includes('leviatdesignstudio.com')
-              ? path
-              : path.replace('/api/service', '')
-          },
           headers: {
             'x-service-key': process.env.SERVICE_KEY,
           },
