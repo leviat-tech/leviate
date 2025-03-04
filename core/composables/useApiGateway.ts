@@ -52,17 +52,31 @@ async function fetchToken(nowSeconds: number) {
 
 async function getToken(): Promise<string> {
   const nowSeconds = Math.floor(Date.now() / 1000);
-  const refreshWindowSeconds = 60;
 
-  if (currentToken) {
-    if (nowSeconds > currentTokenExpiresAt + refreshWindowSeconds) {
-      // If token needs refreshing soon then fetch a new one in the background;
-      fetchToken(nowSeconds);
-    }
-    return currentToken;
+  if (!currentToken) {
+    return fetchToken(nowSeconds);
   }
 
-  return fetchToken(nowSeconds);
+  const timeInSecondsUntilExpiry = currentTokenExpiresAt - nowSeconds;
+  const isExpired = timeInSecondsUntilExpiry <= 0;
+
+  if (isExpired) {
+    return fetchToken(nowSeconds);
+  }
+
+  const refreshWindowSeconds = 120;
+  const minimumBackgroundRefreshSeconds = 20;
+
+  if (
+    timeInSecondsUntilExpiry < refreshWindowSeconds &&
+    timeInSecondsUntilExpiry > minimumBackgroundRefreshSeconds
+  ) {
+      // If token needs refreshing soon then fetch a new one in the background
+    // and use the current token for the request;
+    fetchToken(nowSeconds);
+  }
+
+  return currentToken;
 }
 
 interface ApiGateway {
