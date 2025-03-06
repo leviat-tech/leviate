@@ -1,16 +1,23 @@
 import {useApiGateway} from "./useApiGateway";
 import {useHost} from "../plugins/host";
+import {reactive} from "vue";
 
+interface EntityResults {
+  [entityId: string]: EntityItemResults;
+}
 
-async function getStoragePath(positionId: string): Promise<string> {
+interface EntityItemResults {}
+
+const entityResults: EntityResults = reactive({});
+
+async function getStoragePath(entityId: string): Promise<string> {
   const designData = await useHost().getConfiguration();
   const designId = designData.id;
 
-  return `/${designId}/${positionId}`;
+  return `/${designId}/${entityId}`;
 }
 
 export default function useResults(appName: string) {
-
   const storageApi = useApiGateway(`fupload/${appName}-results`);
 
   let errorCallback: (error: Error) => void | undefined;
@@ -24,29 +31,49 @@ export default function useResults(appName: string) {
   }
 
   return {
-    onError(callback: (error: Error) => void) {
+    entityResults,
+
+    onResultsError(callback: (error: Error) => void) {
       errorCallback = callback;
     },
 
-    async getResults(positionId: string) {
-      const storagePath = await getStoragePath(positionId);
-      return storageApi.get(storagePath).catch(handleStorageApiError);
+    /**
+     * Fetch an entity's results from s3 and save in local store
+     * @param entityId
+     */
+    async getResults(entityId: string) {
+      const storagePath = await getStoragePath(entityId);
+      const results = await storageApi.get(storagePath).catch(handleStorageApiError);
+      entityResults[entityId] = results;
+      return results;
     },
 
-    async uploadResults(positionId: string, results: any): Promise<any> {
+    /**
+     * Upload an entity's results to s3 and save in local store
+     * @param entityId
+     * @param results
+     */
+    async uploadResults(entityId: string, results: EntityItemResults): Promise<any> {
+      entityResults[entityId] = results;
+
       const formdata = new FormData();
       const json = JSON.stringify(results);
       const blob = new Blob([json], { type: 'application/json' });
-      const file = new File([blob], 'positionId');
+      const file = new File([blob], 'entityId');
       formdata.append('file', file);
 
-      const storagePath = await getStoragePath(positionId);
+      const storagePath = await getStoragePath(entityId);
 
       return storageApi.post(storagePath, formdata).catch(handleStorageApiError);
     },
 
-    async deleteResults(positionId: string) {
-      const storagePath = await getStoragePath(positionId);
+    /**
+     * Delete an entity's results from internal store and s3 bucket
+     * @param entityId
+     */
+    async deleteResults(entityId: string) {
+      delete entityResults[entityId];
+      const storagePath = await getStoragePath(entityId);
       return storageApi.delete(storagePath).catch(handleStorageApiError);
     }
   }
