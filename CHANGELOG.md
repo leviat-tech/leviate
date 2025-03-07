@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.12.0](https://github.com/leviat-tech/leviate/compare/v5.11.1...v5.12.0) (2025-03-07)
+
+
+* add type as an create error arg; add createErrMsg alias ([#231](https://github.com/leviat-tech/leviate/issues/231)) ([eb66f49](https://github.com/leviat-tech/leviate/commit/eb66f49c62e15a1bad885cf4cec8361c4dba2905))
+
 ## [5.11.1](https://github.com/leviat-tech/leviate/compare/v5.11.0...v5.11.1) (2025-03-05)
 
 
