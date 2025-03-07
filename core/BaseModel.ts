@@ -64,15 +64,19 @@ class BaseModel extends Entity {
     this.errors = reject(this.errors, { category: 'input' });
   }
 
-  createError(category = 'input', path, text, isDismissable = false) {
+  createError(category = 'input', path, text, isDismissable = false, type = 'error') {
     this.errors.push({
       id: uuidv4(),
       category,
-      type: 'error',
+      type,
       path,
       text,
       isDismissable
     });
+  }
+
+  createErrorMessage({ category = 'input', path, text, isDismissable = false, type = 'error' }) {
+    this.createError(category, path, text, isDismissable, type)
   }
 
   deleteError(id) {
