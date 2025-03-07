@@ -1,6 +1,6 @@
-import {useApiGateway} from "./useApiGateway";
-import {useHost} from "../plugins/host";
-import {reactive} from "vue";
+import { useApiGateway } from "./useApiGateway";
+import { useHost } from "../plugins/host";
+import { reactive } from "vue";
 
 interface EntityResults {
   [entityId: string]: EntityItemResults;
@@ -10,6 +10,22 @@ interface EntityItemResults {}
 
 const entityResults: EntityResults = reactive({});
 
+let api;
+
+function getStorageApi() {
+  if (api) { return api }
+
+  const { referenceName } = useHost().meta.configurator;
+
+  if (!referenceName) {
+    throw new Error('Could not retrieve referenceName from host.meta.configurator');
+  }
+
+  api = useApiGateway(`fupload/${referenceName}-results`);
+
+  return api;
+}
+
 async function getStoragePath(entityId: string): Promise<string> {
   const designData = await useHost().getConfiguration();
   const designId = designData.id;
@@ -17,9 +33,7 @@ async function getStoragePath(entityId: string): Promise<string> {
   return `/${designId}/${entityId}`;
 }
 
-export default function useResults(appName: string) {
-  const storageApi = useApiGateway(`fupload/${appName}-results`);
-
+export default function useResults() {
   let errorCallback: (error: Error) => void | undefined;
 
   function handleStorageApiError(error: Error) {
@@ -43,7 +57,7 @@ export default function useResults(appName: string) {
      */
     async getResults(entityId: string) {
       const storagePath = await getStoragePath(entityId);
-      const results = await storageApi.get(storagePath).catch(handleStorageApiError);
+      const results = await getStorageApi().get(storagePath).catch(handleStorageApiError);
       entityResults[entityId] = results;
       return results;
     },
@@ -64,7 +78,7 @@ export default function useResults(appName: string) {
 
       const storagePath = await getStoragePath(entityId);
 
-      return storageApi.post(storagePath, formdata).catch(handleStorageApiError);
+      return getStorageApi().post(storagePath, formdata).catch(handleStorageApiError);
     },
 
     /**
@@ -74,7 +88,7 @@ export default function useResults(appName: string) {
     async deleteResults(entityId: string) {
       delete entityResults[entityId];
       const storagePath = await getStoragePath(entityId);
-      return storageApi.delete(storagePath).catch(handleStorageApiError);
+      return getStorageApi().delete(storagePath).catch(handleStorageApiError);
     }
   }
 }
