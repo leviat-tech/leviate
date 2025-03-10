@@ -2,11 +2,6 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [5.13.0](https://github.com/leviat-tech/leviate/compare/v5.12.0...v5.13.0) (2025-03-10)
-
-
-* switch to error message for validate func ([#233](https://github.com/leviat-tech/leviate/issues/233)) ([abecfca](https://github.com/leviat-tech/leviate/commit/abecfcac2c8ae2fc40be9b79cc8d7b21d6f186a1))
-
 ## [5.12.0](https://github.com/leviat-tech/leviate/compare/v5.11.1...v5.12.0) (2025-03-07)
 
 
