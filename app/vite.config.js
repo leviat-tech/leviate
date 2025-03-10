@@ -3,7 +3,9 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import svgLoader from 'vite-svg-loader';
 import manifestPlugin from '../core/server/manifestPlugin';
+import authPlugin from '../core/server/authPlugin';
 import { version } from '../package.json';
+import useAppInfo from '../core/composables/useAppInfo';
 
 process.env.VITE_LEVIATE_VERSION = version;
 
@@ -45,9 +47,19 @@ export default defineConfig({
     vue(),
     svgLoader(),
     manifestPlugin('../template/project'),
+    authPlugin(),
   ],
 
   server: {
     port: 8080,
+    proxy: {
+      '/service': {
+        target: process.env.SERVICE_URL,
+        headers: {
+          'x-app-id': process.env.npm_package_name + ' (development)'
+        },
+        changeOrigin: true,
+      },
+    },
   },
 });
