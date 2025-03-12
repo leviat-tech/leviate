@@ -9,8 +9,10 @@ module.exports = function tokenPlugin() {
     configureServer(server) {
       const { SERVICE_URL, LDS_CLIENT_ID, LDS_CLIENT_SECRET } = process.env;
 
-      if (!SERVICE_URL || !LDS_CLIENT_ID || !LDS_CLIENT_SECRET) {
-        throw new Error('please ensure you have the following environment variables set:\n- SERVICE_URL\n- LDS_CLIENT_ID\n- LDS_CLIENT_SECRET');
+      if (process.env.VITEST !== 'true') {
+        if (!SERVICE_URL || !LDS_CLIENT_ID || !LDS_CLIENT_SECRET) {
+          throw new Error('please ensure you have the following environment variables set:\n- SERVICE_URL\n- LDS_CLIENT_ID\n- LDS_CLIENT_SECRET');
+        }
       }
 
       server.middlewares.use('/auth/get-service-token', async(req, res, next) => {
