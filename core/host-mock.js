@@ -2,7 +2,7 @@ import inject from '@crhio/inject';
 import logger from './extensions/logger.js';
 import { watch } from 'vue';
 import useVersions, { activeVersionId } from './composables/useVersions';
-import { assign, cloneDeep, each, set } from 'lodash-es';
+import { cloneDeep, each, set } from 'lodash-es';
 import axios from 'axios';
 
 
@@ -57,6 +57,12 @@ export function useMock() {
       data.meta = Object.assign(data.meta, newMeta);
     },
 
+    async fetchServiceToken() {
+      const res = await axios.get('/auth/get-service-token').catch(console.log);
+      return res.data;
+    },
+
+    // TODO: Deprecated but leaving in for legacy support
     async makeApiGatewayRequest({ method, url, data, options }) {
       const fetchUrl = ['/api/service', url].join('/').replace(/\/\//, '/');
 

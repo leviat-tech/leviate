@@ -3,11 +3,16 @@ const axios = require('axios');
 const merge = require('lodash/merge');
 
 const translationUrl = process.env.VITE_TRANSLATE_BASE_URL;
+
+if (!translationUrl) {
+  throw new Error('Please ensure environment variable VITE_TRANSLATE_BASE_URL is defined.');
+}
+
 const localesFolderName = 'src/locales';
 
 module.exports = async function translationPlugin() {
   const { translationName } = fs.readJsonSync(`${process.cwd()}/manifest.json`);
-  
+
   try {
     if (!fs.existsSync(localesFolderName)) {
       fs.mkdirSync(localesFolderName);
