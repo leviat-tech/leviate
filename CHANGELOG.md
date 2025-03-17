@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.14.0](https://github.com/leviat-tech/leviate/compare/v5.13.0...v5.14.0) (2025-03-17)
+
+
+* add useResults composable ([24688cf](https://github.com/leviat-tech/leviate/commit/24688cfce913f20d0eda2766faaee646bb9dfe3f))
+* don't check env vars in test mode ([ddee02f](https://github.com/leviat-tech/leviate/commit/ddee02f41651031a22651f6954b0d8c82774b1ba))
+* revert manifest plugin changes ([33d0bdf](https://github.com/leviat-tech/leviate/commit/33d0bdffd6e414ca611de46505422d9e4d95f838))
+* update useApiGateway and dev server to use new token service ([6b242c3](https://github.com/leviat-tech/leviate/commit/6b242c342ea6c9e98217e89d0dc0f5c785770061))
+
 ## [5.12.0](https://github.com/leviat-tech/leviate/compare/v5.11.1...v5.12.0) (2025-03-07)
 
 
