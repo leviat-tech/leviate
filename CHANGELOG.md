@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.14.1](https://github.com/leviat-tech/leviate/compare/v5.14.0...v5.14.1) (2025-03-24)
+
+
+* add auth plugin to preview server ([c71edf6](https://github.com/leviat-tech/leviate/commit/c71edf6518533f42f85e30b59e66e2ab2f213991))
+* fix package-lock.json ([3826e6b](https://github.com/leviat-tech/leviate/commit/3826e6bcff48e690a5bc382f2b35605e9384afa7))
+* handle fetch token error ([c81adbd](https://github.com/leviat-tech/leviate/commit/c81adbd46226123b5ea17818b610c51e86a814aa))
+* revert version in template ([0d365e4](https://github.com/leviat-tech/leviate/commit/0d365e40dc3da4516db94899c02995181e9954fb))
+
 ## [5.14.0](https://github.com/leviat-tech/leviate/compare/v5.13.0...v5.14.0) (2025-03-17)
 
 
