@@ -4,7 +4,7 @@ const vue = require('@vitejs/plugin-vue');
 const svgLoader = require('vite-svg-loader');
 const getDefaultTemplateCompilerOptions = require('./server/defaultTemplateCompilerOptions');
 const manifestPlugin = require('./server/manifestPlugin');
-const authPlugin = require('./server/authPlugin');
+const { tokenPlugin } = require('./server/authPlugin');
 const translationPlugin = require('./server/translation');
 
 /**
@@ -40,7 +40,7 @@ module.exports = function getSharedConfig({ mode, projectConfig = {} }) {
 
     plugins: [
       svgLoader(),
-      authPlugin(),
+      tokenPlugin(),
       manifestPlugin(),
       threeReloadPlugin(),
       vue(getDefaultTemplateCompilerOptions(mode)),
