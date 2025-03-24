@@ -13,15 +13,15 @@ async function getToken() {
       client_id: LDS_CLIENT_ID,
       client_secret: LDS_CLIENT_SECRET,
     })
-  }).then(res => res.text());
+  }).then(res => res.json());
 }
 
 function configureServer(server) {
   server.middlewares.use('/auth/get-service-token', async (req, res) => {
     try {
-      const token = await getToken();
+      const tokenResponse = await getToken();
 
-      res.end(token);
+      res.end(JSON.stringify(tokenResponse));
     } catch (e) {
       console.log('Error retrieving token:', e);
     }
