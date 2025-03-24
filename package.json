@@ -10,7 +10,6 @@
   "bin": "cli/index.js",
   "main": "core/index.js",
   "scripts": {
-    "prepublishOnly": "node scripts/bump-template-version",
     "prepare": "husky install",
     "test": "vitest"
   },
