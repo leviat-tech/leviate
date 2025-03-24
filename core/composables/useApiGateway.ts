@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { useHost } from '../plugins/host';
-import useAppInfo from './useAppInfo';
 
 interface TokenResponse {
   access_token: string;
@@ -123,10 +122,13 @@ export function useApiGateway(servicePath: string): ApiGateway {
         const data = getSanitizedData(unsanitizedData);
         const rxDoubleSlash = /\/+/g;
         const url = '/service/' + fullPath.replace(rxDoubleSlash, '/');
-
+        const pluginId = await useHost().getConfiguration().referenceName;
 
         const token = await getToken();
-        const headers = { Authorization: `Bearer ${token}` };
+        const headers = {
+          Authorization: `Bearer ${token}`,
+          'x-app-id': pluginId
+        };
 
         try {
           const res: AxiosResponse<T> = await axios({
