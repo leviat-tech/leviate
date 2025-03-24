@@ -43,6 +43,10 @@ async function fetchToken(nowSeconds: number) {
   const { fetchServiceToken } = useHost();
   const { access_token, expires_in } = await fetchServiceToken() as TokenResponse;
 
+  if (!access_token) {
+    throw new Error('could not retrieve access token');
+  }
+
   currentToken = access_token;
   currentTokenExpiresAt = nowSeconds + expires_in;
 
