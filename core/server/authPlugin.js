@@ -33,11 +33,15 @@ function configureServer(server) {
  * in order to fetch tokens that can be used to call
  * API Gateway services
  */
-module.exports = function tokenPlugin() {
+function tokenPlugin() {
   return {
     name: 'token-generator',
     configureServer,
     configurePreviewServer: configureServer,
   };
 }
- exports.getToken = getToken;
+
+module.exports = {
+  tokenPlugin,
+  getToken
+};
