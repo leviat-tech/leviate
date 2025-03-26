@@ -121,6 +121,29 @@ const pdfConverter = {
     return parseFloat(scale[1]);
   },
 
+  getColumnsData(text) {
+    const columnPropertyLine = /BSIAnnotColumns\s\d+\s/.exec(text)[0].split(" ")[1];
+    const columnsStr = new RegExp(columnPropertyLine + " 0 obj\\[<(.*?)>\\]", "s").exec(text)[1];
+    const columnDataStr = /BSIColumnData\[(.*?)\]/.exec(text)[1];
+    const columnPropertyRegex = /\/Name\((.*?)\)/g;
+    const columnDataRegex = /\((.*?)\)/g;
+    let columnPropertyMatch;
+    let dataMatch;
+    let dataArray = [];
+    let i = 0
+    let columnData = {};
+
+    while ((dataMatch = columnDataRegex.exec(columnDataStr)) !== null) {
+      dataArray.push(dataMatch[1]);
+    }
+
+    while ((columnPropertyMatch = columnPropertyRegex.exec(columnsStr)) !== null) {
+      columnData[columnPropertyMatch[1]] = dataArray[i];
+      i++;
+    }
+    return columnData;
+  },
+
   getShapesFromFileContent(text) {
     const shapes = [];
     const regex = /(\d+ 0 obj.*?endobj)/gs;
@@ -140,7 +163,8 @@ const pdfConverter = {
 
         if (scale) {
           const vertices = getNormalizedVertices(currentShape.vertices, scale);
-          shapes.push({ ...currentShape, vertices });
+          const columnData = this.getColumnsData(text);
+          shapes.push({ ...currentShape, columnData, vertices });
           currentShape = null;
         }
       }
