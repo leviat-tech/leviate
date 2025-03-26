@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import svgLoader from 'vite-svg-loader';
 import manifestPlugin from '../core/server/manifestPlugin';
-import authPlugin from '../core/server/authPlugin';
+import { tokenPlugin } from '../core/server/authPlugin';
 import { version } from '../package.json';
 import useAppInfo from '../core/composables/useAppInfo';
 
@@ -47,7 +47,7 @@ export default defineConfig({
     vue(),
     svgLoader(),
     manifestPlugin('../template/project'),
-    authPlugin(),
+    tokenPlugin(),
   ],
 
   server: {
