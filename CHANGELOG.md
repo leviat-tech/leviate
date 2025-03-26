@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.14.2](https://github.com/leviat-tech/leviate/compare/v5.14.1...v5.14.2) (2025-03-26)
+
+
+* fix dev app config ([a22738e](https://github.com/leviat-tech/leviate/commit/a22738ed252a2a37f06b1480e253b945837399b5))
+
 ## [5.14.1](https://github.com/leviat-tech/leviate/compare/v5.14.0...v5.14.1) (2025-03-24)
 
 
