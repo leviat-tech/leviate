@@ -2,6 +2,7 @@ import { computed, ref, watch } from 'vue';
 import { filter } from 'lodash-es';
 import Big from 'big.js';
 import { convertToSI } from '@crhio/concrete/src/utils/units';
+import { getValueType, formatPropertyName } from '../extensions/pdfFormatter';
 
 const shapes = ref([]);
 const shapeUnits = ref('m');
@@ -121,10 +122,8 @@ const pdfConverter = {
     return parseFloat(scale[1]);
   },
 
-  getColumnsData(text) {
-    const columnPropertyLine = /BSIAnnotColumns\s\d+\s/.exec(text)[0].split(" ")[1];
-    const columnsStr = new RegExp(columnPropertyLine + " 0 obj\\[<(.*?)>\\]", "s").exec(text)[1];
-    const columnDataStr = /BSIColumnData\[(.*?)\]/.exec(text)[1];
+  getColumnsData(text, columnPropertyLine, columnDataStr) {
+    const columnsStr = new RegExp(columnPropertyLine + ' 0 obj\\[<(.*?)>\\]', 's').exec(text)[1];
     const columnPropertyRegex = /\/Name\((.*?)\)/g;
     const columnDataRegex = /\((.*?)\)/g;
     let columnPropertyMatch;
@@ -138,13 +137,16 @@ const pdfConverter = {
     }
 
     while ((columnPropertyMatch = columnPropertyRegex.exec(columnsStr)) !== null) {
-      columnData[columnPropertyMatch[1]] = dataArray[i];
+      columnData[formatPropertyName(columnPropertyMatch[1])] = getValueType(dataArray[i]);
       i++;
     }
     return columnData;
   },
 
   getShapesFromFileContent(text) {
+    const columnPropertyLine = /BSIAnnotColumns\s\d+\s/.exec(text)[0]?.split(' ')[1];
+    const columnDataStr = /BSIColumnData\[(.*?)\]/.exec(text)[1];
+    const haveColumnsData = columnPropertyLine && columnDataStr;
     const shapes = [];
     const regex = /(\d+ 0 obj.*?endobj)/gs;
     let match;
@@ -163,8 +165,12 @@ const pdfConverter = {
 
         if (scale) {
           const vertices = getNormalizedVertices(currentShape.vertices, scale);
-          const columnData = this.getColumnsData(text);
-          shapes.push({ ...currentShape, columnData, vertices });
+          const columnData = haveColumnsData && this.getColumnsData(text, columnPropertyLine, columnDataStr);
+          shapes.push({ 
+            ...currentShape, 
+            vertices,
+            ...(columnData && { columnData })
+          });
           currentShape = null;
         }
       }
