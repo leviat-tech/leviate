@@ -27,21 +27,22 @@ const props = defineProps({
   shape: Object,
 });
 
-const { getShapeParams, shapeUnits, shapeUnitPrecision } = useShapeSelect();
+const { getDraftShapeParams, shapeUnits, shapeUnitPrecision } = useShapeSelect();
 
 const indigo = '#201547';
 const gray = '#aaaaaa';
 const black = '#000000';
 const widthPx = 158; // w-48 class in px
 
-const params = getShapeParams(props.shape);
+const params = getDraftShapeParams(props.shape.vertices);
+const cutoutsParams = props.shape.cutouts?.map(getDraftShapeParams);
 const svg = ref('');
 const width =  ref(null);
 const height =  ref(null);
 
 function formatValue(val) {
   const rounded = val.toFixed(shapeUnitPrecision.value);
-
+  
   return parseFloat(rounded) + shapeUnits.value;
 }
 
@@ -52,7 +53,17 @@ watchEffect(() => {
       fill: { color: fillColor, opacity: 0.05 },
       stroke: { color: strokeColor, opacity: 0.8 }
     };
-    const sketch = new Sketch().polyface(...params).join().style(style);
+    const styleCutout = {
+      fill: { color: 'white', opacity: 1 },
+      stroke: { color: 'black', opacity: 0.8 }
+    };
+    let sketch = new Sketch().polyface(...params).join().style(style);
+    const cutoutSketches = cutoutsParams 
+      ? cutoutsParams.map( cutoutParams => new Sketch().polyface(...cutoutParams).join().style(styleCutout))
+      : [];
+      cutoutSketches.forEach(cutoutSketch => {
+        sketch = sketch.add(cutoutSketch)
+      })
 
     // Calculate padding of 1px to prevent clipping
     const { xmin, xmax, ymin, ymax } = sketch.extents;

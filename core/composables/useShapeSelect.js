@@ -21,17 +21,28 @@ const selectedShapes = computed(() => filter(shapes.value, { isSelected: true })
  */
 
 /**
- * Normalise the position of a shape by translating vertices to minimum x,y position of 0.
- * Scale coordinates if specified e.g. when determining actual measurements from positions of points on a pdf page
+ * Get minimum x,y from vertices
  * @param { Vertices } vertices
- * @param { number } scale - the amount to scale each coordinate by
- * @returns { Vertices }
- */
-function getNormalizedVertices(vertices, scale = 1) {
+*/
+function getReferencePoint(vertices){
   const xOnly = vertices.map(pt => pt.x);
   const yOnly = vertices.map(pt => pt.y);
   const minX = Math.min(...xOnly);
   const minY = Math.min(...yOnly);
+
+  return { x: minX, y: minY }
+}
+
+/**
+ * Normalise the position of a shape by translating vertices to minimum x,y position of 0.
+ * Scale coordinates if specified e.g. when determining actual measurements from positions of points on a pdf page
+ * @param { Vertices } vertices
+ * @param { number } scale - the amount to scale each coordinate by
+ * @param { Vertex } refPoint - minimum x,y to use for translating
+ * @returns { Vertices }
+ */
+function getNormalizedVertices(vertices, scale = 1, refPoint = { x: 0, y: 0 }) {
+  const { x: minX, y: minY } = refPoint;
 
   return vertices.map(pt => {
     const { x, y } = pt;
@@ -73,6 +84,22 @@ function getFormattedVertices(vertices) {
   });
 }
 
+/**
+ * Converts raw strings with vertices in format ['x1', 'y1', 'x2', 'y2', ...]
+ * @returns {Vertices}
+ */
+function getVerticesFromString(verticesStr) {
+  const vertices = [];
+
+  for (let i = 0; i < verticesStr.length; i += 2) {
+    const x = parseFloat(verticesStr[i]);
+    const y = parseFloat(verticesStr[i + 1]);
+    vertices.push({ x, y })
+  }
+
+  return vertices;
+}
+
 const pdfConverter = {
   getShapeMeta(chunk) {
     const isShape = chunk.match(/Subj\(Area Measurement\)\/Type\/Annot/);
@@ -80,18 +107,22 @@ const pdfConverter = {
     if (!isShape) {
       return
     }
-
+    
     const verticesStr = chunk
     .match(/Vertices\[([^\]]+)]/)[1]
     .split(' ');
-
-    const vertices = [];
-
-    for (let i = 0; i < verticesStr.length; i += 2) {
-      const x = parseFloat(verticesStr[i]);
-      const y = parseFloat(verticesStr[i + 1]);
-      vertices.push({ x, y })
+    
+    let cutoutStr;
+    const cutoutStrMatch = chunk
+      .match(/Cutouts\[\[(.*?)\]\]/)
+    if(cutoutStrMatch) {
+      cutoutStr = cutoutStrMatch[1]
+        .split(/\]\[/)
+        .map(c => c.split(' '));
     }
+
+    const vertices = getVerticesFromString(verticesStr);
+    const cutouts = cutoutStr?.map(getVerticesFromString);
 
     const annotationHTML = chunk.match(/<body[^>]+>(.+)<\/body>/)?.[1];
     const div = document.createElement('div');
@@ -105,6 +136,7 @@ const pdfConverter = {
       annotationText,
       title,
       vertices,
+      cutouts,
       isSelected: true,
     }
   },
@@ -139,8 +171,10 @@ const pdfConverter = {
         const scale = this.getScale(chunk);
 
         if (scale) {
-          const vertices = getNormalizedVertices(currentShape.vertices, scale);
-          shapes.push({ ...currentShape, vertices });
+          const referencePoint = getReferencePoint(currentShape.vertices);
+          const vertices = getNormalizedVertices(currentShape.vertices, scale, referencePoint);
+          const cutouts = currentShape.cutouts ? currentShape.cutouts.map(cutout => getNormalizedVertices(cutout, scale, referencePoint)) : currentShape.cutouts;
+          shapes.push({ ...currentShape, vertices, cutouts });
           currentShape = null;
         }
       }
@@ -224,8 +258,8 @@ export default function useShapeSelect() {
       shapes.value = await converter.getShapesFromFileContent(fileData.content);
     },
     clearShapes: () => shapes.value = [],
-    getShapeParams: (shape) => {
-      return shape.vertices.reduce((vertices, pt) => {
+    getDraftShapeParams: (vertices) => {
+      return vertices.reduce((vertices, pt) => {
         const { x, y, bulge } = pt;
         const nextVertices = [...vertices, [x, y]];
 
@@ -237,6 +271,7 @@ export default function useShapeSelect() {
         return {
           ...shape,
           vertices: getFormattedVertices(shape.vertices),
+          cutouts: shape.cutouts?.map(getFormattedVertices),
         }
       })
     }
