@@ -148,7 +148,7 @@ const pdfConverter = {
           shapes.push({ 
             isSelected: true,
             vertices: normalizedVertices,
-            ...(columnData ? { data: { ...columnData, ...rest }} : { data: rest })
+            data: columnData ? { ...columnData, ...rest } : rest
           });
           currentShape = null;
         }
