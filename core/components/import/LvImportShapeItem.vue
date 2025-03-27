@@ -72,12 +72,22 @@
 
     props.shape.features.forEach((feat) => {
       if (feat.featureType === 'OPENING') {
-        openings.push(
-          new Sketch()
-            .polyface(...feat.vertices.map(({ x, y }) => [x, y]))
-            .join()
-            .style(styleCutout)
-        );
+        if(feat.type === 'LWPOLYLINE') {
+          openings.push(
+            new Sketch()
+              .polyface(...feat.vertices.map(({ x, y }) => [x, y]))
+              .join()
+              .style(styleCutout)
+          );
+        } else if(feat.type === 'CIRCLE') {
+          openings.push(
+            new Sketch()
+              .circle([feat.center.x, feat.center.y], feat.radius)
+              .join()
+              .style(styleCutout)
+          );
+        }
+
       }
     });
 

@@ -330,8 +330,51 @@ const dxfConverter = {
       return polygonA.every((point) => isPointInOrOnPolygon(point, polygonB));
     }
 
+    function isCircleInsidePolygon(polygon, center, radius) {
+      if (!pointInPolygonInclusiveEdges(polygon, center)) {
+        return false;
+      }
+
+      const testPoints = [
+        { x: center.x + radius, y: center.y },
+        { x: center.x - radius, y: center.y },
+        { x: center.x, y: center.y + radius },
+        { x: center.x, y: center.y - radius },
+        { x: center.x + radius * Math.SQRT1_2, y: center.y + radius * Math.SQRT1_2 },
+        { x: center.x - radius * Math.SQRT1_2, y: center.y + radius * Math.SQRT1_2 },
+        { x: center.x + radius * Math.SQRT1_2, y: center.y - radius * Math.SQRT1_2 },
+        { x: center.x - radius * Math.SQRT1_2, y: center.y - radius * Math.SQRT1_2 },
+      ];
+
+      for (const point of testPoints) {
+        if (!pointInPolygonInclusiveEdges(polygon, point)) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
     return entities.reduce((acc, entity) => {
+      // Do not consider shape as potential opening
+      if (entity.handle === shape.handle) {
+        return acc;
+      }
+
+      // Consider only polygonal and circular shapes
+      if (entity.type !== this.SHAPE_TYPES.CIRCLE && entity.type !== this.SHAPE_TYPES.LWPOLYLINE) {
+        return acc;
+      }
+
       if (
+        entity.type === this.SHAPE_TYPES.CIRCLE &&
+        isCircleInsidePolygon(shape.vertices, entity.center, entity.radius)
+      ) {
+        acc.push(entity);
+      }
+
+      if (
+        entity.type === this.SHAPE_TYPES.LWPOLYLINE &&
         isPolygonInsideOrTouching(
           entity.vertices.map(({ x, y }) => [x, y]),
           shape.vertices.map(({ x, y }) => [x, y])
@@ -416,19 +459,26 @@ const dxfConverter = {
     shapeUnits.value = this.getUnits(dxf.header.$INSUNITS);
 
     const shapes = this.findOnlyShapes(dxf.entities);
+    console.log(shapes);
+    
     const allTextElements = this.getAllElementsByType(dxf.entities, this.SHAPE_TYPES.TEXT);
 
     return shapes.map((shape, index) => {
-      const openings = this.findAllOpeningsForShape(
-        shape,
-        this.getAllPolygons(dxf.entities).filter(({ handle }) => handle !== shape.handle)
-      ).map((el) => {
+      const openings = this.findAllOpeningsForShape(shape, dxf.entities).map((el) => {
+        el.featureType = 'OPENING';
+
+        if (el.type !== this.SHAPE_TYPES.LWPOLYLINE) {
+          return el;
+        }
+
         return {
           ...el,
-          featureType: 'OPENING',
+
           vertices: getNormalizedVertices(el.vertices),
         };
       });
+
+      console.log(openings);
 
       return {
         id: shape.handle,
@@ -482,11 +532,25 @@ export default function useShapeSelect() {
         return {
           ...shape,
           vertices: getFormattedVertices(shape.vertices),
-          openings: shape.openings.map((o) => {
-            return {
-              ...o,
-              vertices: getFormattedVertices(o.vertices),
-            };
+          openings: shape.features.map((feat) => {
+            if (feat.featureType === 'OPENING') {
+              if (feat.type === 'CIRCLE') {
+                return {
+                  ...feat,
+                  radius: getFormattedValue(feat.radius),
+                  center: {
+                    x: getFormattedValue(feat.center.x),
+                    y: getFormattedValue(feat.center.y),
+                  },
+                };
+              } else if (feat.type === 'LWPOLYLINE') {
+                return {
+                  ...feat,
+                  vertices: getFormattedVertices(feat.vertices),
+                };
+              }
+            }
+            return feat;
           }),
         };
       });
