@@ -2,6 +2,7 @@ import { computed, ref, watch } from 'vue';
 import { filter } from 'lodash-es';
 import Big from 'big.js';
 import { convertToSI } from '@crhio/concrete/src/utils/units';
+import { getColumnsData } from '../extensions/pdfFormatter';
 
 const shapes = ref([]);
 const shapeUnits = ref('m');
@@ -105,7 +106,6 @@ const pdfConverter = {
       annotationText,
       title,
       vertices,
-      isSelected: true,
     }
   },
 
@@ -122,6 +122,9 @@ const pdfConverter = {
   },
 
   getShapesFromFileContent(text) {
+    const columnPropertyLine = /BSIAnnotColumns\s\d+\s/.exec(text)[0]?.split(' ')[1];
+    const columnDataStr = /BSIColumnData\[(.*?)\]/.exec(text)[1];
+    const haveColumnsData = columnPropertyLine && columnDataStr;
     const shapes = [];
     const regex = /(\d+ 0 obj.*?endobj)/gs;
     let match;
@@ -139,8 +142,14 @@ const pdfConverter = {
         const scale = this.getScale(chunk);
 
         if (scale) {
-          const vertices = getNormalizedVertices(currentShape.vertices, scale);
-          shapes.push({ ...currentShape, vertices });
+          const { vertices, ...rest } = currentShape;
+          const normalizedVertices = getNormalizedVertices(vertices, scale);
+          const columnData = haveColumnsData && getColumnsData(text, columnPropertyLine, columnDataStr);
+          shapes.push({ 
+            isSelected: true,
+            vertices: normalizedVertices,
+            data: columnData ? { pdfData: columnData, ...rest } : rest
+          });
           currentShape = null;
         }
       }
