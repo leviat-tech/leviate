@@ -2,7 +2,7 @@ import { computed, ref, watch } from 'vue';
 import { filter } from 'lodash-es';
 import Big from 'big.js';
 import { convertToSI } from '@crhio/concrete/src/utils/units';
-import { getValueType, formatPropertyName } from '../extensions/pdfFormatter';
+import { getColumnsData } from '../extensions/pdfFormatter';
 
 const shapes = ref([]);
 const shapeUnits = ref('m');
@@ -106,7 +106,6 @@ const pdfConverter = {
       annotationText,
       title,
       vertices,
-      isSelected: true,
     }
   },
 
@@ -120,27 +119,6 @@ const pdfConverter = {
     const scale = chunk.match(/Type\/NumberFormat\/U\(m\)\/C (.+)\/D/);
 
     return parseFloat(scale[1]);
-  },
-
-  getColumnsData(text, columnPropertyLine, columnDataStr) {
-    const columnsStr = new RegExp(columnPropertyLine + ' 0 obj\\[<(.*?)>\\]', 's').exec(text)[1];
-    const columnPropertyRegex = /\/Name\((.*?)\)/g;
-    const columnDataRegex = /\((.*?)\)/g;
-    let columnPropertyMatch;
-    let dataMatch;
-    let dataArray = [];
-    let i = 0
-    let columnData = {};
-
-    while ((dataMatch = columnDataRegex.exec(columnDataStr)) !== null) {
-      dataArray.push(dataMatch[1]);
-    }
-
-    while ((columnPropertyMatch = columnPropertyRegex.exec(columnsStr)) !== null) {
-      columnData[formatPropertyName(columnPropertyMatch[1])] = getValueType(dataArray[i]);
-      i++;
-    }
-    return columnData;
   },
 
   getShapesFromFileContent(text) {
@@ -164,12 +142,13 @@ const pdfConverter = {
         const scale = this.getScale(chunk);
 
         if (scale) {
-          const vertices = getNormalizedVertices(currentShape.vertices, scale);
-          const columnData = haveColumnsData && this.getColumnsData(text, columnPropertyLine, columnDataStr);
+          const { vertices, ...rest } = currentShape;
+          const normalizedVertices = getNormalizedVertices(vertices, scale);
+          const columnData = haveColumnsData && getColumnsData(text, columnPropertyLine, columnDataStr);
           shapes.push({ 
-            ...currentShape, 
-            vertices,
-            ...(columnData && { columnData })
+            isSelected: true,
+            vertices: normalizedVertices,
+            ...(columnData ? { data: { ...columnData, ...rest }} : { data: rest })
           });
           currentShape = null;
         }
