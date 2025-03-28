@@ -35,7 +35,7 @@ module.exports = function getSharedConfig({ mode, projectConfig = {} }) {
 
     optimizeDeps: {
       exclude: ['@headlessui/vue', '@crhio/leviate', '@crhio/normie', 'pinia', 'vue-router', 'vue'],
-      include: ['@crhio/leviate > axios', 'axios/lib/adapters/http'],
+      include: ['@crhio/leviate > axios', 'axios/lib/adapters/http', 'logLevel'],
     },
 
     plugins: [
