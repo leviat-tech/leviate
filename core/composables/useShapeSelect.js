@@ -95,23 +95,63 @@ function getReferencePoint(vertices) {
   return { x: minX, y: minY };
 }
 
+/**
+ * Converts raw strings with vertices in format ['x1', 'y1', 'x2', 'y2', ...]
+ * @returns {Vertices}
+ */
+function getVerticesFromString(verticesStr) {
+  const vertices = [];
+
+  for (let i = 0; i < verticesStr.length; i += 2) {
+    const x = parseFloat(verticesStr[i]);
+    const y = parseFloat(verticesStr[i + 1]);
+    vertices.push({ x, y })
+  }
+
+  return vertices;
+}
+
 const pdfConverter = {
+  getCutoutCurves(chunk){
+    const cutoutCurvesStrMatch = chunk.match(/CutoutsCurves\[\[(.*?)\]\]/);
+    
+      if(!cutoutCurvesStrMatch) return;
+    
+      const cutoutCurvesStr = cutoutCurvesStrMatch[1]
+        .split(/\]\[/)
+        .map(c => c.split(' '));
+      
+      const cutoutCurvesToFloat = cutoutCurvesStr.map(curve => curve.filter(Boolean).map(parseFloat))
+
+      return cutoutCurvesToFloat
+  },
+  getCutoutMatch(chunk){
+    const cutoutStrMatch = chunk.match(/Cutouts\[\[(.*?)\]\]/)
+    
+    if(!cutoutStrMatch) return;
+      
+    return cutoutStrMatch[1]
+      .split(/\]\[/)
+      .map(c => c.split(' '));
+  },
   getShapeMeta(chunk) {
-    const isShape = chunk.match(/Subj\(Area Measurement\)\/Type\/Annot/);
+    const isShape = chunk.match(/Subtype\/Polygon/);
 
     if (!isShape) {
       return;
     }
+    
+    const verticesStr = chunk
+    .match(/Vertices\[([^\]]+)]/)[1]
+    .split(' ');
+    const cutoutStr = this.getCutoutMatch(chunk);
 
-    const verticesStr = chunk.match(/Vertices\[([^\]]+)]/)[1].split(' ');
-
-    const vertices = [];
-
-    for (let i = 0; i < verticesStr.length; i += 2) {
-      const x = parseFloat(verticesStr[i]);
-      const y = parseFloat(verticesStr[i + 1]);
-      vertices.push({ x, y });
-    }
+    const vertices = getVerticesFromString(verticesStr);
+    const openings = cutoutStr?.map(cutout => ({ vertices: getVerticesFromString(cutout) }));
+    const cutoutCurves = this.getCutoutCurves(chunk);
+    cutoutCurves?.forEach((curve, index) => {
+      if(curve.length > 0) openings[index].curves = { data: [ ...curve ] };  
+    })
 
     const annotationHTML = chunk.match(/<body[^>]+>(.+)<\/body>/)?.[1];
     const div = document.createElement('div');
@@ -125,7 +165,9 @@ const pdfConverter = {
       annotationText,
       title,
       vertices,
-    };
+      features: { openings },
+      isSelected: true,
+    }
   },
 
   getScale(chunk) {
@@ -164,10 +206,15 @@ const pdfConverter = {
           const { vertices, ...rest } = currentShape;
           const referencePoint = getReferencePoint(vertices);
           const normalizedVertices = getNormalizedVertices(vertices, scale, referencePoint);
+          const openings = currentShape.features.openings?.map(cutout => {
+            if(cutout.curves) cutout.curves = {...cutout.curves, scale, referencePoint};
+            return { ...cutout, vertices: getNormalizedVertices(cutout.vertices, scale, referencePoint) }
+          });
           const pdfData = columnData && columnData[i];
           shapes.push({
             isSelected: true,
             vertices: normalizedVertices,
+            features: { openings },
             data: pdfData ? { pdfData, ...rest } : rest,
           });
           currentShape = null;
@@ -465,8 +512,8 @@ export default function useShapeSelect() {
       shapes.value = await converter.getShapesFromFileContent(fileData.content);
     },
     clearShapes: () => (shapes.value = []),
-    getShapeParams: (shape) => {
-      return shape.vertices.reduce((vertices, pt) => {
+    getDraftShapeParams: (vertices) => {
+      return vertices.reduce((vertices, pt) => {
         const { x, y, bulge } = pt;
         const nextVertices = [...vertices, [x, y]];
 
@@ -479,8 +526,8 @@ export default function useShapeSelect() {
           ...shape,
           vertices: getFormattedVertices(shape.vertices),
           features: Object.keys(shape.features).reduce((acc, key) => {
-            if (key === 'openings') {
-              acc.openings = shape.features[key].map((feat) => {
+            if (key === 'openings' ) {
+              acc.openings = shape.features[key]?.map((feat) => {
                 if (feat.type === DXF_SHAPE_TYPES.CIRCLE) {
                   return {
                     ...feat,
@@ -499,9 +546,11 @@ export default function useShapeSelect() {
                     ],
                     vertices: getFormattedVertices(feat.vertices),
                   };
+                } else return { //pdf
+                  ...feat,
+                  vertices: getFormattedVertices(feat.vertices)
                 }
 
-                return feat;
               });
             }
             return acc;
