@@ -46,5 +46,5 @@ export const getColumnsData = (text, columnPropertyLine) => {
     data = {}
     i = 0
   }
-  return columnsData
+  return columnsData;
 }
