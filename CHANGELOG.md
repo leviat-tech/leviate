@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.15.0](https://github.com/leviat-tech/leviate/compare/v5.14.2...v5.15.0) (2025-03-28)
+
+
+* extract column data ([#241](https://github.com/leviat-tech/leviate/issues/241)) ([a040354](https://github.com/leviat-tech/leviate/commit/a0403540bd8d180a40b9fdbacb2e5ddde639eb62))
+* multiple column data extraction ([#243](https://github.com/leviat-tech/leviate/issues/243)) ([c1ba759](https://github.com/leviat-tech/leviate/commit/c1ba759b76440cdab188544dbdc7eb6601a33539))
+* structure ([#246](https://github.com/leviat-tech/leviate/issues/246)) ([c7032d7](https://github.com/leviat-tech/leviate/commit/c7032d7353a3e76238519882119e517d8d24463f))
+
 ## [5.14.2](https://github.com/leviat-tech/leviate/compare/v5.14.1...v5.14.2) (2025-03-26)
 
 
