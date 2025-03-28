@@ -148,7 +148,7 @@ const pdfConverter = {
       .map(c => c.split(' '));
   },
   getShapeMeta(chunk) {
-    const isShape = chunk.match(/Subj\(Area Measurement\)\/Type\/Annot/);
+    const isShape = chunk.match(/Subtype\/Polygon/);
 
     if (!isShape) {
       return;
