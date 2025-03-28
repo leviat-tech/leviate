@@ -10,6 +10,17 @@ const shapeUnitPrecision = ref(4);
 
 const selectedShapes = computed(() => filter(shapes.value, { isSelected: true }));
 
+export const FEATURE_TYPES = {
+  OPENING: 'OPENING',
+};
+
+export const DXF_SHAPE_TYPES = {
+  TEXT: 'TEXT',
+  CIRCLE: 'CIRCLE',
+  POLYLINE: 'POLYLINE',
+  LWPOLYLINE: 'LWPOLYLINE',
+};
+
 /**
  * @typedef Vertex
  * @property { number } x
@@ -26,22 +37,17 @@ const selectedShapes = computed(() => filter(shapes.value, { isSelected: true })
  * Scale coordinates if specified e.g. when determining actual measurements from positions of points on a pdf page
  * @param { Vertices } vertices
  * @param { number } scale - the amount to scale each coordinate by
+ * @param { Vertex } refPoint - minimum x,y to use for translating
  * @returns { Vertices }
  */
-function getNormalizedVertices(vertices, scale = 1) {
-  const xOnly = vertices.map((pt) => pt.x);
-  const yOnly = vertices.map((pt) => pt.y);
-  const minX = Math.min(...xOnly);
-  const minY = Math.min(...yOnly);
+function getNormalizedVertices(vertices, scale = 1, refPoint = { x: 0, y: 0 }) {
+  const { x: minX, y: minY } = refPoint;
 
   return vertices.map((pt) => {
     const { x, y } = pt;
-
     return {
-      // x: Big(x).minus(minX).times(scale).toNumber(),
-      // y: Big(y).minus(minY).times(scale).toNumber(),
-      x,
-      y,
+      x: Big(x).minus(minX).round().times(scale).toNumber(),
+      y: Big(y).minus(minY).round().times(scale).toNumber(),
       bulge: pt.bulge || 0,
     };
   });
@@ -76,45 +82,17 @@ function getFormattedVertices(vertices) {
   });
 }
 
-function almost_equal(a, b, absoluteError = 2.2204460492503131e-16, relativeError = 1.1920929e-7) {
-  const d = Math.abs(a - b);
-  if (d <= absoluteError) return true;
+/**
+ * Get minimum x,y from vertices
+ * @param { Vertices } vertices
+ */
+function getReferencePoint(vertices) {
+  const xOnly = vertices.map((pt) => pt.x);
+  const yOnly = vertices.map((pt) => pt.y);
+  const minX = Math.min(...xOnly);
+  const minY = Math.min(...yOnly);
 
-  if (d <= relativeError * Math.min(Math.abs(a), Math.abs(b))) return true;
-
-  return a === b;
-}
-
-export function ptDistSq(pt1, pt2) {
-  return (pt2.x - pt1.x) ** 2 + (pt2.y - pt1.y) ** 2;
-}
-
-function pointOnSegement(a, b, pt) {
-  const length = Math.sqrt(ptDistSq(a, b));
-  const dist1 = Math.sqrt(ptDistSq(a, pt));
-  const dist2 = Math.sqrt(ptDistSq(pt, b));
-  return almost_equal(dist1 + dist2, length);
-}
-
-function pointInPolygonInclusiveEdges(vertices, vertex) {
-  let odd = false;
-  for (let i = 0, j = vertices.length - 1; i < vertices.length; i += 1) {
-    if (pointOnSegement(vertices[i], vertices[j], vertex)) {
-      odd = true;
-      break;
-    }
-    if (
-      vertices[i].y > vertex.y !== vertices[j].y > vertex.y &&
-      vertex.x <
-        ((vertices[j].x - vertices[i].x) * (vertex.y - vertices[i].y)) /
-          (vertices[j].y - vertices[i].y) +
-          vertices[i].x
-    ) {
-      odd = !odd;
-    }
-    j = i;
-  }
-  return odd;
+  return { x: minX, y: minY };
 }
 
 const pdfConverter = {
@@ -147,7 +125,7 @@ const pdfConverter = {
       annotationText,
       title,
       vertices,
-    }
+    };
   },
 
   getScale(chunk) {
@@ -184,15 +162,16 @@ const pdfConverter = {
 
         if (scale) {
           const { vertices, ...rest } = currentShape;
-          const normalizedVertices = getNormalizedVertices(vertices, scale);
+          const referencePoint = getReferencePoint(vertices);
+          const normalizedVertices = getNormalizedVertices(vertices, scale, referencePoint);
           const pdfData = columnData && columnData[i];
-          shapes.push({ 
+          shapes.push({
             isSelected: true,
             vertices: normalizedVertices,
-            data: pdfData ? { pdfData, ...rest } : rest
+            data: pdfData ? { pdfData, ...rest } : rest,
           });
           currentShape = null;
-          i++
+          i++;
         }
       }
     }
@@ -202,12 +181,6 @@ const pdfConverter = {
 };
 
 const dxfConverter = {
-  SHAPE_TYPES: {
-    TEXT: 'TEXT',
-    CIRCLE: 'CIRCLE',
-    POLYLINE: 'POLYLINE',
-    LWPOLYLINE: 'LWPOLYLINE',
-  },
   getUnits(dxfUnitType) {
     switch (dxfUnitType) {
       case 1:
@@ -226,165 +199,46 @@ const dxfConverter = {
     }
   },
 
-  isPointOnLineSegment(point, p1, p2) {
-    let x = point[0],
-      y = point[1];
-    let x1 = p1[0],
-      y1 = p1[1];
-    let x2 = p2[0],
-      y2 = p2[1];
-
-    // Check if the point is on the line formed by p1 and p2
-    let crossProduct = (y - y1) * (x2 - x1) - (x - x1) * (y2 - y1);
-    if (Math.abs(crossProduct) > Number.EPSILON) return false;
-
-    // Check if the point lies within the bounds of the line segment
-    let dotProduct = (x - x1) * (x2 - x1) + (y - y1) * (y2 - y1);
-    if (dotProduct < 0) return false;
-
-    let squaredLength = (x2 - x1) ** 2 + (y2 - y1) ** 2;
-    if (dotProduct > squaredLength) return false;
-
-    return true;
-  },
-
-  isPointInPolygonOrOnEdge(point, polygon) {
-    let x = point[0],
-      y = point[1];
+  isCircleInsideOrTouching(circle, referenceShape) {
+    const { center, radius } = circle;
     let inside = false;
+    let j = referenceShape.length - 1;
 
-    for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-      let xi = polygon[i][0],
-        yi = polygon[i][1];
-      let xj = polygon[j][0],
-        yj = polygon[j][1];
+    for (let i = 0; i < referenceShape.length; j = i++) {
+      const { x: xi, y: yi } = referenceShape[i];
+      const { x: xj, y: yj } = referenceShape[j];
 
-      // Check if point is on an edge of the polygon
-      if (this.isPointOnLineSegment(point, [xi, yi], [xj, yj])) {
-        return true; // Point is on the edge
+      // Check if center is on the edge
+      if (
+        (center.x - xi) * (yj - yi) === (center.y - yi) * (xj - xi) &&
+        Math.min(xi, xj) <= center.x &&
+        center.x <= Math.max(xi, xj) &&
+        Math.min(yi, yj) <= center.y &&
+        center.y <= Math.max(yi, yj)
+      ) {
+        return true;
       }
 
-      // Ray-Casting Algorithm for inside check
-      let intersect = yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi;
+      // Ray-casting algorithm for point inside polygon
+      const intersect =
+        yi > center.y !== yj > center.y &&
+        center.x < ((xj - xi) * (center.y - yi)) / (yj - yi) + xi;
       if (intersect) inside = !inside;
-    }
 
+      // Check if circle is touching an edge
+      const dx = xj - xi;
+      const dy = yj - yi;
+      const lengthSq = dx * dx + dy * dy;
+      const t = Math.max(0, Math.min(1, ((center.x - xi) * dx + (center.y - yi) * dy) / lengthSq));
+      const closestX = xi + t * dx;
+      const closestY = yi + t * dy;
+
+      const distanceSq = (center.x - closestX) ** 2 + (center.y - closestY) ** 2;
+      if (distanceSq <= radius ** 2) {
+        return true;
+      }
+    }
     return inside;
-  },
-
-  // Function to check if a polygon is fully inside another polygon (including edges)
-  isElementFullyInside(innerElement, outerElement) {
-    // Check if all vertices of innerElement are inside or on the edge of outerElement
-    for (let vertex of innerElement) {
-      if (!this.isPointInPolygonOrOnEdge(vertex, outerElement)) {
-        return false;
-      }
-    }
-    return true;
-  },
-
-  findAllOpeningsForShape(shape, entities) {
-    function isPointInOrOnPolygon(point, polygon) {
-      let [x, y] = point;
-      let inside = false;
-
-      for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-        let [xi, yi] = polygon[i];
-        let [xj, yj] = polygon[j];
-
-        // Check if point is exactly on an edge
-        if (isPointOnSegment([xi, yi], [xj, yj], [x, y])) {
-          return true; // Considered inside if on edge
-        }
-
-        // Ray-Casting Algorithm for inside check
-        let intersect = yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi;
-        if (intersect) inside = !inside;
-      }
-
-      return inside;
-    }
-
-    // Function to check if a point is on a line segment
-    function isPointOnSegment(A, B, P) {
-      let [Ax, Ay] = A,
-        [Bx, By] = B,
-        [Px, Py] = P;
-
-      // Check if collinear
-      let crossProduct = (Py - Ay) * (Bx - Ax) - (Px - Ax) * (By - Ay);
-      if (Math.abs(crossProduct) > 1e-10) return false;
-
-      // Check if within segment bounds
-      let dotProduct = (Px - Ax) * (Bx - Ax) + (Py - Ay) * (By - Ay);
-      if (dotProduct < 0) return false;
-
-      let squaredLength = (Bx - Ax) ** 2 + (By - Ay) ** 2;
-      if (dotProduct > squaredLength) return false;
-
-      return true;
-    }
-
-    // Function to check if polygonA is fully inside or touching polygonB
-    function isPolygonInsideOrTouching(polygonA, polygonB) {
-      return polygonA.every((point) => isPointInOrOnPolygon(point, polygonB));
-    }
-
-    function isCircleInsidePolygon(polygon, center, radius) {
-      if (!pointInPolygonInclusiveEdges(polygon, center)) {
-        return false;
-      }
-
-      const testPoints = [
-        { x: center.x + radius, y: center.y },
-        { x: center.x - radius, y: center.y },
-        { x: center.x, y: center.y + radius },
-        { x: center.x, y: center.y - radius },
-        { x: center.x + radius * Math.SQRT1_2, y: center.y + radius * Math.SQRT1_2 },
-        { x: center.x - radius * Math.SQRT1_2, y: center.y + radius * Math.SQRT1_2 },
-        { x: center.x + radius * Math.SQRT1_2, y: center.y - radius * Math.SQRT1_2 },
-        { x: center.x - radius * Math.SQRT1_2, y: center.y - radius * Math.SQRT1_2 },
-      ];
-
-      for (const point of testPoints) {
-        if (!pointInPolygonInclusiveEdges(polygon, point)) {
-          return false;
-        }
-      }
-
-      return true;
-    }
-
-    return entities.reduce((acc, entity) => {
-      // Do not consider shape as potential opening
-      if (entity.handle === shape.handle) {
-        return acc;
-      }
-
-      // Consider only polygonal and circular shapes
-      if (entity.type !== this.SHAPE_TYPES.CIRCLE && entity.type !== this.SHAPE_TYPES.LWPOLYLINE) {
-        return acc;
-      }
-
-      if (
-        entity.type === this.SHAPE_TYPES.CIRCLE &&
-        isCircleInsidePolygon(shape.vertices, entity.center, entity.radius)
-      ) {
-        acc.push(entity);
-      }
-
-      if (
-        entity.type === this.SHAPE_TYPES.LWPOLYLINE &&
-        isPolygonInsideOrTouching(
-          entity.vertices.map(({ x, y }) => [x, y]),
-          shape.vertices.map(({ x, y }) => [x, y])
-        )
-      ) {
-        acc.push(entity);
-      }
-
-      return acc;
-    }, []);
   },
 
   findTitleForShape(shape, entities) {
@@ -393,8 +247,8 @@ const dxfConverter = {
 
       // Both points of TEXT should be inside slab
       if (
-        pointInPolygonInclusiveEdges(shape.vertices, startPoint) &&
-        pointInPolygonInclusiveEdges(shape.vertices, endPoint)
+        this.isPointInsideOrOnEdge(startPoint, shape.vertices) &&
+        this.isPointInsideOrOnEdge(endPoint, shape.vertices)
       ) {
         return true;
       }
@@ -413,7 +267,7 @@ const dxfConverter = {
   getAllPolygons(entities) {
     return entities.filter((el) => {
       // Sometimes line element in not parsed as LINE element (type === LINE) but as polyline with 2 vertices
-      return el.type === this.SHAPE_TYPES.LWPOLYLINE && el.vertices.length > 2;
+      return el.type === DXF_SHAPE_TYPES.LWPOLYLINE && el.vertices.length > 2;
     });
   },
 
@@ -423,30 +277,109 @@ const dxfConverter = {
     });
   },
 
-  findOnlyShapes(entities) {
-    const polygons = this.mapPolygonsById(entities);
-    let shapeIds = [];
+  findUncontainedShapes(shapes) {
+    function isPointInsideOrOnEdge(point, shape) {
+      const [x, y] = point;
+      let inside = false;
+      let j = shape.length - 1;
+      for (let i = 0; i < shape.length; j = i++) {
+        const [xi, yi] = shape[i];
+        const [xj, yj] = shape[j];
 
-    for (let id1 in polygons) {
-      let isIncluded = false;
-
-      for (let id2 in polygons) {
-        if (id1 !== id2) {
-          if (this.isElementFullyInside(polygons[id1], polygons[id2])) {
-            isIncluded = true;
-            break;
-          }
+        // Check if point is on the edge
+        if (
+          (x - xi) * (yj - yi) === (y - yi) * (xj - xi) &&
+          Math.min(xi, xj) <= x &&
+          x <= Math.max(xi, xj) &&
+          Math.min(yi, yj) <= y &&
+          y <= Math.max(yi, yj)
+        ) {
+          return true;
         }
-      }
 
-      if (!isIncluded) {
-        shapeIds.push(id1);
+        // Ray-casting algorithm for point inside polygon
+        const intersect = yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi;
+        if (intersect) inside = !inside;
       }
+      return inside;
     }
 
-    return entities.filter((el) => {
-      return shapeIds.includes(el.handle);
+    return Object.keys(shapes).filter((id) => {
+      return !Object.keys(shapes).some(
+        (otherId) =>
+          id !== otherId &&
+          shapes[id].every((point) => isPointInsideOrOnEdge(point, shapes[otherId]))
+      );
     });
+  },
+
+  isPointInsideOrOnEdge(point, shape) {
+    const { x, y } = point;
+    let inside = false;
+    let j = shape.length - 1;
+    for (let i = 0; i < shape.length; j = i++) {
+      const { x: xi, y: yi } = shape[i];
+      const { x: xj, y: yj } = shape[j];
+
+      // Check if point is on the edge
+      if (
+        (x - xi) * (yj - yi) === (y - yi) * (xj - xi) &&
+        Math.min(xi, xj) <= x &&
+        x <= Math.max(xi, xj) &&
+        Math.min(yi, yj) <= y &&
+        y <= Math.max(yi, yj)
+      ) {
+        return true;
+      }
+
+      // Ray-casting algorithm for point inside polygon
+      const intersect = yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi;
+      if (intersect) inside = !inside;
+    }
+    return inside;
+  },
+
+  isShapeInsideOrTouching(shape, referenceShape) {
+    return shape.every((point) => this.isPointInsideOrOnEdge(point, referenceShape));
+  },
+
+  findOpenings(entities, shape) {
+    const openings = [];
+
+    entities.forEach((entity) => {
+      if (
+        entity.type === DXF_SHAPE_TYPES.CIRCLE &&
+        this.isCircleInsideOrTouching(entity, shape.vertices)
+      ) {
+        openings.push(entity);
+      } else if (
+        entity.type === DXF_SHAPE_TYPES.LWPOLYLINE &&
+        entity.vertices.length > 2 &&
+        this.isShapeInsideOrTouching(entity.vertices, shape.vertices)
+      ) {
+        openings.push(entity);
+      }
+    });
+
+    return openings;
+  },
+
+  filterEntitiesByShape(entities, shapeIds) {
+    return entities.reduce(
+      (acc, item) => {
+        if (shapeIds.includes(item.handle)) {
+          acc.shapes.push(item);
+        } else {
+          acc.entitiesWithoutShapes.push(item);
+        }
+
+        return acc;
+      },
+      {
+        shapes: [],
+        entitiesWithoutShapes: [],
+      }
+    );
   },
 
   async getShapesFromFileContent(content) {
@@ -458,34 +391,49 @@ const dxfConverter = {
 
     shapeUnits.value = this.getUnits(dxf.header.$INSUNITS);
 
-    const shapes = this.findOnlyShapes(dxf.entities);
-    console.log(shapes);
-    
-    const allTextElements = this.getAllElementsByType(dxf.entities, this.SHAPE_TYPES.TEXT);
+    const shapeIds = this.findUncontainedShapes(this.mapPolygonsById(dxf.entities));
+
+    const allTextElements = this.getAllElementsByType(dxf.entities, DXF_SHAPE_TYPES.TEXT);
+    const { shapes, entitiesWithoutShapes } = this.filterEntitiesByShape(dxf.entities, shapeIds);
 
     return shapes.map((shape, index) => {
-      const openings = this.findAllOpeningsForShape(shape, dxf.entities).map((el) => {
-        el.featureType = 'OPENING';
+      const shapeRef = getReferencePoint(shape.vertices);
 
-        if (el.type !== this.SHAPE_TYPES.LWPOLYLINE) {
+      const openings = this.findOpenings(entitiesWithoutShapes, shape).map((el) => {
+        el.featureType = FEATURE_TYPES.OPENING;
+
+        if (el.type === DXF_SHAPE_TYPES.LWPOLYLINE) {
+          const referencePoint = getReferencePoint(el.vertices);
+          return {
+            ...el,
+
+            vertices: getNormalizedVertices(el.vertices, 1, getReferencePoint(el.vertices)),
+            position: [
+              Big(referencePoint.x).minus(shapeRef.x).round().toNumber(),
+              Big(referencePoint.y).minus(shapeRef.y).round().toNumber(),
+            ],
+          };
+        } else if (el.type === DXF_SHAPE_TYPES.CIRCLE) {
+          return {
+            ...el,
+
+            radius: Big(el.radius).round().toNumber(),
+            center: {
+              x: Big(el.center.x).minus(shapeRef.x).round().toNumber(),
+              y: Big(el.center.y).minus(shapeRef.y).round().toNumber(),
+            },
+          };
+        } else {
           return el;
         }
-
-        return {
-          ...el,
-
-          vertices: getNormalizedVertices(el.vertices),
-        };
       });
-
-      console.log(openings);
 
       return {
         id: shape.handle,
         isSelected: true,
         type: shape.type || '',
         layer: shape.layer || '',
-        vertices: getNormalizedVertices(shape.vertices),
+        vertices: getNormalizedVertices(shape.vertices, 1, getReferencePoint(shape.vertices)),
         name: this.findTitleForShape(shape, allTextElements),
 
         features: [...openings],
@@ -533,8 +481,8 @@ export default function useShapeSelect() {
           ...shape,
           vertices: getFormattedVertices(shape.vertices),
           openings: shape.features.map((feat) => {
-            if (feat.featureType === 'OPENING') {
-              if (feat.type === 'CIRCLE') {
+            if (feat.featureType === FEATURE_TYPES.OPENING) {
+              if (feat.type === DXF_SHAPE_TYPES.CIRCLE) {
                 return {
                   ...feat,
                   radius: getFormattedValue(feat.radius),
@@ -543,9 +491,13 @@ export default function useShapeSelect() {
                     y: getFormattedValue(feat.center.y),
                   },
                 };
-              } else if (feat.type === 'LWPOLYLINE') {
+              } else if (feat.type === DXF_SHAPE_TYPES.LWPOLYLINE) {
                 return {
                   ...feat,
+                  position: [
+                    getFormattedValue(feat.position[0]),
+                    getFormattedValue(feat.position[1]),
+                  ],
                   vertices: getFormattedVertices(feat.vertices),
                 };
               }

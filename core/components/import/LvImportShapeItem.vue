@@ -22,7 +22,7 @@
 
 <script setup>
   import { Sketch, render } from '@crhio/jsdraft';
-  import useShapeSelect from '../../composables/useShapeSelect';
+  import useShapeSelect, { FEATURE_TYPES, DXF_SHAPE_TYPES } from '../../composables/useShapeSelect';
   import { computed, ref, watchEffect } from 'vue';
   import { CheckIcon } from '@heroicons/vue/20/solid';
 
@@ -62,24 +62,38 @@
       stroke: { color: 'black', opacity: 0.8 },
     };
 
+    console.log(props.shape);
+
     // Main shape
     let sketch = new Sketch()
       .polyface(...params)
       .join()
       .style(style);
 
+    // let sketch = new Sketch()
+    // .polyface([0,0], [3000,0], [3000, 8000], [0, 8000])
+    // .style(style)
+
+    // const opening = new Sketch()
+    // .polyface([0,0], [0, 700], [900, 700], [900, 0])
+    // .style(styleCutout)
+
+    // sketch = sketch.add(opening)
+
     const openings = [];
 
     props.shape.features.forEach((feat) => {
-      if (feat.featureType === 'OPENING') {
-        if(feat.type === 'LWPOLYLINE') {
+      console.log(feat.position);
+      if (feat.featureType === FEATURE_TYPES.OPENING) {
+        if (feat.type === DXF_SHAPE_TYPES.LWPOLYLINE) {
           openings.push(
             new Sketch()
               .polyface(...feat.vertices.map(({ x, y }) => [x, y]))
+              .translate(feat.position[0], feat.position[1])
               .join()
               .style(styleCutout)
           );
-        } else if(feat.type === 'CIRCLE') {
+        } else if (feat.type === DXF_SHAPE_TYPES.CIRCLE) {
           openings.push(
             new Sketch()
               .circle([feat.center.x, feat.center.y], feat.radius)
@@ -87,7 +101,6 @@
               .style(styleCutout)
           );
         }
-
       }
     });
 
