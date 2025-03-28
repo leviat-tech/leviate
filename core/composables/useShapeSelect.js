@@ -33,19 +33,6 @@ export const DXF_SHAPE_TYPES = {
  */
 
 /**
- * Get minimum x,y from vertices
- * @param { Vertices } vertices
-*/
-function getReferencePoint(vertices){
-  const xOnly = vertices.map(pt => pt.x);
-  const yOnly = vertices.map(pt => pt.y);
-  const minX = Math.min(...xOnly);
-  const minY = Math.min(...yOnly);
-
-  return { x: minX, y: minY }
-}
-
-/**
  * Normalise the position of a shape by translating vertices to minimum x,y position of 0.
  * Scale coordinates if specified e.g. when determining actual measurements from positions of points on a pdf page
  * @param { Vertices } vertices
@@ -160,10 +147,10 @@ const pdfConverter = {
     const cutoutStr = this.getCutoutMatch(chunk);
 
     const vertices = getVerticesFromString(verticesStr);
-    const cutouts = cutoutStr?.map(cutout => ({ vertices: getVerticesFromString(cutout) }));
+    const openings = cutoutStr?.map(cutout => ({ vertices: getVerticesFromString(cutout) }));
     const cutoutCurves = this.getCutoutCurves(chunk);
     cutoutCurves?.forEach((curve, index) => {
-      if(curve.length > 0) cutouts[index].curves = { data: [ ...curve ] };  
+      if(curve.length > 0) openings[index].curves = { data: [ ...curve ] };  
     })
 
     const annotationHTML = chunk.match(/<body[^>]+>(.+)<\/body>/)?.[1];
@@ -178,7 +165,7 @@ const pdfConverter = {
       annotationText,
       title,
       vertices,
-      features: { cutouts },
+      features: { openings },
       isSelected: true,
     }
   },
@@ -219,7 +206,7 @@ const pdfConverter = {
           const { vertices, ...rest } = currentShape;
           const referencePoint = getReferencePoint(vertices);
           const normalizedVertices = getNormalizedVertices(vertices, scale, referencePoint);
-          const cutouts = currentShape.features.cutouts?.map(cutout => {
+          const openings = currentShape.features.openings?.map(cutout => {
             if(cutout.curves) cutout.curves = {...cutout.curves, scale, referencePoint};
             return { ...cutout, vertices: getNormalizedVertices(cutout.vertices, scale, referencePoint) }
           });
@@ -227,7 +214,7 @@ const pdfConverter = {
           shapes.push({
             isSelected: true,
             vertices: normalizedVertices,
-            features: { cutouts },
+            features: { openings },
             data: pdfData ? { pdfData, ...rest } : rest,
           });
           currentShape = null;
@@ -538,12 +525,9 @@ export default function useShapeSelect() {
         return {
           ...shape,
           vertices: getFormattedVertices(shape.vertices),
-          features: { 
-            cutouts: shape.features.cutouts?.map(cutout => ({ ...cutout, vertices: getFormattedVertices(cutout.vertices) })),
-          },
           features: Object.keys(shape.features).reduce((acc, key) => {
-            if (key === 'openings') {
-              acc.openings = shape.features[key].map((feat) => {
+            if (key === 'openings' ) {
+              acc.openings = shape.features[key]?.map((feat) => {
                 if (feat.type === DXF_SHAPE_TYPES.CIRCLE) {
                   return {
                     ...feat,
@@ -562,9 +546,11 @@ export default function useShapeSelect() {
                     ],
                     vertices: getFormattedVertices(feat.vertices),
                   };
+                } else return { //pdf
+                  ...feat,
+                  vertices: getFormattedVertices(feat.vertices)
                 }
 
-                return feat;
               });
             }
             return acc;

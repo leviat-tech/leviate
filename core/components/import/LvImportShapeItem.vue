@@ -46,7 +46,6 @@ const { getDraftShapeParams, shapeUnits, shapeUnitPrecision } = useShapeSelect()
   const widthPx = 158; // w-48 class in px
 
   const params = getDraftShapeParams(props.shape.vertices);
-  const cutoutsParams = props.shape.features.cutouts?.map(cutout => ({ ...cutout, vertices: getDraftShapeParams(cutout.vertices) }));
   const svg = ref('');
   const width = ref(null);
   const height = ref(null);
@@ -85,7 +84,7 @@ const { getDraftShapeParams, shapeUnits, shapeUnitPrecision } = useShapeSelect()
 
     const openings = [];
 
-    props.shape.features.openings.forEach((feat) => {
+    props.shape.features.openings?.forEach((feat) => {
       if (feat.type === DXF_SHAPE_TYPES.LWPOLYLINE) {
         openings.push(
           new Sketch()
@@ -98,18 +97,20 @@ const { getDraftShapeParams, shapeUnits, shapeUnitPrecision } = useShapeSelect()
         openings.push(
           new Sketch().circle([feat.center.x, feat.center.y], feat.radius).join().style(styleCutout)
         );
+        //pdf
+      } else {
+        const vertices = getDraftShapeParams(feat.vertices);
+        openings.push(
+          new Sketch().polyface(...vertices)
+          .join()
+          .style(feat.curves ? { ...styleCutout.default, ...styleCutout.invalid } : styleCutout.default)
+        );
       }
     });
 
     openings.forEach((o) => {
       sketch = sketch.add(o);
     });
-    const cutoutSketches = cutoutsParams?.map( 
-      cutoutParams => new Sketch().polyface(...cutoutParams.vertices)
-        .join()
-        .style(cutoutParams.curves ? { ...styleCutout.default, ...styleCutout.invalid } : styleCutout.default)
-    );
-    cutoutSketches?.forEach(cutoutSketch => sketch = sketch.add(cutoutSketch))
 
     // Calculate padding of 1px to prevent clipping
     const { xmin, xmax, ymin, ymax } = sketch.extents;
