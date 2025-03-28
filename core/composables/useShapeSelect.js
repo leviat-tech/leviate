@@ -398,8 +398,6 @@ const dxfConverter = {
       const shapeRef = getReferencePoint(shape.vertices);
 
       const openings = this.findOpenings(entitiesWithoutShapes, shape).map((el) => {
-        el.featureType = FEATURE_TYPES.OPENING;
-
         if (el.type === DXF_SHAPE_TYPES.LWPOLYLINE) {
           const referencePoint = getReferencePoint(el.vertices);
           return {
@@ -434,7 +432,9 @@ const dxfConverter = {
         vertices: getNormalizedVertices(shape.vertices, 1, getReferencePoint(shape.vertices)),
         name: this.findTitleForShape(shape, allTextElements),
 
-        features: [...openings],
+        features: {
+          openings,
+        },
       };
     });
   },
@@ -478,30 +478,34 @@ export default function useShapeSelect() {
         return {
           ...shape,
           vertices: getFormattedVertices(shape.vertices),
-          openings: shape.features.map((feat) => {
-            if (feat.featureType === FEATURE_TYPES.OPENING) {
-              if (feat.type === DXF_SHAPE_TYPES.CIRCLE) {
-                return {
-                  ...feat,
-                  radius: getFormattedValue(feat.radius),
-                  center: {
-                    x: getFormattedValue(feat.center.x),
-                    y: getFormattedValue(feat.center.y),
-                  },
-                };
-              } else if (feat.type === DXF_SHAPE_TYPES.LWPOLYLINE) {
-                return {
-                  ...feat,
-                  position: [
-                    getFormattedValue(feat.position[0]),
-                    getFormattedValue(feat.position[1]),
-                  ],
-                  vertices: getFormattedVertices(feat.vertices),
-                };
-              }
+          features: Object.keys(shape.features).reduce((acc, key) => {
+            if (key === 'openings') {
+              acc.openings = shape.features[key].map((feat) => {
+                if (feat.type === DXF_SHAPE_TYPES.CIRCLE) {
+                  return {
+                    ...feat,
+                    radius: getFormattedValue(feat.radius),
+                    center: {
+                      x: getFormattedValue(feat.center.x),
+                      y: getFormattedValue(feat.center.y),
+                    },
+                  };
+                } else if (feat.type === DXF_SHAPE_TYPES.LWPOLYLINE) {
+                  return {
+                    ...feat,
+                    position: [
+                      getFormattedValue(feat.position[0]),
+                      getFormattedValue(feat.position[1]),
+                    ],
+                    vertices: getFormattedVertices(feat.vertices),
+                  };
+                }
+
+                return feat;
+              });
             }
-            return feat;
-          }),
+            return acc;
+          }, {}),
         };
       });
     },
