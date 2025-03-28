@@ -123,12 +123,12 @@ const pdfConverter = {
 
   getShapesFromFileContent(text) {
     const columnPropertyLine = /BSIAnnotColumns\s\d+\s/.exec(text)[0]?.split(' ')[1];
-    const columnDataStr = /BSIColumnData\[(.*?)\]/.exec(text)[1];
-    const haveColumnsData = columnPropertyLine && columnDataStr;
+    const columnData = columnPropertyLine && getColumnsData(text, columnPropertyLine);
     const shapes = [];
     const regex = /(\d+ 0 obj.*?endobj)/gs;
     let match;
     let currentShape;
+    let i = 0;
 
     while ((match = regex.exec(text)) !== null) {
       const chunk = match[1];
@@ -144,13 +144,14 @@ const pdfConverter = {
         if (scale) {
           const { vertices, ...rest } = currentShape;
           const normalizedVertices = getNormalizedVertices(vertices, scale);
-          const columnData = haveColumnsData && getColumnsData(text, columnPropertyLine, columnDataStr);
+          const pdfData = columnData && columnData[i];
           shapes.push({ 
             isSelected: true,
             vertices: normalizedVertices,
-            data: columnData ? { pdfData: columnData, ...rest } : rest
+            data: pdfData ? { pdfData: pdfData, ...rest } : rest
           });
           currentShape = null;
+          i++
         }
       }
     }
