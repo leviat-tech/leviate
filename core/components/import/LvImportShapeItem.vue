@@ -62,28 +62,15 @@
       stroke: { color: 'black', opacity: 0.8 },
     };
 
-    console.log(props.shape);
-
     // Main shape
     let sketch = new Sketch()
       .polyface(...params)
       .join()
       .style(style);
 
-    // let sketch = new Sketch()
-    // .polyface([0,0], [3000,0], [3000, 8000], [0, 8000])
-    // .style(style)
-
-    // const opening = new Sketch()
-    // .polyface([0,0], [0, 700], [900, 700], [900, 0])
-    // .style(styleCutout)
-
-    // sketch = sketch.add(opening)
-
     const openings = [];
 
     props.shape.features.forEach((feat) => {
-      console.log(feat.position);
       if (feat.featureType === FEATURE_TYPES.OPENING) {
         if (feat.type === DXF_SHAPE_TYPES.LWPOLYLINE) {
           openings.push(

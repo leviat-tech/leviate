@@ -387,8 +387,6 @@ const dxfConverter = {
     const parser = new DxfParser();
     const dxf = parser.parseSync(content);
 
-    console.log('Loaded entities', dxf.entities);
-
     shapeUnits.value = this.getUnits(dxf.header.$INSUNITS);
 
     const shapeIds = this.findUncontainedShapes(this.mapPolygonsById(dxf.entities));
