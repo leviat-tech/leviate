@@ -1,4 +1,4 @@
-export const getValueType = (str) => {
+const getValueType = (str) => {
   const isNumRegex = /^-?\d+(\.\d+)?([eE][+-]?\d+)?$/;
   const isBooleanRegex = /^(true|false)$/i;
   if (isNumRegex.test(str)) return Number(str);
@@ -7,29 +7,44 @@ export const getValueType = (str) => {
   return null;
 } 
 
-export const formatPropertyName = (str) => {
+const formatPropertyName = (str) => {
   const regex = /[()[\]\\}]/g;
   const clearStr = str.replace(regex, '');
   return clearStr.split(' ').join('_').toLowerCase();
 }
 
-export const getColumnsData = (text, columnPropertyLine, columnDataStr) => {
+
+const getColumnsProperties = (text, columnPropertyLine) => {
   const columnsStr = new RegExp(columnPropertyLine + ' 0 obj\\[<(.*?)>\\]', 's').exec(text)[1];
   const columnPropertyRegex = /\/Name\((.*?)\)/g;
-  const columnDataRegex = /\((.*?)\)/g;
   let columnPropertyMatch;
-  let dataMatch;
-  let dataArray = [];
-  let i = 0
-  let columnData = {};
-
-  while ((dataMatch = columnDataRegex.exec(columnDataStr)) !== null) {
-    dataArray.push(dataMatch[1]);
-  }
+  let propertiesArray = [];
 
   while ((columnPropertyMatch = columnPropertyRegex.exec(columnsStr)) !== null) {
-    columnData[formatPropertyName(columnPropertyMatch[1])] = getValueType(dataArray[i]);
-    i++;
+    propertiesArray.push(formatPropertyName(columnPropertyMatch[1]));
   }
-  return columnData;
+  return propertiesArray
+}
+
+export const getColumnsData = (text, columnPropertyLine) => {
+  const propertiesArray = getColumnsProperties(text, columnPropertyLine)
+  let dataMatch;
+  let columnDataMatch;
+  let columnsData = [];
+  let i = 0;
+
+  const columnDataStr = /BSIColumnData\[(.*?)\]/g;
+  const columnDataRegex = /\((.*?)\)/g;
+
+  while ((dataMatch = columnDataStr.exec(text)) !== null) {
+    let data = {};
+    while ((columnDataMatch = columnDataRegex.exec(dataMatch[1])) !== null) {
+      data[propertiesArray[i]] = getValueType(columnDataMatch[1])
+      i++;
+    }
+    columnsData.push(data);
+    data = {}
+    i = 0
+  }
+  return columnsData;
 }
