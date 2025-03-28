@@ -70,24 +70,19 @@
 
     const openings = [];
 
-    props.shape.features.forEach((feat) => {
-      if (feat.featureType === FEATURE_TYPES.OPENING) {
-        if (feat.type === DXF_SHAPE_TYPES.LWPOLYLINE) {
-          openings.push(
-            new Sketch()
-              .polyface(...feat.vertices.map(({ x, y }) => [x, y]))
-              .translate(feat.position[0], feat.position[1])
-              .join()
-              .style(styleCutout)
-          );
-        } else if (feat.type === DXF_SHAPE_TYPES.CIRCLE) {
-          openings.push(
-            new Sketch()
-              .circle([feat.center.x, feat.center.y], feat.radius)
-              .join()
-              .style(styleCutout)
-          );
-        }
+    props.shape.features.openings.forEach((feat) => {
+      if (feat.type === DXF_SHAPE_TYPES.LWPOLYLINE) {
+        openings.push(
+          new Sketch()
+            .polyface(...feat.vertices.map(({ x, y }) => [x, y]))
+            .translate(feat.position[0], feat.position[1])
+            .join()
+            .style(styleCutout)
+        );
+      } else if (feat.type === DXF_SHAPE_TYPES.CIRCLE) {
+        openings.push(
+          new Sketch().circle([feat.center.x, feat.center.y], feat.radius).join().style(styleCutout)
+        );
       }
     });
 
