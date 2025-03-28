@@ -17,6 +17,12 @@
     >
       <CheckIcon class="w-4 h-4 text-white" />
     </div>
+    <div v-if="hasWarning" title="Some issues detected" class="absolute top-0 left-0 flex items-center justify-center w-6 h-6 bg-orange-400">
+      <ExclamationTriangleIcon class="w-4 h-4"/>
+    </div>
+    <div v-if="hasWarning" title="Some issues detected" class="absolute top-0 left-0 flex items-center justify-center w-6 h-6 bg-orange-400">
+      <ExclamationTriangleIcon class="w-4 h-4"/>
+    </div>
   </button>
 </template>
 
@@ -24,7 +30,7 @@
   import { Sketch, render } from '@crhio/jsdraft';
   import useShapeSelect, { FEATURE_TYPES, DXF_SHAPE_TYPES } from '../../composables/useShapeSelect';
   import { computed, ref, watchEffect } from 'vue';
-  import { CheckIcon } from '@heroicons/vue/20/solid';
+  import { CheckIcon, ExclamationTriangleIcon } from '@heroicons/vue/20/solid';
 
   const props = defineProps({
     shape: Object,
@@ -35,13 +41,17 @@ const { getDraftShapeParams, shapeUnits, shapeUnitPrecision } = useShapeSelect()
   const indigo = '#201547';
   const gray = '#aaaaaa';
   const black = '#000000';
+  const white = '#ffffff';
+  const warning = '#ff8904';
   const widthPx = 158; // w-48 class in px
 
   const params = getDraftShapeParams(props.shape.vertices);
-  const cutoutsParams = props.shape.cutouts?.map(getDraftShapeParams);
+  const cutoutsParams = props.shape.features.cutouts?.map(cutout => ({ ...cutout, vertices: getDraftShapeParams(cutout.vertices) }));
   const svg = ref('');
   const width = ref(null);
   const height = ref(null);
+  //TODO: remove once curves could be handled properly
+  const hasWarning = computed(() => (props.shape.features.cutouts?.some(c => Boolean(c.curves))))
 
   function formatValue(val) {
     const rounded = val.toFixed(shapeUnitPrecision.value);
@@ -59,9 +69,14 @@ const { getDraftShapeParams, shapeUnits, shapeUnitPrecision } = useShapeSelect()
     };
 
     // Main shape
-    let styleCutout = {
-      fill: { color: 'white', opacity: 1 },
-      stroke: { color: 'black', opacity: 0.8 }
+    const styleCutout = {
+      default: {
+        fill: { color: white, opacity: 1 },
+        stroke: { color: black, opacity: 0.8 }
+      },
+      invalid: {
+        fill: { color: warning, opacity: 1 },
+      }
     };
     let sketch = new Sketch()
       .polyface(...params)
@@ -89,12 +104,12 @@ const { getDraftShapeParams, shapeUnits, shapeUnitPrecision } = useShapeSelect()
     openings.forEach((o) => {
       sketch = sketch.add(o);
     });
-    const cutoutSketches = cutoutsParams 
-      ? cutoutsParams.map( cutoutParams => new Sketch().polyface(...cutoutParams).join().style(styleCutout))
-      : [];
-      cutoutSketches.forEach(cutoutSketch => {
-        sketch = sketch.add(cutoutSketch)
-      })
+    const cutoutSketches = cutoutsParams?.map( 
+      cutoutParams => new Sketch().polyface(...cutoutParams.vertices)
+        .join()
+        .style(cutoutParams.curves ? { ...styleCutout.default, ...styleCutout.invalid } : styleCutout.default)
+    );
+    cutoutSketches?.forEach(cutoutSketch => sketch = sketch.add(cutoutSketch))
 
     // Calculate padding of 1px to prevent clipping
     const { xmin, xmax, ymin, ymax } = sketch.extents;

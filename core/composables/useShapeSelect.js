@@ -125,6 +125,28 @@ function getVerticesFromString(verticesStr) {
 }
 
 const pdfConverter = {
+  getCutoutCurves(chunk){
+    const cutoutCurvesStrMatch = chunk.match(/CutoutsCurves\[\[(.*?)\]\]/);
+    
+      if(!cutoutCurvesStrMatch) return;
+    
+      const cutoutCurvesStr = cutoutCurvesStrMatch[1]
+        .split(/\]\[/)
+        .map(c => c.split(' '));
+      
+      const cutoutCurvesToFloat = cutoutCurvesStr.map(curve => curve.filter(Boolean).map(parseFloat))
+
+      return cutoutCurvesToFloat
+  },
+  getCutoutMatch(chunk){
+    const cutoutStrMatch = chunk.match(/Cutouts\[\[(.*?)\]\]/)
+    
+    if(!cutoutStrMatch) return;
+      
+    return cutoutStrMatch[1]
+      .split(/\]\[/)
+      .map(c => c.split(' '));
+  },
   getShapeMeta(chunk) {
     const isShape = chunk.match(/Subj\(Area Measurement\)\/Type\/Annot/);
 
@@ -135,18 +157,14 @@ const pdfConverter = {
     const verticesStr = chunk
     .match(/Vertices\[([^\]]+)]/)[1]
     .split(' ');
-    
-    let cutoutStr;
-    const cutoutStrMatch = chunk
-      .match(/Cutouts\[\[(.*?)\]\]/)
-    if(cutoutStrMatch) {
-      cutoutStr = cutoutStrMatch[1]
-        .split(/\]\[/)
-        .map(c => c.split(' '));
-    }
+    const cutoutStr = this.getCutoutMatch(chunk);
 
     const vertices = getVerticesFromString(verticesStr);
-    const cutouts = cutoutStr?.map(getVerticesFromString);
+    const cutouts = cutoutStr?.map(cutout => ({ vertices: getVerticesFromString(cutout) }));
+    const cutoutCurves = this.getCutoutCurves(chunk);
+    cutoutCurves?.forEach((curve, index) => {
+      if(curve.length > 0) cutouts[index].curves = { data: [ ...curve ] };  
+    })
 
     const annotationHTML = chunk.match(/<body[^>]+>(.+)<\/body>/)?.[1];
     const div = document.createElement('div');
@@ -160,7 +178,7 @@ const pdfConverter = {
       annotationText,
       title,
       vertices,
-      cutouts,
+      features: { cutouts },
       isSelected: true,
     }
   },
@@ -201,12 +219,15 @@ const pdfConverter = {
           const { vertices, ...rest } = currentShape;
           const referencePoint = getReferencePoint(vertices);
           const normalizedVertices = getNormalizedVertices(vertices, scale, referencePoint);
-          const cutouts = currentShape.cutouts ? currentShape.cutouts.map(cutout => getNormalizedVertices(cutout, scale, referencePoint)) : currentShape.cutouts;
+          const cutouts = currentShape.features.cutouts?.map(cutout => {
+            if(cutout.curves) cutout.curves = {...cutout.curves, scale, referencePoint};
+            return { ...cutout, vertices: getNormalizedVertices(cutout.vertices, scale, referencePoint) }
+          });
           const pdfData = columnData && columnData[i];
           shapes.push({
             isSelected: true,
             vertices: normalizedVertices,
-            cutouts,
+            features: { cutouts },
             data: pdfData ? { pdfData, ...rest } : rest,
           });
           currentShape = null;
@@ -517,7 +538,9 @@ export default function useShapeSelect() {
         return {
           ...shape,
           vertices: getFormattedVertices(shape.vertices),
-          cutouts: shape.cutouts?.map(getFormattedVertices),
+          features: { 
+            cutouts: shape.features.cutouts?.map(cutout => ({ ...cutout, vertices: getFormattedVertices(cutout.vertices) })),
+          },
           features: Object.keys(shape.features).reduce((acc, key) => {
             if (key === 'openings') {
               acc.openings = shape.features[key].map((feat) => {
