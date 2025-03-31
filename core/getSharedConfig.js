@@ -4,6 +4,7 @@ const vue = require('@vitejs/plugin-vue');
 const svgLoader = require('vite-svg-loader');
 const getDefaultTemplateCompilerOptions = require('./server/defaultTemplateCompilerOptions');
 const manifestPlugin = require('./server/manifestPlugin');
+const { tokenPlugin } = require('./server/authPlugin');
 const translationPlugin = require('./server/translation');
 
 /**
@@ -34,11 +35,12 @@ module.exports = function getSharedConfig({ mode, projectConfig = {} }) {
 
     optimizeDeps: {
       exclude: ['@headlessui/vue', '@crhio/leviate', '@crhio/normie', 'pinia', 'vue-router', 'vue'],
-      include: ['@crhio/leviate > axios', 'axios/lib/adapters/http'],
+      include: ['@crhio/leviate > axios', 'axios/lib/adapters/http', 'loglevel'],
     },
 
     plugins: [
       svgLoader(),
+      tokenPlugin(),
       manifestPlugin(),
       threeReloadPlugin(),
       vue(getDefaultTemplateCompilerOptions(mode)),
@@ -52,10 +54,15 @@ module.exports = function getSharedConfig({ mode, projectConfig = {} }) {
     server: {
       port: 8080,
       proxy: {
-        '/api': {
+        '/service': {
           target: process.env.SERVICE_URL,
+          rewrite: (path) => {
+            return process.env.SERVICE_URL.includes('leviatdesignstudio.com')
+              ? path
+              : path.replace('/api/service', '')
+          },
           headers: {
-            'x-service-key': process.env.SERVICE_KEY,
+            'x-app-id': process.env.npm_package_name + ' (development)'
           },
           changeOrigin: true,
         },

@@ -8,6 +8,7 @@ import useVersions from './composables/useVersions';
 import { useFeature } from './composables/useFeature';
 import { useApiGateway } from './composables/useApiGateway';
 import { usePdfGenerator } from './composables/usePdfGenerator';
+import useResults from './composables/useResults';
 
 import { useLocalize } from './plugins/localize';
 import { useHost, useMeta } from './plugins/host';
@@ -29,6 +30,7 @@ export {
   useLocalize,
   useVersions,
   useRootStore,
+  useResults,
   useApiGateway,
   useMessageStore,
   useLeviateStore,

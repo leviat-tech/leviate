@@ -2,6 +2,54 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.15.1](https://github.com/leviat-tech/leviate/compare/v5.15.0...v5.15.1) (2025-03-28)
+
+
+* deps ([#249](https://github.com/leviat-tech/leviate/issues/249)) ([0202b6d](https://github.com/leviat-tech/leviate/commit/0202b6dda0ea5b64292e1c5735b071ce4f880350))
+
+## [5.15.0](https://github.com/leviat-tech/leviate/compare/v5.14.2...v5.15.0) (2025-03-28)
+
+
+* extract column data ([#241](https://github.com/leviat-tech/leviate/issues/241)) ([a040354](https://github.com/leviat-tech/leviate/commit/a0403540bd8d180a40b9fdbacb2e5ddde639eb62))
+* multiple column data extraction ([#243](https://github.com/leviat-tech/leviate/issues/243)) ([c1ba759](https://github.com/leviat-tech/leviate/commit/c1ba759b76440cdab188544dbdc7eb6601a33539))
+* structure ([#246](https://github.com/leviat-tech/leviate/issues/246)) ([c7032d7](https://github.com/leviat-tech/leviate/commit/c7032d7353a3e76238519882119e517d8d24463f))
+
+## [5.14.2](https://github.com/leviat-tech/leviate/compare/v5.14.1...v5.14.2) (2025-03-26)
+
+
+* fix dev app config ([a22738e](https://github.com/leviat-tech/leviate/commit/a22738ed252a2a37f06b1480e253b945837399b5))
+
+## [5.14.1](https://github.com/leviat-tech/leviate/compare/v5.14.0...v5.14.1) (2025-03-24)
+
+
+* add auth plugin to preview server ([c71edf6](https://github.com/leviat-tech/leviate/commit/c71edf6518533f42f85e30b59e66e2ab2f213991))
+* fix package-lock.json ([3826e6b](https://github.com/leviat-tech/leviate/commit/3826e6bcff48e690a5bc382f2b35605e9384afa7))
+* handle fetch token error ([c81adbd](https://github.com/leviat-tech/leviate/commit/c81adbd46226123b5ea17818b610c51e86a814aa))
+* revert version in template ([0d365e4](https://github.com/leviat-tech/leviate/commit/0d365e40dc3da4516db94899c02995181e9954fb))
+
+## [5.14.0](https://github.com/leviat-tech/leviate/compare/v5.13.0...v5.14.0) (2025-03-17)
+
+
+* add useResults composable ([24688cf](https://github.com/leviat-tech/leviate/commit/24688cfce913f20d0eda2766faaee646bb9dfe3f))
+* don't check env vars in test mode ([ddee02f](https://github.com/leviat-tech/leviate/commit/ddee02f41651031a22651f6954b0d8c82774b1ba))
+* revert manifest plugin changes ([33d0bdf](https://github.com/leviat-tech/leviate/commit/33d0bdffd6e414ca611de46505422d9e4d95f838))
+* update useApiGateway and dev server to use new token service ([6b242c3](https://github.com/leviat-tech/leviate/commit/6b242c342ea6c9e98217e89d0dc0f5c785770061))
+
+## [5.12.0](https://github.com/leviat-tech/leviate/compare/v5.11.1...v5.12.0) (2025-03-07)
+
+
+* add type as an create error arg; add createErrMsg alias ([#231](https://github.com/leviat-tech/leviate/issues/231)) ([eb66f49](https://github.com/leviat-tech/leviate/commit/eb66f49c62e15a1bad885cf4cec8361c4dba2905))
+
+## [5.11.1](https://github.com/leviat-tech/leviate/compare/v5.11.0...v5.11.1) (2025-03-05)
+
+
+* allow local url values for SERVICE_URL values ([#228](https://github.com/leviat-tech/leviate/issues/228)) ([c9cca7e](https://github.com/leviat-tech/leviate/commit/c9cca7e438e6f22b4f5506f5e75cac7fdcb796ee))
+
+## [5.11.0](https://github.com/leviat-tech/leviate/compare/v5.10.6...v5.11.0) (2025-02-25)
+
+
+* add generic category getErrorByPath to BaseModel ([#223](https://github.com/leviat-tech/leviate/issues/223)) ([d688974](https://github.com/leviat-tech/leviate/commit/d688974065f2ab49c50a94c3cf81c4bc71d6e054))
+
 ## [5.10.6](https://github.com/leviat-tech/leviate/compare/v5.10.5...v5.10.6) (2025-02-13)
 
 

@@ -1,7 +1,8 @@
 <template>
-  <button class="w-48 h-48 border p-8 relative rounded-sm"
-          :class="shape.isSelected && 'border-indigo'"
-          @click="shape.isSelected = !shape.isSelected"
+  <button
+    class="w-48 h-48 border p-8 relative rounded-sm"
+    :class="shape.isSelected && 'border-indigo'"
+    @click="shape.isSelected = !shape.isSelected"
   >
     <div class="absolute inset-4 bottom-12" v-html="svg" />
 
@@ -10,49 +11,106 @@
       <div>H = {{ formatValue(height) }}</div>
     </div>
 
-    <div class="absolute bottom-0 right-0 flex items-center justify-center w-6 h-6"
-         :class="shape.isSelected && 'bg-indigo'">
-      <CheckIcon class="w-4 h-4 text-white"  />
+    <div
+      class="absolute bottom-0 right-0 flex items-center justify-center w-6 h-6"
+      :class="shape.isSelected && 'bg-indigo'"
+    >
+      <CheckIcon class="w-4 h-4 text-white" />
+    </div>
+    <div v-if="hasWarning" title="Some issues detected" class="absolute top-0 left-0 flex items-center justify-center w-6 h-6 bg-orange-400">
+      <ExclamationTriangleIcon class="w-4 h-4"/>
+    </div>
+    <div v-if="hasWarning" title="Some issues detected" class="absolute top-0 left-0 flex items-center justify-center w-6 h-6 bg-orange-400">
+      <ExclamationTriangleIcon class="w-4 h-4"/>
     </div>
   </button>
 </template>
 
 <script setup>
-import { Sketch, render } from '@crhio/jsdraft';
-import useShapeSelect from '../../composables/useShapeSelect';
-import { computed, ref, watchEffect } from 'vue';
-import { CheckIcon } from '@heroicons/vue/20/solid'
+  import { Sketch, render } from '@crhio/jsdraft';
+  import useShapeSelect, { FEATURE_TYPES, DXF_SHAPE_TYPES } from '../../composables/useShapeSelect';
+  import { computed, ref, watchEffect } from 'vue';
+  import { CheckIcon, ExclamationTriangleIcon } from '@heroicons/vue/20/solid';
 
-const props = defineProps({
-  shape: Object,
-});
+  const props = defineProps({
+    shape: Object,
+  });
 
-const { getShapeParams, shapeUnits, shapeUnitPrecision } = useShapeSelect();
+const { getDraftShapeParams, shapeUnits, shapeUnitPrecision } = useShapeSelect();
 
-const indigo = '#201547';
-const gray = '#aaaaaa';
-const black = '#000000';
-const widthPx = 158; // w-48 class in px
+  const indigo = '#201547';
+  const gray = '#aaaaaa';
+  const black = '#000000';
+  const white = '#ffffff';
+  const warning = '#ff8904';
+  const widthPx = 158; // w-48 class in px
 
-const params = getShapeParams(props.shape);
-const svg = ref('');
-const width =  ref(null);
-const height =  ref(null);
+  const params = getDraftShapeParams(props.shape.vertices);
+  const svg = ref('');
+  const width = ref(null);
+  const height = ref(null);
+  //TODO: remove once curves could be handled properly
+  const hasWarning = computed(() => (props.shape.features.cutouts?.some(c => Boolean(c.curves))))
 
-function formatValue(val) {
-  const rounded = val.toFixed(shapeUnitPrecision.value);
+  function formatValue(val) {
+    const rounded = val.toFixed(shapeUnitPrecision.value);
 
-  return parseFloat(rounded) + shapeUnits.value;
-}
+    return parseFloat(rounded) + shapeUnits.value;
+  }
 
-watchEffect(() => {
+  watchEffect(() => {
     const strokeColor = props.shape.isSelected ? indigo : gray;
     const fillColor = props.shape.isSelected ? indigo : black;
+
     const style = {
       fill: { color: fillColor, opacity: 0.05 },
-      stroke: { color: strokeColor, opacity: 0.8 }
+      stroke: { color: strokeColor, opacity: 0.8 },
     };
-    const sketch = new Sketch().polyface(...params).join().style(style);
+
+    // Main shape
+    const styleCutout = {
+      default: {
+        fill: { color: white, opacity: 1 },
+        stroke: { color: black, opacity: 0.8 }
+      },
+      invalid: {
+        fill: { color: warning, opacity: 1 },
+      }
+    };
+    let sketch = new Sketch()
+      .polyface(...params)
+      .join()
+      .style(style);
+
+    const openings = [];
+
+    props.shape.features.openings?.forEach((feat) => {
+      if (feat.type === DXF_SHAPE_TYPES.LWPOLYLINE) {
+        openings.push(
+          new Sketch()
+            .polyface(...feat.vertices.map(({ x, y }) => [x, y]))
+            .translate(feat.position[0], feat.position[1])
+            .join()
+            .style(styleCutout)
+        );
+      } else if (feat.type === DXF_SHAPE_TYPES.CIRCLE) {
+        openings.push(
+          new Sketch().circle([feat.center.x, feat.center.y], feat.radius).join().style(styleCutout)
+        );
+        //pdf
+      } else {
+        const vertices = getDraftShapeParams(feat.vertices);
+        openings.push(
+          new Sketch().polyface(...vertices)
+          .join()
+          .style(feat.curves ? { ...styleCutout.default, ...styleCutout.invalid } : styleCutout.default)
+        );
+      }
+    });
+
+    openings.forEach((o) => {
+      sketch = sketch.add(o);
+    });
 
     // Calculate padding of 1px to prevent clipping
     const { xmin, xmax, ymin, ymax } = sketch.extents;
@@ -63,5 +121,5 @@ watchEffect(() => {
     height.value = ymax - ymin;
 
     svg.value = render(sketch, 'svg', { fit: true, padding: unitPerPx });
-})
+  });
 </script>
