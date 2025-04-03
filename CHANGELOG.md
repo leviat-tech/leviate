@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.16.0](https://github.com/leviat-tech/leviate/compare/v5.15.1...v5.16.0) (2025-04-03)
+
+
+* add validation error params support ([#251](https://github.com/leviat-tech/leviate/issues/251)) ([7f4d3f8](https://github.com/leviat-tech/leviate/commit/7f4d3f8a8ae942feb360bdeb4dc7e72d82126c6b))
+
 ## [5.15.1](https://github.com/leviat-tech/leviate/compare/v5.15.0...v5.15.1) (2025-03-28)
 
 
