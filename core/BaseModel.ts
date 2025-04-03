@@ -51,7 +51,8 @@ class BaseModel extends Entity {
       this.constructor.schema.validateSync(this, { abortEarly: false });
     } catch (e) {
       e.inner?.forEach(error => {
-        this.createError('input', error.path, error.message, false);
+        const { _errCategory = 'input' , _isDismissable = false, _errType = 'error' } = error.params || {};
+        this.createError(_errCategory, error.path, error.message, _isDismissable, _errType);
       });
     }
   }
