@@ -88,7 +88,7 @@ function deepDiff(obj1, obj2) {
 
   compare(obj1, obj2);
 
-  return omit(result, 'transactionDepth');
+  return omit(result, ['newValue.transactionDepth','oldValue.transactionDepth']);
 }
 
 const initialActions = {
