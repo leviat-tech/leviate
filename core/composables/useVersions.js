@@ -1,6 +1,5 @@
 import { computed, ref } from 'vue';
 import { useHost } from '../plugins/host';
-import { useRootStore } from '@crhio/leviate';
 
 let isInitialized = ref(false);
 
@@ -23,15 +22,16 @@ function getVersionById(id) {
   return versions.value.find((version) => version.id === id);
 }
 
-function loadVersion(id) {
-  const newState = getVersionById(id).state;
-  useRootStore().replaceState(newState);
-  activeVersionId.value = id;
+async function loadVersion(id) {
+  await useHost().setActiveVersionId(id);
   window.location.reload();
 }
 
 async function fetchVersions() {
-  versions.value = await useHost().getVersions();
+  const { getVersions, getActiveVersionId } = useHost();
+  versions.value = await getVersions();
+  activeVersionId.value = await getActiveVersionId();
+  console.log(versions.value, activeVersionId.value)
 }
 
 export default function useVersions() {
@@ -51,20 +51,25 @@ export default function useVersions() {
     loadVersion,
     setName: async (name, id) => {
       await useHost().setName(name, id);
-      fetchVersions();
+      return fetchVersions();
     },
     createVersion: async (name, fromId) => {
       const id = fromId || activeVersionId.value;
       const newVersion = await useHost().createVersion(name, id);
-      await fetchVersions();
-      loadVersion(newVersion.id);
+      return loadVersion(newVersion.id);
     },
     deleteVersion: async (id) => {
+      await useHost().deleteVersion(id);
+
+      const isActiveVersion = activeVersionId.value === id;
+
+      if (!isActiveVersion) {
+        return fetchVersions();
+      }
+
       const nextActiveVersionIndex = versions.value.findIndex((version) => version.id === id) - 1;
       const nextActiveVersionId = versions.value[nextActiveVersionIndex].id;
-      await useHost().deleteVersion(id);
-      loadVersion(nextActiveVersionId);
-      fetchVersions();
+      return loadVersion(nextActiveVersionId);
     },
   };
 }

@@ -1,7 +1,7 @@
 import inject from '@crhio/inject';
 import logger from './extensions/logger.js';
-import { watch } from 'vue';
-import useVersions, { activeVersionId } from './composables/useVersions';
+import { ref } from 'vue';
+import useVersions from './composables/useVersions';
 import { cloneDeep, each, set } from 'lodash-es';
 import axios from 'axios';
 
@@ -11,6 +11,8 @@ const data = {
   configuration: {},
   dictionary: {},
 };
+
+const activeVersionId = ref(null);
 
 export function useMock() {
   const mockApi = {
@@ -111,6 +113,15 @@ export function useMock() {
       return newVersion;
     },
 
+    getActiveVersionId() {
+      return activeVersionId.value;
+    },
+
+    setActiveVersionId(id) {
+      activeVersionId.value = id;
+      saveDataToLocalStorage({ activeVersionId: id });
+    },
+
     deleteVersion: async (id) => {
       modifyVersions((versions) =>
         versions.filter((version) => version.id !== id)
@@ -161,7 +172,6 @@ export function useMock() {
     // Use timeout to prevent race conditions when deleting the active version
     // Otherwise deleting the active version will update the activeVersionId
     // and trigger the sync handler before the version has been deleted from storage
-    watch(activeVersionId, () => setTimeout(syncVersionsData));
   }
 
   /****************************** LOCAL STORAGE MANAGEMENT ******************************/
