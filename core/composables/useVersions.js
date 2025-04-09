@@ -31,7 +31,6 @@ async function fetchVersions() {
   const { getVersions, getActiveVersionId } = useHost();
   versions.value = await getVersions();
   activeVersionId.value = await getActiveVersionId();
-  console.log(versions.value, activeVersionId.value)
 }
 
 export default function useVersions() {
