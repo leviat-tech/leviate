@@ -42,6 +42,7 @@ const initialState = {
   appVersion: null,
 };
 
+//deep compare, output only the differing properties between the 2 objects, ignoring "settings" and "transactionDepth" at the top level
 function deepDiff(obj1, obj2) {
   const result = {
     oldValue: {},
@@ -86,9 +87,9 @@ function deepDiff(obj1, obj2) {
     }
   }
 
-  compare(obj1, obj2);
-
-  return omit(result, ['newValue.transactionDepth','oldValue.transactionDepth']);
+  const noTrack = ['transactionDepth','settings']
+  compare(omit(obj1,noTrack), omit(obj2,noTrack));
+  return result
 }
 
 const initialActions = {

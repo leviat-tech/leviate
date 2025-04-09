@@ -1,5 +1,5 @@
 import { computed, reactive } from 'vue';
-import { each, map, set, unset } from 'lodash-es';
+import { each, map, set, unset, isEmpty } from 'lodash-es';
 
 
 class Revision {
@@ -15,6 +15,7 @@ class Revision {
 
   // save current state to undo stack
   commit(patch) {
+    if (isEmpty(patch.newValue) && isEmpty(patch.oldValue)) return
     this.undos.push(patch);
 
     // Redo is no longer possible once a new change has been made
