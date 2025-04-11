@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.16.1](https://github.com/leviat-tech/leviate/compare/v5.16.0...v5.16.1) (2025-04-11)
+
+
+* dont track transaction depth in undo stack ([1212bb0](https://github.com/leviat-tech/leviate/commit/1212bb0cbb1d8aa03e655ac571ac747efd5ca54c))
+* omit settings changes from undo tracking ([#256](https://github.com/leviat-tech/leviate/issues/256)) ([7a81d86](https://github.com/leviat-tech/leviate/commit/7a81d862dc36995c70c2ca963351eddf471ed48e))
+* remove console log ([34ceeea](https://github.com/leviat-tech/leviate/commit/34ceeea195017f7033d6cee981dd6e4278c31b76))
+* versions ([8c2ddd5](https://github.com/leviat-tech/leviate/commit/8c2ddd55590fdef82a5ae7885d46bc236f1dde4f))
+
 ## [5.16.0](https://github.com/leviat-tech/leviate/compare/v5.15.1...v5.16.0) (2025-04-03)
 
 
