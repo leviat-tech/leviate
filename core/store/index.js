@@ -323,7 +323,7 @@ async function initializeStore(initialState, migrations, models) {
 
   rootStore.$patch({ transactionDepth: 0 });
 
-  if (typeof rootStore.initialize === 'function') rootStore.initialize();
+  if (typeof rootStore.initialize === 'function') await rootStore.initialize();
 
   await detectAppVersionMismatch();
 }
