@@ -70,7 +70,7 @@ export async function createApp(projectConfig, Root, isStandalone) {
   const initialState = await host.getState();
   const initialUrl = await host.getUrl();
 
-  initializeStore(initialState, migrations, models);
+  await initializeStore(initialState, migrations, models);
 
   // Wait for store to initialize before initializing router
   app.use(router);
