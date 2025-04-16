@@ -129,8 +129,6 @@ const initialActions = {
 
       const stateToSave = _useStateCompression ? await compressState(newState) : diff.newValue;
 
-      console.log(stateToSave)
-
       const { activeVersionId } = useVersions();
       useHost().setState(stateToSave, activeVersionId.value);
       transactionUpdates.unshift(diff);
