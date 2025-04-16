@@ -1,4 +1,5 @@
 import { compressSync, decompressSync, strToU8, strFromU8 } from 'fflate';
+import logger from "../extensions/logger";
 
 interface CompressedState {
   _compressed: string,
@@ -10,13 +11,13 @@ export default function useStateCompression() {
     compress(state: any): CompressedState {
       const stateStr: string = JSON.stringify(state);
 
-      console.log('State size before compression:', stateStr.length);
+      logger.log('uncompressed state size:', stateStr.length);
 
       const buffer: Uint8Array = strToU8(stateStr)
       const compressed: Uint8Array = compressSync(buffer, { level: 9 });
       const stateStrCompressed: string = strFromU8(compressed, true);
 
-      console.log('State size after compression:', stateStrCompressed.length);
+      logger.log('  compressed state size:', stateStrCompressed.length);
 
       // Explicitly set any existing state properties to undefined
       // so they will be removed from the stored state, and replaced with compressed data

@@ -1,4 +1,15 @@
-const log = (msg, data = '', level = 'info') => {
+const LOG_LEVELS = {
+  ERROR: 1,
+  WARNING: 2,
+  DEBUG: 3,
+}
+
+const logLevelConfig = import.meta.env.VITE_LOG_LEVEL || 'ERROR';
+const logLevel = LOG_LEVELS[logLevelConfig];
+
+const log = (msg, data = '', level = 'info', requiredLogLevel) => {
+  if (logLevel < requiredLogLevel) return;
+
   const prefix = `[LEVIATE ${level}]:`;
   const fullMessage = [prefix, msg].join(' ');
   const action = console[level];
@@ -7,8 +18,8 @@ const log = (msg, data = '', level = 'info') => {
 }
 
 export default {
-  log,
-  info: (msg, data) => log(msg, data, 'info'),
-  warn: (msg, data) => log(msg, data, 'warn'),
-  error: (msg, data) => log(msg, data, 'error')
+  log: (msg, data) => log(msg, data, 'info', LOG_LEVELS.DEBUG),
+  info: (msg, data) => log(msg, data, 'info', LOG_LEVELS.DEBUG),
+  warn: (msg, data) => log(msg, data, 'warn', LOG_LEVELS.WARNING),
+  error: (msg, data) => log(msg, data, 'error', LOG_LEVELS.ERROR),
 }
