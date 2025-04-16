@@ -13,7 +13,9 @@ export default function useStateCompression() {
 
       console.log('State size after compression:', stateStrCompressed.length);
 
-      return { _compressed: stateStrCompressed }
+      return Object.keys(state).reduce((stateToSave, key) => {
+        return { ...stateToSave, [key]: undefined };
+      }, { _compressed: stateStrCompressed }
     },
     decompress(stateStrCompressed: string) {
       const buffer: Uint8Array = strToU8(stateStrCompressed, true)
