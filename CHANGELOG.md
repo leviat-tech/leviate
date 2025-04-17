@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.17.1](https://github.com/leviat-tech/leviate/compare/v5.17.0...v5.17.1) (2025-04-17)
+
+
+* race conditions in versions ([960bd66](https://github.com/leviat-tech/leviate/commit/960bd66f946cf195d91a9e24b543eaaf2659020c))
+
 ## [5.17.0](https://github.com/leviat-tech/leviate/compare/v5.16.1...v5.17.0) (2025-04-17)
 
 
