@@ -1,4 +1,4 @@
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useHost } from '../plugins/host';
 
 let isInitialized = ref(false);
@@ -33,6 +33,17 @@ async function fetchVersions() {
   activeVersionId.value = await getActiveVersionId();
 }
 
+async function isVersionsReady() {
+  if (isInitialized.value) return true;
+
+  return new Promise((resolve) => {
+    const unwatch = watch(isInitialized, () => {
+      unwatch();
+      resolve(true);
+    })
+  })
+}
+
 export default function useVersions() {
   if (!isInitialized.value) {
     fetchVersions().then(() => {
@@ -42,6 +53,7 @@ export default function useVersions() {
 
   return {
     versions,
+    isVersionsReady,
     isInitialized,
     activeVersion,
     activeVersionId,

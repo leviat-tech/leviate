@@ -127,7 +127,9 @@ const initialActions = {
 
       const diff = deepDiff(oldState, newState);
 
-      const stateToSave = _useStateCompression ? await compressState(newState) : diff.newValue;
+      const stateToSave = _useStateCompression
+        ? await compressState(newState)
+        : { ...diff.newValue, _compressed: undefined };
 
       const { activeVersionId } = useVersions();
       useHost().setState(stateToSave, activeVersionId.value);
@@ -319,6 +321,8 @@ function getStoreConfig(storeConfig, router) {
 
 // function to initialize store given initial state
 async function initializeStore(hostState, migrations, models) {
+  await useVersions().isVersionsReady();
+
   // eslint-disable-line
   const rootStore = useRootStore();
 
