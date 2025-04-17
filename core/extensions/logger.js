@@ -4,7 +4,7 @@ const LOG_LEVELS = {
   DEBUG: 3,
 }
 
-const logLevelConfig = import.meta.env.VITE_LOG_LEVEL || 'ERROR';
+const logLevelConfig = import.meta.env.VITE_LDS_ENV === 'prod' ? 'ERROR' : 'DEBUG';
 const logLevel = LOG_LEVELS[logLevelConfig];
 
 const log = (msg, data = '', level = 'info', requiredLogLevel = LOG_LEVELS.DEBUG) => {
