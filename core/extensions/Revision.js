@@ -52,6 +52,7 @@ class Revision {
 
   applyUpdates(updates) {
     const { transactionDepth, ...state } = this.store.toJSON();
+    const { activeVersion, activeVersionId } = useVersions();
 
     updates.forEach(patch => {
       each(patch, (val, key) => {
@@ -61,9 +62,13 @@ class Revision {
           set(state, key, val);
         }
       });
+      useHost().setState(patch, activeVersionId.value);
     });
 
     this.store.replaceState(state);
+    
+    
+    
   }
 
   // clear revision undo / redo stack
