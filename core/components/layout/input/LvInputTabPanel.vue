@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { useLeviateStore } from '@crhio/leviate/store/leviate.js';
+import { useLeviateStore } from '@crhio/leviate/store/leviate.ts';
 
 const props = defineProps({
   tabId: String,
