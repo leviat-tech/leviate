@@ -1,7 +1,9 @@
 <template>
   <div class="bg-gray-50 h-12 border-b" :class="isExpanded && 'py-2'">
-    <CToolbar class="justify-between !min-h-0"
-              :class="!isExpanded && `flex flex-col-reverse h-auto`">
+    <CToolbar
+      class="justify-between !min-h-0"
+      :class="!isExpanded && `flex flex-col-reverse h-auto`"
+    >
       <CTool-group :class="!isExpanded && `flex mt-1 -space-x-1`">
         <CTool
           name="Undo"
@@ -21,20 +23,17 @@
       <template v-if="isExpanded">
         <Menu class="relative" as="div">
           <!-- Button -->
-          <MenuButton
-            :title="$L('help')"
-            class="flex items-center p-1 relative ring-0"
-          >
-            <slot v-if="$slots.button" name="button"/>
-            <CIcon type="question-circle" size="md"/>
+          <MenuButton :title="$L('help')" class="flex items-center p-1 relative ring-0">
+            <slot v-if="$slots.button" name="button" />
+            <CIcon type="question-circle" size="md" />
           </MenuButton>
 
           <!-- Content -->
           <Transition enter-from-class="scale-95 opacity-0" leave-to-class="opacity-0">
             <MenuItems
               as="div"
-              class="absolute w-[260px] text-black top-3 right-3 z-20 py-2 bg-white shadow-xl transition duration-150 origin-top-right outline-none">
-
+              class="absolute w-[260px] text-black top-3 right-3 z-20 py-2 bg-white shadow-xl transition duration-150 origin-top-right outline-none"
+            >
               <template v-for="item in $config.helpMenu">
                 <hr v-if="item === null" class="my-2" />
 
@@ -45,19 +44,20 @@
                     :data-cy="`toolbar__info_link_${item.name}`"
                     target="_blank"
                   >
-                    <CIcon v-if="item.icon" :type="item.icon" size="sm"/>
+                    <CIcon v-if="item.icon" :type="item.icon" size="sm" />
                     <span>{{ $l(item.name) }}</span>
                   </a>
-
                 </MenuItem>
               </template>
 
               <hr v-if="$config.helpMenu.length > 0" class="my-2" />
 
               <MenuItem v-slot="{ active }" :class="menuItemClass">
-                <button @click="openAppInfoModal"
-                        :class="[menuItemClass, active && 'bg-steel-light']">
-                  <CIcon type="information-circle" class="!w-5"/>
+                <button
+                  @click="openAppInfoModal"
+                  :class="[menuItemClass, active && 'bg-steel-light']"
+                >
+                  <CIcon type="information-circle" class="!w-5" />
                   <span>{{ $L('about') }} {{ manifest.name }}</span>
                 </button>
               </MenuItem>
@@ -73,7 +73,7 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import { useRootStore } from '@crhio/leviate';
 import useAppInfo from '@crhio/leviate/composables/useAppInfo';
-import { useLeviateStore } from '../../../store/leviate.js';
+import { useLeviateStore } from '../../../store/leviate.ts';
 import { computed, onMounted, onUnmounted } from 'vue';
 
 const { openAppInfoModal, manifest } = useAppInfo();
