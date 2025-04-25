@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.17.1](https://github.com/leviat-tech/leviate/compare/v5.17.0...v5.17.1) (2025-04-17)
+
+
+* race conditions in versions ([960bd66](https://github.com/leviat-tech/leviate/commit/960bd66f946cf195d91a9e24b543eaaf2659020c))
+
+## [5.17.0](https://github.com/leviat-tech/leviate/compare/v5.16.1...v5.17.0) (2025-04-17)
+
+
+* add useStateCompression option ([9cc42d6](https://github.com/leviat-tech/leviate/commit/9cc42d620a54affd144c30a102caa749e68c9e79))
+* fix syntax error and add interface ([7adbfc0](https://github.com/leviat-tech/leviate/commit/7adbfc06b53b937cc14ddd6aacdd7b9f3020c5de))
+* improve logging ([a04391d](https://github.com/leviat-tech/leviate/commit/a04391d91d526d844169c64f8b5faed3c2f67d7e))
+* remove state keys if using compression ([04d7822](https://github.com/leviat-tech/leviate/commit/04d7822fa6f55026876581f51efa7d7cf44aef76))
+* tidy logger ([1be72f5](https://github.com/leviat-tech/leviate/commit/1be72f5c2cbbd13cb0066e0262cbabb875a7e4c2))
+* tidy logger ([c9a45fc](https://github.com/leviat-tech/leviate/commit/c9a45fc424e8030b8711d54474dd4884a30f486b))
+* wait for root store to initialize before mounting app ([3122b5b](https://github.com/leviat-tech/leviate/commit/3122b5bbf337061992783b7a86ca2883ebed7126))
+* wait for store to initialize in createApp ([d548b17](https://github.com/leviat-tech/leviate/commit/d548b176d3d78be98c42a5b059581a850758a420))
+
+## [5.16.1](https://github.com/leviat-tech/leviate/compare/v5.16.0...v5.16.1) (2025-04-11)
+
+
+* dont track transaction depth in undo stack ([1212bb0](https://github.com/leviat-tech/leviate/commit/1212bb0cbb1d8aa03e655ac571ac747efd5ca54c))
+* omit settings changes from undo tracking ([#256](https://github.com/leviat-tech/leviate/issues/256)) ([7a81d86](https://github.com/leviat-tech/leviate/commit/7a81d862dc36995c70c2ca963351eddf471ed48e))
+* remove console log ([34ceeea](https://github.com/leviat-tech/leviate/commit/34ceeea195017f7033d6cee981dd6e4278c31b76))
+* versions ([8c2ddd5](https://github.com/leviat-tech/leviate/commit/8c2ddd55590fdef82a5ae7885d46bc236f1dde4f))
+
+## [5.16.0](https://github.com/leviat-tech/leviate/compare/v5.15.1...v5.16.0) (2025-04-03)
+
+
+* add validation error params support ([#251](https://github.com/leviat-tech/leviate/issues/251)) ([7f4d3f8](https://github.com/leviat-tech/leviate/commit/7f4d3f8a8ae942feb360bdeb4dc7e72d82126c6b))
+
 ## [5.15.1](https://github.com/leviat-tech/leviate/compare/v5.15.0...v5.15.1) (2025-03-28)
 
 
