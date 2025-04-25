@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.17.2](https://github.com/leviat-tech/leviate/compare/v5.17.1...v5.17.2) (2025-04-25)
+
+
+* allow to disable tab ([#265](https://github.com/leviat-tech/leviate/issues/265)) ([e626043](https://github.com/leviat-tech/leviate/commit/e6260432823b5c15c99ff05f638882cd320d993d))
+
 ## [5.17.1](https://github.com/leviat-tech/leviate/compare/v5.17.0...v5.17.1) (2025-04-17)
 
 
