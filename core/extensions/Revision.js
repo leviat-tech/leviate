@@ -3,6 +3,7 @@ import { each, isEmpty, map, omitBy, set, unset } from 'lodash-es';
 import useVersions from '../composables/useVersions';
 import { useHost } from '../plugins/host';
 
+
 class Revision {
   constructor(store, maxUpdates = 25) {
     this.store = store;

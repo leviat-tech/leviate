@@ -48,7 +48,7 @@ module.exports = function getSharedConfig({ mode, projectConfig = {} }) {
     ],
 
     build: {
-      minify: false,
+      minify: process.env.VITE_LDS_ENV === 'prod',
     },
 
     server: {

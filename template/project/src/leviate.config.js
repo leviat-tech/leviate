@@ -37,5 +37,6 @@ export default {
   concreteOptions: {
     // You can override any of the concrete options here e.g. registerInputs: true
   },
-  isHosted: false
+  isHosted: false,
+  useStateCompression: false, // Set to true to allow state compression
 };

@@ -19,10 +19,23 @@ class TransactionError extends Error {
 }
 
 let storeConfig = {};
+let _useStateCompression = false;
 
 let useRootStore = () => logger.log('Root store has not been initialized');
 
 let transactionUpdates = [];
+
+async function compressState(state) {
+  const mod = await import('../composables/useStateCompression.ts');
+  const { compress } = mod.default();
+  return compress(state);
+}
+
+async function decompressState(state) {
+  const mod = await import('../composables/useStateCompression.ts');
+  const { decompress } = mod.default();
+  return decompress(state);
+}
 
 function transact(cb) {
   if (useMeta().isReadOnly) {
@@ -114,8 +127,12 @@ const initialActions = {
 
       const diff = deepDiff(oldState, newState);
 
-      const { activeVersion, activeVersionId } = useVersions();
-      useHost().setState(diff.newValue, activeVersionId.value);
+      const stateToSave = _useStateCompression
+        ? await compressState(newState)
+        : { ...diff.newValue, _compressed: undefined };
+
+      const { activeVersionId } = useVersions();
+      useHost().setState(stateToSave, activeVersionId.value);
       transactionUpdates.unshift(diff);
 
       if (this.transactionDepth === 0) {
@@ -303,7 +320,9 @@ function getStoreConfig(storeConfig, router) {
 }
 
 // function to initialize store given initial state
-async function initializeStore(initialState, migrations, models) {
+async function initializeStore(hostState, migrations, models) {
+  await useVersions().isVersionsReady();
+
   // eslint-disable-line
   const rootStore = useRootStore();
 
@@ -311,6 +330,8 @@ async function initializeStore(initialState, migrations, models) {
   const useEntityStore = normie(defineStore, Object.values(models));
   const modules = storeConfig.modules.concat(useEntityStore);
   modules.forEach(rootStore._registerModule);
+
+  const initialState = hostState._compressed ? await decompressState(hostState._compressed) : hostState;
 
   performMigration(rootStore, initialState, migrations);
 
@@ -323,7 +344,7 @@ async function initializeStore(initialState, migrations, models) {
 
   rootStore.$patch({ transactionDepth: 0 });
 
-  if (typeof rootStore.initialize === 'function') rootStore.initialize();
+  if (typeof rootStore.initialize === 'function') await rootStore.initialize();
 
   await detectAppVersionMismatch();
 }
@@ -343,7 +364,9 @@ function performMigration(rootStore, initialState, migrations) {
   }
 }
 
-function createStore(projectStoreConfig, router) {
+function createStore(projectStoreConfig, router, useStateCompression) {
+  _useStateCompression = useStateCompression;
+
   storeConfig = getStoreConfig(projectStoreConfig, router);
 
   const pinia = createPinia();

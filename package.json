@@ -1,6 +1,6 @@
 {
   "name": "@crhio/leviate",
-  "version": "5.16.0",
+  "version": "5.17.2",
   "description": "A project template, core library and CLI for building single page Vue apps",
   "homepage": "https://github.com/leviat-tech/leviate#readme",
   "repository": {
@@ -39,6 +39,7 @@
     "dxf-parser": "^1.1.2",
     "enquirer": "^2.3.6",
     "esm": "^3.2.25",
+    "fflate": "^0.8.2",
     "fs-extra": "^10.0.0",
     "glob": "^7.2.0",
     "line-reader": "^0.4.0",
@@ -55,6 +56,7 @@
     "yup": "^0.32.8"
   },
   "devDependencies": {
+    "@types/lodash-es": "^4.17.12",
     "@vue/test-utils": "^2.4.1",
     "husky": "^8.0.1",
     "vitest": "^0.29.1"

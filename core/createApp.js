@@ -50,13 +50,14 @@ export async function createApp(projectConfig, Root, isStandalone) {
     models,
     migrations,
     onAppCreated,
+    useStateCompression,
   } = projectConfig;
 
 
   const app = _createApp(Root);
 
   const router = createRouter(routes);
-  const store = createStore(storeConfig, router);
+  const store = createStore(storeConfig, router, useStateCompression);
 
   onAppCreated?.();
 
@@ -67,10 +68,10 @@ export async function createApp(projectConfig, Root, isStandalone) {
 
   await hostIsConnected();
   const host = useHost()
-  const initialState = await host.getState();
+  const hostState = await host.getState();
   const initialUrl = await host.getUrl();
 
-  initializeStore(initialState, migrations, models);
+  await initializeStore(hostState, migrations, models);
 
   // Wait for store to initialize before initializing router
   app.use(router);
