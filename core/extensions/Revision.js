@@ -72,7 +72,6 @@ class Revision {
 
       const { activeVersionId } = useVersions();
       useHost().setState(stateToSave, activeVersionId.value);
-      useHost().setState(patch, activeVersionId.value);
     });
 
     this.store.replaceState(state);
