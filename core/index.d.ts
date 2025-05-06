@@ -15,7 +15,6 @@ import { useHost, useMeta } from './plugins/host';
 import BaseModel from './BaseModel';
 import CoreLayerModel from './models/CoreLayerModel';
 import CorePositionModel from './models/CorePositionModel';
-import ValidationPaneMessage from './models/ValidationPaneMessage';
 
 import {
     LvLogo,
@@ -43,7 +42,6 @@ export {
     BaseModel,
     CoreLayerModel,
     CorePositionModel,
-    ValidationPaneMessage,
 
     useHost,
     useFile,

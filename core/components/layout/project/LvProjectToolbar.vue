@@ -72,7 +72,7 @@ import { QuestionMarkCircleIcon } from '@heroicons/vue/20/solid';
 import { useRootStore } from '@crhio/leviate';
 import useAppInfo from '@crhio/leviate/composables/useAppInfo';
 import LvToolbar from '../../ui/LvToolbar.vue';
-import { useLeviateStore } from '@/store/leviate';
+import { useLeviateStore } from '../../../store/leviate';
 import { computed, onMounted, onUnmounted } from 'vue';
 
 const { openAppInfoModal, manifest } = useAppInfo();

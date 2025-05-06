@@ -16,17 +16,12 @@ import { useHost, useMeta } from './plugins/host';
 import BaseModel from './BaseModel';
 import CoreLayerModel from './models/CoreLayerModel';
 import CorePositionModel from './models/CorePositionModel';
-import ValidationPaneMessage from './models/ValidationPaneMessage';
-
 
 export {
   transact,
-
   BaseModel,
   CoreLayerModel,
   CorePositionModel,
-  ValidationPaneMessage,
-  
   useHost,
   useFile,
   useEnum,
