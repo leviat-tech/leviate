@@ -4,6 +4,7 @@ const vue = require('@vitejs/plugin-vue');
 const svgLoader = require('vite-svg-loader');
 const getDefaultTemplateCompilerOptions = require('./server/defaultTemplateCompilerOptions');
 const manifestPlugin = require('./server/manifestPlugin');
+const { tokenPlugin } = require('./server/authPlugin');
 const translationPlugin = require('./server/translation');
 
 /**
@@ -39,6 +40,7 @@ module.exports = function getSharedConfig({ mode, projectConfig = {} }) {
 
     plugins: [
       svgLoader(),
+      tokenPlugin(),
       manifestPlugin(),
       threeReloadPlugin(),
       vue(getDefaultTemplateCompilerOptions(mode)),
@@ -52,7 +54,7 @@ module.exports = function getSharedConfig({ mode, projectConfig = {} }) {
     server: {
       port: 8080,
       proxy: {
-        '/api': {
+        '/service': {
           target: process.env.SERVICE_URL,
           rewrite: (path) => {
             return process.env.SERVICE_URL.includes('leviatdesignstudio.com')
@@ -60,7 +62,7 @@ module.exports = function getSharedConfig({ mode, projectConfig = {} }) {
               : path.replace('/api/service', '')
           },
           headers: {
-            'x-service-key': process.env.SERVICE_KEY,
+            'x-app-id': process.env.npm_package_name + ' (development)'
           },
           changeOrigin: true,
         },
