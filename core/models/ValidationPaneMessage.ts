@@ -1,6 +1,5 @@
 export interface ValidationPaneMessage {
     id: string,
-    text: string,
     content: string,
     timestamp: number,
     isDismissable: boolean,
