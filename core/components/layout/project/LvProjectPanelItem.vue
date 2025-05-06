@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { useLeviateStore } from '../../../store/leviate.js';
+import { useLeviateStore } from '@/store/eviate.js';
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 

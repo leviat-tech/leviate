@@ -23,15 +23,10 @@ import LvLayersToggle from './viewport/LvLayersToggle.vue';
 
 import LvProjectRoot from './layout/LvProjectRoot.vue';
 
-import LvHome from './pages/LvHome.vue'
-import LvNotFound from './pages/LvNotFound.vue'
-
 
 export {
   LvLogo,
-  LvHome,
   LvLayout,
-  LvNotFound,
   LvPopupMenu,
   LvInputPanel,
   LvProjectRoot,
