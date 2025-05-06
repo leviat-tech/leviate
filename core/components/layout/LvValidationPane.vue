@@ -89,7 +89,7 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/20/solid';
 import { computed, watch, ref } from 'vue';
 import { useLocalize } from '../..';
 import { useLeviateStore } from '../../store/leviate';
-import { ValidationPaneMessage } from 'core/models/ValidationPaneMessage';
+import ValidationPaneMessage from '../../models/ValidationPaneMessage';
 
 interface Props {
   autoAppear?: boolean;
