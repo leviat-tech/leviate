@@ -16,7 +16,7 @@ import { useHost, useMeta } from './plugins/host';
 import BaseModel from './BaseModel';
 import CoreLayerModel from './models/CoreLayerModel';
 import CorePositionModel from './models/CorePositionModel';
-import { ValidationPaneMessage } from './models/ValidationPaneMessage';
+import ValidationPaneMessage from './models/ValidationPaneMessage';
 
 
 export {
@@ -27,7 +27,6 @@ export {
   CorePositionModel,
   ValidationPaneMessage,
   
-  Validation
   useHost,
   useFile,
   useEnum,

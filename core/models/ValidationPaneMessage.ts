@@ -1,4 +1,4 @@
-export interface ValidationPaneMessage {
+export default interface ValidationPaneMessage {
     id: string,
     content: string,
     timestamp: number,
