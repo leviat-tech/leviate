@@ -56,6 +56,7 @@ class Revision {
     const { transactionDepth, ...state } = this.store.toJSON();
     const { activeVersion, activeVersionId } = useVersions();
 
+    const _useStateCompression = false //TODO make this an export from the store
     updates.forEach(async patch => {
       each(patch, (val, key) =>  {
         if (val === undefined) {
@@ -64,8 +65,8 @@ class Revision {
           set(state, key, val);
         }
       });
-      const _useStateCompression = false //TODO make this an export from the store
-      const stateToSave = _useStateCompression ? await compressState(newState) : diff.newValue;
+      
+      const stateToSave = _useStateCompression ? await compressState(patch) : patch;
 
       console.log(stateToSave)
 
