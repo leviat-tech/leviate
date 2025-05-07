@@ -53,6 +53,7 @@ class Revision {
   }
 
   applyUpdates(updates) {
+    console.log("apply updates ch test version 1")
     const { transactionDepth, ...state } = this.store.toJSON();
     const { activeVersion, activeVersionId } = useVersions();
 
