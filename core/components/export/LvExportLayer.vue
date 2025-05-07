@@ -2,7 +2,7 @@
   <div data-cy="export_layer" :class="`ml-${layer?.depth * 4}`">
     <CAccordion data-cy="export_layer__accordion_toggle" size="sm" default-open :title="layerName">
       <template #customTitle>
-        <div class="flex items-center w-full ml-4 -mt-5 bg-white absolute z-9">
+        <div class="flex items-center w-full ml-4 -mt-7 bg-white absolute z-9">
           <CCheckbox
             v-if="
               areAllNestedCalulatedPositionsSelected ||
