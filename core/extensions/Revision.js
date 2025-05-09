@@ -53,10 +53,10 @@ class Revision {
   }
 
   applyUpdates(updates) {
-    console.log("apply updates ch test version 1")
+    console.log("apply updates ch test version 2")
     const { transactionDepth, ...state } = this.store.toJSON();
 
-    const _useStateCompression = false //TODO make this an export from the store
+    const _useStateCompression = true //TODO make this an export from the store
     updates.forEach(async patch => {
       each(patch, (val, key) =>  {
         if (val === undefined) {
