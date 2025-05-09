@@ -1,6 +1,8 @@
 import { computed, reactive } from 'vue';
 import { each, isEmpty, map, omitBy, set, unset } from 'lodash-es';
-
+import useVersions from '../composables/useVersions';
+import { useHost } from '../plugins/host';
+import { compressState } from '../store/index'
 
 class Revision {
   constructor(store, maxUpdates = 25) {
@@ -51,19 +53,31 @@ class Revision {
   }
 
   applyUpdates(updates) {
+    console.log("apply updates ch test version 3")
     const { transactionDepth, ...state } = this.store.toJSON();
 
-    updates.forEach(patch => {
-      each(patch, (val, key) => {
+    const _useStateCompression = true //TODO make this an export from the store
+    updates.forEach(async patch => {
+      each(patch, (val, key) =>  {
         if (val === undefined) {
           unset(state, key);
         } else {
           set(state, key, val);
         }
       });
+      
+      const stateToSave = _useStateCompression ? await compressState(patch) : patch;
+
+      console.log(stateToSave)
+
+      const { activeVersionId } = useVersions();
+      useHost().setState(stateToSave, activeVersionId.value);
     });
 
     this.store.replaceState(state);
+    
+    
+    
   }
 
   // clear revision undo / redo stack
