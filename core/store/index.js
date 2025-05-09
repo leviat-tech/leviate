@@ -25,7 +25,7 @@ let useRootStore = () => logger.log('Root store has not been initialized');
 
 let transactionUpdates = [];
 
-async function compressState(state) {
+export async function compressState(state) {
   const mod = await import('../composables/useStateCompression.ts');
   const { compress } = mod.default();
   return compress(state);

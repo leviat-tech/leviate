@@ -2,7 +2,7 @@ import { computed, reactive } from 'vue';
 import { each, isEmpty, map, omitBy, set, unset } from 'lodash-es';
 import useVersions from '../composables/useVersions';
 import { useHost } from '../plugins/host';
-
+import { compressState } from '../store/index'
 
 class Revision {
   constructor(store, maxUpdates = 25) {
@@ -53,7 +53,7 @@ class Revision {
   }
 
   applyUpdates(updates) {
-    console.log("apply updates ch test version 2")
+    console.log("apply updates ch test version 3")
     const { transactionDepth, ...state } = this.store.toJSON();
 
     const _useStateCompression = true //TODO make this an export from the store
