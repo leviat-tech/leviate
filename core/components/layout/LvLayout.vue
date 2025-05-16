@@ -32,7 +32,18 @@
         <ProjectRoot />
       </LvProjectPanel>
 
-      <div class="flex-1">
+      <div class="flex-1 relative">
+        <Transition
+          enter-from-class="-translate-y-4 opacity-0"
+          leave-to-class="-translate-y-4 opacity-0"
+        >
+          <div
+            v-if="globalMessage"
+            class="absolute z-30 bg-danger text-white py-3 px-4 inset-x-4 top-4 rounded transition">
+            {{ globalMessage }}
+          </div>
+        </Transition>
+
         <slot />
       </div>
     </div>
@@ -40,14 +51,16 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
-import { useRootStore } from '@crhio/leviate';
+import { computed, onMounted, ref } from 'vue';
+import { useRootStore, useLeviateStore } from '@crhio/leviate';
 
 import ProjectRoot from '@/components/project/ProjectRoot.vue';
 import { LvProjectPanel } from '../';
 import LvReadOnlyBanner from './LvReadOnlyBanner.vue'
 
 const appVersionsHaveMismatch = ref(false);
+
+const globalMessage = computed(() => useLeviateStore().globalMessage);
 
 onMounted(async () => {
   appVersionsHaveMismatch.value = await useRootStore().detectAppVersionMismatch;

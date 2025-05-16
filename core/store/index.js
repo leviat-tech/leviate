@@ -1,5 +1,6 @@
 import { defineStore, createPinia } from 'pinia';
 import { normie } from '@crhio/normie';
+import { v4 as uuidv4 } from 'uuid';
 import { useMeta } from '@crhio/leviate';
 import { isEmpty, get, last, range, each, omit, isEqual } from 'lodash-es';
 import Migration from '../extensions/migration';
@@ -10,6 +11,7 @@ import logger from '../extensions/logger.js';
 import useAppInfo from '../composables/useAppInfo.js';
 import useVersions from '../composables/useVersions';
 import { useHost } from '../plugins/host';
+import { useLeviateStore } from './leviate';
 
 class TransactionError extends Error {
   constructor() {
@@ -112,15 +114,19 @@ const initialActions = {
 
     this.transactionDepth++;
 
+    const transactionId = uuidv4();
+    const oldState = this.toJSON();
+
     try {
-      const oldState = this.toJSON();
 
       let res = cb();
 
       this.transactionDepth --;
 
       if (res instanceof Promise) {
-        await res.catch(this._onTransactionError);
+        await res.catch((e) => {
+          throw e;
+        });
       }
 
       const newState = this.toJSON();
@@ -133,30 +139,36 @@ const initialActions = {
 
       const { activeVersionId } = useVersions();
       useHost().setState(stateToSave, activeVersionId.value);
-      transactionUpdates.unshift(diff);
+      transactionUpdates.unshift({ id: transactionId, ...diff });
 
       if (this.transactionDepth === 0) {
-        this.revision.commit(transactionUpdates);
+        this.revision.commit(transactionUpdates, transactionId);
       }
 
       return res;
     } catch (e) {
-      this._onTransactionError(e);
+      this._onTransactionError(e, transactionId, oldState);
       return false;
     }
   },
 
-  _onTransactionError(e) {
+  _onTransactionError(e, transactionId, oldState) {
     if (!(e instanceof TransactionError)) {
-      logger.error(e);
+      logger.error('transaction failed -', e);
     }
 
     if (this.transactionDepth > 1) {
       // if we're in a nested transaction, propagate an error;
       throw new TransactionError();
     } else {
-      // otherwise, undo to the last committed state;
-      this.revision.undo();
+      if (transactionId === this.revision.transactionId) {
+        this.revision.undo();
+      } else {
+        this.replaceState(oldState);
+      }
+
+      useLeviateStore().setGlobalMessage(useLocalize().$L('error_global'));
+
       this.transactionDepth = 0;
     }
   },

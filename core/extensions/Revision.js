@@ -8,19 +8,22 @@ class Revision {
     this.maxUpdates = maxUpdates;
     this.undos = reactive([]);
     this.redos = reactive([]);
+    this.transactionId = null;
 
     this.redoable = computed(() => this.redos.length > 0);
     this.undoable = computed(() => this.undos.length > 0);
   }
 
   // save current state to undo stack
-  commit(patch) {
-    const dontUndo = (val,key) => key.startsWith("settings.")
+  commit(patch, transactionId) {
+    const dontUndo = (val,key) => key.startsWith('settings.')
     const cleanPatch = patch.map((change) => {
       return { newValue: omitBy(change.newValue, dontUndo), oldValue: omitBy(change.oldValue, dontUndo) }
     }).filter((change) => !isEmpty(change.newValue) || !isEmpty(change.oldValue) )
     if (cleanPatch.length === 0) return
     this.undos.push(cleanPatch);
+
+    this.transactionId = transactionId;
 
     // Redo is no longer possible once a new change has been made
     this.redos.length = 0;
