@@ -29,6 +29,6 @@
     "vite-svg-loader": "^3.5.0"
   },
   "dependencies": {
-    "@crhio/concrete": "^3.0.3"
+    "@crhio/concrete": "^3.0.8"
   }
 }
