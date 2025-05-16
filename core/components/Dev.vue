@@ -26,8 +26,12 @@
       </div>
     </div>
     <div class="h-full w-full flex flex-col">
-      <div class="host-nav h-12 p-3 border-b">
-        Projects > {{ meta.project.name }} > {{ configuration.name }}
+      <div class="bg-white text-indigo font-medium h-12 p-3 border-b space-x-4">
+        <span>Projects</span>
+        <span>></span>
+        <span> {{ meta.project.name }}</span>
+        <span>></span>
+        <span>{{ configuration.name }}</span>
       </div>
       <div class="host-container relative h-full">
         <App />

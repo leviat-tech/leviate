@@ -19,7 +19,7 @@ module.exports = async function translationPlugin() {
     }
     if (!translationName.length) {
       throw new Error(
-        'Make sure that you specify the project name in order to get translations keys',
+        'Make sure that you specify the project name in order to get translations keys'
       );
     }
   } catch (err) {
@@ -29,10 +29,12 @@ module.exports = async function translationPlugin() {
   let jsonData = {};
   const fileName = `${localesFolderName}/index.json`;
   const languages_data = await axios.get(translationUrl);
-  const languages = languages_data.data.filter(app => app.name === translationName)[0].dictionaries;
-  const countries = languages_data.data.filter(app => app.name === 'Countries')[0].dictionaries;
 
-  Object.keys(languages).forEach(translation => {
+  const languages = languages_data.data.filter((app) => app.name === translationName)[0]
+    .dictionaries;
+  const countries = languages_data.data.filter((app) => app.name === 'Countries')[0].dictionaries;
+
+  Object.keys(languages).forEach((translation) => {
     if (Object.keys(languages[translation]).length !== 0) {
       jsonData = {
         ...jsonData,
@@ -41,4 +43,4 @@ module.exports = async function translationPlugin() {
     }
   });
   fs.writeFileSync(fileName, JSON.stringify(jsonData));
-}
+};

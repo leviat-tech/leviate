@@ -1,7 +1,7 @@
 <template>
   <div>
     <label for="input__file"
-           class="bg-indigo text-white w-2/6 flex items-center justify-center hover:cursor-pointer px-12 py-3 mx-auto whitespace-nowrap">
+           class="bg-brand-500 text-white w-2/6 flex items-center justify-center hover:cursor-pointer px-12 py-3 mx-auto whitespace-nowrap">
       {{ label }}
     </label>
     <input @change="onChange" type="file" id="input__file" ref="fileRef" class="hidden" :accept="accept">

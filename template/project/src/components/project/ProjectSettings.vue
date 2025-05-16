@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 space-y-4">
+  <div class="px-4 pb-4 pt-2 space-y-4">
     <CFormSection stacked>
       <div class="space-y-4">
 

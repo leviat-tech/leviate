@@ -1,7 +1,7 @@
 <template>
-  <address class="not-italic">
+  <address class="not-italic text-base-950">
     <template v-for="field in fields">
-      <span :class="boldFields.includes(field) && 'font-bold'">
+      <span :class="boldFields.includes(field) && 'font-semibold'">
         {{ field === 'country' ? getCountryValue(data[field]) :  data[field] }}
       </span><br>
     </template>

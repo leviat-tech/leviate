@@ -44,12 +44,17 @@
     [AVAILABLE_EXPORT_TYPES.OVERVIEW]: {
       size: 'A4',
       ext: 'pdf',
-      label: 'Pdf',
+      label: 'PDF',
     },
     [AVAILABLE_EXPORT_TYPES.PART_LIST]: {
       size: 'A4',
       ext: 'xls',
-      label: 'Xls',
+      label: 'XLS',
+    },
+    [AVAILABLE_EXPORT_TYPES.DXF]: {
+      size: 'A4',
+      ext: 'dxf',
+      label: 'DXF',
     },
   };
 

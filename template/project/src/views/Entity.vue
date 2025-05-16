@@ -1,7 +1,7 @@
 <template>
   <LvLayout>
 
-    <div class="h-full flex divide-x" v-if="entity">
+    <div class="max-h-full flex flex-grow divide-x w-full divide-base-300" v-if="entity">
 
       <LvInputPanel :tabs="tabs">
         <InputRoot />
@@ -38,5 +38,5 @@ watch(entity, (val) => {
   if (!val) router.replace('/not-found')
 });
 
-const tabs = ['example', 'test', 'load-case', 'reinforcement'];
+const tabs = ['example', 'test', 'load_case', 'reinforcement'];
 </script>

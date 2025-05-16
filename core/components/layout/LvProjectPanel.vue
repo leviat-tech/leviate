@@ -1,16 +1,14 @@
 <template>
   <LvPanel :expanded="300" :collapsed="70" panelId="project" class="flex-none">
-    <div class="h-full flex flex-col justify-start bg-gray-50">
       <LvProjectToolbar />
-
-      <LvProjectPanelItem name="versions">
-        <LvVersions />
-      </LvProjectPanelItem>
-
-      <slot />
-
-      <div v-if="leviate.panels.project.isExpanded" class="flex-1 bg-gray-200 mx-1 -mt-px mb-1" />
-    </div>
+      <div class="bg-red-300 flex-1 flex flex-col">
+        <div class="flex-1 flex flex-col divide-y">
+          <LvProjectPanelItem name="versions">
+            <LvVersions />
+          </LvProjectPanelItem>
+          <slot />
+        </div>
+      </div>
   </LvPanel>
 </template>
 
