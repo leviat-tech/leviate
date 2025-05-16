@@ -139,7 +139,7 @@ const initialActions = {
 
       const { activeVersionId } = useVersions();
       useHost().setState(stateToSave, activeVersionId.value);
-      transactionUpdates.unshift({ id: transactionId, ...diff });
+      transactionUpdates.unshift(diff);
 
       if (this.transactionDepth === 0) {
         this.revision.commit(transactionUpdates, transactionId);
