@@ -7,22 +7,20 @@
   </LvPanel>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import LvPanel from '../ui/LvPanel.vue';
 import LvInputToolbar from './input/LvInputToolbar.vue';
-import { useLeviateStore } from '@crhio/leviate/store/leviate.js';
 
-const store = useLeviateStore();
+type Tab = string | { name: string; disabled: boolean };
 
-const props = defineProps({
-  width: {
-    type: Number,
-    default: 440,
-  },
-  tabs: {
-    type: Array,
-    default: ['input'],
+withDefaults(
+  defineProps<{
+    width: number;
+    tabs: Array<Tab>;
+  }>(),
+  {
+    width: 440,
+    tabs: () => ['input'],
   }
-});
+);
 </script>
-

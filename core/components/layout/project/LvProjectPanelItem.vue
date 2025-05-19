@@ -27,7 +27,7 @@
 
 <script setup>
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
-import { useLeviateStore } from '../../../store/leviate.js';
+import { useLeviateStore } from '../../../store/leviate.ts';
 import { computed } from 'vue';
 import LvTabText from '../../ui/LvTabText.vue';
 import { useRoute, useRouter } from 'vue-router';

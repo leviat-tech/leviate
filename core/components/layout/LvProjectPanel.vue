@@ -9,10 +9,7 @@
 
       <slot />
 
-      <div
-        v-if="leviate.panels.project.isExpanded"
-        class="flex-1 bg-gray-200 mx-1 -mt-px mb-1"
-      />
+      <div v-if="leviate.panels.project.isExpanded" class="flex-1 bg-gray-200 mx-1 -mt-px mb-1" />
     </div>
   </LvPanel>
 </template>
@@ -20,7 +17,7 @@
 <script setup>
 import { watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { useLeviateStore } from '@crhio/leviate/store/leviate.js';
+import { useLeviateStore } from '@crhio/leviate/store/leviate.ts';
 
 import LvPanel from '../ui/LvPanel.vue';
 import LvProjectPanelItem from './project/LvProjectPanelItem.vue';

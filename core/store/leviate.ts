@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia';
 
+export type PanelNames = 'project' | 'input' | 'results' | 'validation'
+
 export const useLeviateStore = defineStore('leviate', {
   state: () => ({
     panels: {
@@ -21,10 +23,10 @@ export const useLeviateStore = defineStore('leviate', {
     },
   }),
   actions: {
-    setPanelIsExpanded(panelId, value) {
-      this.panels[panelId].isExpanded = value;
+    setPanelIsExpanded(panelName: PanelNames, value: boolean) {
+      this.panels[panelName].isExpanded = value;
     },
-    setActiveProjectItem(name) {
+    setActiveProjectItem(name: string) {
       const { project } = this.panels;
 
       project.activeItem = name;
