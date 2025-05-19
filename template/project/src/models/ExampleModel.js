@@ -10,11 +10,12 @@ class ExampleModel extends BaseModel {
     if (!this.useStore) return {};
 
     const name = useLocalize().$L('rectangle');
-
+    const statusList = ['none', 'unknown','success','warning','magic','danger'];
     return {
       ...this.schema.cast(),
       ...this.baseFields,
       name: `${name} ${this.read().length + 1}`,
+      entityStatus: statusList[Math.floor(Math.random() * statusList.length)],
     };
   }
 }

@@ -1,9 +1,8 @@
 <template v-if="entity">
   <CFormSection title="Config">
     <div class="grid gap-y-4 py-4">
-      <CTextInput :id="getEntityId('name')">
-        <CInputAffix v-slot:prefix type="suffix">mm</CInputAffix>
-      </CTextInput>
+      <CTextInput :id="getEntityId('name')" />
+      <CTextInput :id="getEntityId('entityStatus')" />
       <CNumericInput :id="getEntityId('width')" :step="10" unit="m"/>
       <CNumericInput :id="getEntityId('height')" :step="10"/>
       <CNumericInput :id="getEntityId('depth')" :step="10"/>
