@@ -35,11 +35,11 @@ const items = computed(() => props.model.read());
 const addItem = () => {
   const { model } = props;
 
-  transact(() => {
+  transact('Create entity', () => {
     const newItem = model.create();
 
     router.replace(`/entities/${model.id}/${newItem.id}`);
-  });
+  }, { skipRevision: true });
 };
 
 

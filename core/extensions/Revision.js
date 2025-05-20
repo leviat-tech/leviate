@@ -66,7 +66,7 @@ class Revision {
       });
     });
 
-    this.store.replaceState(state);
+    this.store.replaceState(state, true);
   }
 
   // clear revision undo / redo stack

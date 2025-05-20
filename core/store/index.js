@@ -12,6 +12,7 @@ import useAppInfo from '../composables/useAppInfo.js';
 import useVersions from '../composables/useVersions';
 import { useHost } from '../plugins/host';
 import { useLeviateStore } from './leviate';
+import { checkEntitiesIntegrity } from './storeUtils';
 
 class TransactionError extends Error {
   constructor() {
@@ -39,13 +40,31 @@ async function decompressState(state) {
   return decompress(state);
 }
 
-function transact(cb) {
+async function hostSetState(newState) {
+  const stateToSave = _useStateCompression
+    ? await compressState(newState)
+    : { ...newState, _compressed: undefined };
+
+  const { activeVersionId } = useVersions();
+  return useHost().setState(stateToSave, activeVersionId.value);
+}
+
+function transact(nameOrCallback, callback, options = { skipRevision: false }) {
   if (useMeta().isReadOnly) {
     logger.log('Transaction skipped: Read-only mode.');
     return;
   }
 
-  return useRootStore().transact(cb);
+  let cb = callback;
+  let name = nameOrCallback;
+
+  if (typeof nameOrCallback !== 'string') {
+    logger.warn('legacy transact detected. Transaction will still run but in future you should use `transact(name, callback) for improved logging and debugging`');
+    cb = nameOrCallback;
+    name = 'Anonymous transaction';
+  }
+
+  return useRootStore().transact(name, cb, options);
 }
 
 const initialState = {
@@ -107,7 +126,7 @@ function deepDiff(obj1, obj2) {
 }
 
 const initialActions = {
-  async transact(cb) {
+  async transact(name, cb, options) {
     if (this.transactionDepth === 0) {
       transactionUpdates = [];
     }
@@ -133,27 +152,30 @@ const initialActions = {
 
       const diff = deepDiff(oldState, newState);
 
-      const stateToSave = _useStateCompression
-        ? await compressState(newState)
-        : { ...diff.newValue, _compressed: undefined };
+      const stateToSave = _useStateCompression ? newState : diff.newValue;
+      const updateKeys = { keys: Object.keys(stateToSave) };
 
-      const { activeVersionId } = useVersions();
-      useHost().setState(stateToSave, activeVersionId.value);
+      useHost().log?.(`Running transaction "${name}" for fields:`, updateKeys);
+
       transactionUpdates.unshift(diff);
+      hostSetState(stateToSave);
 
-      if (this.transactionDepth === 0) {
+      if (this.transactionDepth === 0 && !options.skipRevision) {
         this.revision.commit(transactionUpdates, transactionId);
       }
 
+      useHost().log?.(`Transaction "${name}" completed successfully`, updateKeys);
+
       return res;
     } catch (e) {
-      this._onTransactionError(e, transactionId, oldState);
+      this._onTransactionError(e, name, transactionId, oldState);
       return false;
     }
   },
 
-  _onTransactionError(e, transactionId, oldState) {
+  _onTransactionError(e, name, transactionId, oldState) {
     if (!(e instanceof TransactionError)) {
+      useHost().log?.(`Transaction "${name}" failed`);
       logger.error('transaction failed -', e);
     }
 
@@ -164,7 +186,7 @@ const initialActions = {
       if (transactionId === this.revision.transactionId) {
         this.revision.undo();
       } else {
-        this.replaceState(oldState);
+        this.replaceState(oldState, true);
       }
 
       useLeviateStore().setGlobalMessage(useLocalize().$L('error_global'));
@@ -188,7 +210,7 @@ const initialActions = {
     this.modules[useStore.$id] = useStore;
   },
 
-  replaceState(newState) {
+  replaceState(newState, shouldSync = false) {
     const rootState = {};
 
     Object.entries(newState).forEach(([key, value]) => {
@@ -207,6 +229,10 @@ const initialActions = {
     });
 
     this.$patch(rootState);
+
+    if (shouldSync) {
+      hostSetState(newState);
+    }
   },
 
   toJSON() {
@@ -370,9 +396,17 @@ function performMigration(rootStore, initialState, migrations) {
       migratedState = migration.migrateToLatest();
       logger.log(`successfully migrated to latest: ${latestMigrationName}`);
     }
-    rootStore.replaceState(migratedState || initialState);
+    rootStore.replaceState(migratedState || initialState, true);
   } else {
-    rootStore.$patch({ serialization_version: latestMigrationName });
+    transact('Set serialization version', () => {
+      rootStore.$patch({ serialization_version: latestMigrationName });
+    }, { skipRevision: true });
+  }
+
+  const modifiedEntities = checkEntitiesIntegrity(rootStore);
+
+  if (modifiedEntities) {
+    hostSetState({ entities: modifiedEntities });
   }
 }
 
