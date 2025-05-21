@@ -17,11 +17,11 @@ function localize(phrase, options = {}) {
     let error = `Unable to translate phrase: "${phrase}"`;
     if (fallback) {
       translation = fallback;
-      logger.error(
+      logger.warn(
         `${error}, English fallback phrase: "${fallback}" used instead`
       );
     } else {
-      logger.error(error);
+      logger.warn(error);
       return `{${phrase}}`;
     }
   }
