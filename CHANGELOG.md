@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.17.4](https://github.com/leviat-tech/leviate/compare/v5.17.3...v5.17.4) (2025-05-21)
+
+
+* change error to warning for translation ([#272](https://github.com/leviat-tech/leviate/issues/272)) ([6935392](https://github.com/leviat-tech/leviate/commit/6935392db879dae7f9fca705172896efd1870b30))
+
 ## [5.17.3](https://github.com/leviat-tech/leviate/compare/v5.17.2...v5.17.3) (2025-05-19)
 
 
