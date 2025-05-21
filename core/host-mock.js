@@ -2,7 +2,7 @@ import inject from '@crhio/inject';
 import logger from './extensions/logger.js';
 import { ref } from 'vue';
 import useVersions from './composables/useVersions';
-import { cloneDeep, each, set } from 'lodash-es';
+import { cloneDeep, each, set, unset } from 'lodash-es';
 import axios from 'axios';
 
 
@@ -16,6 +16,19 @@ const activeVersionId = ref(null);
 
 export function useMock() {
   const mockApi = {
+    log(message, logData = '') {
+      const { meta, configuration } = data;
+
+      const lines = [
+        `[Plugin: ${meta.configurator.name}] ${message}`,
+        `  projectId  =  ${meta.project.id}`,
+        `   designId  =  ${configuration.id}`,
+        `       user  =  ${meta.user.email}`
+      ]
+
+      console.log(lines.join('\n'));
+      if (logData) console.log('       data  = ', logData);
+    },
     setUrl() {},
     getUrl: () => window.location.hash.replace(/^#/, ''),
     getState: () => data.configuration.state,
@@ -26,8 +39,11 @@ export function useMock() {
       const { state } = activeVersion.value;
 
       each(patch, (val, key) => {
-        // Don't need to handle undefined values in localStorage
-        set(state, key, val);
+        if (val === undefined) {
+          unset(state, key);
+        } else {
+          set(state, key, val);
+        }
       });
 
       data.configuration.state = state;

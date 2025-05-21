@@ -36,12 +36,11 @@ const route = useRoute();
 const props = defineProps({
   item: Object,
 });
-const { item } = props;
-const model = item.constructor;
+const model = props.item.constructor;
 
 const isEditing = ref(false);
 const inputRef = ref(null);
-const isActive = computed(() => route.params.id === item.id);
+const isActive = computed(() => route.params.id === props.item.id);
 
 const getItemRoute = (itemId) => `/entities/${model.id}/${itemId}`;
 
@@ -62,12 +61,14 @@ const onEnter = () => {
 };
 
 const onBlur = () => {
-  item.name = inputRef.value.innerHTML;
+  transact(() => {
+    props.item.name = inputRef.value.innerHTML;
+  });
 };
 
 const onClone = () => {
   transact(() => {
-    const newData = omit(item.$toJSON(), ['id', 'name']);
+    const newData = omit(props.item.$toJSON(), ['id', 'name']);
     const newItem = model.create(newData);
 
     router.push(getItemRoute(newItem.id));
@@ -76,8 +77,8 @@ const onClone = () => {
 
 const onDelete = () => {
   transact(() => {
-    item.$delete();
-  })
+    props.item.$delete();
+  });
 };
 
 </script>
