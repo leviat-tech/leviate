@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.18.0](https://github.com/leviat-tech/leviate/compare/v5.17.4...v5.18.0) (2025-05-21)
+
+
+* check initial state and process corrupted entities ([1daccca](https://github.com/leviat-tech/leviate/commit/1dacccae4668428896765e8ee0b1024f2d689265))
+* ensure undo/redo changes are persisted ([1daccca](https://github.com/leviat-tech/leviate/commit/1dacccae4668428896765e8ee0b1024f2d689265))
+* revert changes if transaction fails ([#269](https://github.com/leviat-tech/leviate/issues/269)) ([1daccca](https://github.com/leviat-tech/leviate/commit/1dacccae4668428896765e8ee0b1024f2d689265))
+* use new host.log method to log transactions and add method to host mock ([1daccca](https://github.com/leviat-tech/leviate/commit/1dacccae4668428896765e8ee0b1024f2d689265))
+
 ## [5.17.4](https://github.com/leviat-tech/leviate/compare/v5.17.3...v5.17.4) (2025-05-21)
 
 
