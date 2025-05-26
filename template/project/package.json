@@ -50,6 +50,7 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-vue": "^7.6.0",
     "express": "^4.17.1",
+    "jiti": "^2.4.2",
     "postcss": "^8.3.6",
     "s3-folder-upload": "^2.3.5",
     "sass": "1.32",
