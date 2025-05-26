@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.18.1](https://github.com/leviat-tech/leviate/compare/v5.18.0...v5.18.1) (2025-05-26)
+
+
+* add husky to template ([#275](https://github.com/leviat-tech/leviate/issues/275)) ([7aa7d1c](https://github.com/leviat-tech/leviate/commit/7aa7d1c3c3b0bcd52ef01f735b51568437c49990))
+
 ## [5.18.0](https://github.com/leviat-tech/leviate/compare/v5.17.4...v5.18.0) (2025-05-21)
 
 
