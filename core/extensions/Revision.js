@@ -16,11 +16,15 @@ class Revision {
 
   // save current state to undo stack
   commit(patch, transactionId) {
-    const dontUndo = (val,key) => key.startsWith('settings.')
-    const cleanPatch = patch.map((change) => {
-      return { newValue: omitBy(change.newValue, dontUndo), oldValue: omitBy(change.oldValue, dontUndo) }
-    }).filter((change) => !isEmpty(change.newValue) || !isEmpty(change.oldValue) )
-    if (cleanPatch.length === 0) return
+    const dontUndo = (val, key) => key.startsWith('settings.')
+
+    const cleanPatch = {
+      newValue: omitBy(patch.newValue, dontUndo),
+      oldValue: omitBy(patch.oldValue, dontUndo)
+    };
+
+    if (isEmpty(cleanPatch.newValue) || isEmpty(cleanPatch.oldValue)) return;
+
     this.undos.push(cleanPatch);
 
     this.transactionId = transactionId;
@@ -38,9 +42,7 @@ class Revision {
     const undoItem = this.undos.pop();
     this.redos.push(undoItem);
 
-    const updates = map(undoItem, 'oldValue');
-
-    this.applyUpdates(updates);
+    this.applyPatch(undoItem.oldValue);
   }
 
   redo() {
@@ -48,22 +50,18 @@ class Revision {
     const redoItem = this.redos.pop();
     this.undos.push(redoItem);
 
-    const updates = map(redoItem, 'newValue').reverse();
-
-    this.applyUpdates(updates);
+    this.applyPatch(redoItem.newValue);
   }
 
-  applyUpdates(updates) {
+  applyPatch(patch) {
     const { transactionDepth, ...state } = this.store.toJSON();
 
-    updates.forEach(patch => {
-      each(patch, (val, key) => {
-        if (val === undefined) {
-          unset(state, key);
-        } else {
-          set(state, key, val);
-        }
-      });
+    each(patch, (val, key) => {
+      if (val === undefined) {
+        unset(state, key);
+      } else {
+        set(state, key, val);
+      }
     });
 
     this.store.replaceState(state, true);

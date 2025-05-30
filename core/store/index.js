@@ -1,3 +1,4 @@
+import { nextTick } from 'vue'
 import { defineStore, createPinia } from 'pinia';
 import { normie } from '@crhio/normie';
 import { v4 as uuidv4 } from 'uuid';
@@ -26,7 +27,7 @@ let _useStateCompression = false;
 
 let useRootStore = () => logger.log('Root store has not been initialized');
 
-let transactionUpdates = [];
+let transactionUpdates = null;
 
 async function compressState(state) {
   const mod = await import('../composables/useStateCompression.ts');
@@ -128,7 +129,7 @@ function deepDiff(obj1, obj2) {
 const initialActions = {
   async transact(name, cb, options) {
     if (this.transactionDepth === 0) {
-      transactionUpdates = [];
+      transactionUpdates = { oldValue: {}, newValue: {} };
     }
 
     this.transactionDepth++;
@@ -137,10 +138,13 @@ const initialActions = {
     const oldState = this.toJSON();
 
     try {
+      useHost().log?.(`Running transaction "${name}"`);
 
       let res = cb();
 
-      this.transactionDepth --;
+      // Ensure that any nested transactions within reactive handlers
+      // are processed before continuing
+      await nextTick();
 
       if (res instanceof Promise) {
         await res.catch((e) => {
@@ -155,12 +159,21 @@ const initialActions = {
       const stateToSave = _useStateCompression ? newState : diff.newValue;
       const updateKeys = { keys: Object.keys(stateToSave) };
 
-      useHost().log?.(`Running transaction "${name}" for fields:`, updateKeys);
+      // Exit if there is nothing to update
+      if (updateKeys.keys.length === 0) {
+        return console.warn(`Nothing to save in transaction ${name}`);
+      }
 
-      transactionUpdates.unshift(diff);
+      if (!options.skipRevision) {
+        Object.assign(transactionUpdates.oldValue, diff.oldValue);
+        Object.assign(transactionUpdates.newValue, diff.newValue);
+      }
+
       hostSetState(stateToSave);
 
-      if (this.transactionDepth === 0 && !options.skipRevision) {
+      this.transactionDepth --;
+
+      if (this.transactionDepth === 0 && !isEmpty(transactionUpdates)) {
         this.revision.commit(transactionUpdates, transactionId);
       }
 
@@ -222,7 +235,7 @@ const initialActions = {
       const useModule = this.modules[key];
       if (useModule) {
         const module = useModule();
-          module.$state = newState[key];
+        module.$state = newState[key];
       } else {
         logger.error(`Store module ${key} does not exist`);
       }
@@ -398,9 +411,7 @@ function performMigration(rootStore, initialState, migrations) {
     }
     rootStore.replaceState(migratedState || initialState, true);
   } else {
-    transact('Set serialization version', () => {
-      rootStore.$patch({ serialization_version: latestMigrationName });
-    }, { skipRevision: true });
+    hostSetState({ serialization_version: latestMigrationName });
   }
 
   const modifiedEntities = checkEntitiesIntegrity(rootStore);
