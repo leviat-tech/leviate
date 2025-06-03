@@ -1,0 +1,10 @@
+{
+    "release-type": "node",
+    "package-name": "leviate",
+    "bump-minor-pre-major": true,
+    "packages": {
+        ".": {
+            "release-as": "6.0.14"
+        }
+    }
+}
