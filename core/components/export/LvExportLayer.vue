@@ -2,7 +2,7 @@
   <div data-cy="export_layer" :class="`ml-${layer?.depth * 4}`">
     <CAccordion data-cy="export_layer__accordion_toggle" size="sm" default-open :title="layerName">
       <template #customTitle>
-        <div class="flex items-center w-full ml-4 -mt-5 bg-white absolute z-9">
+        <div class="flex items-center w-full ml-4 -mt-7 bg-white absolute z-9">
           <CCheckbox
             v-if="
               areAllNestedCalulatedPositionsSelected ||
@@ -18,11 +18,11 @@
 
           <button
             v-else
-            class="flex justify-center ml-2 items-center w-4 h-4 border text-indigo"
+            class="flex justify-center ml-2 items-center w-4 h-4 border text-brand-700"
             data-cy="export_layer__partialy_selected_layer"
             @click="handleLayerSelection"
           >
-            <div class="w-2 h-0.5 bg-indigo"></div>
+            <div class="w-2 h-0.5 bg-brand-700"></div>
           </button>
 
           <div class="font-semibold py-1 pl-2">{{ layerName }}</div>

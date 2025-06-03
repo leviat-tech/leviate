@@ -14,6 +14,7 @@ import LvExportConfigurator from './export/LvExportConfigurator.vue';
 
 import LvLogo from './ui/LvLogo.vue';
 import LvPopupMenu from './ui/LvPopupMenu.vue';
+import LvEditableDiv from './ui/LvEditableDiv.vue';
 
 import LvSlotRenderer from './LvSlotRenderer.vue';
 import LvImport from './import/LvImport.vue'
@@ -22,6 +23,7 @@ import LvLayersToggle from './viewport/LvLayersToggle.vue';
 
 import LvProjectRoot from './layout/LvProjectRoot.vue';
 
+
 export {
   LvLogo,
   LvLayout,
@@ -29,6 +31,7 @@ export {
   LvInputPanel,
   LvProjectRoot,
   LvProjectInfo,
+  LvEditableDiv,
   LvLayersToggle,
   LvSlotRenderer,
   LvProjectPanel,

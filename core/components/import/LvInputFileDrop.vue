@@ -2,8 +2,8 @@
   <div
     @mouseenter="isMouseActive = true"
     @mouseleave="isMouseActive = false"
-    :class="{ 'border-indigo bg-indigo bg-opacity-5' : active }"
-    class="relative m-4 border-dashed border text-center justify-center rounded-sm p-6 border-gray-300 flex flex-col items-center gap-y-2 duration-150"
+    :class="{ 'border-brand-500 bg-brand-500 bg-opacity-5' : active }"
+    class="relative m-4 border-dashed border text-center justify-center rounded-sm p-6 border-base-300 flex flex-col items-center gap-y-2 duration-150"
   >
 
     <!-- mask to prevent toggling drag state when a button is present -->

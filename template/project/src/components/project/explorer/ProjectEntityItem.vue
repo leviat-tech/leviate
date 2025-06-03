@@ -1,10 +1,11 @@
 <template>
-  <li class="project__entity-item flex border-b p-2 pl-6 bg-white" :class="isActive && 'bg-gray-100 text-indigo'">
-
-    <router-link :to="getItemRoute(item.id)" class="flex-1">
+  <li class="project__entity-item border-b h-9 flex justify-between bg-white text-xs">
+    <router-link :to="getItemRoute(item.id)" class="flex space-x-3 w-full">
+      <div class="w-2 h-9" :class="{ 'bg-transparent' : !isActive, 'bg-brand-500' : isActive }"></div>
+      <div v-if="['none', null].includes(item.entityStatus) == false" class="w-4 h-4 rounded-full my-auto" :class="dotClass"></div>
       <div
         ref="inputRef"
-        class="outline-none"
+        class="flex items-center outline-none"
         :contenteditable="isEditing"
         @keydown.enter.prevent="onEnter"
         @blur="onBlur"
@@ -12,13 +13,11 @@
         {{ item.name }}
       </div>
     </router-link>
-
-    <div class="project__entity-item-buttons flex space-x-1" :class="isActive || 'text-gray-500'">
+    <div class="project__entity-item-buttons flex items-center px-3 space-x-1">
       <ProjectEntityItemButton @click="onEdit" icon="edit" :title="$L('edit')" />
       <ProjectEntityItemButton @click="onClone" icon="copy" :title="$L('clone')" />
       <ProjectEntityItemButton @click="onDelete" icon="trash" :title="$L('delete')" />
     </div>
-
   </li>
 
 </template>
@@ -43,6 +42,17 @@ const inputRef = ref(null);
 const isActive = computed(() => route.params.id === props.item.id);
 
 const getItemRoute = (itemId) => `/entities/${model.id}/${itemId}`;
+
+const dotClass = computed(() => {
+  return {
+    none: '',
+    unknown: 'bg-status-unknown',
+    success: 'bg-status-success',
+    warning: 'bg-status-warning',
+    magic: 'bg-status-magic',
+    danger: 'bg-status-danger',
+  }[item.entityStatus || 'none']
+}); 
 
 const onEdit = async () => {
   if (isEditing.value) return;

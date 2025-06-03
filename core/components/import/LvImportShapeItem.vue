@@ -1,8 +1,7 @@
 <template>
-  <button
-    class="w-48 h-48 border p-8 relative rounded-sm"
-    :class="shape.isSelected && 'border-indigo'"
-    @click="shape.isSelected = !shape.isSelected"
+  <button class="w-48 h-48 border p-8 relative rounded-sm"
+          :class="shape.isSelected && 'border-brand-500'"
+          @click="shape.isSelected = !shape.isSelected"
   >
     <div class="absolute inset-4 bottom-12" v-html="svg" />
 
@@ -11,17 +10,9 @@
       <div>H = {{ formatValue(height) }}</div>
     </div>
 
-    <div
-      class="absolute bottom-0 right-0 flex items-center justify-center w-6 h-6"
-      :class="shape.isSelected && 'bg-indigo'"
-    >
-      <CheckIcon class="w-4 h-4 text-white" />
-    </div>
-    <div v-if="hasWarning" title="Some issues detected" class="absolute top-0 left-0 flex items-center justify-center w-6 h-6 bg-orange-400">
-      <ExclamationTriangleIcon class="w-4 h-4"/>
-    </div>
-    <div v-if="hasWarning" title="Some issues detected" class="absolute top-0 left-0 flex items-center justify-center w-6 h-6 bg-orange-400">
-      <ExclamationTriangleIcon class="w-4 h-4"/>
+    <div class="absolute bottom-0 right-0 flex items-center justify-center w-6 h-6"
+         :class="shape.isSelected && 'bg-brand-500'">
+      <CheckIcon class="w-4 h-4 text-white"  />
     </div>
   </button>
 </template>
