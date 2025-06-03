@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.19.0](https://github.com/leviat-tech/leviate/compare/v5.18.1...v5.19.0) (2025-06-03)
+
+
+* release 6.0.14 ([#278](https://github.com/leviat-tech/leviate/issues/278)) ([060859e](https://github.com/leviat-tech/leviate/commit/060859e369c40c7edb20cb10b8fd352c3f641693))
+* version ([#283](https://github.com/leviat-tech/leviate/issues/283)) ([886a44b](https://github.com/leviat-tech/leviate/commit/886a44b11cf32df2f38d949a09924a27d7537e3f))
+
 ## [5.18.1](https://github.com/leviat-tech/leviate/compare/v5.18.0...v5.18.1) (2025-06-03)
 
 
