@@ -224,9 +224,10 @@ const initialActions = {
   },
 
   replaceState(newState, shouldSync = false) {
+    const serializedState = JSON.parse(JSON.stringify(newState));
     const rootState = {};
 
-    Object.entries(newState).forEach(([key, value]) => {
+    Object.entries(serializedState).forEach(([key, value]) => {
       if (this.$state[key] !== undefined) {
         rootState[key] = value;
         return;
@@ -235,7 +236,7 @@ const initialActions = {
       const useModule = this.modules[key];
       if (useModule) {
         const module = useModule();
-        module.$state = newState[key];
+        module.$state = serializedState[key];
       } else {
         logger.error(`Store module ${key} does not exist`);
       }
@@ -244,7 +245,7 @@ const initialActions = {
     this.$patch(rootState);
 
     if (shouldSync) {
-      hostSetState(newState);
+      hostSetState(serializedState);
     }
   },
 
