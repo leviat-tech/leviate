@@ -161,6 +161,7 @@ const initialActions = {
 
       // Exit if there is nothing to update
       if (updateKeys.keys.length === 0) {
+        this.transactionDepth --;
         return console.warn(`Nothing to save in transaction ${name}`);
       }
 
@@ -173,7 +174,7 @@ const initialActions = {
 
       this.transactionDepth --;
 
-      if (this.transactionDepth === 0 && !isEmpty(transactionUpdates)) {
+      if (this.transactionDepth === 0 && !isEmpty(transactionUpdates.newValue)) {
         this.revision.commit(transactionUpdates, transactionId);
       }
 
