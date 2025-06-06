@@ -159,10 +159,9 @@ const initialActions = {
       const stateToSave = _useStateCompression ? newState : diff.newValue;
       const updateKeys = { keys: Object.keys(stateToSave) };
 
-      // Exit if there is nothing to update
+      // Warn if there is nothing to update
       if (updateKeys.keys.length === 0) {
-        this.transactionDepth --;
-        return console.warn(`Nothing to save in transaction ${name}`);
+        console.warn(`Nothing to save in transaction ${name}`);
       }
 
       if (!options.skipRevision) {
