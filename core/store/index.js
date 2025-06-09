@@ -159,9 +159,9 @@ const initialActions = {
       const stateToSave = _useStateCompression ? newState : diff.newValue;
       const updateKeys = { keys: Object.keys(stateToSave) };
 
-      // Exit if there is nothing to update
+      // Warn if there is nothing to update
       if (updateKeys.keys.length === 0) {
-        return console.warn(`Nothing to save in transaction ${name}`);
+        logger.warn(`Nothing to save in transaction ${name}`);
       }
 
       if (!options.skipRevision) {
@@ -173,7 +173,7 @@ const initialActions = {
 
       this.transactionDepth --;
 
-      if (this.transactionDepth === 0 && !isEmpty(transactionUpdates)) {
+      if (this.transactionDepth === 0 && !isEmpty(transactionUpdates.newValue)) {
         this.revision.commit(transactionUpdates, transactionId);
       }
 
@@ -224,9 +224,10 @@ const initialActions = {
   },
 
   replaceState(newState, shouldSync = false) {
+    const serializedState = JSON.parse(JSON.stringify(newState));
     const rootState = {};
 
-    Object.entries(newState).forEach(([key, value]) => {
+    Object.entries(serializedState).forEach(([key, value]) => {
       if (this.$state[key] !== undefined) {
         rootState[key] = value;
         return;
@@ -235,7 +236,7 @@ const initialActions = {
       const useModule = this.modules[key];
       if (useModule) {
         const module = useModule();
-        module.$state = newState[key];
+        module.$state = serializedState[key];
       } else {
         logger.error(`Store module ${key} does not exist`);
       }
@@ -244,7 +245,7 @@ const initialActions = {
     this.$patch(rootState);
 
     if (shouldSync) {
-      hostSetState(newState);
+      hostSetState(serializedState);
     }
   },
 
