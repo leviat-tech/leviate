@@ -1,12 +1,8 @@
 <template>
-  <div class="h-full p-4 flex flex-col">
-    <h4 class="text-sky-dark font-bold mb-2 text-base">
-      {{ $L('project_info_heading') }}
-    </h4>
+  <div class="h-full flex flex-col text-xs px-4 pb-4 pt-2">
+    <CHeading :size="2" :title="$L('project_info_heading')" />
 
-    <div
-      class="flex justify-between mb-1 text-gray-500 font-bold border-b py-1 mb-2"
-    >
+    <div class="flex justify-between text-base-800 font-bold border-b py-1 mb-2 text-sm">
       <div>{{ name }}</div>
       <div>#{{ number }}</div>
     </div>
@@ -19,8 +15,8 @@
 
     <LvClientInfo v-if="customer" v-bind="customer" />
 
-    <div class="text-right">
-      <CButton color="sky" size="sm" @click="openProjectSettings">{{
+    <div class="text-right flex justify-end mt-4">
+      <CButton color="base" size="sm" @click="openProjectSettings">{{
         $L('edit')
       }}</CButton>
     </div>
@@ -29,6 +25,7 @@
 
 <script setup>
 import { useHost } from '@crhio/leviate';
+import { CHeading } from '@crhio/concrete';
 import LvAddress from './LvAddress.vue';
 import LvClientInfo from './LvClientInfo.vue';
 

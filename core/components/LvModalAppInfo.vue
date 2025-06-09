@@ -1,6 +1,6 @@
 <template>
   <CModal :title="manifest.name" :show="isAppInfoModalOpen" @close="closeAppInfoModal">
-    <div class="flex -m-6 p-6 bg-gray-100">
+    <div class="flex -m-6 p-6 bg-base-100">
       <div class="flex-grow flex flex-col justify-between mr-24 text-xs leading-5">
         <div>
           <LvLogo width="200" class="mb-1" />
@@ -11,7 +11,7 @@
           <div>{{ $L('version') }} {{ manifest.version }}</div>
           <div> {{ $l('built_on') }} {{ manifest.date }}
           </div>
-          <RouterLink to="/release-notes" class="text-indigo" @click="closeAppInfoModal">
+          <RouterLink to="/release-notes" class="text-status-info" @click="closeAppInfoModal">
             ({{ $l('release_notes') }})
           </RouterLink>
         </div>
