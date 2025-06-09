@@ -161,7 +161,7 @@ const initialActions = {
 
       // Warn if there is nothing to update
       if (updateKeys.keys.length === 0) {
-        console.warn(`Nothing to save in transaction ${name}`);
+        logger.warn(`Nothing to save in transaction ${name}`);
       }
 
       if (!options.skipRevision) {
