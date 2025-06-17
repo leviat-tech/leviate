@@ -51,8 +51,8 @@ const dotClass = computed(() => {
     warning: 'bg-status-warning',
     magic: 'bg-status-magic',
     danger: 'bg-status-danger',
-  }[item.entityStatus || 'none']
-}); 
+  }[props.item.entityStatus || 'none']
+});
 
 const onEdit = async () => {
   if (isEditing.value) return;
