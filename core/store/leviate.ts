@@ -4,6 +4,8 @@ export type PanelNames = 'project' | 'input' | 'results' | 'validation'
 
 export const useLeviateStore = defineStore('leviate', {
   state: () => ({
+    globalMessage: null,
+    globalMessageTimeout: null,
     panels: {
       project: {
         isExpanded: true,
@@ -18,11 +20,23 @@ export const useLeviateStore = defineStore('leviate', {
         activeTab: null,
       },
       validation: {
-        isExpanded: false
+        isExpanded: false,
+        lastTimestamp: 0,
       }
     },
   }),
   actions: {
+    setGlobalMessage(message) {
+      clearTimeout(this.globalMessageTimeout);
+
+      this.globalMessage = message;
+
+      const displayMessageForMs = 4000;
+
+      this.globalMessageTimeout = setTimeout(() => {
+        this.globalMessage = null;
+      }, displayMessageForMs)
+    },
     setPanelIsExpanded(panelName: PanelNames, value: boolean) {
       this.panels[panelName].isExpanded = value;
     },

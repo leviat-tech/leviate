@@ -32,7 +32,7 @@ export default {
 
     const pathSegments = path.split('.');
 
-    transact(() => {
+    transact(`Input handler (${path})`, () => {
       if (pathSegments.length === 1) {
         return set(instance, path, val);
       }

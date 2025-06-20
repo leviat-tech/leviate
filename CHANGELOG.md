@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.0.15](https://github.com/leviat-tech/leviate/compare/v6.0.14...v6.0.15) (2025-06-03)
+
+
+* trigger release-please ([26077cb](https://github.com/leviat-tech/leviate/commit/26077cb31c5410790c4c5602a2528dfc04f9bc12))
+* version ([#283](https://github.com/leviat-tech/leviate/issues/283)) ([886a44b](https://github.com/leviat-tech/leviate/commit/886a44b11cf32df2f38d949a09924a27d7537e3f))
+
+## [5.18.1](https://github.com/leviat-tech/leviate/compare/v5.18.0...v5.18.1) (2025-06-03)
+
+
+* add husky to template ([#275](https://github.com/leviat-tech/leviate/issues/275)) ([7aa7d1c](https://github.com/leviat-tech/leviate/commit/7aa7d1c3c3b0bcd52ef01f735b51568437c49990))
+* async transactions ([50f06d5](https://github.com/leviat-tech/leviate/commit/50f06d5b03716a455a78aad3db710d469da3f519))
+
+## [5.18.0](https://github.com/leviat-tech/leviate/compare/v5.17.4...v5.18.0) (2025-05-21)
+
+
+* check initial state and process corrupted entities ([1daccca](https://github.com/leviat-tech/leviate/commit/1dacccae4668428896765e8ee0b1024f2d689265))
+* ensure undo/redo changes are persisted ([1daccca](https://github.com/leviat-tech/leviate/commit/1dacccae4668428896765e8ee0b1024f2d689265))
+* revert changes if transaction fails ([#269](https://github.com/leviat-tech/leviate/issues/269)) ([1daccca](https://github.com/leviat-tech/leviate/commit/1dacccae4668428896765e8ee0b1024f2d689265))
+* use new host.log method to log transactions and add method to host mock ([1daccca](https://github.com/leviat-tech/leviate/commit/1dacccae4668428896765e8ee0b1024f2d689265))
+
+## [5.17.4](https://github.com/leviat-tech/leviate/compare/v5.17.3...v5.17.4) (2025-05-21)
+
+
+* change error to warning for translation ([#272](https://github.com/leviat-tech/leviate/issues/272)) ([6935392](https://github.com/leviat-tech/leviate/commit/6935392db879dae7f9fca705172896efd1870b30))
+
 ## [5.17.3](https://github.com/leviat-tech/leviate/compare/v5.17.2...v5.17.3) (2025-05-19)
 
 

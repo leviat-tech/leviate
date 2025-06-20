@@ -73,7 +73,7 @@ To separate concerns, improve readability and avoid really long lines e.g.
 ```jsx
 <div class="flex bg-red-500" :class="someComputedClassName"></div>
 <div class="flex bg-blue-500" :class="[class1, class2]"></div>
-<div class="flex bg-gray-500" :class="{ 'bg-green-500': isActive }"></div>
+<div class="flex bg-base-500" :class="{ 'bg-green-500': isActive }"></div>
 <div class="flex lots of classes eg items-center justify-center bg-yellow-500 etc"
      :class="[activeClass, dynamicClass, sizeClass]"></div>
 ```

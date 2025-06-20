@@ -46,6 +46,7 @@ export default {
 
     user: {
       name: 'Wilt Chamberlain',
+      email: 'wilt@somewhere.com',
       locale: 'en',
       role: {
         name: 'admin',

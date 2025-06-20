@@ -2,16 +2,18 @@
   <CAccordion default-open>
 
     <template #title="{ open }">
-      <div class="flex items-center justify-stretch px-2 pt-6 pb-2">
-         <CIcon type="chevron-right" size="sm" :class="open && 'transform rotate-90'"/>
-        <div class="font-bold ml-2 flex-grow capitalize">{{ $L(model.id) }}</div>
+      <div class="flex justify-between px-2 py-2 border-b text-xs">
+        <div class="flex space-x-4">
+          <CIcon type="chevron-right" size="sm" :class="open && 'transform rotate-90'"/>
+          <div class="flex items-center font-bold capitalize">{{ $L(model.id) }}</div>
+        </div>
         <button title="Add" @click.stop="addItem">
           <CIcon type="plus" size="sm"></CIcon>
         </button>
       </div>
     </template>
 
-    <ul class="border-t">
+    <ul class="">
       <ProjectEntityItem v-for="item in items" :item="item" :key="item.id"></ProjectEntityItem>
     </ul>
 
@@ -35,11 +37,11 @@ const items = computed(() => props.model.read());
 const addItem = () => {
   const { model } = props;
 
-  transact(() => {
+  transact('Create entity', () => {
     const newItem = model.create();
 
     router.replace(`/entities/${model.id}/${newItem.id}`);
-  });
+  }, { skipRevision: true });
 };
 
 
