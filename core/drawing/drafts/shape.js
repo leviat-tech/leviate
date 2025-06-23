@@ -65,14 +65,7 @@ export default {
     visibleElements.push(perimeterDims);
     // }
 
-    // if (layers[MODEL_LAYERS.ADDITIONALS]) {
-    //   visibleElements.push(perimeterNumbers, perimeterCoordSys);
-    // }
-
-    // if (layers[MODEL_LAYERS.OPENINGS]) {
     visibleElements.push(previewOpening, ...features);
-    // }
-    // }
 
     return sketch.add(...visibleElements);
   },

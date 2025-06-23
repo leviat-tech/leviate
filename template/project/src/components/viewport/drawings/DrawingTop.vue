@@ -19,6 +19,11 @@
 <!--      @delete:active-opening="id => deleteFeature(id, OpeningModel)"-->
 <!--      @validate:openings="validateOpenings"-->
   </DViewport>
+
+  <DToolbar
+    :items="draftConfig.toolbar"
+    :formatter="tool => $l(`tooltip_${tool}`)"
+  />
 </template>
 
 <script setup>
@@ -26,6 +31,7 @@ import { computed, ref } from 'vue';
 import { transact } from '@crhio/leviate';
 import draftConfig from '@/draft/draft.config';
 import DViewport from '@crhio/leviate/drawing/components/DViewport.vue';
+import DToolbar from '@crhio/leviate/drawing/components/DToolbar.vue';
 import DEditableShape from '@crhio/leviate/drawing/components/DEditableShape.vue';
 import { FEATURE_TYPES } from '@crhio/leviate/drawing/constants';
 

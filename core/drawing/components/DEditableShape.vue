@@ -58,7 +58,7 @@
 <script setup>
 import { cloneDeep } from 'lodash-es';
 import { Draft, render } from '@crhio/jsdraft';
-import { computed, ref, watch, watchEffect, onBeforeUnmount } from 'vue';
+import { computed, ref, watch, watchEffect, onBeforeUnmount, onMounted } from 'vue';
 
 import { mirrorPath } from '../operations';
 import roundoffVertex from '../operations/roundoffVertex';
@@ -295,6 +295,10 @@ function updateLocalOpening(type, vertices, location) {
 function handleMovingVertex(isDragging) {
   isCurrentPointVisible.value = isDragging;
 }
+
+onMounted(() => {
+  state.currentTool = tools.new_polygon
+})
 
 onBeforeUnmount(() => {
   state.activeFeatureId = null;

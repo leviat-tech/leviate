@@ -1,0 +1,12 @@
+<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 30H14" stroke="#FF0000"/>
+<path d="M16 30H18" stroke="#FF0000"/>
+<path d="M20 30H22" stroke="#FF0000"/>
+<path d="M24 30H26" stroke="#FF0000"/>
+<path d="M30 14V12" stroke="#FF0000"/>
+<path d="M30 18V16" stroke="#FF0000"/>
+<path d="M30 22V20" stroke="#FF0000"/>
+<path d="M30 26V24" stroke="#FF0000"/>
+<path d="M30 28V30H28" stroke="#FF0000"/>
+<path d="M9 30C16 30.3333 30 26.6 30 9" stroke="black"/>
+</svg>

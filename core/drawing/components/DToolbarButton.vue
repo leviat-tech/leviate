@@ -13,5 +13,5 @@ const props = defineProps({
   },
 });
 
-const icon = defineAsyncComponent(() => import(`../../assets/icons/${props.svgname}.svg`));
+const icon = defineAsyncComponent(() => import(`../assets/${props.svgname}.svg`));
 </script>
