@@ -163,7 +163,7 @@ watchEffect(() => {
     dimCount: props.dimCount,
     layers: props.layers,
     perimeter: localPerimeter.value,
-    activeOpeningId: state.activeOpeningId,
+    activeFeatureId: state.activeFeatureId,
     invalidOpeningIds: state.invalidOpeningIds,
   };
 
@@ -177,9 +177,10 @@ watchEffect(() => {
 
   sketch.value = shapeSketch;
   html.value = render(sketch.value, 'svg', { viewport: null, ...shapeDraft.settings });
-  emit('validate:openings', props.shape);
-  emit('validate:groups');
-  emit('validate:loads');
+  // TODO: inject validators from app
+  // emit('validate:openings', props.shape);
+  // emit('validate:groups');
+  // emit('validate:loads');
 });
 
 function getViewportScaleFactor(unit = 'm') {
@@ -260,7 +261,7 @@ const vertexWithRadiusModel = computed({
 });
 
 const selectedOpening = computed(() =>
-  props.shape.openings.find(({ id }) => id === state.activeOpeningId),
+  props.shape.openings.find(({ id }) => id === state.activeFeatureId),
 );
 
 const isRadiusPopupVisible = computed(() => {
@@ -296,7 +297,7 @@ function handleMovingVertex(isDragging) {
 }
 
 onBeforeUnmount(() => {
-  state.activeOpeningId = null;
+  state.activeFeatureId = null;
 });
 
 watch(
@@ -316,7 +317,6 @@ watch(
         isCurrentPointVisible.value = true;
         break;
       case tools.mirror_geometry:
-        console.log(state.currentTool, tools, tools.currentTool);
         state.currentTool = tools.pointer;
         perimeterModel.value = mirrorPath(perimeterModel.value);
         break;
@@ -360,7 +360,7 @@ watch(
 );
 
 watch(
-  () => state.activeOpeningId,
+  () => state.activeFeatureId,
   val => {
     if (val) {
       emit('update:activeOpening', val);
@@ -374,10 +374,10 @@ watch(
     if (
       (backspaceKey || deleteKey) &&
       state.currentTool === tools.pointer &&
-      state.activeOpeningId
+      state.activeFeatureId
     ) {
-      emit('delete:activeOpening', state.activeOpeningId);
-      state.activeOpeningId = null;
+      emit('delete:activeOpening', state.activeFeatureId);
+      state.activeFeatureId = null;
       isCurrentPointVisible.value = false;
     }
   },

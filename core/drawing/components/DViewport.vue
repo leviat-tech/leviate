@@ -322,13 +322,7 @@ const handleMousedown = e => {
 
   // In this case we want just to scroll view
   if (e.button !== 2) {
-    state.activeOpeningId = null;
-    state.activeSupportId = null;
-    state.activeEdgeSupportId = null;
-    state.activeConnectorGroupId = null;
-    state.activePointLoadId = null;
-    state.activeLineLoadId = null;
-    state.activePartialAreaLoadId = null;
+    state.activeFeatureId = null;
   }
 
   if (e.button === 2 || props.currentTool === 'pan') {
@@ -339,7 +333,7 @@ const handleMousedown = e => {
     zoomstart();
   } else if (state.currentTool === 'pointer') {
     if (e.target.dataset.type === 'opening') {
-      state.activeOpeningId = e.target.dataset.id;
+      state.activeFeatureId = e.target.dataset.id;
     }
   } else if (state.currentTool === tools.round_off && e.target.dataset?.type === 'node') {
     openPopup(e, e.target.dataset);

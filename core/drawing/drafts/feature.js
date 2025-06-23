@@ -33,8 +33,6 @@ export default {
 
     const opacity = feature.isDragging ? 0.5 : 1;
 
-    console.log(feature.type)
-
     return sketch.add(shape).style(feature.type || 'shape').style({ opacity });
   },
 };

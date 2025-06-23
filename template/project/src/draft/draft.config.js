@@ -48,7 +48,7 @@ export default {
       },
       stroke: {
         color: 'black',
-        opacity: 0.25,
+        opacity: 0.5,
       },
     },
   },
