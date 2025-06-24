@@ -1,17 +1,12 @@
 <template>
-  <div v-if="!icon" class="w-4">&nbsp;</div>
-  <component :is="icon" v-else class="w-fit h-fit" />
+  <div v-if="!tool.icon" class="w-4 text-red">E</div>
+
 </template>
 
 <script setup>
-import { defineAsyncComponent } from 'vue';
-
 const props = defineProps({
-  svgname: {
-    type: String,
-    required: true,
-  },
+  tool: Object
 });
 
-const icon = defineAsyncComponent(() => import(`../assets/${props.svgname}.svg`));
+console.log(props.tool)
 </script>

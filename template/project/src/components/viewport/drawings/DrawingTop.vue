@@ -8,7 +8,6 @@
     <DEditableShape
       :key="entity.id"
       :shape="shapeParams"
-      :dim-count="[]"
       :draft-config="draftConfig"
       @update="onUpdate"
       origin
@@ -21,12 +20,13 @@
   </DViewport>
 
   <DToolbar
-    :items="draftConfig.toolbar"
+    :items="toolbarItems"
     :formatter="tool => $l(`tooltip_${tool}`)"
   />
 </template>
 
 <script setup>
+import AreaLoads from '@/assets/area_loads.svg';
 import { computed, ref } from 'vue';
 import { transact } from '@crhio/leviate';
 import draftConfig from '@/draft/draft.config';
@@ -41,36 +41,36 @@ const props = defineProps({
 
 // Define arbitrary features. In an app, these will likely be in models
 const features = ref([
-  {
-    id: 'openingId',
-    type: 'opening',
-    shapeType: FEATURE_TYPES.circular,
-    location: { x: 0.75, y: 1.25 },
-    diameter: 0.5,
-  },
-  {
-    id: 'recessId',
-    type: 'recess',
-    shapeType: FEATURE_TYPES.rectangular,
-    vertices: [
-      { x: 2, y: 0.5 },
-      { x: 2.5, y: 0.5 },
-      { x: 2.5, y: 1 },
-      { x: 2, y: 1 },
-    ]
-  },
-  {
-    id: 'upstandId',
-    type: 'upstand',
-    cutout: true,
-    shapeType: FEATURE_TYPES.rectangular,
-    vertices: [
-      { x: 2, y: 1.1 },
-      { x: 2.5, y: 1.1 },
-      { x: 2.5, y: 1.5 },
-      { x: 2, y: 1.5 },
-    ]
-  }
+  // {
+  //   id: 'openingId',
+  //   type: 'opening',
+  //   shapeType: FEATURE_TYPES.circular,
+  //   location: { x: 0.75, y: 1.25 },
+  //   diameter: 0.5,
+  // },
+  // {
+  //   id: 'recessId',
+  //   type: 'recess',
+  //   shapeType: FEATURE_TYPES.rectangular,
+  //   vertices: [
+  //     { x: 2, y: 0.5 },
+  //     { x: 2.5, y: 0.5 },
+  //     { x: 2.5, y: 1 },
+  //     { x: 2, y: 1 },
+  //   ]
+  // },
+  // {
+  //   id: 'upstandId',
+  //   type: 'upstand',
+  //   cutout: true,
+  //   shapeType: FEATURE_TYPES.rectangular,
+  //   vertices: [
+  //     { x: 2, y: 1.1 },
+  //     { x: 2.5, y: 1.1 },
+  //     { x: 2.5, y: 1.5 },
+  //     { x: 2, y: 1.5 },
+  //   ]
+  // }
 ]);
 
 const shapeParams = computed(() => {
@@ -84,19 +84,6 @@ const shapeParams = computed(() => {
   }
 });
 
-const colorClasses = {
-  red: 'bg-red-300',
-  orange: 'bg-orange-300',
-  yellow: 'bg-yellow-300',
-  green: 'bg-green-300',
-  blue: 'bg-blue-300',
-  purple: 'bg-purple-300',
-};
-
-const colorClass = computed(() => {
-  return colorClasses[props.entity.color.top];
-});
-
 function onUpdate({ vertices, location, id }) {
   if (id === props.entity.id) {
     return transact('Update shape', () => {
@@ -106,15 +93,23 @@ function onUpdate({ vertices, location, id }) {
 
   const feature = features.value.find(feature => feature.id === id);
 
-
   return transact(`Update ${feature.type}`, () => {
     Object.assign(feature, { location, vertices });
   });
 }
 
-function addOpening(opening) {
-  transact(() => {
-    OpeningModel.create({ shapeId: shape.value.id, ...opening });
-  });
-}
+const toolbarItems = [
+  {
+    id: 'new_polygon',
+    handler: () => {
+      props.entity.perimeter = [{ x: 0, y: 0, bulge: 0 }];
+      return true;
+    }
+  },
+  {
+    id: 'some_tool',
+    icon: AreaLoads,
+    handler: () => alert('You just clicked area loads')
+  }
+];
 </script>

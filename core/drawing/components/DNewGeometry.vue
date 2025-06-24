@@ -6,7 +6,7 @@
         :d="`M ${path.startX}, ${path.startY} L ${path.endX},${path.endY}`"
         stroke-width="2"
         vector-effect="non-scaling-stroke"
-        class="stroke-danger"
+        class="stroke-red-500"
       />
     </slot>
 

@@ -80,7 +80,6 @@ import useDraggablePoint from '../composables/useDraggablePoint';
 
 const props = defineProps({
   shape: Object,
-  dimCount: Array,
   origin: [Object, Boolean],
   draftConfig: {
     type: Object,
@@ -160,7 +159,6 @@ watchEffect(() => {
 
   const shape = {
     ...props.shape,
-    dimCount: props.dimCount,
     layers: props.layers,
     perimeter: localPerimeter.value,
     activeFeatureId: state.activeFeatureId,
@@ -295,10 +293,6 @@ function updateLocalOpening(type, vertices, location) {
 function handleMovingVertex(isDragging) {
   isCurrentPointVisible.value = isDragging;
 }
-
-onMounted(() => {
-  state.currentTool = tools.new_polygon
-})
 
 onBeforeUnmount(() => {
   state.activeFeatureId = null;

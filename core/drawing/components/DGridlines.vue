@@ -30,12 +30,12 @@ const props = defineProps({
 const { state } = useDrawing();
 
 function dynamicRound(num) {
-  const magnitude = Math.floor(Math.log10(Math.abs(num)));
+  const magnitude = Math.floor(Math.log10(Math.abs(num / 2)))
   return 10 ** (magnitude + 2);
 }
 
 const gridSpacing = computed(() => {
-  return dynamicRound(state.pxToSvg / 2);
+  return dynamicRound(state.pxToSvg);
 });
 
 function round(number, roundTo) {

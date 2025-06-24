@@ -1,7 +1,7 @@
 import Big from 'big.js';
 import { getSegmentsFromVertexList, pt2fixed } from '../utils';
 import moveVertex from './moveVertex';
-import { DIM_ACHOR } from '../constants.ts';
+import { DIM_ANCHOR } from '../constants.ts';
 
 /**
  * Update an edge by expanding left, right, or both directions
@@ -37,7 +37,7 @@ export default function updateEdge(path, edgeIndex, newLength, anchorPoint) {
   }
 
   switch (anchorPoint) {
-    case DIM_ACHOR.start:
+    case DIM_ANCHOR.start:
       return moveVertex(
         path,
         endIndex,
@@ -46,7 +46,7 @@ export default function updateEdge(path, edgeIndex, newLength, anchorPoint) {
           y: b.y + changeY,
         }),
       );
-    case DIM_ACHOR.centre: {
+    case DIM_ANCHOR.centre: {
       const newVertices = moveVertex(
         path,
         endIndex,
@@ -64,7 +64,7 @@ export default function updateEdge(path, edgeIndex, newLength, anchorPoint) {
         }),
       );
     }
-    case DIM_ACHOR.end:
+    case DIM_ANCHOR.end:
     default:
       return moveVertex(
         path,

@@ -25,7 +25,7 @@ export default function useDraggablePoint() {
       return state.gridPrecision === 1 ? 3 : maxPrecision;
     }
 
-    return Math.min(state.gridPrecision + 1, maxPrecision);
+    return Math.min(state.gridPrecision, maxPrecision);
   });
 
   const currentPointWithPrecision = computed(() => {

@@ -80,3 +80,9 @@ export interface Sketch {
     connectorGroupDims?: (params: ConnectorGroupDimsParams) => Sketch;
   };
 }
+
+export interface ToolRegistrationConfig {
+  id: string;
+  icon: Component;
+  handler: () => unknown;
+}

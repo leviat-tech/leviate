@@ -1,33 +1,17 @@
-import { Sketch } from '../types';
-import { inject, reactive, ref } from 'vue';
+import { Sketch, ToolRegistrationConfig } from '../types';
+import { defineAsyncComponent, inject, reactive, ref } from 'vue';
+import { DEFAULT_TOOLS } from "../constants";
 
 const globalConfig = reactive({
   $l: (val: string) => val,
 });
 
-const availableTools = [
-  'pointer',
-  'new_polygon',
-  'add_vertex',
-  'delete_vertex',
-  'round_off',
-  'mirror_geometry',
-  'point_bearing',
-  'edge_bearing',
-  'range_for_connectors',
-  'point_loads',
-  'line_loads',
-  'area_loads',
-  'rect_opening',
-  'circle_opening',
-  'polygon_opening',
-];
-
-const toolHandlers = {};
 const currentTool = ref('pointer');
 const setCurrentTool = (tool: string) => {
   currentTool.value = tool;
 };
+const availableTools = {};
+const toolIcons = {};
 
 const tools = new Proxy(availableTools, {
   get(target, prop: string) {
@@ -35,39 +19,46 @@ const tools = new Proxy(availableTools, {
       case 'current':
         return { [currentTool.value]: true };
       case 'register':
-        return (tool: string, handler: () => unknown) => {
-          if (!tools.includes(tool)) {
-            availableTools.push(tool);
+        return (toolConfig: ToolRegistrationConfig) => {
+          const { id } = toolConfig;
+          if (availableTools[id]) {
+            console.log(toolConfig)
+            Object.assign(availableTools[id], toolConfig);
+          } else {
+            availableTools[toolConfig.id] = toolConfig;
           }
-          toolHandlers[tool] = handler;
         };
+      case '_raw':
+        return availableTools;
       case '_setCurrent':
-        return (tool: string) => {
-          const handler = toolHandlers[tool];
+        return (toolId: string) => {
+          const handler = availableTools[toolId]?.handler;
 
           if (!handler) {
-            setCurrentTool(tool);
+            setCurrentTool(toolId);
             return;
           }
 
-          const res = handler(tool);
+          const res = handler(toolId);
 
           if (res === true) {
-            setCurrentTool(tool);
+            setCurrentTool(toolId);
             return;
           }
 
           if (res instanceof Promise) {
             res.then(val => {
               if (val === true) {
-                setCurrentTool(tool);
+                setCurrentTool(toolId);
               }
             });
           }
         };
+      case 'icon':
+        return toolIcons;
 
       default:
-        if (availableTools.includes(prop)) {
+        if (availableTools[prop]) {
           return prop;
         }
 
@@ -75,6 +66,13 @@ const tools = new Proxy(availableTools, {
     }
   },
 });
+
+DEFAULT_TOOLS.forEach(toolId => {
+  tools.register({
+    id: toolId,
+    icon: defineAsyncComponent(() => import(`../assets/${toolId}.svg`))
+  })
+})
 
 function getOrigin() {
   return { x: 0, y: 0 };

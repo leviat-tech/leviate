@@ -44,7 +44,6 @@ export default {
 
     const perimeterDims = sketch.user.edgeDimsParallel({
       vertices: params.perimeter,
-      dimCount: params.dimCount,
       shapeType: 'perimeter',
       isInteractive: true,
       getOffset: params.getPerimeterDimOffset

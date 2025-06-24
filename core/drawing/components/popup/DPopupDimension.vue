@@ -24,7 +24,7 @@ import useDrawing from '../../composables/useDrawing.ts';
 import DPopupWrapper from './DPopupWrapper.vue';
 import { calculateDistance, getSegmentsFromVertexList } from '../../utils';
 import updateEdge from '../../operations/updateEdge';
-import { DIM_ACHOR } from '../../constants.ts';
+import { DIM_ANCHOR } from '../../constants.ts';
 
 import ExpandBoth from '../../assets/dimension_expand_both.svg';
 import ExpandLeft from '../../assets/dimension_expand_left.svg';
@@ -51,9 +51,9 @@ const edgeIndex = popup.data.index;
 const expandOptions = ['right', 'both', 'left'];
 const selectedExpandOption = ref(expandOptions[0]);
 const directionToAnchorPoint = {
-  right: DIM_ACHOR.start,
-  both: DIM_ACHOR.centre,
-  left: DIM_ACHOR.end,
+  right: DIM_ANCHOR.start,
+  both: DIM_ANCHOR.centre,
+  left: DIM_ANCHOR.end,
 };
 
 function saveValue() {
