@@ -21,6 +21,16 @@ export default {
         opacity: 0.25,
       },
     },
+    recessBase: {
+      fill: {
+        opacity: '1',
+        color: 'red',
+      },
+      stroke: {
+        color: 'black',
+        opacity: 0.25,
+      },
+    },
     recess: {
       fill: {
         hatch: 'lines',

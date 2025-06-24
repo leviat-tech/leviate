@@ -1,5 +1,29 @@
+import { FEATURE_TYPES } from "../constants";
+
+type Bulge = number;
+type Segment = [SketchPoint, SketchPoint];
+type FilletPoint = [SketchPoint, number];
+
+type CircleArgs =
+  | [center: SketchPoint, radius: number]
+  | [center: SketchPoint, point: SketchPoint]
+  | [p1: SketchPoint, p2: SketchPoint, p3: SketchPoint]
+  | [seg1: Segment, seg2: Segment, radius: number];
+
+type PolycurveElement = SketchPoint | number | FilletPoint;
+type PolycurveArgs = [...PolycurveElement[]] | [Segment[]];
+
+type RectangleArgs =
+  | [xmin: number, ymin: number, xmax: number, ymax: number, radius?: number]
+  | [origin: SketchPoint, width: number, height: number, radius?: number]
+  | [corner1: SketchPoint, corner2: SketchPoint, radius?: number]
+  | [segment: Segment, height: number, radius?: number];
+
+type PolyfaceInput = (SketchPoint | Bulge | FilletPoint)[] | Segment[];
+
 export interface Sketch {
   children: Array<Sketch>;
+  new: Sketch;
   /**
    const dimSketch = sketch.aligned_dim([0, 0], [4, 3]);
    Places an aligned dimension string traveling from the origin to [4, 3],
@@ -23,6 +47,7 @@ export interface Sketch {
     dataset?: unknown,
   ) => Sketch;
   polyface: (...points: unknown) => Sketch;
+  segment: (SketchPoint, SketchPoint) => Sketch;
   style: (
     style:
       | string
@@ -30,13 +55,16 @@ export interface Sketch {
       fill?: { color?: string; opacity?: number };
       stroke?: { color?: string; width?: number };
       annotation?: { color?: string; font_size?: number };
+      opacity?: number;
     },
   ) => Sketch;
+  dataset: (...args: unknown[]) => Sketch;
   add: (...params: unknown) => Sketch;
   translate: (x: number, y: number) => Sketch;
   subtract: (sketch: Sketch) => Sketch;
   z: (index: number) => Sketch;
   rotate: (angle: number, units?: string) => Sketch;
+  clone: () => Sketch;
   /**
    * Adds a rectangle to a sketch. A rectangle is a "polyface"--a closed chain of segments and arcs.
    *
@@ -56,28 +84,24 @@ export interface Sketch {
 
    const rectSketch = sketch.rectangle([[1, 1], [11, 1]], 5, 1);
    */
-  rectangle: (
-    arg1: number | [number, number],
-    arg2: number | [number, number],
-    arg3: number,
-    arg4: number,
-  ) => Sketch;
+  rectangle: (...args: RectangleArgs) => Sketch;
+  name: (name: string) => Sketch;
   stroke: (color: string, thickness?: number) => Sketch;
   fill: (color: string) => Sketch;
   scale: (x: number, y?: number) => Sketch;
-  circle: (center: [number, number], a: number | [number, number], b?: [number, number]) => Sketch;
-  polycurve: (...params: unknown) => Sketch;
+  // circle: (center: [number, number], a: number | [number, number], b?: [number, number]) => Sketch;
+
+  circle: (...args: CircleArgs) => Sketch;
+  // polycurve: (...params: unknown) => Sketch;
+
+  polycurve: (...args: PolycurveArgs) => Sketch;
+
   text: (text: string, p: [number, number]) => Sketch;
+  // TODO: separate dynamic user features
   user: {
-    shape?: (params: ShapeParams) => Sketch;
-    pointBearing?: (params: { location: Point }) => Sketch;
-    pointLoad?: (params: { location: Point }) => Sketch;
-    edgeBearing?: (params: { perimeter: Array<PointWithBulge>; group: Support }) => Sketch;
-    connectorGroup?: (params: ConnectorGroupParams) => Sketch;
-    lineLoad?: (params: { vertices: Array<Point> }) => Sketch;
-    partialAreaLoad?: (params: { vertices: Array<Point>; id: string }) => Sketch;
-    edgeBearingDims?: (params: EdgeBearingDimsParams) => Sketch;
-    connectorGroupDims?: (params: ConnectorGroupDimsParams) => Sketch;
+    shape?: (params: DrawingParams) => Sketch;
+    perimeter: (params: Array<PointWithBulge>) => Sketch;
+    feature:  (params: Feature) => Sketch;
   };
 }
 
@@ -86,3 +110,47 @@ export interface ToolRegistrationConfig {
   icon: Component;
   handler: () => unknown;
 }
+
+export type SketchPoint = [number, number];
+
+export interface PointWithBulge {
+  x: number;
+  y: number;
+  bulge: number;
+}
+
+export interface Extents {
+  xmin: number;
+  xmax: number;
+  ymin: number;
+  ymax: number;
+}
+
+interface BaseFeature {
+  id: string;
+  type: string;
+  style?: string;
+  cutout?: boolean;
+  isDragging: boolean;
+}
+
+export interface CircularFeature extends BaseFeature {
+  shapeType: typeof FEATURE_TYPES.CIRCULAR;
+  location: Point;
+  diameter: number;
+}
+
+export interface RectangularFeature extends BaseFeature {
+  shapeType: typeof FEATURE_TYPES.RECTANGULAR;
+  location: Point;
+  width: number;
+  height: number;
+  vertices: PointWithBulge[];
+}
+
+export interface PolygonalFeature extends BaseFeature {
+  shapeType: typeof FEATURE_TYPES.POLYGONAL;
+  vertices: PointWithBulge[];
+}
+
+export type Feature = CircularFeature | RectangularFeature | PolygonalFeature;

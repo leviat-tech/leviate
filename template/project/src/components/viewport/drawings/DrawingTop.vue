@@ -25,52 +25,61 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import AreaLoads from '@/assets/area_loads.svg';
-import { computed, ref } from 'vue';
+import { computed, Ref, ref } from 'vue';
 import { transact } from '@crhio/leviate';
 import draftConfig from '@/draft/draft.config';
 import DViewport from '@crhio/leviate/drawing/components/DViewport.vue';
 import DToolbar from '@crhio/leviate/drawing/components/DToolbar.vue';
 import DEditableShape from '@crhio/leviate/drawing/components/DEditableShape.vue';
 import { FEATURE_TYPES } from '@crhio/leviate/drawing/constants';
+import {
+  CircularFeature,
+  PolygonalFeature,
+  RectangularFeature
+} from "../../../../../../core/drawing/types";
 
 const props = defineProps({
   entity: Object
 });
 
 // Define arbitrary features. In an app, these will likely be in models
-const features = ref([
-  // {
-  //   id: 'openingId',
-  //   type: 'opening',
-  //   shapeType: FEATURE_TYPES.circular,
-  //   location: { x: 0.75, y: 1.25 },
-  //   diameter: 0.5,
-  // },
-  // {
-  //   id: 'recessId',
-  //   type: 'recess',
-  //   shapeType: FEATURE_TYPES.rectangular,
-  //   vertices: [
-  //     { x: 2, y: 0.5 },
-  //     { x: 2.5, y: 0.5 },
-  //     { x: 2.5, y: 1 },
-  //     { x: 2, y: 1 },
-  //   ]
-  // },
-  // {
-  //   id: 'upstandId',
-  //   type: 'upstand',
-  //   cutout: true,
-  //   shapeType: FEATURE_TYPES.rectangular,
-  //   vertices: [
-  //     { x: 2, y: 1.1 },
-  //     { x: 2.5, y: 1.1 },
-  //     { x: 2.5, y: 1.5 },
-  //     { x: 2, y: 1.5 },
-  //   ]
-  // }
+const features: Ref<Array<CircularFeature|RectangularFeature|PolygonalFeature>> = ref([
+  {
+    id: 'openingId',
+    type: 'opening',
+    shapeType: FEATURE_TYPES.CIRCULAR,
+    location: { x: 0.75, y: 1.25 },
+    diameter: 0.5,
+    cutout: true,
+    // style: 'recessBase'
+  },
+  {
+    id: 'recessId',
+    type: 'recess',
+    shapeType: FEATURE_TYPES.RECTANGULAR,
+    location: { x: 0, y: 0 },
+    vertices: [
+      { x: 0, y: 0.5 },
+      { x: 0.5, y: 0.5 },
+      { x: 0.5, y: 1 },
+      { x: 0, y: 1 },
+    ],
+  },
+  {
+    id: 'upstandId',
+    type: 'upstand',
+    cutout: true,
+    shapeType: FEATURE_TYPES.RECTANGULAR,
+    location: { x: 0, y: 0 },
+    vertices: [
+      { x: 2, y: 1.1 },
+      { x: 2.5, y: 1.1 },
+      { x: 2.5, y: 1.5 },
+      { x: 2, y: 1.5 },
+    ]
+  }
 ]);
 
 const shapeParams = computed(() => {

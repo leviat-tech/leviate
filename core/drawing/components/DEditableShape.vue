@@ -139,7 +139,6 @@ const shapeDraft = Draft.load_config({
   ...shapeDraftConfig,
   features: mergeDraftConfig('features'),
   styles: mergeDraftConfig('styles'),
-  xrefs: mergeDraftConfig('xrefs'),
 });
 
 const defaultDraftSettings = {
@@ -345,7 +344,6 @@ watch(
 watch(
   () => props.shape.perimeter,
   val => {
-    console.log(val)
     if (val) localPerimeter.value = val;
   },
 );

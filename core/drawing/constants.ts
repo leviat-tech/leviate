@@ -1,8 +1,10 @@
-import { useEnum } from "../composables/useEnum";
-
-export const FEATURE_TYPES = useEnum(['rectangular', 'circular', 'polygonal']);
-
 export const PARALLEL_DIM_OFFSET = 0.15;
+
+export const FEATURE_TYPES = {
+  RECTANGULAR: 'rectangular',
+  CIRCULAR: 'circular',
+  POLYGONAL: 'polygonal',
+} as const;
 
 export enum DIM_ANCHOR {
   start = 'start',

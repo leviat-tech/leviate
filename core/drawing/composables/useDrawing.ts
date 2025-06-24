@@ -22,7 +22,6 @@ const tools = new Proxy(availableTools, {
         return (toolConfig: ToolRegistrationConfig) => {
           const { id } = toolConfig;
           if (availableTools[id]) {
-            console.log(toolConfig)
             Object.assign(availableTools[id], toolConfig);
           } else {
             availableTools[toolConfig.id] = toolConfig;

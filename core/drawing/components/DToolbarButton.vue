@@ -7,6 +7,4 @@
 const props = defineProps({
   tool: Object
 });
-
-console.log(props.tool)
 </script>
