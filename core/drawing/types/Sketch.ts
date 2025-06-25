@@ -24,8 +24,16 @@ type RectangleArgs =
 type PolyfaceInput = (SketchPoint | Bulge | FilletPoint)[] | Segment[];
 
 export type StyleProp = string | {
-    fill?: { color?: string; opacity?: number };
-    stroke?: { color?: string; width?: number };
+    fill?:
+    { color?: string; opacity?: number } |
+    {
+        hatch: 'crosshatch' | 'lines' | 'steel' | 'concrete',
+        hatch_scale: number,
+        hatch_color: string,
+        hatch_background: string,
+        hatch_stroke_width: number,
+    };
+    stroke?: { color?: string; width?: number, opacity: number };
     annotation?: { color?: string; font_size?: number };
     opacity?: number;
 }
@@ -57,11 +65,9 @@ export interface Sketch {
     ) => Sketch;
     polyface: (...points: unknown[]) => Sketch;
     segment: (start: SketchPoint, end: SketchPoint) => Sketch;
-    style: (
-        style: StyleProp
-    ) => Sketch;
+    style: (style: string) => Sketch;
     dataset: (...args: unknown[]) => Sketch;
-    add: (sketch: Sketch) => Sketch;
+    add: (...sketch: Sketch[]) => Sketch;
     translate: (x: number, y: number) => Sketch;
     subtract: (sketch: Sketch) => Sketch;
     z: (index: number) => Sketch;

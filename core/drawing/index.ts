@@ -23,7 +23,7 @@ import type {
   RectangularFeature,
 } from './types/Drawings'
 
-import type { Sketch, StyleProp } from './types/Sketch'
+import type { Sketch, StyleProp, SketchPoint } from './types/Sketch'
 
 export {
   DOrigin,
@@ -44,6 +44,7 @@ export {
   Point,
   Sketch,
   StyleProp,
+  SketchPoint,
   ShapeParams,
   BaseFeature,
   PointWithBulge,

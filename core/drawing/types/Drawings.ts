@@ -19,7 +19,7 @@ export interface ToolRegistrationConfig {
 }
 
 export type ShapeParams = {
-  features: Array<Feature>;
+  features: Array<CircularFeature | RectangularFeature | PolygonalFeature>;
   perimeter: Array<PointWithBulge>;
 }
 
