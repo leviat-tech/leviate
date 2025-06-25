@@ -11,14 +11,14 @@
   />
 
   <!-- Adding a new opening -->
-  <DNewGeometry v-if="localOpening.type === FEATURE_TYPES.polygonal" v-model="openingModel" />
+  <DNewGeometry v-if="localOpening.type === FEATURE_TYPES.POLYGONAL" v-model="openingModel" />
   <DDraggableSketch
     v-if="Boolean(localOpening.type)"
     :key="localOpening.type"
     :params="localOpening"
     :feature="featureDraft"
     :style="props.draftConfig.styles[feature.type]"
-    :is-preview-enabled="localOpening.type !== FEATURE_TYPES.polygonal"
+    :is-preview-enabled="localOpening.type !== FEATURE_TYPES.POLYGONAL"
     @click="addNewOpening"
   />
 
@@ -55,14 +55,14 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { cloneDeep } from 'lodash-es';
 import { Draft, render } from '@crhio/jsdraft';
 import { computed, ref, watch, watchEffect, onBeforeUnmount, onMounted } from 'vue';
 
 import { mirrorPath } from '../operations';
 import roundoffVertex from '../operations/roundoffVertex';
-import { FEATURE_TYPES } from '../constants.ts';
+import { AvailableToolbarOptions, FEATURE_TYPES } from '../constants.ts';
 
 import DDraggableSketch from '../components/DDraggableSketch.vue';
 import featureDraft from '../drafts/feature';
@@ -77,20 +77,24 @@ import DPopupVertex from './popup/DPopupVertex.vue';
 import DPopupDimension from './popup/DPopupDimension.vue';
 import { getSegmentRadiusFromVertexList } from '../utils';
 import useDraggablePoint from '../composables/useDraggablePoint';
+import { ShapeParams} from '../types/Drawings';
+import { StyleProp } from '../types/Sketch';
 
-const props = defineProps({
-  shape: Object,
-  origin: [Object, Boolean],
+const props = defineProps<{
+  shape: ShapeParams;
   draftConfig: {
-    type: Object,
-    default: () => ({
-      settings: {},
-      features: {},
-    }),
-  },
-  userFeature: String,
-  layers: Object,
-});
+    styles: {
+      [key: string]: StyleProp;
+    };
+    settings: {
+      model_unit?: string;
+      plot_unit?: string;
+      plot_size?: number;
+    };
+    toolbar: AvailableToolbarOptions[];
+  };
+  origin: boolean | { xColor: string; yColor: string };
+}>();
 
 const { config, state, sketch, tools, popup } = useDrawing();
 
@@ -99,7 +103,7 @@ const { currentPointWithPrecision } = useDraggablePoint();
 const html = ref('');
 const isCurrentPointVisible = ref(false);
 
-const mergeDraftConfig = prop => {
+const mergeDraftConfig = (prop) => {
   return {
     ...shapeDraftConfig[prop],
     ...props.draftConfig[prop],
@@ -145,7 +149,7 @@ const defaultDraftSettings = {
   model_unit: 'm',
   plot_unit: 'mm',
   plot_size: 800,
-}
+};
 
 watchEffect(() => {
   const draftGlobalSettings = { ...defaultDraftSettings, ...props.draftConfig.settings };
@@ -193,7 +197,7 @@ function getViewportScaleFactor(unit = 'm') {
 
 const perimeterModel = computed({
   get: () => localPerimeter.value,
-  set: vertices => {
+  set: (vertices) => {
     // Update the temp local perimeter when dragging
     localPerimeter.value = vertices;
 
@@ -224,7 +228,7 @@ const popupRadius = computed(() => {
 
 const vertexModel = computed({
   get: () => popupVertices.value[popup.data.index],
-  set: newVertex => {
+  set: (newVertex) => {
     if (popup.data.shapeType === 'perimeter') {
       state.isDragging = false;
 
@@ -237,7 +241,7 @@ const vertexModel = computed({
 
 const dimensionsModel = computed({
   get: () => localPerimeter.value,
-  set: params => {
+  set: (params) => {
     emit('update:perimeter', params.vertices);
   },
 });
@@ -247,7 +251,7 @@ const vertexWithRadiusModel = computed({
     const vertex = popupVertices.value[popup.data.index];
     return { x: vertex.x, y: vertex.y, bulge: popupRadius.value };
   },
-  set: newVertex => {
+  set: (newVertex) => {
     if (state.currentTool === tools.round_off) {
       state.isDragging = false;
       setTimeout(() => {
@@ -258,7 +262,7 @@ const vertexWithRadiusModel = computed({
 });
 
 const selectedOpening = computed(() =>
-  props.shape.openings.find(({ id }) => id === state.activeFeatureId),
+  props.shape.openings.find(({ id }) => id === state.activeFeatureId)
 );
 
 const isRadiusPopupVisible = computed(() => {
@@ -274,7 +278,6 @@ function addNewOpening() {
 function onFeatureDragStart(feature) {
   feature.isDragging = true;
   isCurrentPointVisible.value = true;
-
 }
 
 function onFeatureDragEnd(feature, { location, vertices }) {
@@ -299,7 +302,7 @@ onBeforeUnmount(() => {
 
 watch(
   () => state.currentTool,
-  tool => {
+  (tool) => {
     switch (tool) {
       case tools.polygon_opening:
         updateLocalOpening(FEATURE_TYPES.polygonal, [], defaultLocation);
@@ -321,12 +324,12 @@ watch(
         if (localOpening.value.type !== FEATURE_TYPES.polygonal) localOpening.value.type = '';
         isCurrentPointVisible.value = false;
     }
-  },
+  }
 );
 
 watch(
   () => state.actionKeys.Escape,
-  esc => {
+  (esc) => {
     if (!esc) return;
 
     state.currentTool = tools.pointer;
@@ -338,30 +341,30 @@ watch(
       localOpening.value.location = { ...defaultLocation };
       localOpening.value.type = '';
     }
-  },
+  }
 );
 
 watch(
   () => props.shape.perimeter,
-  val => {
+  (val) => {
     if (val) localPerimeter.value = val;
-  },
+  }
 );
 
 watch(
   () => props.shape,
-  newShape => {
+  (newShape) => {
     state.shape = newShape;
-  },
+  }
 );
 
 watch(
   () => state.activeFeatureId,
-  val => {
+  (val) => {
     if (val) {
       emit('update:activeOpening', val);
     }
-  },
+  }
 );
 
 watch(
@@ -376,15 +379,15 @@ watch(
       state.activeFeatureId = null;
       isCurrentPointVisible.value = false;
     }
-  },
+  }
 );
 
 watch(
   () => currentPointWithPrecision.value,
-  currentPoint => {
+  (currentPoint) => {
     // setting only if opening has a valid type, i.e. insert opening tool selected
     if (localOpening.value.type)
       localOpening.value.location = { x: currentPoint.x, y: currentPoint.y };
-  },
+  }
 );
 </script>

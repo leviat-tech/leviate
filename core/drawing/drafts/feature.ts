@@ -1,5 +1,6 @@
 import { FEATURE_TYPES } from '../constants';
-import { Sketch, CircularFeature, PolygonalFeature, RectangularFeature, SketchPoint } from "../types";
+import { CircularFeature, PolygonalFeature, RectangularFeature } from "../types/Drawings";
+import { Sketch, SketchPoint } from '../types/Sketch'
 
 export default {
   func(sketch: Sketch, feature: RectangularFeature | CircularFeature | PolygonalFeature): Sketch {
@@ -41,10 +42,10 @@ export default {
           return sketch;
         }
 
-          const adjustedVertices: SketchPoint[] = vertices.map(({ x, y }) => [
-            x + 0, //location.x,
-            y + 0, //location.y,
-          ]);
+        const adjustedVertices: SketchPoint[] = vertices.map(({ x, y }) => [
+          x + 0, //location.x,
+          y + 0, //location.y,
+        ]);
 
         shape = sketch.polyface(...adjustedVertices);
         break;

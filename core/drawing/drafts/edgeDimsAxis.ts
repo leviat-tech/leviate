@@ -1,7 +1,7 @@
 import { Vector } from '@crhio/vector';
 import { convertFromSI } from '@crhio/concrete/src/utils/units';
 import { getSegmentsFromVertexList } from '../utils';
-import { Extents, Vertex } from '../types';
+import { Extents } from '../types/Drawings';
 import { PARALLEL_DIM_OFFSET } from '../constants.ts';
 
 // TODO: inject units ref

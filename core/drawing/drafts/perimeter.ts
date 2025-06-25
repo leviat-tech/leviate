@@ -1,4 +1,5 @@
-import { Sketch, SketchPoint, PointWithBulge } from '../types';
+import { PointWithBulge } from '../types/Drawings';
+import {Sketch, SketchPoint} from '../types/Sketch'
 
 export default {
   func(sketch: Sketch, perimeter: Array<PointWithBulge>) {

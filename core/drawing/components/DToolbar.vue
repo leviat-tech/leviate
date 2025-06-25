@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import DToolbarButton from './DToolbarButton.vue';
 import useDrawing from '../composables/useDrawing.ts';
-import { ToolRegistrationConfig } from "../types";
+import { ToolRegistrationConfig } from "../types/Drawings";
 
 const props = defineProps({
   items: Array,

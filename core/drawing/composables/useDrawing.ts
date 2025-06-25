@@ -1,4 +1,6 @@
-import { Sketch, ToolRegistrationConfig } from '../types';
+import { ToolRegistrationConfig } from '../types/Drawings';
+import { Sketch } from '../types/Sketch';
+
 import { defineAsyncComponent, inject, reactive, ref } from 'vue';
 import { DEFAULT_TOOLS } from "../constants";
 

@@ -1,19 +1,23 @@
-import { Feature, Sketch } from '../types';
+import { FEATURE_TYPES } from '../constants';
+import { ShapeParams } from '../types/Drawings';
+import { Sketch } from "../types/Sketch"
 
 export default {
-  func(sketch: Sketch, params) {
-    const { layers } = params;
+  func(sketch: Sketch, params: ShapeParams) {
     let perimeter = sketch.user.perimeter(params.perimeter).name('perimeter');
 
     const segments: Sketch[] = [];
-    const visibleElements = [];
+    const visibleElements: Sketch[] = [];
 
     if (params.perimeter.length > 2) {
-      params.features.forEach((feature: Feature) => {
-
-        if (feature.shapeType === 'polygonal') {
+      params.features.forEach(feature => {
+        if (feature.shapeType === FEATURE_TYPES.POLYGONAL) {
           const vertexCount = feature.vertices.length;
-          if (vertexCount <= 1) return;
+
+          if (vertexCount <= 1) {
+            return;
+          }
+
           if (vertexCount === 2) {
             const [a, b] = feature.vertices;
             const segment = sketch.new.segment([a.x, a.y], [b.x, b.y]).style('shape');
@@ -25,8 +29,8 @@ export default {
         // perimeter = perimeter.subtract(sketch.user.feature(feature)).style('shape');
       });
     }
-    const features = params.features.map((feature: Feature) => {
-      const featureSketch: Sketch = sketch.user.feature(feature);
+    const features = params.features.map(feature => {
+      const featureSketch = sketch.user.feature(feature);
 
       if (feature.cutout) {
         const clone = featureSketch.clone();

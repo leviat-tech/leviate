@@ -6,6 +6,7 @@
     "paths": {
       "@/*": ["src/*"],
       "@crhio/normie": ["./node_modules/@crhio/normie/dist"],
+      "@crhio/leviate/drawing": ["./node_modules/@crhio/leviate/core/drawing"],
     },
     "allowJs": true,
     "esModuleInterop": true
