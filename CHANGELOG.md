@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.0.16](https://github.com/leviat-tech/leviate/compare/v6.0.15...v6.0.16) (2025-06-27)
+
+
+* don't exit transaction early ([16e7e59](https://github.com/leviat-tech/leviate/commit/16e7e598cae6fea4dfe03f9075bfceedd610298b))
+
 ## [6.0.15](https://github.com/leviat-tech/leviate/compare/v6.0.14...v6.0.15) (2025-06-03)
 
 
