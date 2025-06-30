@@ -10,7 +10,7 @@ const currentTool = ref('pointer');
 const setCurrentTool = (tool: string) => {
   currentTool.value = tool;
 };
-const availableTools = {};
+const availableTools: { [key: string]: ToolRegistrationConfig } = {};
 const toolIcons = {};
 
 const tools = new Proxy(availableTools, {
@@ -26,12 +26,42 @@ const tools = new Proxy(availableTools, {
           } else {
             availableTools[toolConfig.id] = toolConfig;
           }
+
+          // if (toolConfig.children) {
+          //   toolConfig.children.forEach(child => {
+          //     const { id } = child;
+
+
+
+          //     if (availableTools[id]) {
+          //       console.log("1");
+
+          //       Object.assign(availableTools[id], child);
+          //     } else {
+          //       console.log("2");
+
+          //       availableTools[id] = child;
+          //     }
+          //     console.log(availableTools);
+          //   })
+          // }
         };
       case '_raw':
         return availableTools;
       case '_setCurrent':
-        return (toolId: string) => {
-          const handler = availableTools[toolId]?.handler;
+        return (toolId: string, parentId?: string) => {
+
+          let handler;
+
+          if (parentId) {
+            handler = availableTools[parentId]?.children.find(child => child.id === toolId)?.handler
+          } else {
+            handler = availableTools[toolId]?.handler
+          }
+
+          // const handler = availableTools[toolId]?.handler || parentTool?.children.find(child => child.id === toolId)?.handler;
+
+
 
           if (!handler) {
             setCurrentTool(toolId);
@@ -41,6 +71,8 @@ const tools = new Proxy(availableTools, {
           const res = handler(toolId);
 
           if (res === true) {
+            console.log("TEST");
+            
             setCurrentTool(toolId);
             return;
           }
@@ -66,11 +98,28 @@ const tools = new Proxy(availableTools, {
   },
 });
 
+console.log(tools._raw);
+
+
+
+
 DEFAULT_TOOLS.forEach(toolId => {
-  tools.register({
-    id: toolId,
-    icon: defineAsyncComponent(() => import(`../assets/${toolId}.svg`))
-  })
+  if (toolId === 'rect_opening') {
+    tools.register({
+      id: toolId,
+      icon: defineAsyncComponent(() => import(`../assets/${toolId}.svg`)),
+      children: {
+        id: 'circle_opening',
+        icon: defineAsyncComponent(() => import(`../assets/circle_opening.svg`))
+      }
+    })
+  } else {
+    tools.register({
+      id: toolId,
+      icon: defineAsyncComponent(() => import(`../assets/${toolId}.svg`))
+    })
+  }
+
 })
 
 function getOrigin() {
@@ -189,6 +238,16 @@ function closePopup() {
 export default function useDrawing(config?: object): {
   state: {};
   sketch: Sketch;
+  tools: {
+    _raw: [{
+      id: string,
+      icon: any,
+      children?: {
+        id: string,
+        icon: any,
+      }
+    }]
+  }
 } {
   const viewportName = inject('viewportName', 'DEFAULT');
 

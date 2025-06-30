@@ -114,6 +114,12 @@ export interface DraftConfig {
 export interface ToolRegistrationConfig {
   id: string;
   icon: Component;
+  parent?: boolean,
+  children: [{
+    id: string;
+    icon: Component;
+    handler: () => unknown
+  }]
   handler: () => unknown;
 }
 

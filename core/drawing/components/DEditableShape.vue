@@ -3,12 +3,12 @@
   <!-- eslint-disable-next-line -->
   <g v-html="html" />
 
-  <DOrigin v-if="origin" v-bind="originProps" />
+  <!-- <DOrigin v-if="origin" v-bind="originProps" />
   <DVertices
     v-model="perimeterModel"
     @move:vertex="handleMovingVertex"
     @stop-moving:vertex="handleMovingVertex"
-  />
+  /> -->
 
   <!-- Adding a new opening -->
   <DNewGeometry v-if="localOpening.type === FEATURE_TYPES.polygonal" v-model="openingModel" />
@@ -23,7 +23,7 @@
   />
 
   <!-- Updating existing openings   -->
-  <DDraggableSketch
+  <!-- <DDraggableSketch
     v-for="feature in shape.features"
     :key="feature.id"
     :feature="featureDraft"
@@ -31,13 +31,13 @@
     :style="{ fill: { opacity: 0.000001 } }"
     @drag-end="onFeatureDragEnd(feature, $event)"
     @dragging="onFeatureDragStart(feature)"
-  />
+  /> -->
 
   <!-- Freehand shape -->
-  <DNewGeometry v-if="state.currentTool === tools.new_polygon" v-model="perimeterModel" />
+  <!-- <DNewGeometry v-if="state.currentTool === tools.new_polygon" v-model="perimeterModel" /> -->
 
   <!-- required to enable rendering of non-svg entities inside svg tag -->
-  <foreignObject>
+  <!-- <foreignObject>
     <Teleport to="body">
       <DPopupVertex
         v-if="popup.data.type === 'node' && state.currentTool !== tools.round_off"
@@ -46,13 +46,13 @@
       <DPopupDimension v-if="popup.data.type === 'dimension'" v-model:vertices="dimensionsModel" />
       <DPopupRadius v-if="isRadiusPopupVisible" v-model:vertex="vertexWithRadiusModel" />
     </Teleport>
-  </foreignObject>
+  </foreignObject> -->
 
-  <DHoverText
+  <!-- <DHoverText
     v-if="isCurrentPointVisible"
     :x="currentPointWithPrecision.x"
     :y="currentPointWithPrecision.y"
-  />
+  /> -->
 </template>
 
 <script setup lang="ts">
@@ -100,13 +100,19 @@ const mergeDraftConfig = prop => {
   };
 };
 
-const emit = defineEmits([
-  'add:opening',
-  'update',
-  'delete:opening',
-  'update:dimension',
-  'delete:activeOpening',
-]);
+// const emit = defineEmits([
+//   'add:opening',
+//   'update',
+//   'delete:opening',
+//   'update:dimension',
+//   'delete:activeOpening',
+// ]);
+
+
+const emit = defineEmits<{
+ (e: 'update', payload: { type: 'addOpening' }): void
+}>()
+
 
 const originProps = computed(() => {
   if (!props.origin) return null;
@@ -301,8 +307,10 @@ watch(
         updateLocalOpening(FEATURE_TYPES.polygonal, [], defaultLocation);
         isCurrentPointVisible.value = false;
         break;
-      case tools.rect_opening:
-        updateLocalOpening(FEATURE_TYPES.rectangular, defaultVertices, defaultLocation);
+      case 'rect_opening':
+        console.log("EEEE");
+        
+        updateLocalOpening(FEATURE_TYPES.RECTANGULAR, defaultVertices, defaultLocation);
         isCurrentPointVisible.value = true;
         break;
       case tools.circle_opening:
