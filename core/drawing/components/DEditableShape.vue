@@ -168,6 +168,8 @@ watchEffect(() => {
     invalidOpeningIds: state.invalidOpeningIds,
   };
 
+  console.log(shape)
+
   // Render to sketch first so that it can be used in other components
   let shapeSketch = shapeDraft.render('shape', [shape], 'sketch');
 

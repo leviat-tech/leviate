@@ -32,6 +32,11 @@ export const TOOLBAR_OPTIONS = {
 
 export type AvailableToolbarOptions = typeof TOOLBAR_OPTIONS[keyof typeof TOOLBAR_OPTIONS]
 
+export const PERIMETER_DIM_TYPES = {
+  AXIS: 'axis',
+  PARALLEL: 'parallel',
+}
+
 export const DEFAULT_TOOLS = [
   'pointer',
   'new_polygon',

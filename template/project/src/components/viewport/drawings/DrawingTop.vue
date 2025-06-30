@@ -1,28 +1,30 @@
 <template>
-  <DViewport
-    current-tool="select"
-    data-cy="viewport_2d"
-    :padding="0.5"
-    show-grid
-  >
-    <DEditableShape
-      :key="entity.id"
-      :shape="shapeParams"
-      :draft-config="draftConfig"
-      @update="onUpdate"
-      origin
-    />
-<!--      @add:opening="addOpening"-->
-<!--      @update:opening="updateOpening"-->
-<!--      @update:active-opening="scrollToActiveItem"-->
-<!--      @delete:active-opening="id => deleteFeature(id, OpeningModel)"-->
-<!--      @validate:openings="validateOpenings"-->
-  </DViewport>
+  <LvErrorBoundary :instance="entity">
+    <DViewport
+      current-tool="select"
+      data-cy="viewport_2d"
+      :padding="0.5"
+      show-grid
+    >
+      <DEditableShape
+        :key="entity.id"
+        :shape="shapeParams"
+        :draft-config="draftConfig"
+        @update="onUpdate"
+        origin
+      />
+      <!--      @add:opening="addOpening"-->
+      <!--      @update:opening="updateOpening"-->
+      <!--      @update:active-opening="scrollToActiveItem"-->
+      <!--      @delete:active-opening="id => deleteFeature(id, OpeningModel)"-->
+      <!--      @validate:openings="validateOpenings"-->
+    </DViewport>
 
-  <DToolbar
-    :items="toolbarItems"
-    :formatter="tool => $l(`tooltip_${tool}`)"
-  />
+    <DToolbar
+      :items="toolbarItems"
+      :formatter="tool => $l(`tooltip_${tool}`)"
+    />
+  </LvErrorBoundary>
 </template>
 
 <script setup lang="ts">
@@ -31,21 +33,22 @@ import { computed, Ref, ref } from 'vue';
 import { transact } from '@crhio/leviate';
 import draftConfig from '@/draft/draft.config';
 import DViewport from '@crhio/leviate/drawing/components/DViewport.vue';
+import LvErrorBoundary from '@crhio/leviate/components/LvErrorBoundary.vue';
 import DToolbar from '@crhio/leviate/drawing/components/DToolbar.vue';
 import DEditableShape from '@crhio/leviate/drawing/components/DEditableShape.vue';
-import { FEATURE_TYPES } from '@crhio/leviate/drawing/constants';
+import { FEATURE_TYPES, PERIMETER_DIM_TYPES } from '@crhio/leviate/drawing/constants';
 import {
   CircularFeature,
   PolygonalFeature,
   RectangularFeature
-} from "../../../../../../core/drawing/types";
+} from "@crhio/leviate/drawing/types";
 
 const props = defineProps({
   entity: Object
 });
 
 // Define arbitrary features. In an app, these will likely be in models
-const features: Ref<Array<CircularFeature|RectangularFeature|PolygonalFeature>> = ref([
+const features: Ref<Array<CircularFeature | RectangularFeature | PolygonalFeature>> = ref([
   {
     id: 'openingId',
     type: 'opening',
@@ -89,6 +92,7 @@ const shapeParams = computed(() => {
     getPerimeterDimOffset(edgeIndex) {
       return edgeIndex === 2 ? 2 : 1;
     },
+    dimType: PERIMETER_DIM_TYPES.AXIS,
     features: features.value
   }
 });
@@ -111,7 +115,9 @@ const toolbarItems = [
   {
     id: 'new_polygon',
     handler: () => {
+      alert('Free geometry')
       props.entity.perimeter = [{ x: 0, y: 0, bulge: 0 }];
+      props.entity.shapeType = 'free_geometry';
       return true;
     }
   },

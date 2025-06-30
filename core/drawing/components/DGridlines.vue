@@ -30,7 +30,10 @@ const props = defineProps({
 const { state } = useDrawing();
 
 function dynamicRound(num) {
-  const magnitude = Math.floor(Math.log10(Math.abs(num / 2)))
+  // This value controls the point at which the grid scale changes
+  // Higher values result in smaller gridlines appearing sooner when zooming in
+  const changeThresholdFactor = 3.5;
+  const magnitude = Math.floor(Math.log10(Math.abs(num / changeThresholdFactor)))
   return 10 ** (magnitude + 2);
 }
 
