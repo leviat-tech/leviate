@@ -12,6 +12,11 @@ export enum DIM_ANCHOR {
   end = 'end',
 }
 
+export const PERIMETER_DIM_TYPES = {
+  AXIS: 'axis',
+  PARALLEL: 'parallel',
+}
+
 export const DEFAULT_TOOLS = [
   'pointer',
   'new_polygon',

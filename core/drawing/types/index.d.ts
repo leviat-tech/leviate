@@ -65,6 +65,7 @@ export interface Sketch {
   z: (index: number) => Sketch;
   rotate: (angle: number, units?: string) => Sketch;
   clone: () => Sketch;
+  extents: Extents;
   /**
    * Adds a rectangle to a sketch. A rectangle is a "polyface"--a closed chain of segments and arcs.
    *
@@ -103,6 +104,11 @@ export interface Sketch {
     perimeter: (params: Array<PointWithBulge>) => Sketch;
     feature:  (params: Feature) => Sketch;
   };
+}
+
+export interface DraftConfig {
+  settings?: unknown;
+  features?: unknown;
 }
 
 export interface ToolRegistrationConfig {

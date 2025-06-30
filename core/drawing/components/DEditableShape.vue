@@ -55,7 +55,7 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { cloneDeep } from 'lodash-es';
 import { Draft, render } from '@crhio/jsdraft';
 import { computed, ref, watch, watchEffect, onBeforeUnmount, onMounted } from 'vue';
@@ -77,20 +77,14 @@ import DPopupVertex from './popup/DPopupVertex.vue';
 import DPopupDimension from './popup/DPopupDimension.vue';
 import { getSegmentRadiusFromVertexList } from '../utils';
 import useDraggablePoint from '../composables/useDraggablePoint';
+import { DraftConfig } from "../types";
 
-const props = defineProps({
-  shape: Object,
-  origin: [Object, Boolean],
-  draftConfig: {
-    type: Object,
-    default: () => ({
-      settings: {},
-      features: {},
-    }),
-  },
-  userFeature: String,
-  layers: Object,
-});
+const props = defineProps<{
+  shape: unknown;
+  origin: boolean;
+  userFeature?: string;
+  draftConfig: DraftConfig
+}>();
 
 const { config, state, sketch, tools, popup } = useDrawing();
 
@@ -163,6 +157,8 @@ watchEffect(() => {
     activeFeatureId: state.activeFeatureId,
     invalidOpeningIds: state.invalidOpeningIds,
   };
+
+  console.log(shape)
 
   // Render to sketch first so that it can be used in other components
   let shapeSketch = shapeDraft.render('shape', [shape], 'sketch');

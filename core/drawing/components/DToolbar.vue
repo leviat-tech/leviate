@@ -5,7 +5,7 @@
       :key="tool"
       :title="formatter(tool.id)"
       :data-cy="`viewport_2d__tool_btn_${tool.id}`"
-      class="border border-transparent rounded hover:border-gray-500"
+      class="border border-transparent rounded"
       :class="state.currentTool === tool.id && '!border-gray-500 bg-gray-100'"
       @click="handleToolClick(tool.id)"
     >
