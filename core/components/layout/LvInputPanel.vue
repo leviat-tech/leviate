@@ -15,7 +15,7 @@ type Tab = string | { name: string; disabled: boolean };
 
 withDefaults(
   defineProps<{
-    width: number;
+    width?: number;
     tabs: Array<Tab>;
   }>(),
   {

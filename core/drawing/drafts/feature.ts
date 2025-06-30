@@ -1,0 +1,59 @@
+import { FEATURE_TYPES } from '../constants';
+import { CircularFeature, PolygonalFeature, RectangularFeature } from "../types/Drawings";
+import { Sketch, SketchPoint } from '../types/Sketch'
+
+export default {
+  func(sketch: Sketch, feature: RectangularFeature | CircularFeature | PolygonalFeature): Sketch {
+    let shape = null;
+
+    const dataset = {
+      type: feature.type,
+      id: feature.id,
+    };
+
+    switch (feature.shapeType) {
+      case FEATURE_TYPES.CIRCULAR: {
+        const { diameter, location } = feature;
+
+        if (diameter <= 0) {
+          return sketch;
+        }
+
+        shape = sketch.circle([location.x, location.y], diameter / 2);
+        break;
+      }
+
+      case FEATURE_TYPES.POLYGONAL: {
+        const { vertices } = feature;
+
+        if (vertices.length < 3) {
+          return sketch;
+        }
+
+        const adjustedVertices: SketchPoint[] = vertices.map(({ x, y }) => [x, y]);
+
+        shape = sketch.polyface(...adjustedVertices);
+        break;
+      }
+      case FEATURE_TYPES.RECTANGULAR: {
+        const { vertices, location } = feature;
+
+        if (vertices.length < 3) {
+          return sketch;
+        }
+
+        const adjustedVertices: SketchPoint[] = vertices.map(({ x, y }) => [
+          x + 0, //location.x,
+          y + 0, //location.y,
+        ]);
+
+        shape = sketch.polyface(...adjustedVertices);
+        break;
+      }
+    }
+
+    const opacity = feature.isDragging ? 0.5 : 1;
+
+    return sketch.add(shape).dataset(dataset).style(feature.style || feature.type || 'shape').style({ opacity });
+  },
+};
