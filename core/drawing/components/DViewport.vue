@@ -361,7 +361,7 @@ const handleDoubleClick = e => {
 const handleMouseup = e => {
   const dataset = e.target.dataset;
 
-  if (dataset?.type === 'dimension') {
+  if (dataset?.type?.startsWith('dimension')) {
     openPopup(e, dataset);
     return;
   }
@@ -418,10 +418,13 @@ onMounted(async () => {
   svgRef.value.addEventListener('contextmenu', e => e.preventDefault());
   hoverPt = svgRef.value.createSVGPoint();
   document.addEventListener('pointerleave', documentMouseleave);
-  resizeHandler();
   window.addEventListener('resize', resizeHandler);
   window.addEventListener('keydown', handleKeyDown);
   window.addEventListener('keyup', handleKeyUp);
+  setTimeout(() => {
+    resizeHandler();
+    zoomToExtents();
+  });
 });
 
 onBeforeUnmount(() => {

@@ -168,6 +168,7 @@ const popup = reactive({
 
 function openPopup(e, data) {
   Object.assign(popup, {
+    target: e.target,
     x: e.clientX,
     y: e.clientY,
     isOpen: true,

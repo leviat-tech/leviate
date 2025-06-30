@@ -45,7 +45,6 @@ const props = defineProps({
 });
 
 const segment = getSegmentsFromVertexList(props.vertices)[popup.data.index];
-console.log(props.vertices)
 const dimension = ref(calculateDistance(segment.a, segment.b));
 const edgeIndex = popup.data.index;
 
