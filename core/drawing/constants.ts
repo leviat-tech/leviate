@@ -1,4 +1,5 @@
-export const PARALLEL_DIM_OFFSET = 0.15;
+export const PERIMETER_DIM_OFFSET = 0.15;
+export const AXIS_DIM_OFFSET = 0.2;
 
 export const FEATURE_TYPES = {
   RECTANGULAR: 'rectangular',
@@ -49,3 +50,12 @@ export const DEFAULT_TOOLS = [
   'circle_opening',
   'polygon_opening',
 ];
+
+export const DIMENSION_TYPES = {
+  WIDTH: 'dimension:width',
+  HEIGHT: 'dimension:height',
+  AXIS: 'dimension:axis',
+  PERIMETER: 'dimension:perimeter',
+  FEATURE: 'dimension:feature',
+}
+
