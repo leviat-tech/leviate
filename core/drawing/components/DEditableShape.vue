@@ -43,7 +43,8 @@
         v-if="popup.data.type === 'node' && state.currentTool !== tools.round_off"
         v-model:vertex="vertexModel"
       />
-      <DPopupDimension v-if="popup.data.type === 'dimension'" v-model:vertices="dimensionsModel" />
+      <DPopupDimensionPerimeter v-if="popup.data.type === 'dimension:perimeter'" v-model:vertices="dimensionsModel" />
+      <DPopupDimensionAxis v-if="availableAxisDimensionTypes.includes(popup.data.type)" v-model:vertices="dimensionsModel" />
       <DPopupRadius v-if="isRadiusPopupVisible" v-model:vertex="vertexWithRadiusModel" />
     </Teleport>
   </foreignObject>
@@ -62,7 +63,7 @@ import { computed, ref, watch, watchEffect, onBeforeUnmount, onMounted } from 'v
 
 import { mirrorPath } from '../operations';
 import roundoffVertex from '../operations/roundoffVertex';
-import { AvailableToolbarOptions, FEATURE_TYPES } from '../constants.ts';
+import { AvailableToolbarOptions, DIMENSION_TYPES, FEATURE_TYPES } from '../constants.ts';
 
 import DDraggableSketch from '../components/DDraggableSketch.vue';
 import featureDraft from '../drafts/feature';
@@ -74,7 +75,8 @@ import DNewGeometry from './DNewGeometry.vue';
 import DPopupRadius from './popup/DPopupRadius.vue';
 import useDrawing from '../composables/useDrawing.ts';
 import DPopupVertex from './popup/DPopupVertex.vue';
-import DPopupDimension from './popup/DPopupDimension.vue';
+import DPopupDimensionPerimeter from './popup/DPopupDimensionPerimeter.vue';
+import DPopupDimensionAxis from './popup/DPopupDimensionAxis.vue';
 import { getSegmentRadiusFromVertexList } from '../utils';
 import useDraggablePoint from '../composables/useDraggablePoint';
 import { ShapeParams} from '../types/Drawings';
@@ -99,6 +101,13 @@ const props = defineProps<{
 const { config, state, sketch, tools, popup } = useDrawing();
 
 const { currentPointWithPrecision } = useDraggablePoint();
+
+const availableAxisDimensionTypes = [
+  DIMENSION_TYPES.AXIS,
+  DIMENSION_TYPES.WIDTH,
+  DIMENSION_TYPES.HEIGHT,
+  DIMENSION_TYPES.FEATURE,
+];
 
 const html = ref('');
 const isCurrentPointVisible = ref(false);
@@ -168,7 +177,7 @@ watchEffect(() => {
     invalidOpeningIds: state.invalidOpeningIds,
   };
 
-  console.log(shape)
+  console.log(shape, popup)
 
   // Render to sketch first so that it can be used in other components
   let shapeSketch = shapeDraft.render('shape', [shape], 'sketch');
@@ -244,7 +253,7 @@ const vertexModel = computed({
 const dimensionsModel = computed({
   get: () => localPerimeter.value,
   set: (params) => {
-    emit('update:perimeter', params.vertices);
+    emit('update', { id: props.shape.id, vertices: params.vertices });
   },
 });
 
