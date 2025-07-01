@@ -104,8 +104,6 @@ const { currentPointWithPrecision } = useDraggablePoint();
 
 const availableAxisDimensionTypes = [
   DIMENSION_TYPES.AXIS,
-  DIMENSION_TYPES.WIDTH,
-  DIMENSION_TYPES.HEIGHT,
   DIMENSION_TYPES.FEATURE,
 ];
 
@@ -174,10 +172,7 @@ watchEffect(() => {
     layers: props.layers,
     perimeter: localPerimeter.value,
     activeFeatureId: state.activeFeatureId,
-    invalidOpeningIds: state.invalidOpeningIds,
   };
-
-  console.log(shape, popup)
 
   // Render to sketch first so that it can be used in other components
   let shapeSketch = shapeDraft.render('shape', [shape], 'sketch');

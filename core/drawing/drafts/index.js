@@ -3,7 +3,7 @@
 import shape from './shape';
 import feature from './feature';
 import perimeter from './perimeter.ts';
-import edgeDimsPerimeter from './edgeDimsPerimeter';
+import edgeDimsParallel from './edgeDimsParallel';
 import edgeDimsAxis from './edgeDimsAxis';
 
 // function fillStyle(fill) {
@@ -21,7 +21,7 @@ export default {
     shape,
     feature,
     perimeter,
-    edgeDimsPerimeter,
+    edgeDimsParallel,
     edgeDimsAxis,
   },
   xrefs: {},

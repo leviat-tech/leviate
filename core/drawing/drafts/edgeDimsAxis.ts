@@ -1,9 +1,4 @@
-import { Vector } from '@crhio/vector';
-import { convertFromSI } from '@crhio/concrete/src/utils/units';
-import { getSegmentsFromVertexList } from '../utils';
-import { Extents } from '../types/Drawings';
-import { PARALLEL_DIM_OFFSET } from '../constants.ts';
-import { Extents, PointWithBulge, Sketch, SketchPoint } from '../types';
+import { Extents, Sketch, SketchPoint, PointWithBulge } from '../types';
 import { AXIS_DIM_OFFSET, DIMENSION_TYPES } from "../constants";
 
 // TODO: inject units ref

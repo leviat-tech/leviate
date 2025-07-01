@@ -1,17 +1,15 @@
 import { FEATURE_TYPES } from '../constants';
-import { ShapeParams } from '../types/Drawings';
 import { PERIMETER_DIM_TYPES } from "../constants";
+import { ShapeParams, ShapeSketch, Feature } from '../types/Drawings';
 import { Sketch } from "../types/Sketch"
 
 export default {
-  func(sketch: Sketch, params: ShapeParams) {
-    let perimeter = sketch.user.perimeter(params.perimeter).name('perimeter');
-  func(sketch: Sketch, params) {
+  func(sketch: ShapeSketch, params: ShapeParams) {
     const { perimeter, features } = params;
-    let perimeterSketch = sketch.user.perimeter(perimeter).name('perimeter');
+    let perimeterSketch: Sketch = sketch.user.perimeter(perimeter).name('perimeter');
 
     const segments: Sketch[] = [];
-    const visibleElements: Sketch[] = [];
+    const visibleElements: (Sketch|null)[] = [];
 
     if (perimeter.length > 2) {
       features.forEach(feature => {
@@ -31,7 +29,7 @@ export default {
         }
       });
     }
-    const featuresSketches = features.map(feature => {
+    const featuresSketches = features.map((feature: Feature) => {
       const featureSketch = sketch.user.feature(feature);
 
       if (feature.cutout) {
@@ -59,7 +57,6 @@ export default {
     const perimeterDims = sketch.user[perimeterDimFeature]({
       vertices: params.perimeter,
       extents: perimeterSketch.extents,
-      shapeType: 'perimeter',
       isInteractive: true,
       getOffset: params.getPerimeterDimOffset
     });

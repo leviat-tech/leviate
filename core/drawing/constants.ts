@@ -52,8 +52,6 @@ export const DEFAULT_TOOLS = [
 ];
 
 export const DIMENSION_TYPES = {
-  WIDTH: 'dimension:width',
-  HEIGHT: 'dimension:height',
   AXIS: 'dimension:axis',
   PERIMETER: 'dimension:perimeter',
   FEATURE: 'dimension:feature',
