@@ -1,8 +1,13 @@
-import { Feature, PointWithBulge, ShapeParams } from "./Drawings";
-
 type Bulge = number;
 type Segment = [SketchPoint, SketchPoint];
 type FilletPoint = [SketchPoint, number];
+
+export interface Extents {
+    xmin: number;
+    xmax: number;
+    ymin: number;
+    ymax: number;
+}
 
 export type SketchPoint = [number, number];
 
@@ -45,13 +50,13 @@ export interface Sketch {
      const dimSketch = sketch.aligned_dim([0, 0], [4, 3]);
      Places an aligned dimension string traveling from the origin to [4, 3],
      with a distance label of "5".
-  
+
      const dimSketch = sketch.aligned_dim([0, 0], [4, 3], "right");
      Places the same aligned dimension string, but offset to the opposite side as in the previous example.
-  
+
      const dimSketch = sketch.aligned_dim([0, 0], [4, 3], 1);
      Places the same aligned dimension string, but with the offset bar one unit from the line between the two points.
-  
+
      const dimSketch = sketch.aligned_dim([0, 0], [4, 3], [3, 6]);
      Places the same aligned dimension string, but with the offset bar passing
      through the point [3, 6].
@@ -65,31 +70,32 @@ export interface Sketch {
     ) => Sketch;
     polyface: (...points: unknown[]) => Sketch;
     segment: (start: SketchPoint, end: SketchPoint) => Sketch;
-    style: (style: string) => Sketch;
+    style: (style: string|unknown) => Sketch;
     dataset: (...args: unknown[]) => Sketch;
-    add: (...sketch: Sketch[]) => Sketch;
+    add: (...sketch: (Sketch|null)[]) => Sketch;
     translate: (x: number, y: number) => Sketch;
     subtract: (sketch: Sketch) => Sketch;
     z: (index: number) => Sketch;
     rotate: (angle: number, units?: string) => Sketch;
     clone: () => Sketch;
+    extents: Extents;
     /**
      * Adds a rectangle to a sketch. A rectangle is a "polyface"--a closed chain of segments and arcs.
      *
      *  Construction: xmin, ymin, xmax, ymax, radius
      *
      const rectSketch = sketch.rectangle(1, 1, 11, 6, 1);
-  
+
      Construction: origin, width, height, radius
-  
+
      const rectSketch = sketch.rectangle([1, 1], 10, 5, 1);
-  
+
      Construction: corner1, corner2, radius
-  
+
      const rectSketch = sketch.rectangle([1, 1], [11, 6], 1);
-  
+
      Construction: segment, height, radius
-  
+
      const rectSketch = sketch.rectangle([[1, 1], [11, 1]], 5, 1);
      */
     rectangle: (...args: RectangleArgs) => Sketch;
@@ -107,8 +113,6 @@ export interface Sketch {
     text: (text: string, p: [number, number]) => Sketch;
     // TODO: separate dynamic user features
     user: {
-        shape?: (params: ShapeParams) => Sketch;
-        perimeter: (params: Array<PointWithBulge>) => Sketch;
-        feature: (params: Feature) => Sketch;
+        [key: string]: ((params: any) => Sketch)
     };
 }

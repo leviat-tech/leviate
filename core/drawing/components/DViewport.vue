@@ -117,7 +117,7 @@ const aspectRatio = computed(() => {
 });
 
 const extents = computed(() => {
-  return sketch.value.extents || props.extents;
+  return sketch.value?.extents || props.extents;
 });
 
 const ZOOM_LIMITS = {

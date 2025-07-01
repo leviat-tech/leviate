@@ -93,7 +93,7 @@ const shapeParams = computed(() => {
       return edgeIndex === 2 ? 2 : 1;
     },
     dimType: PERIMETER_DIM_TYPES.AXIS,
-    features: features.value
+    features: props.entity.features || features.value
   }
 });
 
@@ -108,6 +108,7 @@ function onUpdate({ vertices, location, id }) {
 
   return transact(`Update ${feature.type}`, () => {
     Object.assign(feature, { location, vertices });
+    props.entity.features = features;
   });
 }
 

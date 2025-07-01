@@ -1,8 +1,57 @@
-import { ToolRegistrationConfig } from '../types/Drawings';
+import { defineAsyncComponent, inject, Reactive, reactive, Ref, ref } from 'vue';
+import { DEFAULT_TOOLS } from "../constants";
+import { ToolRegistrationConfig, Point } from '../types/Drawings';
 import { Sketch } from '../types/Sketch';
 
-import { defineAsyncComponent, inject, reactive, ref } from 'vue';
-import { DEFAULT_TOOLS } from "../constants";
+interface ViewportConfig {
+  fontSizePx?: number;
+  dimFormatter?: (value: number) => string;
+  proximityDistance?: number;
+  precision?: number;
+  showGrid: boolean;
+  vertexRadius: number;
+}
+
+type UserViewportConfig = Partial<ViewportConfig> | undefined;
+
+interface ViewportState {
+  currentTool: string;
+  keyModifiers: { [key: string]: boolean };
+  isPointerActive: boolean;
+  isDragging: boolean;
+  gridPrecision: number;
+  pxToSvg: number;
+  currentPoint: Point;
+}
+
+interface Viewport {
+  config: ViewportConfig;
+  sketch: Ref<Sketch|null>;
+  state: ViewportState;
+}
+
+interface ViewportsStore {
+  [key: string]: Viewport;
+}
+
+interface ToolsStore {
+  [key: string]: ToolRegistrationConfig;
+}
+
+type CurrentTool = { [key: string]: true };
+
+interface Tools {
+  current: CurrentTool;
+  register: (toolConfig: ToolRegistrationConfig) => void;
+  _raw: ToolsStore;
+  _setCurrent: (toolId: string) => boolean | Promise<boolean> | void;
+  [key: string]:
+    ToolsStore |
+    CurrentTool |
+    ((toolConfig: ToolRegistrationConfig) => void) |
+    ((toolId: string) => boolean | Promise<boolean> | void) |
+    string
+}
 
 const globalConfig = reactive({
   $l: (val: string) => val,
@@ -12,10 +61,11 @@ const currentTool = ref('pointer');
 const setCurrentTool = (tool: string) => {
   currentTool.value = tool;
 };
-const availableTools = {};
+const availableTools: ToolsStore = {};
 const toolIcons = {};
 
-const tools = new Proxy(availableTools, {
+// @ts-expect-error - Tools is correct interface but error due to Proxy
+const tools: Tools = new Proxy(availableTools, {
   get(target, prop: string) {
     switch (prop) {
       case 'current':
@@ -73,53 +123,15 @@ DEFAULT_TOOLS.forEach(toolId => {
     id: toolId,
     icon: defineAsyncComponent(() => import(`../assets/${toolId}.svg`))
   })
-})
+});
 
 function getOrigin() {
   return { x: 0, y: 0 };
 }
 
-const viewports = {};
+const viewports: ViewportsStore = {};
 
-/**
- * @typedef Point
- * @param { number } x
- * @param { number } y
- */
-
-/**
- * @typedef ViewportConfig
- * @param { number } fontSizePx - font size in pixels
- * @param { function } dimFormatter - function for converting SI to dim display value
- * @param { number } proximityDistance - distance in px from a segment to show a new suggested vertex
- * @param { number } precision - snap precision
- * @param { boolean } showGrid - whether to display gridlines
- * @param { number } vertexRadius - radius of editable vertices
- */
-
-/**
- * @typedef ViewportState
- * @param { string } currentTool
- * @param { object } keyModifiers
- * @param { boolean } isPointerActive
- * @param { boolean } isDragging
- * @param { number } gridPrecision
- * @param { number } pxToSvg
- * @param { Point } currentPoint
- */
-
-/**
- * @typedef Viewport
- * @param { ViewportConfig } config,
- * @param { Sketch } sketch,
- * @param { ViewportState } state,
- */
-
-/**
- * @param { ViewportConfig } userConfig
- * @returns Viewport
- */
-function createViewport(userConfig) {
+function createViewport(userConfig: UserViewportConfig): Viewport {
   const config = reactive({
     fontSizePx: 12,
     unitScaleFactor: 1,
@@ -155,8 +167,7 @@ function createViewport(userConfig) {
 
   return {
     config: { ...config, ...globalConfig },
-    shape: ref({}),
-    sketch: ref({}),
+    sketch: ref(null),
     state,
   };
 }
@@ -168,7 +179,7 @@ const popup = reactive({
   data: {},
 });
 
-function openPopup(e, data) {
+function openPopup(e: MouseEvent, data: unknown) {
   Object.assign(popup, {
     target: e.target,
     x: e.clientX,
@@ -185,14 +196,19 @@ function closePopup() {
   });
 }
 
-/**
- * @param { ViewportConfig | object } config
- * @returns { Viewport }
- */
-export default function useDrawing(config?: object): {
-  state: {};
-  sketch: Sketch;
-} {
+interface ViewportExport extends Viewport {
+  tools: Tools;
+  openPopup: (e: MouseEvent, data: unknown) => void;
+  closePopup: () => void;
+  popup: Reactive<{
+    isOpen: boolean;
+    x: number;
+    y: number;
+    data: unknown,
+  }>
+}
+
+export default function useDrawing(config?: UserViewportConfig | undefined): ViewportExport {
   const viewportName = inject('viewportName', 'DEFAULT');
 
   viewports[viewportName] ??= createViewport(config);
@@ -203,9 +219,5 @@ export default function useDrawing(config?: object): {
     openPopup,
     closePopup,
     popup,
-    loadGlobalConfig: useGlobalConfig => {
-      Object.assign(globalConfig, useGlobalConfig);
-      Object.assign(viewports[viewportName].config, useGlobalConfig);
-    },
   };
 }
