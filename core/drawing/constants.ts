@@ -39,12 +39,12 @@ export const PERIMETER_DIM_TYPES = {
 }
 
 export const DEFAULT_TOOLS = [
-  'pointer',
-  'new_polygon',
-  'add_vertex',
-  'delete_vertex',
-  'round_off',
-  'mirror_geometry',
+  TOOLBAR_OPTIONS.POINTER,
+  TOOLBAR_OPTIONS.ROUND_OFF,
+  TOOLBAR_OPTIONS.ADD_VERTEX,
+  TOOLBAR_OPTIONS.NEW_POLYGON,
+  TOOLBAR_OPTIONS.DELETE_VERTEX,
+  TOOLBAR_OPTIONS.MIRROR_GEOMETRY,
 ];
 
 export const DIMENSION_TYPES = {

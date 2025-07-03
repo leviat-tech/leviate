@@ -9,12 +9,12 @@
   />
 </template>
 
-<script setup>
-/* eslint-disable */
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
-import { Sketch, render } from '@crhio/jsdraft';
+<script setup lang="ts">
 import { drag as d3Drag } from 'd3-drag';
 import { selectAll } from 'd3-selection';
+import { Sketch, render } from '@crhio/jsdraft';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+
 import { useDraggablePoint } from '../index';
 import { calculateCentroid } from '../utils';
 
@@ -36,7 +36,7 @@ const isDragging = ref(false);
 const html = computed(() => {
   const { feature, style } = props;
   const params = { ...props.params, location: location.value, vertices: vertices.value };
-  const sketch = feature.func(new Sketch(), params)?.style(style);
+  const sketch = feature.func(new Sketch(), params)?.style('shape');
   return sketch ? render(sketch, 'svg', { viewport: null }) : null;
 });
 
@@ -89,25 +89,25 @@ function canDrag(e) {
 
 watch(
   () => props.params.location,
-  newLocation => {
+  (newLocation) => {
     location.value = newLocation;
-  },
+  }
 );
 
 //recalculating vertices to place pointer near the center of the opening
 watch(
   () => props.params.vertices,
-  newVertices => {
+  (newVertices) => {
     if (props.isPreviewEnabled && newVertices?.length > 0) {
       const { x: pointX, y: pointY } = currentPointWithPrecision.value;
       const centroid = calculateCentroid(newVertices);
-      vertices.value.forEach(vertice => {
+      vertices.value.forEach((vertice) => {
         vertice.x += pointX - centroid.x;
         vertice.y += pointY - centroid.y;
       });
     } else vertices.value = newVertices;
   },
-  { immediate: true },
+  { immediate: true }
 );
 
 watch(
@@ -115,12 +115,12 @@ watch(
   (val, prevVal) => {
     if ((!isDragging.value && !props.isPreviewEnabled) || !vertices.value?.length) return;
     const dif = { x: val.x - prevVal.x, y: val.y - prevVal.y };
-    vertices.value = vertices.value.map(vertex => ({
+    vertices.value = vertices.value.map((vertex) => ({
       x: vertex.x + dif.x,
       y: vertex.y + dif.y,
     }));
   },
-  { deep: true },
+  { deep: true }
 );
 
 onMounted(() => {
