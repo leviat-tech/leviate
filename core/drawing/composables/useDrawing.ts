@@ -1,7 +1,23 @@
-import { defineAsyncComponent, inject, Reactive, reactive, Ref, ref } from 'vue';
+import { inject, Reactive, reactive, Ref, ref } from 'vue';
 import { DEFAULT_TOOLS } from "../constants";
 import { ToolRegistrationConfig, Point } from '../types/Drawings';
 import { Sketch } from '../types/Sketch';
+
+import pointer from '../assets/pointer.svg';
+import new_polygon from '../assets/new_polygon.svg';
+import add_vertex from '../assets/add_vertex.svg';
+import delete_vertex from '../assets/delete_vertex.svg';
+import round_off from '../assets/round_off.svg';
+import mirror_geometry from '../assets/mirror_geometry.svg';
+
+const toolIcons = {
+  pointer,
+  new_polygon,
+  add_vertex,
+  delete_vertex,
+  round_off,
+  mirror_geometry,
+};
 
 interface ViewportConfig {
   fontSizePx?: number;
@@ -62,7 +78,6 @@ const setCurrentTool = (tool: string) => {
   currentTool.value = tool;
 };
 const availableTools: ToolsStore = {};
-const toolIcons = {};
 
 // @ts-expect-error - Tools is correct interface but error due to Proxy
 const tools: Tools = new Proxy(availableTools, {
@@ -72,6 +87,10 @@ const tools: Tools = new Proxy(availableTools, {
         return { [currentTool.value]: true };
       case 'register':
         return (toolConfig: ToolRegistrationConfig) => {
+          if (!availableTools[toolConfig.id] && !toolConfig.icon) {
+            throw new Error(`Tool '${toolConfig.id}' cannot be registered without an icon`);
+          }
+
           const { id } = toolConfig;
           if (availableTools[id]) {
             Object.assign(availableTools[id], toolConfig);
@@ -105,7 +124,7 @@ const tools: Tools = new Proxy(availableTools, {
             });
           }
         };
-      case 'icon':
+      case 'icons':
         return toolIcons;
 
       default:
@@ -121,7 +140,7 @@ const tools: Tools = new Proxy(availableTools, {
 DEFAULT_TOOLS.forEach(toolId => {
   tools.register({
     id: toolId,
-    icon: defineAsyncComponent(() => import(`../assets/${toolId}.svg`))
+    icon: toolIcons[toolId]
   })
 });
 

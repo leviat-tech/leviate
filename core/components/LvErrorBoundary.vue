@@ -1,12 +1,12 @@
 <!-- ErrorBoundary.vue -->
 <template>
   <div v-if="hasError">
-    <div class="p-4 bg-danger-100 border border-danger-400 text-danger-700 rounded">
+    <div class="m-4 p-4 bg-danger-100 border border-danger-400 text-danger-700 rounded">
       <h2 class="text-lg font-bold mb-2">Error displaying drawing</h2>
       <p class="mb-4">We've caught an error in a child component.</p>
       <div class="bg-white p-2 rounded">
-        <div class="cursor-pointer">Error Details:</div>
-        <pre class="mt-2 text-sm whitespace-pre-wrap break-all"><code>{{ errorInfo }}</code></pre>
+        <div class="cursor-pointer mb-2">Error Details:</div>
+        <div v-for="detail in errorDetails" class="text-sm" v-html="detail"/>
       </div>
     </div>
   </div>
@@ -14,32 +14,32 @@
 </template>
 
 <script setup>
-import { ref, onErrorCaptured, watch } from 'vue';
+import { onErrorCaptured, ref, watch } from 'vue';
 
 const props = defineProps({
   instance: Object,
 });
 
-// Reactive state to track if an error has occurred
 const hasError = ref(false);
-// Reactive state to store error information
-const errorInfo = ref(null);
+const errorDetails = ref([]);
+
 
 onErrorCaptured((err, vm, info) => {
   hasError.value = true;
-  errorInfo.value = {
-    component: vm.$options.__name || 'Anonymous Component',
-    info: info,
-  };
-  console.error("Error Boundary Caught:", err, vm, info);
 
-  // Return false to prevent the error from propagating further up
-  // the component tree.
+  if (errorDetails.value.length === 0) {
+    errorDetails.value = [
+      `<b>Component</b>: ${vm.$options.__name || 'Anonymous Component'}`,
+      `<b>Info</b>: ${err.message}`
+    ];
+    }
+    console.error("Error Boundary Caught:", err, vm, info);
+
   return false;
 });
 
 watch(() => props.instance, () => {
   hasError.value = false;
-  errorInfo.value = null;
+  errorDetails.value = [];
 });
 </script>

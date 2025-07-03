@@ -15,7 +15,6 @@
 </template>
 
 <script setup lang="ts">
-import DToolbarButton from './DToolbarButton.vue';
 import useDrawing from '../composables/useDrawing.ts';
 import { ToolRegistrationConfig } from "../types/Drawings";
 

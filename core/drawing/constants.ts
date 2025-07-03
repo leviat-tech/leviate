@@ -45,10 +45,6 @@ export const DEFAULT_TOOLS = [
   'delete_vertex',
   'round_off',
   'mirror_geometry',
-  // 'opening_select',
-  'rect_opening',
-  'circle_opening',
-  'polygon_opening',
 ];
 
 export const DIMENSION_TYPES = {
