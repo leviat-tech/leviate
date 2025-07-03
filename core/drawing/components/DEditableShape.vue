@@ -22,7 +22,7 @@
     @click="addNewOpening"
   />
 
-  <!-- Updating existing openings   -->
+  <!-- Updating existing features   -->
   <DDraggableSketch
     v-for="feature in shape.features"
     :key="feature.id"
@@ -220,7 +220,7 @@ const popupVertices = computed(() => {
   }
 
   return [];
-  // TODO: openings
+  // TODO: features
 });
 
 const popupRadius = computed(() => {
