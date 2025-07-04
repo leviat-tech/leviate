@@ -10,18 +10,18 @@
     @stop-moving:vertex="handleMovingVertex"
   />
 
-  <!-- Adding a new opening -->
+  <!-- Adding a new feature -->
   <DNewGeometry
-    v-if="localOpening.shapeType === FEATURE_TYPES.POLYGONAL"
-    v-model="polygonalOpeningModel"
+    v-if="localFeature.shapeType === FEATURE_TYPES.POLYGONAL"
+    v-model="polygonalFeatureModel"
   />
   <DDraggableSketch
-    v-if="localOpening?.shapeType"
-    :key="localOpening.shapeType"
-    :params="localOpening"
+    v-if="localFeature?.shapeType"
+    :key="localFeature.shapeType"
+    :params="localFeature"
     :feature="featureDraft"
-    :is-preview-enabled="localOpening.shapeType !== FEATURE_TYPES.POLYGONAL"
-    @click="addNewOpening"
+    :is-preview-enabled="localFeature.shapeType !== FEATURE_TYPES.POLYGONAL"
+    @click="addNewFeature"
   />
 
   <!-- Updating existing features   -->
@@ -160,7 +160,7 @@ const defaultVertices = [
 const defaultLocation = { x: 0.1, y: 0.1 };
 const localPerimeter = ref(cloneDeep(props.shape.perimeter));
 
-const localOpening = ref<{
+const localFeature = ref<{
   shapeType: AvailableShapes | null;
   vertices: PointWithBulge[];
   location: Point;
@@ -294,19 +294,15 @@ const vertexWithRadiusModel = computed({
   },
 });
 
-const selectedOpening = computed(() =>
-  props.shape.openings.find(({ id }) => id === state.activeFeatureId)
-);
-
 const isRadiusPopupVisible = computed(() => {
   return popup.data.type === 'node' && state.currentTool === tools.round_off;
 });
 
-function addNewOpening() {
-  // polygonal opening should have a closed shape, which is handled separately
-  if (localOpening.value.shapeType === FEATURE_TYPES.POLYGONAL) return;
+function addNewFeature() {
+  // polygonal feature should have a closed shape, which is handled separately
+  if (localFeature.value.shapeType === FEATURE_TYPES.POLYGONAL) return;
 
-  emit('update', { type: 'addOpening', ...localOpening.value });
+  emit('update', { type: 'addOpening', ...localFeature.value });
 }
 
 function onFeatureDragStart(feature) {
@@ -320,14 +316,14 @@ function onFeatureDragEnd(feature, { location, vertices }) {
   emit('update', { id: feature.id, location, vertices });
 }
 
-function updateLocalOpening(
+function updateLocalFeature(
   shapeType: (typeof FEATURE_TYPES)[keyof typeof FEATURE_TYPES],
   vertices: PointWithBulge[],
   location: Point
 ) {
-  localOpening.value.shapeType = shapeType;
-  localOpening.value.vertices = vertices;
-  localOpening.value.location = { ...location };
+  localFeature.value.shapeType = shapeType;
+  localFeature.value.vertices = vertices;
+  localFeature.value.location = { ...location };
 }
 
 function handleMovingVertex(isDragging) {
@@ -338,22 +334,21 @@ onBeforeUnmount(() => {
   state.activeFeatureId = null;
 });
 
-const polygonalOpeningModel = computed({
-  get: () => localOpening.value.vertices,
+const polygonalFeatureModel = computed({
+  get: () => localFeature.value.vertices,
   set: (vertices) => {
-    // Update the temp local opening's vertices when dragging
-    localOpening.value.vertices = vertices;
+    // Update the temp local features's vertices when dragging
+    localFeature.value.vertices = vertices;
     if (
       state.currentTool === TOOLBAR_OPTIONS.POINTER &&
-      localOpening.value.shapeType === FEATURE_TYPES.POLYGONAL &&
-      localOpening.value.vertices.length > 2
+      localFeature.value.shapeType === FEATURE_TYPES.POLYGONAL &&
+      localFeature.value.vertices.length > 2
     ) {
-      // localOpening.value.type = OPENING_TYPES.polygonal;
-      emit('update', { type: 'addOpening', ...localOpening.value });
+      emit('update', { type: 'addOpening', ...localFeature.value });
 
-      localOpening.value.vertices = [];
-      localOpening.value.location = { ...defaultLocation };
-      localOpening.value.shapeType = null;
+      localFeature.value.vertices = [];
+      localFeature.value.location = { ...defaultLocation };
+      localFeature.value.shapeType = null;
     }
   },
 });
@@ -363,15 +358,15 @@ watch(
   (tool) => {
     switch (tool) {
       case TOOLBAR_OPTIONS.POLYGON_OPENING:
-        updateLocalOpening(FEATURE_TYPES.POLYGONAL, [], defaultLocation);
+        updateLocalFeature(FEATURE_TYPES.POLYGONAL, [], defaultLocation);
         isCurrentPointVisible.value = false;
         break;
       case TOOLBAR_OPTIONS.RECT_OPENING:
-        updateLocalOpening(FEATURE_TYPES.RECTANGULAR, defaultVertices, defaultLocation);
+        updateLocalFeature(FEATURE_TYPES.RECTANGULAR, defaultVertices, defaultLocation);
         isCurrentPointVisible.value = true;
         break;
       case TOOLBAR_OPTIONS.CIRCLE_OPENING:
-        updateLocalOpening(FEATURE_TYPES.CIRCULAR, defaultVertices, defaultLocation);
+        updateLocalFeature(FEATURE_TYPES.CIRCULAR, defaultVertices, defaultLocation);
         isCurrentPointVisible.value = true;
         break;
       case TOOLBAR_OPTIONS.MIRROR_GEOMETRY:
@@ -379,7 +374,7 @@ watch(
         perimeterModel.value = mirrorPath(perimeterModel.value);
         break;
       default:
-        if (localOpening.value.type !== FEATURE_TYPES.POLYGONAL) localOpening.value.shapeType = '';
+        if (localFeature.value.type !== FEATURE_TYPES.POLYGONAL) localFeature.value.shapeType = '';
         isCurrentPointVisible.value = false;
     }
   }
@@ -392,14 +387,14 @@ watch(
 
     state.currentTool = TOOLBAR_OPTIONS.POINTER;
 
-    if (localOpening.value?.shapeType === FEATURE_TYPES.POLYGONAL) {
-      if (localOpening.value.vertices.length >= 3) {
-        emit('update', { type: 'addOpening', ...localOpening.value });
+    if (localFeature.value?.shapeType === FEATURE_TYPES.POLYGONAL) {
+      if (localFeature.value.vertices.length >= 3) {
+        emit('update', { type: 'addOpening', ...localFeature.value });
       }
 
-      localOpening.value.vertices = [];
-      localOpening.value.location = { ...defaultLocation };
-      localOpening.value.shapeType = null;
+      localFeature.value.vertices = [];
+      localFeature.value.location = { ...defaultLocation };
+      localFeature.value.shapeType = null;
     }
   }
 );
@@ -446,8 +441,8 @@ watch(
   () => currentPointWithPrecision.value,
   (currentPoint) => {
     // setting only if opening has a valid type, i.e. insert opening tool selected
-    if (localOpening.value?.shapeType)
-      localOpening.value.location = { x: currentPoint.x, y: currentPoint.y };
+    if (localFeature.value?.shapeType)
+      localFeature.value.location = { x: currentPoint.x, y: currentPoint.y };
   }
 );
 </script>

@@ -29,9 +29,10 @@
 </template>
 
 <script setup lang="ts">
+import { TOOLBAR_OPTIONS } from '@crhio/leviate/drawing/constants.js';
 import useDrawing from '../composables/useDrawing.ts';
 import { ToolRegistrationConfig } from '../types';
-import { DefineComponent, ref } from 'vue';
+import { DefineComponent, ref, watch } from 'vue';
 
 export type ToolbarItem = {
   id: string;
@@ -79,4 +80,10 @@ const handleToolClick = (toolId: string, parentId?: string) => {
     emit('select', toolId);
   }
 };
+
+watch(() => state.currentTool , (val) => {
+  if(val === TOOLBAR_OPTIONS.POINTER) {
+    preview.value = ''
+  }
+})
 </script>
