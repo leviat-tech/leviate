@@ -7,7 +7,7 @@
     :class="styleClass"
     :cx="point.x"
     :cy="point.y"
-    :r="0.1"
+    :r="(radius || config.vertexRadius) * scale"
     @click="onClick"
   />
 </template>

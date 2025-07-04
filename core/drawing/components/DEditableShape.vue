@@ -129,7 +129,7 @@ const mergeDraftConfig = (prop) => {
 
 export type EmitParams =
   | {
-      type: 'addOpening';
+      type: 'addFeature';
 
       shapeType: AvailableShapes;
       location: Point;
@@ -302,7 +302,7 @@ function addNewFeature() {
   // polygonal feature should have a closed shape, which is handled separately
   if (localFeature.value.shapeType === FEATURE_TYPES.POLYGONAL) return;
 
-  emit('update', { type: 'addOpening', ...localFeature.value });
+  emit('update', { type: 'addFeature', ...localFeature.value });
 }
 
 function onFeatureDragStart(feature) {
@@ -344,7 +344,7 @@ const polygonalFeatureModel = computed({
       localFeature.value.shapeType === FEATURE_TYPES.POLYGONAL &&
       localFeature.value.vertices.length > 2
     ) {
-      emit('update', { type: 'addOpening', ...localFeature.value });
+      emit('update', { type: 'addFeature', ...localFeature.value });
 
       localFeature.value.vertices = [];
       localFeature.value.location = { ...defaultLocation };
@@ -358,14 +358,17 @@ watch(
   (tool) => {
     switch (tool) {
       case TOOLBAR_OPTIONS.POLYGON_OPENING:
+      case TOOLBAR_OPTIONS.POLYGON_RECESS:
         updateLocalFeature(FEATURE_TYPES.POLYGONAL, [], defaultLocation);
         isCurrentPointVisible.value = false;
         break;
       case TOOLBAR_OPTIONS.RECT_OPENING:
+      case TOOLBAR_OPTIONS.RECT_RECESS:
         updateLocalFeature(FEATURE_TYPES.RECTANGULAR, defaultVertices, defaultLocation);
         isCurrentPointVisible.value = true;
         break;
       case TOOLBAR_OPTIONS.CIRCLE_OPENING:
+      case TOOLBAR_OPTIONS.CIRCLE_RECESS:
         updateLocalFeature(FEATURE_TYPES.CIRCULAR, defaultVertices, defaultLocation);
         isCurrentPointVisible.value = true;
         break;
@@ -389,7 +392,7 @@ watch(
 
     if (localFeature.value?.shapeType === FEATURE_TYPES.POLYGONAL) {
       if (localFeature.value.vertices.length >= 3) {
-        emit('update', { type: 'addOpening', ...localFeature.value });
+        emit('update', { type: 'addFeature', ...localFeature.value });
       }
 
       localFeature.value.vertices = [];
@@ -413,29 +416,29 @@ watch(
   }
 );
 
-watch(
-  () => state.activeFeatureId,
-  (val) => {
-    if (val) {
-      emit('update:activeOpening', val);
-    }
-  }
-);
+// watch(
+//   () => state.activeFeatureId,
+//   (val) => {
+//     if (val) {
+//       emit('update:activeOpening', val);
+//     }
+//   }
+// );
 
-watch(
-  [() => state.actionKeys.Backspace, () => state.actionKeys.Delete],
-  ([backspaceKey, deleteKey]) => {
-    if (
-      (backspaceKey || deleteKey) &&
-      state.currentTool === tools.pointer &&
-      state.activeFeatureId
-    ) {
-      emit('delete:activeOpening', state.activeFeatureId);
-      state.activeFeatureId = null;
-      isCurrentPointVisible.value = false;
-    }
-  }
-);
+// watch(
+//   [() => state.actionKeys.Backspace, () => state.actionKeys.Delete],
+//   ([backspaceKey, deleteKey]) => {
+//     if (
+//       (backspaceKey || deleteKey) &&
+//       state.currentTool === tools.pointer &&
+//       state.activeFeatureId
+//     ) {
+//       emit('delete:activeOpening', state.activeFeatureId);
+//       state.activeFeatureId = null;
+//       isCurrentPointVisible.value = false;
+//     }
+//   }
+// );
 
 watch(
   () => currentPointWithPrecision.value,
