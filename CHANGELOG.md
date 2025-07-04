@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.0.16](https://github.com/leviat-tech/leviate/compare/v6.0.15...v6.0.16) (2025-07-04)
+
+
+* 2D openings ([#294](https://github.com/leviat-tech/leviate/issues/294)) ([58ba5f4](https://github.com/leviat-tech/leviate/commit/58ba5f4b061aa4da8e6e4d857599fba5d610b16f))
+* complete work on axis dimensions edit ([a1051b4](https://github.com/leviat-tech/leviate/commit/a1051b4b3eee44350bc8c7cf250e29b9e8ae0d05))
+* continue work on axis dimensions ([b8bff4e](https://github.com/leviat-tech/leviate/commit/b8bff4ee8b4dfcfac8ffbb1822abdcaa3fd28a63))
+* don't exit transaction early ([16e7e59](https://github.com/leviat-tech/leviate/commit/16e7e598cae6fea4dfe03f9075bfceedd610298b))
+* drawing icons ([edf2708](https://github.com/leviat-tech/leviate/commit/edf27086d34e0db640d617235269456d885f4858))
+* resolve conflicts and tidy dimensions ([290e9b4](https://github.com/leviat-tech/leviate/commit/290e9b45dd648c1e9d756cf257c2778bb7b2c0df))
+
 ## [6.0.15](https://github.com/leviat-tech/leviate/compare/v6.0.14...v6.0.15) (2025-06-03)
 
 
