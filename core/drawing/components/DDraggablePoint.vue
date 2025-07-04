@@ -11,24 +11,34 @@
   />
 </template>
 
-<script setup>
-/* eslint-disable */
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+<script setup lang="ts">
 import { drag as d3Drag } from 'd3-drag';
 import { selectAll } from 'd3-selection';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { AvailableColors } from '@crhio/concrete/src/types/FormElementProps';
+
 import useDrawing from '../composables/useDrawing';
 import removeVertex from '../operations/removeVertex';
+import { Point, PointWithBulge } from '../../drawing/types/Drawings';
 
 const { state, config } = useDrawing();
 
-const props = defineProps({
-  modelValue: { type: Object },
-  point: { type: Object, default: () => ({ x: 0, y: 0 }) },
-  color: { type: String, default: 'default' },
-  radius: { type: Number },
-  disabled: { type: Boolean, default: false },
-  isDeleteActive: { type: Boolean, default: false },
-});
+const props = withDefaults(
+  defineProps<{
+    radius?: number;
+    disabled?: boolean;
+    point?: Point | null;
+    color?: AvailableColors;
+    isDeleteActive?: boolean;
+    modelValue?: PointWithBulge[];
+  }>(),
+  {
+    color: 'default',
+    disabled: false,
+    isDeleteActive: false,
+    point: () => ({ x: 0, y: 0 }),
+  }
+);
 
 // Drag threshold in px to avoid drag event firing on click
 const dragThreshold = 5;

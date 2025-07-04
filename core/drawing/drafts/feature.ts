@@ -26,11 +26,16 @@ export default {
       case FEATURE_TYPES.POLYGONAL: {
         const { vertices } = feature;
 
-        if (vertices.length < 3) {
-          return sketch;
+        if (vertices.length <= 1) {
+          return sketch
         }
 
         const adjustedVertices: SketchPoint[] = vertices.map(({ x, y }) => [x, y]);
+
+        if (vertices.length === 2) {
+          return sketch.segment(adjustedVertices[0], adjustedVertices[1]);
+        }
+
 
         shape = sketch.polyface(...adjustedVertices);
         break;

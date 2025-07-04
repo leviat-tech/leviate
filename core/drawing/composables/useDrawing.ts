@@ -1,7 +1,7 @@
 import { inject, Reactive, reactive, Ref, ref } from 'vue';
+
+import { Point, Sketch, ToolRegistrationConfig } from '../types';
 import { DEFAULT_TOOLS } from "../constants";
-import { ToolRegistrationConfig, Point } from '../types/Drawings';
-import { Sketch } from '../types/Sketch';
 
 import pointer from '../assets/pointer.svg';
 import new_polygon from '../assets/new_polygon.svg';
@@ -42,7 +42,7 @@ interface ViewportState {
 
 interface Viewport {
   config: ViewportConfig;
-  sketch: Ref<Sketch|null>;
+  sketch: Ref<Sketch | null>;
   state: ViewportState;
 }
 
@@ -62,11 +62,11 @@ interface Tools {
   _raw: ToolsStore;
   _setCurrent: (toolId: string) => boolean | Promise<boolean> | void;
   [key: string]:
-    ToolsStore |
-    CurrentTool |
-    ((toolConfig: ToolRegistrationConfig) => void) |
-    ((toolId: string) => boolean | Promise<boolean> | void) |
-    string
+  ToolsStore |
+  CurrentTool |
+  ((toolConfig: ToolRegistrationConfig) => void) |
+  ((toolId: string) => boolean | Promise<boolean> | void) |
+  string
 }
 
 const globalConfig = reactive({
@@ -78,9 +78,8 @@ const setCurrentTool = (tool: string) => {
   currentTool.value = tool;
 };
 const availableTools: ToolsStore = {};
-
 // @ts-expect-error - Tools is correct interface but error due to Proxy
-const tools: Tools = new Proxy(availableTools, {
+const tools = new Proxy(availableTools, {
   get(target, prop: string) {
     switch (prop) {
       case 'current':
@@ -101,8 +100,16 @@ const tools: Tools = new Proxy(availableTools, {
       case '_raw':
         return availableTools;
       case '_setCurrent':
-        return (toolId: string) => {
-          const handler = availableTools[toolId]?.handler;
+        return (toolId: string, parentId?: string) => {
+
+          let handler;
+
+          if (parentId) {
+            handler = availableTools[parentId]?.children.find(child => child.id === toolId)?.handler
+          } else {
+            handler = availableTools[toolId]?.handler
+          }
+
 
           if (!handler) {
             setCurrentTool(toolId);

@@ -15,20 +15,30 @@ export enum DIM_ANCHOR {
 
 export const TOOLBAR_OPTIONS = {
   POINTER: 'pointer',
-  NEW_POLYGON: 'new_polygon',
-  ADD_VERTEX: 'add_vertex',
-  DELETE_VERTEX: 'delete_vertex',
+
   ROUND_OFF: 'round_off',
+  ADD_VERTEX: 'add_vertex',
+  NEW_POLYGON: 'new_polygon',
+  DELETE_VERTEX: 'delete_vertex',
+
   MIRROR_GEOMETRY: 'mirror_geometry',
-  POINT_BEARING: 'point_bearing',
+
   EDGE_BEARING: 'edge_bearing',
+  POINT_BEARING: 'point_bearing',
+
   RANGE_FOR_CONNECTORS: 'range_for_connectors',
-  POINT_LOADS: 'point_loads',
+
   LINE_LOADS: 'line_loads',
   AREA_LOADS: 'area_loads',
+  POINT_LOADS: 'point_loads',
+
   RECT_OPENING: 'rect_opening',
   CIRCLE_OPENING: 'circle_opening',
   POLYGON_OPENING: 'polygon_opening',
+
+  RECT_RECESS: 'rect_recess',
+  CIRCLE_RECESS: 'circle_recess',
+  POLYGON_RECESS: 'polygon_recess',
 } as const;
 
 export type AvailableToolbarOptions = typeof TOOLBAR_OPTIONS[keyof typeof TOOLBAR_OPTIONS]
@@ -39,12 +49,9 @@ export const PERIMETER_DIM_TYPES = {
 }
 
 export const DEFAULT_TOOLS = [
-  'pointer',
-  'new_polygon',
-  'add_vertex',
-  'delete_vertex',
-  'round_off',
-  'mirror_geometry',
+  TOOLBAR_OPTIONS.POINTER,
+  TOOLBAR_OPTIONS.ADD_VERTEX,
+  TOOLBAR_OPTIONS.DELETE_VERTEX,
 ];
 
 export const DIMENSION_TYPES = {
