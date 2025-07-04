@@ -1,5 +1,4 @@
 <template>
-  <!-- TODO solve problem with radius, static to make dragable point visibie but it should come form config which does not work right now-->
   <circle
     ref="pointRef"
     class="cursor-move stroke-transparent fill-black/60 stroke-[10px] concrete__draggable-point"
