@@ -30,7 +30,7 @@ export default {
       });
     }
     const featuresSketches = features.map((feature: Feature) => {
-      const featureSketch = sketch.user.feature(feature);
+      const featureSketch = sketch.user.feature(feature).style('recess');
 
       if (feature.cutout) {
         try {
@@ -41,6 +41,7 @@ export default {
         }
       }
 
+      return null;
       return featureSketch;
     });
 

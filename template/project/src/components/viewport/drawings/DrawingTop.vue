@@ -56,7 +56,6 @@ const features: Ref<Array<CircularFeature | RectangularFeature | PolygonalFeatur
     location: { x: 0.75, y: 1.25 },
     diameter: 0.5,
     cutout: true,
-    // style: 'recessBase'
   },
   {
     id: 'recessId',
@@ -81,7 +80,8 @@ const features: Ref<Array<CircularFeature | RectangularFeature | PolygonalFeatur
       { x: 2.5, y: 1.1 },
       { x: 2.5, y: 1.5 },
       { x: 2, y: 1.5 },
-    ]
+    ],
+    style: 'opening'
   }
 ]);
 
@@ -113,15 +113,6 @@ function onUpdate({ vertices, location, id }) {
 }
 
 const toolbarItems = [
-  {
-    id: 'new_polygon',
-    handler: () => {
-      alert('Free geometry')
-      props.entity.perimeter = [{ x: 0, y: 0, bulge: 0 }];
-      props.entity.shapeType = 'free_geometry';
-      return true;
-    }
-  },
   {
     id: 'some_tool',
     icon: AreaLoads,

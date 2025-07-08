@@ -1,7 +1,7 @@
 import { inject, Reactive, reactive, Ref, ref } from 'vue';
 
 import { Point, Sketch, ToolRegistrationConfig } from '../types';
-import { DEFAULT_TOOLS } from "../constants";
+import { DEFAULT_TOOLS, TOOLBAR_OPTIONS } from "../constants";
 
 import pointer from '../assets/pointer.svg';
 import new_polygon from '../assets/new_polygon.svg';
@@ -86,6 +86,7 @@ const tools = new Proxy(availableTools, {
         return { [currentTool.value]: true };
       case 'register':
         return (toolConfig: ToolRegistrationConfig) => {
+          console.log(availableTools);
           if (!availableTools[toolConfig.id] && !toolConfig.icon) {
             throw new Error(`Tool '${toolConfig.id}' cannot be registered without an icon`);
           }

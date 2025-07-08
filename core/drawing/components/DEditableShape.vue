@@ -38,7 +38,7 @@
   <!-- Freehand shape -->
   <DNewGeometry v-if="state.currentTool === tools.new_polygon" v-model="perimeterModel" />
 
-  <!-- required to enable rendering of non-svg entities inside svg tag -->
+  <!-- required to enable rendering of non-svg entities (input modals) inside svg tag -->
   <foreignObject>
     <Teleport to="body">
       <DPopupVertex
@@ -92,7 +92,7 @@ import DPopupDimensionPerimeter from './popup/DPopupDimensionPerimeter.vue';
 import DPopupDimensionAxis from './popup/DPopupDimensionAxis.vue';
 import { getSegmentRadiusFromVertexList } from '../utils';
 import useDraggablePoint from '../composables/useDraggablePoint';
-import { ShapeParams, StyleProp } from '../types';
+import { Feature, ShapeParams, StyleProp } from '../types';
 import { AvailableShapes, Point, PointWithBulge } from '@crhio/leviate/drawing/types/Drawings.js';
 
 const props = defineProps<{
@@ -298,6 +298,17 @@ const isRadiusPopupVisible = computed(() => {
   return popup.data.type === 'node' && state.currentTool === tools.round_off;
 });
 
+function getFeatureStyle(feature: Feature) {
+  const styleKey = feature.style || feature.type;
+  const styleObj: StyleProp | undefined = props.draftConfig.styles[styleKey];
+
+  if (!styleObj) {
+    console.warn('Could not retrieve styles for feature', feature);
+  }
+
+  return styleObj;
+}
+
 function addNewFeature() {
   // polygonal feature should have a closed shape, which is handled separately
   if (localFeature.value.shapeType === FEATURE_TYPES.POLYGONAL) return;
@@ -326,7 +337,7 @@ function updateLocalFeature(
   localFeature.value.location = { ...location };
 }
 
-function handleMovingVertex(isDragging) {
+function handleMovingVertex(isDragging: boolean) {
   isCurrentPointVisible.value = isDragging;
 }
 

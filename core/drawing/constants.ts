@@ -23,15 +23,6 @@ export const TOOLBAR_OPTIONS = {
 
   MIRROR_GEOMETRY: 'mirror_geometry',
 
-  EDGE_BEARING: 'edge_bearing',
-  POINT_BEARING: 'point_bearing',
-
-  RANGE_FOR_CONNECTORS: 'range_for_connectors',
-
-  LINE_LOADS: 'line_loads',
-  AREA_LOADS: 'area_loads',
-  POINT_LOADS: 'point_loads',
-
   RECT_OPENING: 'rect_opening',
   CIRCLE_OPENING: 'circle_opening',
   POLYGON_OPENING: 'polygon_opening',

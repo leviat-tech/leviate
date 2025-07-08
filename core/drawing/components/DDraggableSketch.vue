@@ -36,7 +36,7 @@ const isDragging = ref(false);
 const html = computed(() => {
   const { feature, style } = props;
   const params = { ...props.params, location: location.value, vertices: vertices.value };
-  const sketch = feature.func(new Sketch(), params)?.style('shape');
+  const sketch = feature.func(new Sketch(), params)?.style(style);
   return sketch ? render(sketch, 'svg', { viewport: null }) : null;
 });
 
