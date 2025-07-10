@@ -3,7 +3,7 @@ import useDraggablePoint from './composables/useDraggablePoint';
 
 import DShape from './components/DShape.vue';
 import DOrigin from './components/DOrigin.vue';
-import DToolbar from './components/DToolbar.vue';
+import DToolbar from './components/toolbar/DToolbar.vue';
 import DVertices from './components/DVertices.vue';
 import DViewport from './components/DViewport.vue';
 import DGridlines from './components/DGridlines.vue';
