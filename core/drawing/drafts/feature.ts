@@ -1,4 +1,4 @@
-import { FEATURE_TYPES } from '../constants';
+import { SHAPE_TYPES } from '../constants';
 import { CircularFeature, PolygonalFeature, RectangularFeature } from "../types/Drawings";
 import { Sketch, SketchPoint } from '../types/Sketch'
 
@@ -12,7 +12,7 @@ export default {
     };
 
     switch (feature.shapeType) {
-      case FEATURE_TYPES.CIRCULAR: {
+      case SHAPE_TYPES.CIRCULAR: {
         const { diameter, location } = feature;
 
         if (diameter <= 0) {
@@ -23,7 +23,7 @@ export default {
         break;
       }
 
-      case FEATURE_TYPES.POLYGONAL: {
+      case SHAPE_TYPES.POLYGONAL: {
         const { vertices } = feature;
 
         if (vertices.length <= 1) {
@@ -40,7 +40,7 @@ export default {
         shape = sketch.polyface(...adjustedVertices);
         break;
       }
-      case FEATURE_TYPES.RECTANGULAR: {
+      case SHAPE_TYPES.RECTANGULAR: {
         const { vertices, location } = feature;
 
         if (vertices.length < 3) {
@@ -57,7 +57,7 @@ export default {
       }
     }
 
-    const opacity = feature.isDragging ? 0.5 : 1;
+    const opacity = feature.isDragging ? 1 : 1;
 
     return sketch.add(shape).dataset(dataset).style(feature.style || feature.type || 'shape').style({ opacity });
   },

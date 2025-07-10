@@ -11,6 +11,7 @@
         :shape="shapeParams"
         :draft-config="draftConfig"
         @update="onUpdate"
+        @delete:feature="features = features.filter(({ id }) => id !== $event)"
         origin
       />
       <!--      @add:opening="addOpening"-->
@@ -28,15 +29,18 @@
 </template>
 
 <script setup lang="ts">
+import RectOpeningIcon from '@/assets/rect_opening.svg';
+import CircOpeningIcon from '@/assets/circle_opening.svg';
+import PolyOpeningIcon from '@/assets/polygon_opening.svg';
 import AreaLoads from '@/assets/area_loads.svg';
 import { computed, Ref, ref } from 'vue';
 import { transact } from '@crhio/leviate';
 import draftConfig from '@/draft/draft.config';
 import DViewport from '@crhio/leviate/drawing/components/DViewport.vue';
 import LvErrorBoundary from '@crhio/leviate/components/LvErrorBoundary.vue';
-import DToolbar from '@crhio/leviate/drawing/components/DToolbar.vue';
+import DToolbar from '@crhio/leviate/drawing/components/toolbar/DToolbar.vue';
 import DEditableShape from '@crhio/leviate/drawing/components/DEditableShape.vue';
-import { FEATURE_TYPES, PERIMETER_DIM_TYPES } from '@crhio/leviate/drawing/constants';
+import { SHAPE_TYPES, PERIMETER_DIM_TYPES } from '@crhio/leviate/drawing/constants';
 import {
   CircularFeature,
   PolygonalFeature,
@@ -52,7 +56,7 @@ const features: Ref<Array<CircularFeature | RectangularFeature | PolygonalFeatur
   {
     id: 'openingId',
     type: 'opening',
-    shapeType: FEATURE_TYPES.CIRCULAR,
+    shapeType: SHAPE_TYPES.CIRCULAR,
     location: { x: 0.75, y: 1.25 },
     diameter: 0.5,
     cutout: true,
@@ -60,7 +64,7 @@ const features: Ref<Array<CircularFeature | RectangularFeature | PolygonalFeatur
   {
     id: 'recessId',
     type: 'recess',
-    shapeType: FEATURE_TYPES.RECTANGULAR,
+    shapeType: SHAPE_TYPES.RECTANGULAR,
     location: { x: 0, y: 0 },
     vertices: [
       { x: 0, y: 0.5 },
@@ -73,7 +77,7 @@ const features: Ref<Array<CircularFeature | RectangularFeature | PolygonalFeatur
     id: 'upstandId',
     type: 'upstand',
     cutout: true,
-    shapeType: FEATURE_TYPES.RECTANGULAR,
+    shapeType: SHAPE_TYPES.RECTANGULAR,
     location: { x: 0, y: 0 },
     vertices: [
       { x: 2, y: 1.1 },
@@ -112,11 +116,50 @@ function onUpdate({ vertices, location, id }) {
   });
 }
 
+const TOOLBAR_OPTIONS = {
+  RECT_OPENING: 'rect_opening',
+  CIRCLE_OPENING: 'circle_opening',
+  POLYGON_OPENING: 'polygon_opening',
+
+  RECT_RECESS: 'rect_recess',
+  CIRCLE_RECESS: 'circle_recess',
+  POLYGON_RECESS: 'polygon_recess',
+}
+
 const toolbarItems = [
   {
     id: 'some_tool',
     icon: AreaLoads,
     handler: () => alert('You just clicked area loads')
-  }
+  },
+  {
+    id: 'openings',
+    children: [
+      {
+        id: TOOLBAR_OPTIONS.RECT_OPENING,
+        icon: RectOpeningIcon,
+        params: { shapeType: SHAPE_TYPES.RECTANGULAR },
+        handler: () => {
+          return true;
+        },
+      },
+      {
+        id: TOOLBAR_OPTIONS.CIRCLE_OPENING,
+        icon: CircOpeningIcon,
+        params: { shapeType: SHAPE_TYPES.CIRCULAR },
+        handler: () => {
+          return true;
+        },
+      },
+      {
+        id: 'polygon_opening',
+        icon: PolyOpeningIcon,
+        params: { shapeType: SHAPE_TYPES.POLYGONAL },
+        handler: () => {
+          return true;
+        },
+      },
+    ],
+  },
 ];
 </script>

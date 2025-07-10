@@ -1,4 +1,4 @@
-import { FEATURE_TYPES } from '../constants';
+import { SHAPE_TYPES } from '../constants';
 import { PERIMETER_DIM_TYPES } from "../constants";
 import { ShapeParams, ShapeSketch, Feature } from '../types/Drawings';
 import { Sketch } from "../types/Sketch"
@@ -13,7 +13,7 @@ export default {
 
     if (perimeter.length > 2) {
       features.forEach(feature => {
-        if (feature.shapeType === FEATURE_TYPES.POLYGONAL) {
+        if (feature.shapeType === SHAPE_TYPES.POLYGONAL) {
           const vertexCount = feature.vertices.length;
 
           if (vertexCount <= 1) {
@@ -30,7 +30,7 @@ export default {
       });
     }
     const featuresSketches = features.map((feature: Feature) => {
-      const featureSketch = sketch.user.feature(feature).style('recess');
+      const featureSketch = sketch.user.feature(feature);
 
       if (feature.cutout) {
         try {
@@ -41,7 +41,6 @@ export default {
         }
       }
 
-      return null;
       return featureSketch;
     });
 

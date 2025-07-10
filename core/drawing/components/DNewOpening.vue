@@ -1,20 +1,20 @@
 <template class="viewport__new_geometry">
   <g>
     <circle
-      v-if="opening.type === FEATURE_TYPES.circular"
+      v-if="opening.type === SHAPE_TYPES.circular"
       :r="radius"
       :cx="opening.location.x"
       :cy="opening.location.y"
       :fill="style.fill"
       :opacity="style.opacity"
     />
-    <template v-if="opening.type === FEATURE_TYPES.polygonal">
+    <template v-if="opening.type === SHAPE_TYPES.polygonal">
       <path :d="path" stroke-width="2" vector-effect="non-scaling-stroke" class="stroke-danger" />
       <polygon :points="points" :opacity="style.opacity" :style="`fill: ${style.fill}`" />
     </template>
     <!-- TODO: remove text's conditional once rectangular added -->
     <text
-      v-if="opening.type !== FEATURE_TYPES.rectangular"
+      v-if="opening.type !== SHAPE_TYPES.rectangular"
       text-anchor="middle"
       :x="opening.location.x"
       :y="-opening.location.y"
@@ -30,7 +30,7 @@
 /* eslint-disable */
 import { computed } from 'vue';
 import useDraggablePoint from '../composables/useDraggablePoint';
-import { FEATURE_TYPES } from '../constants';
+import { SHAPE_TYPES } from '../constants';
 
 const props = defineProps({
   opening: Object,
