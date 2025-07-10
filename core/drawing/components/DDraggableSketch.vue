@@ -3,7 +3,8 @@
   <g
     v-if="html"
     ref="el"
-    style="vector-effect: non-scaling-stroke !important; paint-order: stroke fill markers"
+    style=""
+    stroke-width="10"
     @click="onClick"
     v-html="html"
   />
@@ -15,19 +16,20 @@ import { selectAll } from 'd3-selection';
 import { Sketch, render } from '@crhio/jsdraft';
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
-import { useDraggablePoint } from '../index';
+import useDraggablePoint from '../composables/useDraggablePoint';
 import { calculateCentroid } from '../utils';
+import { StyleProp } from '../types';
 
 const { currentPointWithPrecision } = useDraggablePoint();
 
-const props = defineProps({
-  feature: { type: Object },
-  params: { type: Object },
-  style: { type: Object },
-  disabled: { type: Boolean, default: false },
-  isDeleteActive: { type: Boolean, default: false },
-  isPreviewEnabled: { type: Boolean, default: false },
-});
+const props = defineProps<{
+  feature: unknown,
+  params: unknown,
+  style: StyleProp,
+  disabled?: boolean;
+  isSelected: boolean;
+  isPreviewEnabled?: boolean;
+}>();
 
 const location = ref(props.params.location);
 const vertices = ref(props.params.vertices);

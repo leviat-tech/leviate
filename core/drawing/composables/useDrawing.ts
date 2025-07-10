@@ -1,6 +1,6 @@
 import { inject, Reactive, reactive, Ref, ref } from 'vue';
 
-import { Point, Sketch, ToolRegistrationConfig } from '../types';
+import { Point, Sketch, ToolItem } from '../types';
 import { DEFAULT_TOOLS, TOOLBAR_OPTIONS } from "../constants";
 
 import pointer from '../assets/pointer.svg';
@@ -32,12 +32,24 @@ type UserViewportConfig = Partial<ViewportConfig> | undefined;
 
 interface ViewportState {
   currentTool: string;
-  keyModifiers: { [key: string]: boolean };
   isPointerActive: boolean;
   isDragging: boolean;
   gridPrecision: number;
   pxToSvg: number;
   currentPoint: Point;
+  selectedFeatureId: string | null;
+  keyModifiers: {
+    Alt: boolean;
+    Control: boolean;
+    Shift: boolean;
+    Meta: boolean;
+  },
+  actionKeys: {
+    Escape: boolean;
+    Backspace: boolean;
+    Delete: boolean;
+  },
+  toolParams: any,
 }
 
 interface Viewport {
@@ -51,20 +63,20 @@ interface ViewportsStore {
 }
 
 interface ToolsStore {
-  [key: string]: ToolRegistrationConfig;
+  [key: string]: ToolItem;
 }
 
 type CurrentTool = { [key: string]: true };
 
 interface Tools {
   current: CurrentTool;
-  register: (toolConfig: ToolRegistrationConfig) => void;
+  register: (toolConfig: ToolItem) => void;
   _raw: ToolsStore;
   _setCurrent: (toolId: string) => boolean | Promise<boolean> | void;
   [key: string]:
   ToolsStore |
   CurrentTool |
-  ((toolConfig: ToolRegistrationConfig) => void) |
+  ((toolConfig: ToolItem) => void) |
   ((toolId: string) => boolean | Promise<boolean> | void) |
   string
 }
@@ -85,12 +97,7 @@ const tools = new Proxy(availableTools, {
       case 'current':
         return { [currentTool.value]: true };
       case 'register':
-        return (toolConfig: ToolRegistrationConfig) => {
-          console.log(availableTools);
-          if (!availableTools[toolConfig.id] && !toolConfig.icon) {
-            throw new Error(`Tool '${toolConfig.id}' cannot be registered without an icon`);
-          }
-
+        return (toolConfig: ToolItem) => {
           const { id } = toolConfig;
           if (availableTools[id]) {
             Object.assign(availableTools[id], toolConfig);
@@ -189,7 +196,9 @@ function createViewport(userConfig: UserViewportConfig): Viewport {
     gridPrecision: 1,
     pxToSvg: 1,
     currentPoint: getOrigin(),
-    activePath: null,
+    // activePath: null,
+    selectedFeatureId: null,
+    toolParams: ref({}),
   });
 
   return {

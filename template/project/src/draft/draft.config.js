@@ -17,8 +17,8 @@ export default {
         opacity: '0'
       },
       stroke: {
-        color: 'black',
-        opacity: 0.25,
+        color: 'transparent',
+        opacity: 1,
       },
     },
     recessBase: {
@@ -48,17 +48,6 @@ export default {
       stroke: {
         color: 'black',
         opacity: 0.25,
-      },
-    },
-
-    shape: {
-      fill: {
-        color: '#3435ff',
-        opacity: 0.25,
-      },
-      stroke: {
-        color: 'black',
-        opacity: 0.5,
       },
     },
   },
