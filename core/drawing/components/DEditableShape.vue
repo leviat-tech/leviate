@@ -97,7 +97,6 @@ import { getSegmentRadiusFromVertexList } from '../utils';
 import useDraggablePoint from '../composables/useDraggablePoint';
 import { Feature, ShapeParams, StyleProp } from '../types';
 import { Point, PointWithBulge } from '@crhio/leviate/drawing/types/Drawings.js';
-import draftConfig from '../../../template/project/src/draft/draft.config';
 
 
 const props = defineProps<{
