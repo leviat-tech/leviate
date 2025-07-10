@@ -81,7 +81,8 @@ import {
   TOOLBAR_OPTIONS,
   DIMENSION_TYPES,
   AvailableToolbarOptions,
-} from '../constants.ts';
+  AvailableShapeTypes,
+} from '../constants';
 
 import DDraggableSketch from '../components/DDraggableSketch.vue';
 import featureDraft from '../drafts/feature';
@@ -136,8 +137,8 @@ const mergeDraftConfig = (prop) => {
 const emit = defineEmits<{
   (e: 'update:shape', payload: { vertices: PointWithBulge[] }): void;
   (e: 'update:feature', payload: { id: string, location: Point, vertices: PointWithBulge[] }): void;
-  (e: 'create:feature', payload: { shapeType: SHAPE_TYPE, location: Point, vertices: PointWithBulge[] }): void;
-  (e: 'delete:feature', payload: string): void;
+  (e: 'create:feature', payload: { shapeType: AvailableShapeTypes, location: Point, vertices: PointWithBulge[] }): void;
+  (e: 'delete:feature', payload: { id: string }): void;
 }>();
 
 const originProps = computed(() => {
@@ -151,18 +152,18 @@ const getDefaultVertices = () => [
   { x: 0.2, y: 0.2, bulge: 0 },
   { x: 0, y: 0.2, bulge: 0 },
 ];
-const defaultLocation = { x: 0.1, y: 0.1 };
+const getDefaultLocation = (): Point => ({ x: 0.1, y: 0.1 });
 const localPerimeter = ref(cloneDeep(props.shape.perimeter));
 
 const localFeature = ref<{
-  shapeType: SHAPE_TYPES | null;
+  shapeType: AvailableShapeTypes | null;
   vertices: PointWithBulge[];
   location: Point;
   diameter: number;
 }>({
   shapeType: null,
   vertices: getDefaultVertices(),
-  location: { ...defaultLocation },
+  location: getDefaultLocation(),
   diameter: config.circleOpeningDiameter,
 });
 
@@ -192,7 +193,6 @@ watchEffect(() => {
     ...props.shape,
     layers: props.layers,
     perimeter: localPerimeter.value,
-    activeFeatureId: state.activeFeatureId,
   };
 
   // Render to sketch first so that it can be used in other components
@@ -292,7 +292,7 @@ const isRadiusPopupVisible = computed(() => {
   return popup.data.type === 'node' && state.currentTool === tools.round_off;
 });
 
-function onNewFeatureClick(vertices) {
+function onNewFeatureClick(vertices?: PointWithBulge[]) {
   switch (localFeature.value.shapeType) {
     // polygonal feature should have a closed shape, which is handled separately
     case SHAPE_TYPES.POLYGONAL: return;
@@ -306,16 +306,19 @@ function onNewFeatureClick(vertices) {
 }
 
 function createFeature() {
-  emit('create:feature', { ...localFeature.value });
+  emit('create:feature', cloneDeep(localFeature.value));
 
   if (localFeature.value.shapeType === SHAPE_TYPES.POLYGONAL) {
     localFeature.value.vertices = [];
+    localFeature.value.location = getDefaultLocation();
   }
 }
 
 function getFeatureStyle(feature: Feature): StyleProp {
   const isActive = feature.id === state.selectedFeatureId;
-  return isActive || feature === localFeature.value ? shapeDraftConfig.styles.activeFeature : shapeDraftConfig.styles.draggableFeature;
+  return isActive || feature === localFeature.value
+    ? shapeDraftConfig.styles.activeFeature
+    : shapeDraftConfig.styles.draggableFeature;
 }
 
 function onFeatureDragStart(feature: Feature) {
@@ -330,7 +333,7 @@ function onFeatureDragEnd(feature, { location, vertices }) {
   emit('update:feature', { id: feature.id, location, vertices });
 }
 
-function updateLocalFeature(shapeType: SHAPE_TYPES | undefined) {
+function updateLocalFeature(shapeType: AvailableShapeTypes | undefined) {
   if (!shapeType) return;
 
   const isPolygonal = shapeType === SHAPE_TYPES.POLYGONAL;
@@ -340,7 +343,7 @@ function updateLocalFeature(shapeType: SHAPE_TYPES | undefined) {
   Object.assign(localFeature.value, {
     shapeType,
     vertices,
-    location: { ...defaultLocation },
+    location: getDefaultLocation(),
   });
 
   isCurrentPointVisible.value = !isPolygonal;
@@ -371,7 +374,7 @@ watch(
         perimeterModel.value = mirrorPath(perimeterModel.value);
         break;
       default:
-        if (localFeature.value.type !== SHAPE_TYPES.POLYGONAL) localFeature.value.shapeType = '';
+        if (localFeature.value.shapeType !== SHAPE_TYPES.POLYGONAL) localFeature.value.shapeType = null;
         isCurrentPointVisible.value = false;
     }
   }
@@ -383,12 +386,15 @@ watch(
     if (!esc) return;
 
     state.currentTool = TOOLBAR_OPTIONS.POINTER;
+    state.toolParams = {};
+    isCurrentPointVisible.value = false;
+    localFeature.value.shapeType = null;
 
     if (localFeature.value?.shapeType === SHAPE_TYPES.POLYGONAL) {
       if (localFeature.value.vertices.length >= 3) {
         createFeature();
       } else {
-        localFeature.vertices = [];
+        localFeature.value.vertices = [];
       }
     }
   }
@@ -418,7 +424,7 @@ watch(
       state.currentTool === tools.pointer &&
       state.selectedFeatureId
     ) {
-      emit('delete:feature', state.selectedFeatureId);
+      emit('delete:feature', { id: state.selectedFeatureId });
       state.selectedFeatureId = null;
       isCurrentPointVisible.value = false;
     }
