@@ -7,6 +7,8 @@ export const SHAPE_TYPES = {
   POLYGONAL: 'polygonal',
 } as const;
 
+export type AvailableShapeTypes = typeof SHAPE_TYPES[keyof typeof SHAPE_TYPES];
+
 export enum DIM_ANCHOR {
   start = 'start',
   centre = 'centre',
@@ -24,7 +26,7 @@ export const TOOLBAR_OPTIONS = {
   MIRROR_GEOMETRY: 'mirror_geometry',
 } as const;
 
-export type AvailableToolbarOptions = typeof TOOLBAR_OPTIONS[keyof typeof TOOLBAR_OPTIONS]
+export type AvailableToolbarOptions = typeof TOOLBAR_OPTIONS[keyof typeof TOOLBAR_OPTIONS];
 
 export const PERIMETER_DIM_TYPES = {
   AXIS: 'axis',

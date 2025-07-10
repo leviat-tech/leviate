@@ -24,7 +24,7 @@ interface ViewportConfig {
   dimFormatter?: (value: number) => string;
   proximityDistance?: number;
   precision?: number;
-  showGrid: boolean;
+  shNowGrid: boolean;
   vertexRadius: number;
 }
 
@@ -70,9 +70,9 @@ type CurrentTool = { [key: string]: true };
 
 interface Tools {
   current: CurrentTool;
-  register: (toolConfig: ToolItem) => void;
+  _register: (toolConfig: ToolItem) => void;
   _raw: ToolsStore;
-  _setCurrent: (toolId: string) => boolean | Promise<boolean> | void;
+  _setCurrent: (toolId: string, parentId?: string | null) => boolean | Promise<boolean> | void;
   [key: string]:
   ToolsStore |
   CurrentTool |
@@ -96,7 +96,7 @@ const tools = new Proxy(availableTools, {
     switch (prop) {
       case 'current':
         return { [currentTool.value]: true };
-      case 'register':
+      case '_register':
         return (toolConfig: ToolItem) => {
           const { id } = toolConfig;
           if (availableTools[id]) {
@@ -109,7 +109,6 @@ const tools = new Proxy(availableTools, {
         return availableTools;
       case '_setCurrent':
         return (toolId: string, parentId?: string) => {
-
           let handler;
 
           if (parentId) {
@@ -117,7 +116,6 @@ const tools = new Proxy(availableTools, {
           } else {
             handler = availableTools[toolId]?.handler
           }
-
 
           if (!handler) {
             setCurrentTool(toolId);
@@ -153,7 +151,7 @@ const tools = new Proxy(availableTools, {
 });
 
 DEFAULT_TOOLS.forEach(toolId => {
-  tools.register({
+  tools._register({
     id: toolId,
     icon: toolIcons[toolId]
   })
