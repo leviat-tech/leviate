@@ -68,7 +68,6 @@ const path = computed(() => {
 
 function closePath() {
   if (props.modelValue.length > 2) {
-    state.currentTool = tools.pointer;
     emit('close-path');
   }
 }

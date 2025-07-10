@@ -58,6 +58,7 @@ export default {
       },
     },
     activeFeature: {
+      opacity: 1,
       fill: {
         color: 'transparent',
       },

@@ -27,7 +27,7 @@ const props = defineProps<{
   params: unknown,
   style: StyleProp,
   disabled?: boolean;
-  isSelected: boolean;
+  isSelected?: boolean;
   isPreviewEnabled?: boolean;
 }>();
 
@@ -51,7 +51,7 @@ const el = ref(null);
 const selection = ref(null);
 
 function onClick() {
-  emit('click');
+  emit('click', vertices.value);
 }
 
 function dragstart(e) {
