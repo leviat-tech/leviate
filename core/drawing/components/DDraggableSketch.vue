@@ -3,8 +3,6 @@
   <g
     v-if="html"
     ref="el"
-    style=""
-    stroke-width="10"
     @click="onClick"
     v-html="html"
   />
