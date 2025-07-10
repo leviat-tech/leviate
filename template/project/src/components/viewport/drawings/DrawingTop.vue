@@ -10,7 +10,9 @@
         :key="entity.id"
         :shape="shapeParams"
         :draft-config="draftConfig"
-        @update="onUpdate"
+        @update:shape="onUpdateShape"
+        @update:feature="onUpdateFeature"
+        @create:feature="onCreateFeature"
         @delete:feature="features = features.filter(({ id }) => id !== $event)"
         origin
       />
@@ -65,7 +67,7 @@ const features: Ref<Array<CircularFeature | RectangularFeature | PolygonalFeatur
     id: 'recessId',
     type: 'recess',
     shapeType: SHAPE_TYPES.RECTANGULAR,
-    location: { x: 0, y: 0 },
+    location: { x: 1, y: 0 },
     vertices: [
       { x: 0, y: 0.5 },
       { x: 0.5, y: 0.5 },
@@ -76,7 +78,6 @@ const features: Ref<Array<CircularFeature | RectangularFeature | PolygonalFeatur
   {
     id: 'upstandId',
     type: 'upstand',
-    cutout: true,
     shapeType: SHAPE_TYPES.RECTANGULAR,
     location: { x: 0, y: 0 },
     vertices: [
@@ -84,8 +85,7 @@ const features: Ref<Array<CircularFeature | RectangularFeature | PolygonalFeatur
       { x: 2.5, y: 1.1 },
       { x: 2.5, y: 1.5 },
       { x: 2, y: 1.5 },
-    ],
-    style: 'opening'
+    ]
   }
 ]);
 
@@ -101,19 +101,31 @@ const shapeParams = computed(() => {
   }
 });
 
-function onUpdate({ vertices, location, id }) {
-  if (id === props.entity.id) {
-    return transact('Update shape', () => {
+function onUpdateShape({ vertices }) {
+    transact('Update shape', () => {
       props.entity.perimeter = vertices;
     });
-  }
+}
 
+function onUpdateFeature({ vertices, location, id }) {
   const feature = features.value.find(feature => feature.id === id);
 
   return transact(`Update ${feature.type}`, () => {
     Object.assign(feature, { location, vertices });
     props.entity.features = features;
   });
+}
+
+function onCreateFeature(feature) {
+  console.log(feature.vertices);
+
+  features.value.push({
+    id: 'recessId',
+    type: 'recess',
+    ...feature
+  });
+
+  props.entity.features = features;
 }
 
 const TOOLBAR_OPTIONS = {

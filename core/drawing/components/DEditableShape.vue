@@ -14,15 +14,16 @@
   <DNewGeometry
     v-if="localFeature.shapeType === SHAPE_TYPES.POLYGONAL"
     v-model="polygonalFeatureModel"
+    @close-path="createFeature"
   />
   <DDraggableSketch
-    v-if="localFeature?.shapeType"
+    v-if="localFeature?.shapeType && state.isPointerActive"
     :key="localFeature.shapeType"
     :params="localFeature"
-    :style="getFeatureStyle(localFeature)"
+    :style="shapeDraftConfig.styles.activeFeature"
     :feature="featureDraft"
     :is-preview-enabled="localFeature.shapeType !== SHAPE_TYPES.POLYGONAL"
-    @click="addNewFeature"
+    @click="onNewFeatureClick"
   />
 
   <!-- Updating existing features   -->
@@ -60,8 +61,9 @@
     </Teleport>
   </foreignObject>
 
+  <!-- Current point annotation -->
   <DHoverText
-    v-if="isCurrentPointVisible"
+    v-if="isCurrentPointVisible && state.isPointerActive"
     :x="currentPointWithPrecision.x"
     :y="currentPointWithPrecision.y"
   />
@@ -131,24 +133,10 @@ const mergeDraftConfig = (prop) => {
   };
 };
 
-export type EmitParams =
-  | {
-      type: 'addFeature';
-
-      shapeType: SHAPE_TYPES;
-      location: Point;
-      vertices: PointWithBulge[];
-    }
-  | {
-      type: 'updatePerimeter';
-
-      id: string;
-      vertices: PointWithBulge[];
-    };
-
 const emit = defineEmits<{
-  (e: 'update', payload: EmitParams): void;
-  (e: 'create:feature', payload: Feature): void;
+  (e: 'update:shape', payload: { vertices: PointWithBulge[] }): void;
+  (e: 'update:feature', payload: { id: string, location: Point, vertices: PointWithBulge[] }): void;
+  (e: 'create:feature', payload: { shapeType: SHAPE_TYPE, location: Point, vertices: PointWithBulge[] }): void;
   (e: 'delete:feature', payload: string): void;
 }>();
 
@@ -157,7 +145,7 @@ const originProps = computed(() => {
 
   return props.origin === true ? {} : props.origin;
 });
-const defaultVertices = [
+const getDefaultVertices = () => [
   { x: 0, y: 0, bulge: 0 },
   { x: 0.2, y: 0, bulge: 0 },
   { x: 0.2, y: 0.2, bulge: 0 },
@@ -167,15 +155,13 @@ const defaultLocation = { x: 0.1, y: 0.1 };
 const localPerimeter = ref(cloneDeep(props.shape.perimeter));
 
 const localFeature = ref<{
-  id: string,
   shapeType: SHAPE_TYPES | null;
   vertices: PointWithBulge[];
   location: Point;
   diameter: number;
 }>({
-  id: 'local',
   shapeType: null,
-  vertices: [...defaultVertices],
+  vertices: getDefaultVertices(),
   location: { ...defaultLocation },
   diameter: config.circleOpeningDiameter,
 });
@@ -244,7 +230,7 @@ const perimeterModel = computed({
 
     // Emit the update event when not dragging, on drag ended
     if (!state.isDragging) {
-      emit('update', { id: props.shape.id, vertices });
+      emit('update:shape', { vertices });
     }
   },
 });
@@ -283,7 +269,7 @@ const vertexModel = computed({
 const dimensionsModel = computed({
   get: () => localPerimeter.value,
   set: (params) => {
-    emit('update', { type: 'updatePerimeter', id: props.shape.id, vertices: params.vertices });
+    emit('update:shape', { vertices: params.vertices });
   },
 });
 
@@ -306,16 +292,30 @@ const isRadiusPopupVisible = computed(() => {
   return popup.data.type === 'node' && state.currentTool === tools.round_off;
 });
 
-function addNewFeature() {
-  // polygonal feature should have a closed shape, which is handled separately
-  if (localFeature.value.shapeType === SHAPE_TYPES.POLYGONAL) return;
+function onNewFeatureClick(vertices) {
+  switch (localFeature.value.shapeType) {
+    // polygonal feature should have a closed shape, which is handled separately
+    case SHAPE_TYPES.POLYGONAL: return;
+    case SHAPE_TYPES.CIRCULAR: return createFeature();
+    case SHAPE_TYPES.RECTANGULAR: {
+      // Use updated vertices after interaction
+      localFeature.value.vertices = vertices;
+      return createFeature();
+    }
+  }
+}
 
-  emit('update', { type: 'addFeature', ...localFeature.value });
+function createFeature() {
+  emit('create:feature', { ...localFeature.value });
+
+  if (localFeature.value.shapeType === SHAPE_TYPES.POLYGONAL) {
+    localFeature.value.vertices = [];
+  }
 }
 
 function getFeatureStyle(feature: Feature): StyleProp {
   const isActive = feature.id === state.selectedFeatureId;
-  return isActive || feature.id === 'local' ? shapeDraftConfig.styles.activeFeature : shapeDraftConfig.styles.draggableFeature;
+  return isActive || feature === localFeature.value ? shapeDraftConfig.styles.activeFeature : shapeDraftConfig.styles.draggableFeature;
 }
 
 function onFeatureDragStart(feature: Feature) {
@@ -327,7 +327,7 @@ function onFeatureDragStart(feature: Feature) {
 function onFeatureDragEnd(feature, { location, vertices }) {
   feature.isDragging = false;
   isCurrentPointVisible.value = false;
-  emit('update', { id: feature.id, location, vertices });
+  emit('update:feature', { id: feature.id, location, vertices });
 }
 
 function updateLocalFeature(shapeType: SHAPE_TYPES | undefined) {
@@ -335,7 +335,7 @@ function updateLocalFeature(shapeType: SHAPE_TYPES | undefined) {
 
   const isPolygonal = shapeType === SHAPE_TYPES.POLYGONAL;
 
-  const vertices = isPolygonal ? [] : defaultVertices;
+  const vertices = isPolygonal ? [] : getDefaultVertices();
 
   Object.assign(localFeature.value, {
     shapeType,
@@ -359,17 +359,6 @@ const polygonalFeatureModel = computed({
   set: (vertices) => {
     // Update the temp local features's vertices when dragging
     localFeature.value.vertices = vertices;
-    if (
-      state.currentTool === TOOLBAR_OPTIONS.POINTER &&
-      localFeature.value.shapeType === SHAPE_TYPES.POLYGONAL &&
-      localFeature.value.vertices.length > 2
-    ) {
-      emit('update', { type: 'addFeature', ...localFeature.value });
-
-      localFeature.value.vertices = [];
-      localFeature.value.location = { ...defaultLocation };
-      localFeature.value.shapeType = null;
-    }
   },
 });
 
@@ -397,12 +386,10 @@ watch(
 
     if (localFeature.value?.shapeType === SHAPE_TYPES.POLYGONAL) {
       if (localFeature.value.vertices.length >= 3) {
-        emit('update', { type: 'addFeature', ...localFeature.value });
+        createFeature();
+      } else {
+        localFeature.vertices = [];
       }
-
-      localFeature.value.vertices = [];
-      localFeature.value.location = { ...defaultLocation };
-      localFeature.value.shapeType = null;
     }
   }
 );
@@ -422,15 +409,6 @@ watch(
     state.shape = newShape;
   }
 );
-
-// watch(
-//   () => state.activeFeatureId,
-//   (val) => {
-//     if (val) {
-//       emit('update:activeOpening', val);
-//     }
-//   }
-// );
 
 watch(
   [() => state.actionKeys.Backspace, () => state.actionKeys.Delete],
