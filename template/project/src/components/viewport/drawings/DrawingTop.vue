@@ -13,7 +13,7 @@
         @update:shape="onUpdateShape"
         @update:feature="onUpdateFeature"
         @create:feature="onCreateFeature"
-        @delete:feature="features = features.filter(({ id }) => id !== $event)"
+        @delete:feature="features = features.filter(({ id }) => id !== $event.id)"
         origin
       />
       <!--      @add:opening="addOpening"-->
@@ -42,12 +42,13 @@ import DViewport from '@crhio/leviate/drawing/components/DViewport.vue';
 import LvErrorBoundary from '@crhio/leviate/components/LvErrorBoundary.vue';
 import DToolbar from '@crhio/leviate/drawing/components/toolbar/DToolbar.vue';
 import DEditableShape from '@crhio/leviate/drawing/components/DEditableShape.vue';
-import { SHAPE_TYPES, PERIMETER_DIM_TYPES } from '@crhio/leviate/drawing/constants';
+import { PERIMETER_DIM_TYPES, SHAPE_TYPES } from '@crhio/leviate/drawing/constants';
 import {
   CircularFeature,
   PolygonalFeature,
   RectangularFeature
-} from "@crhio/leviate/drawing/types";
+} from '@crhio/leviate/drawing/types';
+import { cloneDeep } from 'lodash-es';
 
 const props = defineProps({
   entity: Object
@@ -93,21 +94,22 @@ const shapeParams = computed(() => {
   return {
     ...props.entity.$toJSON('*'),
     // An example of specifying offsets for edge dims
-    getPerimeterDimOffset(edgeIndex) {
+    getPerimeterDimOffset(edgeIndex: number) {
       return edgeIndex === 2 ? 2 : 1;
     },
     dimType: PERIMETER_DIM_TYPES.AXIS,
-    features: props.entity.features || features.value
-  }
+    features: props.entity.features || cloneDeep(features.value)
+  };
 });
 
 function onUpdateShape({ vertices }) {
-    transact('Update shape', () => {
-      props.entity.perimeter = vertices;
-    });
+  transact('Update shape', () => {
+    props.entity.perimeter = vertices;
+  });
 }
 
 function onUpdateFeature({ vertices, location, id }) {
+  console.log(vertices, location);
   const feature = features.value.find(feature => feature.id === id);
 
   return transact(`Update ${feature.type}`, () => {
@@ -119,13 +121,16 @@ function onUpdateFeature({ vertices, location, id }) {
 function onCreateFeature(feature) {
   console.log(feature.vertices);
 
-  features.value.push({
-    id: 'recessId',
-    type: 'recess',
-    ...feature
-  });
+  transact(`Create ${feature.type}`, () => {
 
-  props.entity.features = features;
+    features.value.push({
+      id: 'recessId',
+      type: 'recess',
+      ...feature
+    });
+
+    props.entity.features = features;
+  });
 }
 
 const TOOLBAR_OPTIONS = {
@@ -136,7 +141,7 @@ const TOOLBAR_OPTIONS = {
   RECT_RECESS: 'rect_recess',
   CIRCLE_RECESS: 'circle_recess',
   POLYGON_RECESS: 'polygon_recess',
-}
+};
 
 const toolbarItems = [
   {
