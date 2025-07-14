@@ -40,13 +40,33 @@ export default {
 
     shape: {
       fill: {
-        color: '#3435ff',
-        opacity: 0.25,
+        color: '#009dd3',
+        opacity: 0.5,
       },
       stroke: {
         color: 'black',
         opacity: 0.25,
       },
     },
+    draggableFeature: {
+      fill: {
+        color: 'transparent',
+      },
+      stroke: {
+        color: 'black',
+        opacity: 0.25,
+      },
+    },
+    activeFeature: {
+      opacity: 1,
+      fill: {
+        color: 'transparent',
+      },
+      stroke: {
+        width: 2,
+        color: '#0066ff',
+        opacity: 1,
+      }
+    }
   },
 };

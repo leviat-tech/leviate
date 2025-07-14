@@ -1,8 +1,85 @@
-import { ToolRegistrationConfig } from '../types/Drawings';
-import { Sketch } from '../types/Sketch';
+import { inject, Reactive, reactive, Ref, ref } from 'vue';
 
-import { defineAsyncComponent, inject, reactive, ref } from 'vue';
-import { DEFAULT_TOOLS } from "../constants";
+import { Point, Sketch, ToolItem } from '../types';
+import { DEFAULT_TOOLS, TOOLBAR_OPTIONS } from "../constants";
+
+import pointer from '../assets/pointer.svg';
+import new_polygon from '../assets/new_polygon.svg';
+import add_vertex from '../assets/add_vertex.svg';
+import delete_vertex from '../assets/delete_vertex.svg';
+import round_off from '../assets/round_off.svg';
+import mirror_geometry from '../assets/mirror_geometry.svg';
+
+const toolIcons = {
+  pointer,
+  new_polygon,
+  add_vertex,
+  delete_vertex,
+  round_off,
+  mirror_geometry,
+};
+
+interface ViewportConfig {
+  fontSizePx?: number;
+  dimFormatter?: (value: number) => string;
+  proximityDistance?: number;
+  precision?: number;
+  shNowGrid: boolean;
+  vertexRadius: number;
+}
+
+type UserViewportConfig = Partial<ViewportConfig> | undefined;
+
+interface ViewportState {
+  currentTool: string;
+  isPointerActive: boolean;
+  isDragging: boolean;
+  gridPrecision: number;
+  pxToSvg: number;
+  currentPoint: Point;
+  selectedFeatureId: string | null;
+  keyModifiers: {
+    Alt: boolean;
+    Control: boolean;
+    Shift: boolean;
+    Meta: boolean;
+  },
+  actionKeys: {
+    Escape: boolean;
+    Backspace: boolean;
+    Delete: boolean;
+  },
+  toolParams: any,
+}
+
+interface Viewport {
+  config: ViewportConfig;
+  sketch: Ref<Sketch | null>;
+  state: ViewportState;
+}
+
+interface ViewportsStore {
+  [key: string]: Viewport;
+}
+
+interface ToolsStore {
+  [key: string]: ToolItem;
+}
+
+type CurrentTool = { [key: string]: true };
+
+interface Tools {
+  current: CurrentTool;
+  _register: (toolConfig: ToolItem) => void;
+  _raw: ToolsStore;
+  _setCurrent: (toolId: string, parentId?: string | null) => boolean | Promise<boolean> | void;
+  [key: string]:
+  ToolsStore |
+  CurrentTool |
+  ((toolConfig: ToolItem) => void) |
+  ((toolId: string) => boolean | Promise<boolean> | void) |
+  string
+}
 
 const globalConfig = reactive({
   $l: (val: string) => val,
@@ -12,16 +89,15 @@ const currentTool = ref('pointer');
 const setCurrentTool = (tool: string) => {
   currentTool.value = tool;
 };
-const availableTools = {};
-const toolIcons = {};
-
+const availableTools: ToolsStore = {};
+// @ts-expect-error - Tools is correct interface but error due to Proxy
 const tools = new Proxy(availableTools, {
   get(target, prop: string) {
     switch (prop) {
       case 'current':
         return { [currentTool.value]: true };
-      case 'register':
-        return (toolConfig: ToolRegistrationConfig) => {
+      case '_register':
+        return (toolConfig: ToolItem) => {
           const { id } = toolConfig;
           if (availableTools[id]) {
             Object.assign(availableTools[id], toolConfig);
@@ -32,8 +108,14 @@ const tools = new Proxy(availableTools, {
       case '_raw':
         return availableTools;
       case '_setCurrent':
-        return (toolId: string) => {
-          const handler = availableTools[toolId]?.handler;
+        return (toolId: string, parentId?: string) => {
+          let handler;
+
+          if (parentId) {
+            handler = availableTools[parentId]?.children.find(child => child.id === toolId)?.handler
+          } else {
+            handler = availableTools[toolId]?.handler
+          }
 
           if (!handler) {
             setCurrentTool(toolId);
@@ -55,7 +137,7 @@ const tools = new Proxy(availableTools, {
             });
           }
         };
-      case 'icon':
+      case 'icons':
         return toolIcons;
 
       default:
@@ -69,57 +151,19 @@ const tools = new Proxy(availableTools, {
 });
 
 DEFAULT_TOOLS.forEach(toolId => {
-  tools.register({
+  tools._register({
     id: toolId,
-    icon: defineAsyncComponent(() => import(`../assets/${toolId}.svg`))
+    icon: toolIcons[toolId]
   })
-})
+});
 
 function getOrigin() {
   return { x: 0, y: 0 };
 }
 
-const viewports = {};
+const viewports: ViewportsStore = {};
 
-/**
- * @typedef Point
- * @param { number } x
- * @param { number } y
- */
-
-/**
- * @typedef ViewportConfig
- * @param { number } fontSizePx - font size in pixels
- * @param { function } dimFormatter - function for converting SI to dim display value
- * @param { number } proximityDistance - distance in px from a segment to show a new suggested vertex
- * @param { number } precision - snap precision
- * @param { boolean } showGrid - whether to display gridlines
- * @param { number } vertexRadius - radius of editable vertices
- */
-
-/**
- * @typedef ViewportState
- * @param { string } currentTool
- * @param { object } keyModifiers
- * @param { boolean } isPointerActive
- * @param { boolean } isDragging
- * @param { number } gridPrecision
- * @param { number } pxToSvg
- * @param { Point } currentPoint
- */
-
-/**
- * @typedef Viewport
- * @param { ViewportConfig } config,
- * @param { Sketch } sketch,
- * @param { ViewportState } state,
- */
-
-/**
- * @param { ViewportConfig } userConfig
- * @returns Viewport
- */
-function createViewport(userConfig) {
+function createViewport(userConfig: UserViewportConfig): Viewport {
   const config = reactive({
     fontSizePx: 12,
     unitScaleFactor: 1,
@@ -150,13 +194,14 @@ function createViewport(userConfig) {
     gridPrecision: 1,
     pxToSvg: 1,
     currentPoint: getOrigin(),
-    activePath: null,
+    // activePath: null,
+    selectedFeatureId: null,
+    toolParams: ref({}),
   });
 
   return {
     config: { ...config, ...globalConfig },
-    shape: ref({}),
-    sketch: ref({}),
+    sketch: ref(null),
     state,
   };
 }
@@ -168,8 +213,9 @@ const popup = reactive({
   data: {},
 });
 
-function openPopup(e, data) {
+function openPopup(e: MouseEvent, data: unknown) {
   Object.assign(popup, {
+    target: e.target,
     x: e.clientX,
     y: e.clientY,
     isOpen: true,
@@ -184,14 +230,19 @@ function closePopup() {
   });
 }
 
-/**
- * @param { ViewportConfig | object } config
- * @returns { Viewport }
- */
-export default function useDrawing(config?: object): {
-  state: {};
-  sketch: Sketch;
-} {
+interface ViewportExport extends Viewport {
+  tools: Tools;
+  openPopup: (e: MouseEvent, data: unknown) => void;
+  closePopup: () => void;
+  popup: Reactive<{
+    isOpen: boolean;
+    x: number;
+    y: number;
+    data: unknown,
+  }>
+}
+
+export default function useDrawing(config?: UserViewportConfig | undefined): ViewportExport {
   const viewportName = inject('viewportName', 'DEFAULT');
 
   viewports[viewportName] ??= createViewport(config);
@@ -202,9 +253,5 @@ export default function useDrawing(config?: object): {
     openPopup,
     closePopup,
     popup,
-    loadGlobalConfig: useGlobalConfig => {
-      Object.assign(globalConfig, useGlobalConfig);
-      Object.assign(viewports[viewportName].config, useGlobalConfig);
-    },
   };
 }

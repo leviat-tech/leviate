@@ -1,7 +1,7 @@
 import { Vector } from '@crhio/vector';
 import { convertFromSI } from '@crhio/concrete/src/utils/units';
 import { getSegmentsFromVertexList } from '../utils';
-import { PARALLEL_DIM_OFFSET } from '../constants.ts';
+import { PERIMETER_DIM_OFFSET } from '../constants.ts';
 
 // TODO: inject units ref
 // const units = computed(() => useUnits('dimension').value);
@@ -19,7 +19,7 @@ export default {
         options = {
           dataset: {
             clickable: true,
-            type: 'dimension',
+            type: 'dimension:perimeter',
             // attr name needs to be hyphen case to be converted to camelcase when adding to element dataset
             'shape-type': shapeType,
             index: i,
@@ -27,7 +27,7 @@ export default {
         };
       }
       const offsetMultiplier = params.getOffset?.(i) || 1;
-      const dimOff = offsetMultiplier * PARALLEL_DIM_OFFSET;
+      const dimOff = offsetMultiplier * PERIMETER_DIM_OFFSET;
       if (bulge === 0)
         return sketch.aligned_dim([a.x, a.y], [b.x, b.y], -dimOff, null, options).style('dim');
 

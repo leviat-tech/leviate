@@ -24,7 +24,7 @@
   </g>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, watch } from 'vue';
 import { isEqual } from 'lodash-es';
 import useDraggablePoint from '../composables/useDraggablePoint';
@@ -33,14 +33,17 @@ import useDrawing from '../composables/useDrawing.ts';
 import { addVertex } from '../operations';
 import { setToCounterClockwise } from '../utils';
 import useClosestPointOnSegment from '../composables/useClosestPointOnSegment';
+import { PointWithBulge } from '@crhio/leviate/drawing/types/Drawings.js';
 
-const props = defineProps({
-  modelValue: Array,
-  shouldMindEdges: {
-    type: Boolean,
-    default: false,
-  },
-});
+const props = withDefaults(
+  defineProps<{
+    modelValue?: PointWithBulge[];
+    shouldMindEdges?: boolean;
+  }>(),
+  {
+    shouldMindEdges: false,
+  }
+);
 
 const emit = defineEmits(['update:modelValue', 'close-path']);
 
@@ -48,11 +51,11 @@ const { state, config, tools } = useDrawing();
 const { label, fontSize, transformText, currentPointWithPrecision } = useDraggablePoint();
 const { isCloseToEdge, pointToAddOnSegment } = useClosestPointOnSegment();
 
-const pointToAdd = computed(() =>
-  props.shouldMindEdges && isCloseToEdge.value
+const pointToAdd = computed(() => {
+  return props.shouldMindEdges && isCloseToEdge.value
     ? pointToAddOnSegment.value
-    : currentPointWithPrecision.value,
-);
+    : currentPointWithPrecision.value;
+});
 const prevVertex = computed(() => props.modelValue[props.modelValue.length - 1]);
 
 const path = computed(() => {
@@ -65,7 +68,6 @@ const path = computed(() => {
 
 function closePath() {
   if (props.modelValue.length > 2) {
-    state.currentTool = tools.pointer;
     emit('close-path');
   }
 }
@@ -88,21 +90,21 @@ function addVertexLocal() {
 
 watch(
   () => state.actionKeys.Escape,
-  esc => {
+  (esc) => {
     if (esc && props.modelValue.length > 2) {
       closePath();
     }
-  },
+  }
 );
 
 watch(
   () => state.currentTool,
-  tool => {
+  (tool) => {
     if (tool !== tools.new_polygon && props.modelValue.length > 2) {
       setToCounterClockwise(props.modelValue);
       emit('update:modelValue', props.modelValue);
     }
-  },
+  }
 );
 
 onMounted(() => {

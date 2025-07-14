@@ -1,6 +1,10 @@
-import { FEATURE_TYPES } from '../constants';
+import { SHAPE_TYPES } from '../constants';
 import { CircularFeature, PolygonalFeature, RectangularFeature } from "../types/Drawings";
 import { Sketch, SketchPoint } from '../types/Sketch'
+
+function convertVerticesToPoints(vertices): SketchPoint[] {
+  return vertices.map(({ x, y }) => [x, y]);
+}
 
 export default {
   func(sketch: Sketch, feature: RectangularFeature | CircularFeature | PolygonalFeature): Sketch {
@@ -12,7 +16,7 @@ export default {
     };
 
     switch (feature.shapeType) {
-      case FEATURE_TYPES.CIRCULAR: {
+      case SHAPE_TYPES.CIRCULAR: {
         const { diameter, location } = feature;
 
         if (diameter <= 0) {
@@ -23,29 +27,31 @@ export default {
         break;
       }
 
-      case FEATURE_TYPES.POLYGONAL: {
+      case SHAPE_TYPES.POLYGONAL: {
         const { vertices } = feature;
 
-        if (vertices.length < 3) {
-          return sketch;
+        if (vertices.length <= 1) {
+          return sketch
         }
 
-        const adjustedVertices: SketchPoint[] = vertices.map(({ x, y }) => [x, y]);
+        const adjustedVertices = convertVerticesToPoints(vertices);
+
+        if (vertices.length === 2) {
+          return sketch.segment(adjustedVertices[0], adjustedVertices[1]);
+        }
+
 
         shape = sketch.polyface(...adjustedVertices);
         break;
       }
-      case FEATURE_TYPES.RECTANGULAR: {
+      case SHAPE_TYPES.RECTANGULAR: {
         const { vertices, location } = feature;
 
         if (vertices.length < 3) {
           return sketch;
         }
 
-        const adjustedVertices: SketchPoint[] = vertices.map(({ x, y }) => [
-          x + 0, //location.x,
-          y + 0, //location.y,
-        ]);
+        const adjustedVertices = convertVerticesToPoints(vertices)
 
         shape = sketch.polyface(...adjustedVertices);
         break;

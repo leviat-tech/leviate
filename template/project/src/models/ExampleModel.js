@@ -16,6 +16,7 @@ class ExampleModel extends BaseModel {
       ...this.baseFields,
       name: `${name} ${this.read().length + 1}`,
       entityStatus: statusList[Math.floor(Math.random() * statusList.length)],
+      features: null,
     };
   }
 }

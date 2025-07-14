@@ -1,5 +1,6 @@
 import { Component } from "vue";
-import { FEATURE_TYPES } from "../constants";
+import { SHAPE_TYPES, PERIMETER_DIM_TYPES } from "../constants";
+import { Extents, Sketch } from "./Sketch";
 
 export interface Point {
   x: number;
@@ -12,22 +13,20 @@ export interface PointWithBulge {
   bulge: number;
 }
 
-export interface ToolRegistrationConfig {
+export interface ToolItem {
   id: string;
   icon: Component;
-  handler: () => unknown;
+  handler?: (toolId: string) => unknown;
+  children?: ToolItem[];
+  params?: any;
 }
 
 export type ShapeParams = {
-  features: Array<CircularFeature | RectangularFeature | PolygonalFeature>;
+  features: Feature[];
+  extents?: Extents;
   perimeter: Array<PointWithBulge>;
-}
-
-export interface Extents {
-  xmin: number;
-  xmax: number;
-  ymin: number;
-  ymax: number;
+  dimType: typeof PERIMETER_DIM_TYPES[keyof typeof PERIMETER_DIM_TYPES];
+  getPerimeterDimOffset?: (edgeIndex: number) => number;
 }
 
 export interface BaseFeature {
@@ -35,16 +34,17 @@ export interface BaseFeature {
   type: string;
   style?: string;
   cutout?: boolean;
+  isDragging: boolean;
 }
 
 export interface CircularFeature extends BaseFeature {
-  shapeType: typeof FEATURE_TYPES.CIRCULAR;
+  shapeType: typeof SHAPE_TYPES.CIRCULAR;
   location: Point;
   diameter: number;
 }
 
 export interface RectangularFeature extends BaseFeature {
-  shapeType: typeof FEATURE_TYPES.RECTANGULAR;
+  shapeType: typeof SHAPE_TYPES.RECTANGULAR;
   location: Point;
   width: number;
   height: number;
@@ -52,8 +52,19 @@ export interface RectangularFeature extends BaseFeature {
 }
 
 export interface PolygonalFeature extends BaseFeature {
-  shapeType: typeof FEATURE_TYPES.POLYGONAL;
+  shapeType: typeof SHAPE_TYPES.POLYGONAL;
   vertices: PointWithBulge[];
 }
 
-export type Feature = CircularFeature & { isDragging: boolean } | RectangularFeature & { isDragging: boolean } | PolygonalFeature & { isDragging: boolean };
+export type Feature = CircularFeature | RectangularFeature | PolygonalFeature;
+
+export interface ShapeSketch extends Sketch {
+  user: {
+    shape: (params: ShapeParams) => Sketch;
+    perimeter: (params: Array<PointWithBulge>) => Sketch;
+    feature: (params: Feature) => Sketch;
+    edgeDimsParallel: (params: any) => Sketch;
+    edgeDimsAxis: (params: any) => Sketch;
+    [key: string]: ((params: any) => Sketch)
+  }
+}

@@ -1,17 +1,19 @@
-import { FEATURE_TYPES } from '../constants';
-import { ShapeParams } from '../types/Drawings';
+import { SHAPE_TYPES } from '../constants';
+import { PERIMETER_DIM_TYPES } from "../constants";
+import { ShapeParams, ShapeSketch, Feature } from '../types/Drawings';
 import { Sketch } from "../types/Sketch"
 
 export default {
-  func(sketch: Sketch, params: ShapeParams) {
-    let perimeter = sketch.user.perimeter(params.perimeter).name('perimeter');
+  func(sketch: ShapeSketch, params: ShapeParams) {
+    const { perimeter, features } = params;
+    let perimeterSketch: Sketch = sketch.user.perimeter(perimeter).name('perimeter');
 
     const segments: Sketch[] = [];
-    const visibleElements: Sketch[] = [];
+    const visibleElements: (Sketch|null)[] = [];
 
-    if (params.perimeter.length > 2) {
-      params.features.forEach(feature => {
-        if (feature.shapeType === FEATURE_TYPES.POLYGONAL) {
+    if (perimeter.length > 2) {
+      features.forEach(feature => {
+        if (feature.shapeType === SHAPE_TYPES.POLYGONAL) {
           const vertexCount = feature.vertices.length;
 
           if (vertexCount <= 1) {
@@ -25,22 +27,21 @@ export default {
             return;
           }
         }
-
-        // perimeter = perimeter.subtract(sketch.user.feature(feature)).style('shape');
       });
     }
-    const features = params.features.map(feature => {
+    const featuresSketches = features.map((feature: Feature) => {
       const featureSketch = sketch.user.feature(feature);
 
       if (feature.cutout) {
-        const clone = featureSketch.clone();
-        perimeter = perimeter.subtract(clone).style('shape');
+        try {
+          const clone = featureSketch.clone();
+          perimeterSketch = perimeterSketch.subtract(clone).style('shape');
+        } catch (error) {
+          console.error('Could not cutout feature from perimeter', { feature, perimeter });
+        }
       }
 
       return featureSketch;
-      // .style(
-      //   params.invalidOpeningIds.some(id => id === feature.id) ? 'invalidOpening' : 'opening',
-      // );
     });
 
     let previewOpening = null;
@@ -51,20 +52,14 @@ export default {
     //     .style('shape');
     // }
 
-    // const perimeterDims = sketch.user.edgeDimsParallel({
-    //   vertices: params.perimeter,
-    //   shapeType: 'perimeter',
-    //   isInteractive: true,
-    //   getOffset: params.getPerimeterDimOffset
-    // });
+    const perimeterDimFeature = params.dimType === PERIMETER_DIM_TYPES.PARALLEL ? 'edgeDimsParallel' : 'edgeDimsAxis';
 
-    // const perimeterDims = sketch.user.edgeDimsAxis({
-    //   vertices: params.perimeter,
-    //   extents: perimeter.extents,
-    //   shapeType: 'perimeter',
-    //   isInteractive: true,
-    //   getOffset: params.getPerimeterDimOffset
-    // });
+    const perimeterDims = sketch.user[perimeterDimFeature]({
+      vertices: params.perimeter,
+      extents: perimeterSketch.extents,
+      isInteractive: true,
+      getOffset: params.getPerimeterDimOffset
+    });
 
     // const perimeterNumbers = sketch.user.edgeNumbering({
     //   vertices: params.perimeter,
@@ -75,13 +70,13 @@ export default {
     // });
 
     // if (layers[MODEL_LAYERS.SLAB]) {
-    visibleElements.push(perimeter, ...segments);
+    visibleElements.push(perimeterSketch, ...segments);
 
     // if (layers[MODEL_LAYERS.DIMENSIONS]) {
-    // visibleElements.push(perimeterDims);
+    visibleElements.push(perimeterDims);
     // }
 
-    visibleElements.push(previewOpening, ...features);
+    visibleElements.push(previewOpening, ...featuresSketches);
 
     return sketch.add(...visibleElements);
   },

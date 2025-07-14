@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.0.17](https://github.com/leviat-tech/leviate/compare/v6.0.16...v6.0.17) (2025-07-11)
+
+
+* features and improve toolbar ([5924fbb](https://github.com/leviat-tech/leviate/commit/5924fbb3b0185e3a19db5db8f5472c3c29a0e357))
+* fix toolbar export ([65aa61b](https://github.com/leviat-tech/leviate/commit/65aa61b430307614f94b623ba0b71d136b071fc6))
+* fix tools and new feature location bug ([4bb5990](https://github.com/leviat-tech/leviate/commit/4bb59900f6dde0d6f02ed85e257a35fe5ce4e5bc))
+* more drawing fixes ([b27ae23](https://github.com/leviat-tech/leviate/commit/b27ae23e45802ca58cc94d9282f967205fe924bd))
+* remove unused attributes ([fb509e7](https://github.com/leviat-tech/leviate/commit/fb509e72e3d3969baafa3cf6e96000119e2614f4))
+* remove unused import ([cae3752](https://github.com/leviat-tech/leviate/commit/cae3752683ba87fad80cfe28723a2c5d05300af7))
+* start fixing features ([25ca6ba](https://github.com/leviat-tech/leviate/commit/25ca6baa5d171444bb2811553477bde68927b8d1))
+
+## [6.0.16](https://github.com/leviat-tech/leviate/compare/v6.0.15...v6.0.16) (2025-07-04)
+
+
+* 2D openings ([#294](https://github.com/leviat-tech/leviate/issues/294)) ([58ba5f4](https://github.com/leviat-tech/leviate/commit/58ba5f4b061aa4da8e6e4d857599fba5d610b16f))
+* complete work on axis dimensions edit ([a1051b4](https://github.com/leviat-tech/leviate/commit/a1051b4b3eee44350bc8c7cf250e29b9e8ae0d05))
+* continue work on axis dimensions ([b8bff4e](https://github.com/leviat-tech/leviate/commit/b8bff4ee8b4dfcfac8ffbb1822abdcaa3fd28a63))
+* don't exit transaction early ([16e7e59](https://github.com/leviat-tech/leviate/commit/16e7e598cae6fea4dfe03f9075bfceedd610298b))
+* drawing icons ([edf2708](https://github.com/leviat-tech/leviate/commit/edf27086d34e0db640d617235269456d885f4858))
+* resolve conflicts and tidy dimensions ([290e9b4](https://github.com/leviat-tech/leviate/commit/290e9b45dd648c1e9d756cf257c2778bb7b2c0df))
+
 ## [6.0.15](https://github.com/leviat-tech/leviate/compare/v6.0.14...v6.0.15) (2025-06-03)
 
 
