@@ -1,7 +1,7 @@
 <template>
   <!-- JSDraft sketch -->
   <!-- eslint-disable-next-line -->
-  <g v-html="html" />
+  <g v-html="html"  @click="state.selectedFeatureId = null"/>
 
   <DOrigin v-if="origin" v-bind="originProps" />
   <DVertices
@@ -16,7 +16,7 @@
     v-model="polygonalFeatureModel"
     @close-path="createFeature"
   />
-  <DDraggableSketch
+  <DDraggableFeature
     v-if="localFeature?.shapeType && state.isPointerActive"
     :key="localFeature.shapeType"
     :params="localFeature"
@@ -27,14 +27,14 @@
   />
 
   <!-- Updating existing features   -->
-  <DDraggableSketch
+  <DDraggableFeature
     v-for="feature in shape.features"
     :key="feature.id"
     :feature="featureDraft"
     :params="feature"
     :is-selected="state.selectedFeatureId === feature.id"
     :style="getFeatureStyle(feature)"
-    @click="state.selectedFeatureId = feature.id"
+    @mousedown="state.selectedFeatureId = feature.id"
     @drag-end="onFeatureDragEnd(feature, $event)"
     @dragging="onFeatureDragStart(feature)"
   />
@@ -84,23 +84,22 @@ import {
   AvailableShapeTypes,
 } from '../constants';
 
-import DDraggableSketch from '../components/DDraggableSketch.vue';
 import featureDraft from '../drafts/feature';
+import shapeDraftConfig from '../drafts';
+import { getSegmentRadiusFromVertexList } from '../utils';
+import useDraggablePoint from '../composables/useDraggablePoint';
+import useDrawing from '../composables/useDrawing';
 import DOrigin from './DOrigin.vue';
 import DVertices from './DVertices.vue';
-import shapeDraftConfig from '../drafts';
 import DHoverText from './DHoverText.vue';
 import DNewGeometry from './DNewGeometry.vue';
 import DPopupRadius from './popup/DPopupRadius.vue';
-import useDrawing from '../composables/useDrawing.ts';
+import DDraggableFeature from './DDraggableFeature.vue';
+import DDraggableSketch from './DDraggableSketch.vue';
 import DPopupVertex from './popup/DPopupVertex.vue';
 import DPopupDimensionPerimeter from './popup/DPopupDimensionPerimeter.vue';
 import DPopupDimensionAxis from './popup/DPopupDimensionAxis.vue';
-import { getSegmentRadiusFromVertexList } from '../utils';
-import useDraggablePoint from '../composables/useDraggablePoint';
-import { Feature, ShapeParams, StyleProp } from '../types';
-import { Point, PointWithBulge } from '@crhio/leviate/drawing/types/Drawings.js';
-
+import { Feature, ShapeParams, StyleProp, Point, PointWithBulge } from '../types';
 
 const props = defineProps<{
   shape: ShapeParams;

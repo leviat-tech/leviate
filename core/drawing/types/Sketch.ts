@@ -11,6 +11,10 @@ export interface Extents {
 
 export type SketchPoint = [number, number];
 
+export type FeatureDefinition = {
+    func: (sketch: Sketch, params: any) => Sketch;
+}
+
 type CircleArgs =
     | [center: SketchPoint, radius: number]
     | [center: SketchPoint, point: SketchPoint]
