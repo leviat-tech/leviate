@@ -15,7 +15,8 @@
         @create:feature="onCreateFeature"
         @delete:feature="features = features.filter(({ id }) => id !== $event.id)"
         origin
-      />
+        :cog="[1.5, 1]"
+        />
       <!--      @add:opening="addOpening"-->
       <!--      @update:opening="updateOpening"-->
       <!--      @update:active-opening="scrollToActiveItem"-->

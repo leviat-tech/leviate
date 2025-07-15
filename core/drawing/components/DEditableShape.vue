@@ -67,6 +67,7 @@
     :x="currentPointWithPrecision.x"
     :y="currentPointWithPrecision.y"
   />
+  <DCenterOfGravity v-if="cog" :cog="cog"/>
 </template>
 
 <script setup lang="ts">
@@ -100,6 +101,7 @@ import DPopupVertex from './popup/DPopupVertex.vue';
 import DPopupDimensionPerimeter from './popup/DPopupDimensionPerimeter.vue';
 import DPopupDimensionAxis from './popup/DPopupDimensionAxis.vue';
 import { Feature, ShapeParams, StyleProp, Point, PointWithBulge } from '../types';
+import DCenterOfGravity from './DCenterOfGravity.vue';
 
 const props = defineProps<{
   shape: ShapeParams;
@@ -115,6 +117,7 @@ const props = defineProps<{
     toolbar: AvailableToolbarOptions[];
   };
   origin: boolean | { xColor: string; yColor: string };
+  cog: number[];
 }>();
 
 const { config, state, sketch, tools, popup } = useDrawing();

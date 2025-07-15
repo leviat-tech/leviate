@@ -12,6 +12,7 @@ import DNewVertex from './components/DNewVertex.vue';
 import DNewGeometry from './components/DNewGeometry.vue';
 import DEditableShape from './components/DEditableShape.vue';
 import DDraggablePoint from './components/DDraggablePoint.vue';
+import DCenterOfGravity from './components/DCenterOfGravity.vue';
 
 import type {
   Point,
@@ -37,6 +38,7 @@ export {
   DNewGeometry,
   DEditableShape,
   DDraggablePoint,
+  DCenterOfGravity,
 
   useDrawing,
   useDraggablePoint,
