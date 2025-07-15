@@ -314,6 +314,7 @@ const handleMouseLeave = () => {
 };
 
 const handleMousedown = e => {
+  state.isChildMenuOpen = false;
   closePopup();
   emit('mousedown', e);
   setMousePt(e);
@@ -360,6 +361,12 @@ const handleDoubleClick = e => {
 
 const handleMouseup = e => {
   const dataset = e.target.dataset;
+
+  const hasData = Object.keys(dataset).length > 0;
+
+  if (!hasData) {
+    state.selectedFeatureId = null;
+  }
 
   if (dataset?.type?.startsWith('dimension')) {
     openPopup(e, dataset);
@@ -415,7 +422,10 @@ const resizeHandler = () => {
 
 onMounted(async () => {
   await nextTick();
-  svgRef.value.addEventListener('contextmenu', e => e.preventDefault());
+  svgRef.value.addEventListener('contextmenu', e => {
+    e.preventDefault();
+    state.isChildMenuOpen = false;
+  });
   hoverPt = svgRef.value.createSVGPoint();
   document.addEventListener('pointerleave', documentMouseleave);
   window.addEventListener('resize', resizeHandler);

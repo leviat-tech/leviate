@@ -1,5 +1,5 @@
 <template>
-  <DToolbarWrapper class="absolute z-10 left-4 top-4">
+  <DToolbarWrapper class="absolute z-10 left-2 top-2">
     <div v-for="tool in tools._raw" class="space-y-">
       <div class="relative flex">
         <DToolbarButton
@@ -9,13 +9,14 @@
           @click="handleToolClick(tool)"
         />
 
-        <DToolbarWrapper v-if="tool.children && activeParent === tool.id && isChildMenuOpen" class="absolute top-0 left-10">
+        <DToolbarWrapper v-if="tool.children && activeParent === tool.id && state.isChildMenuOpen" class="absolute top-[-3px] left-10">
           <DToolbarButton
             :title="formatter(tool.id)"
             v-for="child in tool.children"
             :icon="child.icon"
             :is-active="state.currentTool === child.id"
             @click="handleChildClick(child, tool.id)"
+
           />
         </DToolbarWrapper>
       </div>
@@ -41,7 +42,6 @@ const props = defineProps<{
 const emit = defineEmits(['select']);
 
 const activeParent = ref<string | null>(null);
-const isChildMenuOpen = ref(false);
 
 const { state, tools } = useDrawing();
 props.items?.forEach(tools._register);
@@ -57,7 +57,7 @@ const handleToolClick = (tool: ToolItem) => {
 
   if (children?.length) {
     activeParent.value = id;
-    isChildMenuOpen.value = true;
+    state.isChildMenuOpen = true;
     const activeChild = children.find((child) => child.icon === icon) || children[0];
     handleTool(activeChild.id, id, activeChild.params);
   } else {
@@ -71,7 +71,7 @@ const handleChildClick = (tool: ToolItem, parentId: string) => {
 
   handleTool(tool.id, parentId, tool.params);
 
-  isChildMenuOpen.value = false;
+  state.isChildMenuOpen = false;
 };
 
 const getIcon = (tool: ToolItem): Component | string => {

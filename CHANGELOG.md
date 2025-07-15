@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.0.18](https://github.com/leviat-tech/leviate/compare/v6.0.17...v6.0.18) (2025-07-14)
+
+
+* remove temp component ([bb83488](https://github.com/leviat-tech/leviate/commit/bb8348899ea9135478fe0ecd686e0df6fbe02597))
+* rounding when dragging ([89b399c](https://github.com/leviat-tech/leviate/commit/89b399c155b9b86188d968b85c89323a41b54255))
+
 ## [6.0.17](https://github.com/leviat-tech/leviate/compare/v6.0.16...v6.0.17) (2025-07-11)
 
 

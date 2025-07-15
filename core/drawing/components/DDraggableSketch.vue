@@ -3,25 +3,24 @@
   <g
     v-if="html"
     ref="el"
-    @click="onClick"
     v-html="html"
   />
 </template>
 
 <script setup lang="ts">
+import Big from 'big.js';
 import { drag as d3Drag } from 'd3-drag';
 import { selectAll } from 'd3-selection';
 import { Sketch, render } from '@crhio/jsdraft';
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
 import useDraggablePoint from '../composables/useDraggablePoint';
-import { calculateCentroid } from '../utils';
-import { StyleProp } from '../types';
+import { FeatureDefinition, Point, StyleProp } from '../types';
 
 const { currentPointWithPrecision } = useDraggablePoint();
 
 const props = defineProps<{
-  feature: unknown,
+  feature: FeatureDefinition,
   params: unknown,
   style: StyleProp,
   disabled?: boolean;
@@ -29,50 +28,63 @@ const props = defineProps<{
   isPreviewEnabled?: boolean;
 }>();
 
-const location = ref(props.params.location);
-const vertices = ref(props.params.vertices);
 const isDragging = ref(false);
-
-const html = computed(() => {
-  const { feature, style } = props;
-  const params = { ...props.params, location: location.value, vertices: vertices.value };
-  const sketch = feature.func(new Sketch(), params)?.style(style);
-  return sketch ? render(sketch, 'svg', { viewport: null }) : null;
-});
 
 // Drag threshold in px to avoid drag event firing on click
 const dragThreshold = 5;
-let initialPosition = null;
+let initialPosition: Point;
 
-const emit = defineEmits(['click', 'drag-start', 'dragging', 'drag-end']);
+const emit = defineEmits<{
+  (e: 'drag-start'): void;
+  (e: 'dragging', payload: Point): void;
+  (e: 'drag-end', payload: Point): void;
+}>();
+
 const el = ref(null);
 const selection = ref(null);
+const localLocation = ref({ x: 0, y: 0 });
 
-function onClick() {
-  emit('click', vertices.value);
+const html = computed(() => {
+  const { feature, style } = props;
+  const { x, y } = localLocation.value;
+  const sketch = feature.func(new Sketch(), props.params)?.style(style).translate(x, y);
+  return sketch ? render(sketch, 'svg', { viewport: null }) : null;
+});
+
+function getDragDistance() {
+  const { x, y } = currentPointWithPrecision.value;
+  return {
+    x: Big(x).minus(initialPosition.x).toNumber(),
+    y: Big(y).minus(initialPosition.y).toNumber(),
+  };
 }
 
-function dragstart(e) {
+function dragstart(e: Event) {
   if (props.disabled) return;
 
-  initialPosition = { x: e.sourceEvent.x, y: e.sourceEvent.y };
+  initialPosition = currentPointWithPrecision.value;
 
-  emit('drag-start', { x: e.x, y: e.y });
+  emit('drag-start');
 }
 
 function dragged(e) {
   if (!canDrag(e)) return;
 
-  location.value = currentPointWithPrecision.value;
   isDragging.value = true;
-  emit('dragging', { location: currentPointWithPrecision.value, vertices: vertices.value });
+
+  const dragDistance = getDragDistance();
+
+  localLocation.value = dragDistance;
+
+  emit('dragging', dragDistance);
 }
 
 function dragend(e) {
   if (!canDrag(e)) return;
 
   isDragging.value = false;
-  emit('drag-end', { location: currentPointWithPrecision.value, vertices: vertices.value });
+  emit('drag-end', getDragDistance());
+  localLocation.value = { x: 0, y: 0 };
 }
 
 function canDrag(e) {
@@ -86,42 +98,6 @@ function canDrag(e) {
 
   return distance >= dragThreshold;
 }
-
-watch(
-  () => props.params.location,
-  (newLocation) => {
-    location.value = newLocation;
-  }
-);
-
-//recalculating vertices to place pointer near the center of the opening
-watch(
-  () => props.params.vertices,
-  (newVertices) => {
-    if (props.isPreviewEnabled && newVertices?.length > 0) {
-      const { x: pointX, y: pointY } = currentPointWithPrecision.value;
-      const centroid = calculateCentroid(newVertices);
-      vertices.value.forEach((vertice) => {
-        vertice.x += pointX - centroid.x;
-        vertice.y += pointY - centroid.y;
-      });
-    } else vertices.value = newVertices;
-  },
-  { immediate: true }
-);
-
-watch(
-  () => currentPointWithPrecision.value,
-  (val, prevVal) => {
-    if ((!isDragging.value && !props.isPreviewEnabled) || !vertices.value?.length) return;
-    const dif = { x: val.x - prevVal.x, y: val.y - prevVal.y };
-    vertices.value = vertices.value.map((vertex) => ({
-      x: vertex.x + dif.x,
-      y: vertex.y + dif.y,
-    }));
-  },
-  { deep: true }
-);
 
 onMounted(() => {
   selection.value = selectAll([el.value]);

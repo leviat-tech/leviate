@@ -24,7 +24,7 @@ interface ViewportConfig {
   dimFormatter?: (value: number) => string;
   proximityDistance?: number;
   precision?: number;
-  shNowGrid: boolean;
+  showGrid: boolean;
   vertexRadius: number;
 }
 
@@ -34,6 +34,7 @@ interface ViewportState {
   currentTool: string;
   isPointerActive: boolean;
   isDragging: boolean;
+  isChildMenuOpen: boolean;
   gridPrecision: number;
   pxToSvg: number;
   currentPoint: Point;
@@ -91,7 +92,7 @@ const setCurrentTool = (tool: string) => {
 };
 const availableTools: ToolsStore = {};
 // @ts-expect-error - Tools is correct interface but error due to Proxy
-const tools = new Proxy(availableTools, {
+const tools: Tools = new Proxy(availableTools, {
   get(target, prop: string) {
     switch (prop) {
       case 'current':
@@ -112,7 +113,7 @@ const tools = new Proxy(availableTools, {
           let handler;
 
           if (parentId) {
-            handler = availableTools[parentId]?.children.find(child => child.id === toolId)?.handler
+            handler = availableTools[parentId]?.children?.find(child => child.id === toolId)?.handler
           } else {
             handler = availableTools[toolId]?.handler
           }
@@ -190,6 +191,7 @@ function createViewport(userConfig: UserViewportConfig): Viewport {
       Delete: false,
     },
     isDragging: false,
+    isChildMenuOpen: false,
     isPointerActive: false,
     gridPrecision: 1,
     pxToSvg: 1,

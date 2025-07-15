@@ -53,8 +53,7 @@ export default {
         color: 'transparent',
       },
       stroke: {
-        color: 'black',
-        opacity: 0.25,
+        color: 'transparent',
       },
     },
     activeFeature: {
