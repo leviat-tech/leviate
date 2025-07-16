@@ -67,20 +67,7 @@
     :x="currentPointWithPrecision.x"
     :y="currentPointWithPrecision.y"
   />
-
-  <!-- drageable path of section cut -->
-  <c-draggable-path v-if="sectionLine"
-    class="cursor-pointer"
-    :path="sectionPath"
-    :strokeWidth="2.5"
-    :stroke="'black'"
-    stroke-dasharray="30px 8px 3px 8px"
-    :draggable="true"
-    @drag-start="startDraggingSection"
-    @dragging="dragSection"
-    @drag-end="endDraggingSection"
-  />
- 
+  
 </template>
 
 <script setup lang="ts">
@@ -109,7 +96,6 @@ import DHoverText from './DHoverText.vue';
 import DNewGeometry from './DNewGeometry.vue';
 import DPopupRadius from './popup/DPopupRadius.vue';
 import DDraggableFeature from './DDraggableFeature.vue';
-import DDraggableSketch from './DDraggableSketch.vue';
 import DPopupVertex from './popup/DPopupVertex.vue';
 import DPopupDimensionPerimeter from './popup/DPopupDimensionPerimeter.vue';
 import DPopupDimensionAxis from './popup/DPopupDimensionAxis.vue';

@@ -10,7 +10,6 @@
         :key="entity.id"
         :shape="shapeParams"
         :draft-config="draftConfig"
-        :sectionLine="sectionCut"
         @update:shape="onUpdateShape"
         @update:feature="onUpdateFeature"
         @create:feature="onCreateFeature"
@@ -22,6 +21,12 @@
       <!--      @update:active-opening="scrollToActiveItem"-->
       <!--      @delete:active-opening="id => deleteFeature(id, OpeningModel)"-->
       <!--      @validate:openings="validateOpenings"-->
+
+      <!-- drageable path of section cut -->
+      <DSectionLine
+        :shape="shapeParams"
+        :viewDirection="'top'"
+      /> 
     </DViewport>
 
     <DToolbar
@@ -43,6 +48,7 @@ import DViewport from '@crhio/leviate/drawing/components/DViewport.vue';
 import LvErrorBoundary from '@crhio/leviate/components/LvErrorBoundary.vue';
 import DToolbar from '@crhio/leviate/drawing/components/toolbar/DToolbar.vue';
 import DEditableShape from '@crhio/leviate/drawing/components/DEditableShape.vue';
+import DSectionLine from '@crhio/leviate/drawing/components/DSectionLine.vue';
 import { PERIMETER_DIM_TYPES, SHAPE_TYPES } from '@crhio/leviate/drawing/constants';
 import {
   CircularFeature,
@@ -102,8 +108,6 @@ const shapeParams = computed(() => {
     features: props.entity.features || cloneDeep(features.value)
   };
 });
-
-const sectionCut = { viewDirection: 'right'};
 
 function onUpdateShape({ vertices }) {
   transact('Update shape', () => {
