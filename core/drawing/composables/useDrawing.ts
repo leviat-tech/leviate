@@ -51,6 +51,10 @@ interface ViewportState {
     Delete: boolean;
   },
   toolParams: any,
+  sectionCut: {
+    a: Point,
+    b: Point;
+  },
 }
 
 interface Viewport {

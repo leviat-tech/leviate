@@ -10,6 +10,7 @@
         :key="entity.id"
         :shape="shapeParams"
         :draft-config="draftConfig"
+        :sectionLine="sectionCut"
         @update:shape="onUpdateShape"
         @update:feature="onUpdateFeature"
         @create:feature="onCreateFeature"
@@ -101,6 +102,8 @@ const shapeParams = computed(() => {
     features: props.entity.features || cloneDeep(features.value)
   };
 });
+
+const sectionCut = { viewDirection: 'right'};
 
 function onUpdateShape({ vertices }) {
   transact('Update shape', () => {
