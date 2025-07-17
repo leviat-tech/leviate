@@ -25,7 +25,6 @@
       <!-- drageable path of section cut -->
       <DSectionLine
         :shape="shapeParams"
-        :viewDirection="'top'"
       /> 
     </DViewport>
 
@@ -82,6 +81,8 @@ const features: Ref<Array<CircularFeature | RectangularFeature | PolygonalFeatur
       { x: 0.5, y: 1 },
       { x: 0, y: 1 },
     ],
+    thickness: 0.1,
+    panelFace: 'near_end',
   },
   {
     id: 'upstandId',
@@ -93,7 +94,23 @@ const features: Ref<Array<CircularFeature | RectangularFeature | PolygonalFeatur
       { x: 2.5, y: 1.1 },
       { x: 2.5, y: 1.5 },
       { x: 2, y: 1.5 },
-    ]
+    ],
+    thickness: 0.1,
+    panelFace: 'far_end',
+  },
+  {
+    id: 'hollowId',
+    type: 'hollow',
+    shapeType: SHAPE_TYPES.RECTANGULAR,
+    location: { x: 0, y: 0 },
+    vertices: [
+      { x: 2, y: 1.1 },
+      { x: 2.5, y: 1.1 },
+      { x: 2.5, y: 1.5 },
+      { x: 2, y: 1.5 },
+    ],
+    thickness: 0.1,
+    depthFromNearFace: 0.05,
   }
 ]);
 
@@ -105,7 +122,8 @@ const shapeParams = computed(() => {
       return edgeIndex === 2 ? 2 : 1;
     },
     dimType: PERIMETER_DIM_TYPES.AXIS,
-    features: props.entity.features || cloneDeep(features.value)
+    features: props.entity.features || cloneDeep(features.value),
+    viewDirection: 'top',
   };
 });
 

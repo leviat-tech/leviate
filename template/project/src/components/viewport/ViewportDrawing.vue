@@ -12,13 +12,13 @@
       <DrawingTop :entity="entity"></DrawingTop>
     </CViewport>
 
-<!--    <CViewport-->
-<!--      v-model="bottomViewport"-->
-<!--      viewport-id="bottom"-->
-<!--      :options="[{ label: 'Side View', value: 'bottom' }]"-->
-<!--    >-->
-<!--      <DrawingSide :entity="entity"></DrawingSide>-->
-<!--    </CViewport>-->
+   <CViewport
+     v-model="bottomViewport"
+     viewport-id="bottom"
+     :options="[{ label: 'Side View', value: 'bottom' }]"
+   >
+     <DrawingSide :entity="entity"></DrawingSide>
+   </CViewport>
 
   </CViewportContainer>
 </template>
