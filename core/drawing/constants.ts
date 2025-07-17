@@ -7,6 +7,18 @@ export const SHAPE_TYPES = {
   POLYGONAL: 'polygonal',
 } as const;
 
+export const PANEL_FACE_OPTIONS = {
+  NEAR_END: 'near_end',
+  FAR_END: 'far_end',
+} as const;
+
+export const AVAILABLE_PANEL_FEATURE_TYPES = {
+  OPENING: 'opening',
+  RECESS: 'recess',
+  HOLLOW: 'hollow',
+  UPSTAND: 'upstand',
+} as const;
+
 export type AvailableShapeTypes = typeof SHAPE_TYPES[keyof typeof SHAPE_TYPES];
 
 export enum DIM_ANCHOR {

@@ -14,11 +14,11 @@ export default {
     // ...config.styles,
     opening: {
       fill: {
-        opacity: '0'
+        color: 'none',
       },
       stroke: {
-        color: 'transparent',
-        opacity: 1,
+        color: 'black',
+        opacity: 0.25,
       },
     },
     recessBase: {

@@ -21,12 +21,12 @@ import getExtents from '../utils/getExtents';
 
 const props = defineProps<{
   shape: ShapeParams;
-  viewDirection: 'top' | 'bottom' | 'left' | 'right';
 }>();
 
 const { state } = useDrawing();
 
-const isHorizontal = props.viewDirection === 'top' || props.viewDirection === 'bottom';
+const viewDirection = props.shape.viewDirection;
+const isHorizontal = viewDirection === 'top' || viewDirection === 'bottom';
 const shapeExtents = computed(() => getExtents(props.shape.perimeter));
 const sectionCutTemp = ref(
   isHorizontal 
@@ -47,24 +47,24 @@ const sectionPath = computed(() => {
   if (isHorizontal) {
     const a = {
       x: e.xmin - pathOffset,
-      y: props.viewDirection === 'bottom' ? sectionCutTemp.value.a.y + pathOffset : sectionCutTemp.value.a.y - pathOffset,
+      y: viewDirection === 'bottom' ? sectionCutTemp.value.a.y + pathOffset : sectionCutTemp.value.a.y - pathOffset,
     };
     const b = { x: e.xmin - pathOffset, y: sectionCutTemp.value.a.y };
     const c = { x: e.xmax + pathOffset, y: sectionCutTemp.value.b.y };
     const d = {
       x: e.xmax + pathOffset,
-      y: props.viewDirection === 'bottom' ? sectionCutTemp.value.b.y + pathOffset : sectionCutTemp.value.b.y - pathOffset,
+      y: viewDirection === 'bottom' ? sectionCutTemp.value.b.y + pathOffset : sectionCutTemp.value.b.y - pathOffset,
     };
     return `M${a.x},${a.y} L${b.x},${b.y} L${c.x},${c.y} L${d.x},${d.y}`;
   }
   const a = {
-    x: props.viewDirection === 'left' ? sectionCutTemp.value.a.x + pathOffset : sectionCutTemp.value.a.x - pathOffset,
+    x: viewDirection === 'left' ? sectionCutTemp.value.a.x + pathOffset : sectionCutTemp.value.a.x - pathOffset,
     y: e.ymin - pathOffset,
   };
   const b = { x: sectionCutTemp.value.a.x, y: e.ymin - pathOffset };
   const c = { x: sectionCutTemp.value.a.x, y: e.ymax + pathOffset };
   const d = {
-    x: props.viewDirection === 'left' ? sectionCutTemp.value.a.x + pathOffset : sectionCutTemp.value.a.x - pathOffset,
+    x: viewDirection === 'left' ? sectionCutTemp.value.a.x + pathOffset : sectionCutTemp.value.a.x - pathOffset,
     y: e.ymax + pathOffset,
   };
   return `M${a.x},${a.y} L${b.x},${b.y} L${c.x},${c.y} L${d.x},${d.y}`;
@@ -100,4 +100,5 @@ function endDraggingSection(p: Point) {
   sectionDragPt = 0;
   state.sectionCut = sectionCutTemp.value;
 };
+
 </script>

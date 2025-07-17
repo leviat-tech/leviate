@@ -25,8 +25,11 @@ export type ShapeParams = {
   features: Feature[];
   extents?: Extents;
   perimeter: Array<PointWithBulge>;
+  thickness: number;
   dimType: typeof PERIMETER_DIM_TYPES[keyof typeof PERIMETER_DIM_TYPES];
   getPerimeterDimOffset?: (edgeIndex: number) => number;
+  cutSegment?: {a: Point, b: Point},
+  viewDirection: 'top' | 'bottom' | 'left' | 'right',
 }
 
 export interface BaseFeature {
@@ -35,6 +38,9 @@ export interface BaseFeature {
   style?: string;
   cutout?: boolean;
   isDragging: boolean;
+  thickness: number;
+  panelFace?: string;
+  depthFromNearFace?: number;
 }
 
 export interface CircularFeature extends BaseFeature {
