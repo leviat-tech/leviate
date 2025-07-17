@@ -48,6 +48,7 @@ import LvErrorBoundary from '@crhio/leviate/components/LvErrorBoundary.vue';
 import DToolbar from '@crhio/leviate/drawing/components/toolbar/DToolbar.vue';
 import DEditableShape from '@crhio/leviate/drawing/components/DEditableShape.vue';
 import DSectionLine from '@crhio/leviate/drawing/components/DSectionLine.vue';
+import DSectionLine from '@crhio/leviate/drawing/components/DSectionLine.vue';
 import { PERIMETER_DIM_TYPES, SHAPE_TYPES } from '@crhio/leviate/drawing/constants';
 import {
   CircularFeature,
