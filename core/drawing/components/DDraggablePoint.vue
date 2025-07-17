@@ -15,7 +15,7 @@
 import { drag as d3Drag } from 'd3-drag';
 import { selectAll } from 'd3-selection';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
-import { AvailableColors } from '@crhio/concrete/src/types/FormElementProps';
+import AvailableColors from '@crhio/concrete/src/types/FormElementProps';
 
 import useDrawing from '../composables/useDrawing';
 import removeVertex from '../operations/removeVertex';
