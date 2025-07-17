@@ -67,6 +67,7 @@
     :x="currentPointWithPrecision.x"
     :y="currentPointWithPrecision.y"
   />
+  
 </template>
 
 <script setup lang="ts">
@@ -95,7 +96,6 @@ import DHoverText from './DHoverText.vue';
 import DNewGeometry from './DNewGeometry.vue';
 import DPopupRadius from './popup/DPopupRadius.vue';
 import DDraggableFeature from './DDraggableFeature.vue';
-import DDraggableSketch from './DDraggableSketch.vue';
 import DPopupVertex from './popup/DPopupVertex.vue';
 import DPopupDimensionPerimeter from './popup/DPopupDimensionPerimeter.vue';
 import DPopupDimensionAxis from './popup/DPopupDimensionAxis.vue';
@@ -369,11 +369,11 @@ watch(
   (tool) => {
     switch (tool) {
       case TOOLBAR_OPTIONS.MIRROR_GEOMETRY:
-        state.currentTool = tools.pointer;
+        state.currentTool = TOOLBAR_OPTIONS.POINTER;
         perimeterModel.value = mirrorPath(perimeterModel.value);
         break;
       default:
-        if (localFeature.value.shapeType !== SHAPE_TYPES.POLYGONAL) localFeature.value.shapeType = null;
+        if (localFeature.value.shapeType === SHAPE_TYPES.POLYGONAL) localFeature.value.shapeType = null;
         isCurrentPointVisible.value = false;
     }
   }

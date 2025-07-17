@@ -1,16 +1,16 @@
 /**
  * Get edges from a path
  * @param path
- * @return {{ minX: number, maxX: number, minY: number, maxY: number }} extents
+ * @return {{ xmin: number, xmax: number, ymin: number, ymax: number }} extents
  */
 export default function getExtents(path) {
   const xValues = path.map(p => p.x);
   const yValues = path.map(p => p.y);
 
   return {
-    minX: Math.min(...xValues),
-    maxX: Math.max(...xValues),
-    minY: Math.min(...yValues),
-    maxY: Math.max(...yValues),
+    xmin: Math.min(...xValues),
+    xmax: Math.max(...xValues),
+    ymin: Math.min(...yValues),
+    ymax: Math.max(...yValues),
   };
 }
