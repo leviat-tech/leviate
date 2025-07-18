@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.1.0](https://github.com/leviat-tech/leviate/compare/v6.0.18...v6.1.0) (2025-07-18)
+
+
+* draggable section line ([464760b](https://github.com/leviat-tech/leviate/commit/464760bd37805608c31bfb0022a04260fd406a31))
+
 ## [6.0.18](https://github.com/leviat-tech/leviate/compare/v6.0.17...v6.0.18) (2025-07-14)
 
 
