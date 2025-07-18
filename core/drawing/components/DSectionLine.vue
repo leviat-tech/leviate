@@ -112,7 +112,8 @@ watch(
     : { 
         a: { x: (shapeExtents.value.xmin + shapeExtents.value.xmax) / 2, y: shapeExtents.value.ymin }, 
         b: { x: (shapeExtents.value.xmin + shapeExtents.value.xmax) / 2, y: shapeExtents.value.ymax }, 
-      }
+      };
+    state.sectionCut = sectionCutTemp.value;
   }
 );
 
