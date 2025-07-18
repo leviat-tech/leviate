@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import useDrawing from '../composables/useDrawing';
 import DDraggablePath from './DDraggablePath.vue';
 import { ShapeParams, Point } from '../types';
@@ -26,10 +26,10 @@ const props = defineProps<{
 
 const { state } = useDrawing();
 
-const isHorizontal = props.viewDirection === 'top' || props.viewDirection === 'bottom';
+const isHorizontal = computed(() => props.viewDirection === 'top' || props.viewDirection === 'bottom');
 const shapeExtents = computed(() => getExtents(props.shape.perimeter));
 const sectionCutTemp = ref(
-  isHorizontal 
+  isHorizontal.value 
   ? { 
       a: { x: shapeExtents.value.xmin, y: (shapeExtents.value.ymin + shapeExtents.value.ymax) / 2 }, 
       b: { x: shapeExtents.value.xmax, y: (shapeExtents.value.ymin + shapeExtents.value.ymax) / 2 }, 
@@ -44,7 +44,7 @@ const pathOffset = 0.1;
 
 const sectionPath = computed(() => {
   const e = shapeExtents.value;
-  if (isHorizontal) {
+  if (isHorizontal.value) {
     const a = {
       x: e.xmin - pathOffset,
       y: props.viewDirection === 'bottom' ? sectionCutTemp.value.a.y + pathOffset : sectionCutTemp.value.a.y - pathOffset,
@@ -71,12 +71,12 @@ const sectionPath = computed(() => {
 });
 
 function startDraggingSection(p: Point) {
-  sectionDragPt = isHorizontal ? p.y : p.x;
+  sectionDragPt = isHorizontal.value ? p.y : p.x;
 };
 
 function moveSectionCut(diff: number) {
   sectionCutTemp.value =
-    isHorizontal
+    isHorizontal.value
       ? {
           a: { x: sectionCutTemp.value.a.x, y: sectionCutTemp.value.a.y + diff },
           b: { x: sectionCutTemp.value.b.x, y: sectionCutTemp.value.b.y + diff },
@@ -89,15 +89,31 @@ function moveSectionCut(diff: number) {
 
 function dragSection(p: Point) {
   const diff =
-    isHorizontal ? p.y - sectionDragPt : p.x - sectionDragPt;
+    isHorizontal.value ? p.y - sectionDragPt : p.x - sectionDragPt;
   moveSectionCut(diff);
-  sectionDragPt = isHorizontal ? p.y : p.x;
+  sectionDragPt = isHorizontal.value ? p.y : p.x;
 };
 
 function endDraggingSection(p: Point) {
-  const diff = isHorizontal ? p.y - sectionDragPt : p.x - sectionDragPt;
+  const diff = isHorizontal.value ? p.y - sectionDragPt : p.x - sectionDragPt;
   moveSectionCut(diff);
   sectionDragPt = 0;
   state.sectionCut = sectionCutTemp.value;
 };
+
+watch(
+  () => props.viewDirection,
+  (direction) => {
+    sectionCutTemp.value =  direction === 'top' || direction === 'bottom' 
+    ? { 
+        a: { x: shapeExtents.value.xmin, y: (shapeExtents.value.ymin + shapeExtents.value.ymax) / 2 }, 
+        b: { x: shapeExtents.value.xmax, y: (shapeExtents.value.ymin + shapeExtents.value.ymax) / 2 }, 
+      }
+    : { 
+        a: { x: (shapeExtents.value.xmin + shapeExtents.value.xmax) / 2, y: shapeExtents.value.ymin }, 
+        b: { x: (shapeExtents.value.xmin + shapeExtents.value.xmax) / 2, y: shapeExtents.value.ymax }, 
+      }
+  }
+);
+
 </script>
