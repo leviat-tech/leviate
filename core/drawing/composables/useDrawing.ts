@@ -20,7 +20,8 @@ const toolIcons = {
 };
 
 interface ViewportConfig {
-  fontSizePx?: number;
+  fontSizePx: number;
+  unitScaleFactor: number;
   dimFormatter?: (value: number) => string;
   proximityDistance?: number;
   precision?: number;
@@ -49,6 +50,10 @@ interface ViewportState {
     Escape: boolean;
     Backspace: boolean;
     Delete: boolean;
+  },
+  mouseButtons: {
+    left: boolean;
+    right: boolean;
   },
   toolParams: any,
   sectionCut: {

@@ -2,7 +2,6 @@
   <DDraggablePath
     :path="sectionPath"
     :strokeWidth="2.5"
-    :stroke="'black'"
     stroke-dasharray="30px 8px 3px 8px"
     :draggable="true"
     :color="'black'"
@@ -29,14 +28,14 @@ const { state } = useDrawing();
 const isHorizontal = props.viewDirection === 'top' || props.viewDirection === 'bottom';
 const shapeExtents = computed(() => getExtents(props.shape.perimeter));
 const sectionCutTemp = ref(
-  isHorizontal 
-  ? { 
-      a: { x: shapeExtents.value.xmin, y: (shapeExtents.value.ymin + shapeExtents.value.ymax) / 2 }, 
-      b: { x: shapeExtents.value.xmax, y: (shapeExtents.value.ymin + shapeExtents.value.ymax) / 2 }, 
+  isHorizontal
+  ? {
+      a: { x: shapeExtents.value.xmin, y: (shapeExtents.value.ymin + shapeExtents.value.ymax) / 2 },
+      b: { x: shapeExtents.value.xmax, y: (shapeExtents.value.ymin + shapeExtents.value.ymax) / 2 },
     }
-  : { 
-      a: { x: (shapeExtents.value.xmin + shapeExtents.value.xmax) / 2, y: shapeExtents.value.ymin }, 
-      b: { x: (shapeExtents.value.xmin + shapeExtents.value.xmax) / 2, y: shapeExtents.value.ymax }, 
+  : {
+      a: { x: (shapeExtents.value.xmin + shapeExtents.value.xmax) / 2, y: shapeExtents.value.ymin },
+      b: { x: (shapeExtents.value.xmin + shapeExtents.value.xmax) / 2, y: shapeExtents.value.ymax },
     }
 );
 let sectionDragPt = 0;

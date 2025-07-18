@@ -26,13 +26,16 @@
       <DSectionLine
         :shape="shapeParams"
         :viewDirection="'top'"
-      /> 
+      />
     </DViewport>
 
     <DToolbar
       :items="toolbarItems"
       :formatter="tool => $l(`tooltip_${tool}`)"
     />
+<!--    <div class="absolute bottom-2 left-2 bg-white border rounded p-2 text-xs">-->
+<!--      {{ state }}-->
+<!--    </div>-->
   </LvErrorBoundary>
 </template>
 
@@ -56,10 +59,13 @@ import {
   RectangularFeature
 } from '@crhio/leviate/drawing/types';
 import { cloneDeep } from 'lodash-es';
+import { useDrawing } from '@crhio/leviate/drawing';
 
 const props = defineProps({
   entity: Object
 });
+
+const { state } = useDrawing();
 
 // Define arbitrary features. In an app, these will likely be in models
 const features: Ref<Array<CircularFeature | RectangularFeature | PolygonalFeature>> = ref([
@@ -75,12 +81,11 @@ const features: Ref<Array<CircularFeature | RectangularFeature | PolygonalFeatur
     id: 'recessId',
     type: 'recess',
     shapeType: SHAPE_TYPES.RECTANGULAR,
-    location: { x: 1, y: 0 },
     vertices: [
-      { x: 0, y: 0.5 },
-      { x: 0.5, y: 0.5 },
-      { x: 0.5, y: 1 },
-      { x: 0, y: 1 },
+      { x: 0.2, y: 0.4 },
+      { x: 0.8, y: 0.4 },
+      { x: 0.8, y: 1 },
+      { x: 0.2, y: 1 },
     ],
   },
   {
@@ -115,12 +120,11 @@ function onUpdateShape({ vertices }) {
   });
 }
 
-function onUpdateFeature({ vertices, location, id }) {
-  console.log(vertices, location);
+function onUpdateFeature({ id, ...params }) {
   const feature = features.value.find(feature => feature.id === id);
 
   return transact(`Update ${feature.type}`, () => {
-    Object.assign(feature, { location, vertices });
+    Object.assign(feature, params);
     props.entity.features = features;
   });
 }

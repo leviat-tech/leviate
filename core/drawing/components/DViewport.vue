@@ -364,7 +364,7 @@ const handleMouseup = e => {
 
   const hasData = Object.keys(dataset).length > 0;
 
-  if (!hasData) {
+  if (!hasData && !e.target.classList.contains('draggable-point')) {
     state.selectedFeatureId = null;
   }
 
@@ -420,6 +420,8 @@ const resizeHandler = () => {
   viewport.viewBox.height = viewport.viewBox.width / aspectRatio.value;
 };
 
+const resizeObserver = new ResizeObserver(resizeHandler);
+
 onMounted(async () => {
   await nextTick();
   svgRef.value.addEventListener('contextmenu', e => {
@@ -428,7 +430,7 @@ onMounted(async () => {
   });
   hoverPt = svgRef.value.createSVGPoint();
   document.addEventListener('pointerleave', documentMouseleave);
-  window.addEventListener('resize', resizeHandler);
+  resizeObserver.observe(svgRef.value);
   window.addEventListener('keydown', handleKeyDown);
   window.addEventListener('keyup', handleKeyUp);
   setTimeout(() => {
@@ -440,7 +442,7 @@ onMounted(async () => {
 onBeforeUnmount(() => {
   document.removeEventListener('pointerleave', documentMouseleave);
 
-  window.removeEventListener('resize', resizeHandler);
+  resizeObserver.disconnect();
   window.removeEventListener('keydown', handleKeyDown);
   window.removeEventListener('keyup', handleKeyUp);
 });

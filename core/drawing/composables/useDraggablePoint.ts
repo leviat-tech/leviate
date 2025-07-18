@@ -1,6 +1,7 @@
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import Big from 'big.js';
-import useDrawing from './useDrawing.ts';
+import useDrawing from './useDrawing';
+import { Point } from '../types';
 
 export default function useDraggablePoint() {
   const { config, state } = useDrawing();
@@ -29,10 +30,6 @@ export default function useDraggablePoint() {
   });
 
   const currentPointWithPrecision = computed(() => {
-    if (isGridBypass.value) {
-      return state.currentPoint;
-    }
-
     const { x, y } = state.currentPoint;
 
     return {
@@ -55,12 +52,30 @@ export default function useDraggablePoint() {
     return Object.values(currentPointWithScaleFactor.value).join(', ');
   });
 
+  const startPoint = ref<Point>({ x: 0, y: 0 });
+
+  function startDrag(point: Point) {
+    console.log('START', point);
+    startPoint.value = point;
+  }
+
+  function getDragDistance(): Point {
+    const { x, y } = currentPointWithPrecision.value;
+
+    return {
+      x: Big(x).minus(startPoint.value.x).toNumber(),
+      y: Big(y).minus(startPoint.value.y).toNumber(),
+    };
+  }
+
   return {
     scale,
     label,
     fontSize,
     precision,
     transformText,
+    startDrag,
+    getDragDistance,
     currentPointWithPrecision,
   };
 }

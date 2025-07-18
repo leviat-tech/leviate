@@ -1,7 +1,7 @@
 <template>
   <!-- JSDraft sketch -->
   <!-- eslint-disable-next-line -->
-  <g v-html="html"  @click="state.selectedFeatureId = null"/>
+  <g v-html="html" />
 
   <DOrigin v-if="origin" v-bind="originProps" />
   <DVertices
@@ -27,16 +27,18 @@
   />
 
   <!-- Updating existing features   -->
-  <DDraggableFeature
+  <component
     v-for="feature in shape.features"
+    :is="featureComponents[feature.shapeType]"
     :key="feature.id"
     :feature="featureDraft"
+    :shape-draft="shapeDraft"
     :params="feature"
     :is-selected="state.selectedFeatureId === feature.id"
     :style="getFeatureStyle(feature)"
     @mousedown="state.selectedFeatureId = feature.id"
+    @dragging="onFeatureDrag(feature, $event)"
     @drag-end="onFeatureDragEnd(feature, $event)"
-    @dragging="onFeatureDragStart(feature)"
   />
 
   <!-- Freehand shape -->
@@ -67,11 +69,11 @@
     :x="currentPointWithPrecision.x"
     :y="currentPointWithPrecision.y"
   />
-  
+
 </template>
 
 <script setup lang="ts">
-import { cloneDeep } from 'lodash-es';
+import { cloneDeep, pick } from 'lodash-es';
 import { Draft, render } from '@crhio/jsdraft';
 import { computed, ref, watch, watchEffect, onBeforeUnmount, onMounted } from 'vue';
 
@@ -100,6 +102,8 @@ import DPopupVertex from './popup/DPopupVertex.vue';
 import DPopupDimensionPerimeter from './popup/DPopupDimensionPerimeter.vue';
 import DPopupDimensionAxis from './popup/DPopupDimensionAxis.vue';
 import { Feature, ShapeParams, StyleProp, Point, PointWithBulge } from '../types';
+import DCircularFeature from './DCircularFeature.vue';
+import DRectangularFeature from './DRectangularFeature.vue';
 
 const props = defineProps<{
   shape: ShapeParams;
@@ -291,6 +295,14 @@ const isRadiusPopupVisible = computed(() => {
   return popup.data.type === 'node' && state.currentTool === tools.round_off;
 });
 
+/*********************************** FEATURES ***********************************/
+
+const featureComponents = {
+  [SHAPE_TYPES.CIRCULAR]: DCircularFeature,
+  [SHAPE_TYPES.RECTANGULAR]: DRectangularFeature,
+  [SHAPE_TYPES.POLYGONAL]: DDraggableFeature,
+}
+
 function onNewFeatureClick(vertices?: PointWithBulge[]) {
   switch (localFeature.value.shapeType) {
     // polygonal feature should have a closed shape, which is handled separately
@@ -320,16 +332,18 @@ function getFeatureStyle(feature: Feature): StyleProp {
     : shapeDraftConfig.styles.draggableFeature;
 }
 
-function onFeatureDragStart(feature: Feature) {
-  state.selectedFeatureId = feature.id;
+function onFeatureDrag(feature: Feature, targetType: 'feature' | 'anchor') {
   feature.isDragging = true;
-  isCurrentPointVisible.value = true;
+  if (targetType === 'feature') {
+    isCurrentPointVisible.value = true;
+  }
 }
 
-function onFeatureDragEnd(feature, { location, vertices }) {
+function onFeatureDragEnd(feature: Feature, updateParams: Partial<Feature>) {
   feature.isDragging = false;
   isCurrentPointVisible.value = false;
-  emit('update:feature', { id: feature.id, location, vertices });
+  emit('update:feature', { id: feature.id, ...updateParams });
+  state.selectedFeatureId = feature.id;
 }
 
 function updateLocalFeature(shapeType: AvailableShapeTypes | undefined) {
@@ -352,9 +366,6 @@ function handleMovingVertex(isDragging: boolean) {
   isCurrentPointVisible.value = isDragging;
 }
 
-onBeforeUnmount(() => {
-  state.activeFeatureId = null;
-});
 
 const polygonalFeatureModel = computed({
   get: () => localFeature.value.vertices,
@@ -379,6 +390,11 @@ watch(
   }
 );
 
+/**
+ * Reset tool to default on Escape.
+ * If creating a polygonal feature then
+ * close the shape and create the feature
+ */
 watch(
   () => state.actionKeys.Escape,
   (esc) => {
@@ -399,6 +415,9 @@ watch(
   }
 );
 
+/**
+ * Update local perimeter when props change
+ */
 watch(
   () => props.shape.perimeter,
   (val) => {
@@ -406,15 +425,22 @@ watch(
   }
 );
 
+/**
+ * Update local feature when shapeType changes
+ */
 watch(() => state.toolParams.shapeType, updateLocalFeature);
 
+// TODO: not sure what this is for
 watch(
   () => props.shape,
   (newShape) => {
-    state.shape = newShape;
+    // state.shape = newShape;
   }
 );
 
+/**
+ * Handle deleting features with keyboard
+ */
 watch(
   [() => state.actionKeys.Backspace, () => state.actionKeys.Delete],
   ([backspaceKey, deleteKey]) => {
@@ -430,6 +456,9 @@ watch(
   }
 );
 
+/**
+ *
+ */
 watch(
   () => currentPointWithPrecision.value,
   (currentPoint) => {
@@ -438,4 +467,8 @@ watch(
       localFeature.value.location = { x: currentPoint.x, y: currentPoint.y };
   }
 );
+
+onBeforeUnmount(() => {
+  state.activeFeatureId = null;
+});
 </script>

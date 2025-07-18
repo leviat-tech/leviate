@@ -1,30 +1,46 @@
 <template>
-  <!-- eslint-disable vue/no-v-html vue/no-v-text-v-html-on-component -->
-  <g
-    v-if="html"
-    ref="el"
-    @click="onClick"
-    v-html="html"
-  />
+  <g>
+    <!-- eslint-disable vue/no-v-html vue/no-v-text-v-html-on-component -->
+    <g
+      v-if="html"
+      ref="el"
+      @click="onClick"
+      v-bind="$attrs"
+      v-html="html"
+    />
+    <template v-if="isSelected">
+      <DDraggablePoint
+        v-for="(point, key) in draggableHandles"
+        :point="point"
+        @dragging="onHandleDrag"
+      />
+    </template>
+  </g>
 </template>
 
 <script setup lang="ts">
 import Big from 'big.js';
 import { drag as d3Drag } from 'd3-drag';
 import { selectAll } from 'd3-selection';
-import { Sketch, render } from '@crhio/jsdraft';
+import { render, Sketch } from '@crhio/jsdraft';
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
 import useDraggablePoint from '../composables/useDraggablePoint';
-import { calculateCentroid } from '../utils';
 import { Feature, FeatureDefinition, Point, PointWithBulge, StyleProp } from '../types';
+import DDraggablePoint from './DDraggablePoint.vue';
+import { SHAPE_TYPES } from '../constants';
+import { calculateCentroid, ptDistSq } from '../utils';
 
-const { currentPointWithPrecision } = useDraggablePoint();
+const { currentPointWithPrecision, } = useDraggablePoint();
 
 type Params = {
   location: Point;
   vertices: PointWithBulge[];
 };
+
+defineOptions({
+  inheritAttrs: false,
+});
 
 const props = defineProps<{
   feature: FeatureDefinition,
@@ -36,23 +52,59 @@ const props = defineProps<{
 }>();
 
 const location = ref<Point>(props.params.location);
+const diameter = ref<number>(props.params.diameter);
 const vertices = ref<PointWithBulge[]>(props.params.vertices);
 const isDragging = ref(false);
 
+const draggableHandles = computed(() => {
+  switch (props.params.shapeType) {
+    case SHAPE_TYPES.POLYGONAL: {
+      return null;
+    }
+    case SHAPE_TYPES.CIRCULAR: {
+      const { x, y } = location.value;
+      const r = diameter.value / 2;
+      return {
+        left: { x: x - r, y },
+        right: { x: x + r, y },
+        top: { x, y: y + r },
+        bottom: { x, y: y - r },
+      };
+    }
+  }
+});
+
+
 const html = computed(() => {
   const { feature, style } = props;
-  const params = { ...props.params, location: location.value, vertices: vertices.value };
+  const params = {
+    ...props.params,
+    location: location.value,
+    vertices: vertices.value,
+    diameter: diameter.value,
+  };
   const sketch = feature.func(new Sketch(), params)?.style(style);
   return sketch ? render(sketch, 'svg', { viewport: null }) : null;
 });
 
 // Drag threshold in px to avoid drag event firing on click
 const dragThreshold = 5;
-let initialPosition: Point | null = null;
+let initialDiameter = diameter.value;
+
+// The initial screen position in px, used to determine when dragging should start
+let initialPosition: Point = { x: 0, y: 0 };
 
 const emit = defineEmits(['click', 'drag-start', 'dragging', 'drag-end']);
 const el = ref(null);
 const selection = ref(null);
+
+function getDragDistance() {
+  const { x, y } = currentPointWithPrecision.value;
+  return {
+    x: Big(x).minus(initialPosition.x).toNumber(),
+    y: Big(y).minus(initialPosition.y).toNumber(),
+  };
+}
 
 function onClick() {
   emit('click', vertices.value);
@@ -66,7 +118,7 @@ function dragstart(e) {
   emit('drag-start', { x: e.x, y: e.y });
 }
 
-function dragged(e) {
+function dragged(e: DragEvent) {
   if (!canDrag(e)) return;
 
   location.value = currentPointWithPrecision.value;
@@ -74,14 +126,14 @@ function dragged(e) {
   emit('dragging', { location: currentPointWithPrecision.value, vertices: vertices.value });
 }
 
-function dragend(e) {
+function dragend(e: DragEvent) {
   if (!canDrag(e)) return;
 
   isDragging.value = false;
   emit('drag-end', { location: currentPointWithPrecision.value, vertices: vertices.value });
 }
 
-function canDrag(e) {
+function canDrag(e: DragEvent) {
   if (props.disabled) return false;
 
   const { x, y } = e.sourceEvent;
@@ -93,6 +145,20 @@ function canDrag(e) {
   return distance >= dragThreshold;
 }
 
+function onHandleDrag(handle, e: DragEvent) {
+  if (props.params.shapeType === SHAPE_TYPES.CIRCULAR) {
+    const distanceFromCentre = currentPointWithPrecision.value.x - location.value.x;
+    console.log(distanceFromCentre)
+    diameter.value = distanceFromCentre * 2;
+  }
+
+
+}
+
+function updateCircularBox(handle) {
+
+}
+
 watch(
   () => props.params.location,
   (newLocation) => {
@@ -100,7 +166,7 @@ watch(
   }
 );
 
-//recalculating vertices to place pointer near the center of the opening
+// recalculating vertices to place pointer near the center of the opening
 watch(
   () => props.params.vertices,
   (newVertices) => {
