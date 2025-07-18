@@ -2,6 +2,7 @@
   <DDraggablePath
     :path="sectionPath"
     :strokeWidth="2.5"
+    :stroke="'black'"
     stroke-dasharray="30px 8px 3px 8px"
     :draggable="true"
     :color="'black'"

@@ -33,9 +33,6 @@
       :items="toolbarItems"
       :formatter="tool => $l(`tooltip_${tool}`)"
     />
-<!--    <div class="absolute bottom-2 left-2 bg-white border rounded p-2 text-xs">-->
-<!--      {{ state }}-->
-<!--    </div>-->
   </LvErrorBoundary>
 </template>
 
