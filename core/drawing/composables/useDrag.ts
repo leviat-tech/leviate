@@ -49,6 +49,7 @@ export default function useDrag(
 
   function end(e: D3DragEvent) {
     isDragStarted = false;
+    state.isDragging = false;
 
     if (canDrag(e)) handlers.end?.(e);
   }

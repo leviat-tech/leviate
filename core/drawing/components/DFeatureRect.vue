@@ -14,7 +14,7 @@
         :point="point"
         color="selected"
         :class="cursorClassMap[anchor]"
-        @drag-start="startDrag(currentPointWithPrecision)"
+        @drag-start="startDrag(point)"
         @dragging="onAnchorDrag(anchor)"
         @drag-end="onAnchorDrag(anchor, true)"
       />
@@ -84,7 +84,7 @@ const html = computed(() => {
   };
   const { xmin, xmax, ymin, ymax } = extents.value;
   let sketch = props.shapeDraft.render('feature', [params], 'sketch');
-  if (props.isSelected) {
+  if (props.isSelected && isDraggingAnchor.value) {
     sketch = sketch.add(
       sketch.aligned_dim([xmin, ymin], [xmin, ymax], 0.1),
       sketch.aligned_dim([xmin, ymin], [xmax, ymin], -0.1),

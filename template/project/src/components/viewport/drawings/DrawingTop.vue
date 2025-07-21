@@ -6,6 +6,7 @@
       :padding="0.5"
       show-grid
     >
+      <g></g>
       <DEditableShape
         :key="entity.id"
         :shape="shapeParams"
@@ -88,12 +89,12 @@ const features: Ref<Array<CircularFeature | RectangularFeature | PolygonalFeatur
   {
     id: 'upstandId',
     type: 'upstand',
-    shapeType: SHAPE_TYPES.RECTANGULAR,
-    location: { x: 0, y: 0 },
+    shapeType: SHAPE_TYPES.POLYGONAL,
     vertices: [
       { x: 2, y: 1.1 },
       { x: 2.5, y: 1.1 },
       { x: 2.5, y: 1.5 },
+      { x: 2.25, y: 1.7 },
       { x: 2, y: 1.5 },
     ]
   }

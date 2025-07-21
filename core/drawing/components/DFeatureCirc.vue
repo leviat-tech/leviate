@@ -80,7 +80,7 @@ const html = computed(() => {
   const y = location.value.y;
 
   let sketch = props.shapeDraft.render('feature', [params], 'sketch');
-  if (props.isSelected) {
+  if (isDraggingAnchor.value) {
     sketch = sketch.add(
       sketch.aligned_dim([xmin, y], [xmax, y], 0),
     );

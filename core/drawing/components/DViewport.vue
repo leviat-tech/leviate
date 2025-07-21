@@ -460,11 +460,6 @@ watch(pxToSvgUnits, val => {
   }
 });
 
-watch(maximized, async () => {
-  await nextTick();
-  resizeHandler();
-});
-
 defineExpose({
   zoomToExtents,
 });

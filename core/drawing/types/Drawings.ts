@@ -22,6 +22,7 @@ export interface ToolItem {
 }
 
 export type ShapeParams = {
+  id: string;
   features: Feature[];
   extents?: Extents;
   perimeter: Array<PointWithBulge>;

@@ -7,8 +7,9 @@
       :point="vertex"
       :is-delete-active="isDeleteEnabled"
       :data-index="i"
-      :data-shape-type="type"
+      :data-shape-id="shapeId"
       data-type="node"
+      :color="color || 'default'"
       @drag-start="onDragStart(vertex, i)"
       @dragging="onDragging"
       @drag-end="onDragEnd"
@@ -40,10 +41,8 @@ const { currentPointWithPrecision } = useDraggablePoint();
 const MIN_SHAPE_VERTICES = 3;
 
 const props = defineProps({
-  type: {
-    type: String,
-    default: () => 'perimeter',
-  },
+  shapeId: String,
+  color: String,
   modelValue: Array,
 });
 

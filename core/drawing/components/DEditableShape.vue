@@ -5,6 +5,7 @@
 
   <DOrigin v-if="origin" v-bind="originProps" />
   <DVertices
+    :shape-id="shape.id"
     v-model="perimeterModel"
     @move:vertex="handleMovingVertex"
     @stop-moving:vertex="handleMovingVertex"
@@ -49,7 +50,7 @@
     <Teleport to="body">
       <DPopupVertex
         v-if="popup.data.type === 'node' && state.currentTool !== tools.round_off"
-        v-model:vertex="vertexModel"
+        v-model:vertex="vertexPopupModel"
       />
       <DPopupDimensionPerimeter
         v-if="popup.data.type === 'dimension:perimeter'"
@@ -73,18 +74,18 @@
 </template>
 
 <script setup lang="ts">
-import { cloneDeep, pick } from 'lodash-es';
+import { cloneDeep } from 'lodash-es';
 import { Draft, render } from '@crhio/jsdraft';
-import { computed, ref, watch, watchEffect, onBeforeUnmount, onMounted } from 'vue';
+import { computed, markRaw, onBeforeUnmount, ref, watch, watchEffect } from 'vue';
 
 import { mirrorPath } from '../operations';
 import roundoffVertex from '../operations/roundoffVertex';
 import {
+  AvailableShapeTypes,
+  AvailableToolbarOptions,
+  DIMENSION_TYPES,
   SHAPE_TYPES,
   TOOLBAR_OPTIONS,
-  DIMENSION_TYPES,
-  AvailableToolbarOptions,
-  AvailableShapeTypes,
 } from '../constants';
 
 import featureDraft from '../drafts/feature';
@@ -101,9 +102,10 @@ import DDraggableFeature from './DDraggableFeature.vue';
 import DPopupVertex from './popup/DPopupVertex.vue';
 import DPopupDimensionPerimeter from './popup/DPopupDimensionPerimeter.vue';
 import DPopupDimensionAxis from './popup/DPopupDimensionAxis.vue';
-import { Feature, ShapeParams, StyleProp, Point, PointWithBulge } from '../types';
-import DCircularFeature from './DCircularFeature.vue';
-import DRectangularFeature from './DRectangularFeature.vue';
+import { Feature, Point, PointWithBulge, ShapeParams, StyleProp } from '../types';
+import DFeatureCirc from './DFeatureCirc.vue';
+import DFeatureRect from './DFeatureRect.vue';
+import DFeaturePoly from './DFeaturePoly.vue';
 
 const props = defineProps<{
   shape: ShapeParams;
@@ -206,8 +208,8 @@ watchEffect(() => {
     shapeSketch = shapeSketch.user[props.userFeature](shape);
   }
 
-  sketch.value = shapeSketch;
-  html.value = render(sketch.value, 'svg', { viewport: null, ...shapeDraft.settings });
+  sketch.value = markRaw(shapeSketch);
+  html.value = render(shapeSketch, 'svg', { viewport: null, ...shapeDraft.settings });
   // TODO: inject validators from app
   // emit('validate:openings', props.shape);
   // emit('validate:groups');
@@ -239,7 +241,7 @@ const perimeterModel = computed({
 });
 
 const popupVertices = computed(() => {
-  if (popup.data.shapeType === 'perimeter') {
+  if (popup.data.shapeId === props.shape.id) {
     return props.shape.perimeter;
   }
 
@@ -256,16 +258,31 @@ const popupRadius = computed(() => {
   return rList[index];
 });
 
-const vertexModel = computed({
-  get: () => popupVertices.value[popup.data.index],
-  set: (newVertex) => {
-    if (popup.data.shapeType === 'perimeter') {
-      state.isDragging = false;
+/**
+ * Model for updating vertices via modal popup
+ */
+const vertexPopupModel = computed({
+  get: () => {
+    const x = Number(popup.target?.getAttribute('cx'));
+    const y = Number(popup.target?.getAttribute('cy'));
 
-      perimeterModel.value = perimeterModel.value.map((vertex, i) => {
-        return Number(popup.data.index) === i ? newVertex : vertex;
-      });
+    return { x, y };
+  },
+  set: (newVertex) => {
+    const { index, shapeId } = popup.data;
+    const isFeature = shapeId !== props.shape.id;
+    const oldVertices = isFeature ? getFeatureById(shapeId).vertices : props.shape.perimeter;
+
+    const vertices = oldVertices.map((vertex: PointWithBulge, i: number) => {
+      return Number(index) === i ? { ...vertex, ...newVertex } : vertex;
+    });
+
+    if (isFeature) {
+      emit('update:feature', { id: shapeId, vertices });
+    } else {
+      emit('update:shape', { vertices })
     }
+    return;
   },
 });
 
@@ -298,9 +315,9 @@ const isRadiusPopupVisible = computed(() => {
 /*********************************** FEATURES ***********************************/
 
 const featureComponents = {
-  [SHAPE_TYPES.CIRCULAR]: DCircularFeature,
-  [SHAPE_TYPES.RECTANGULAR]: DRectangularFeature,
-  [SHAPE_TYPES.POLYGONAL]: DDraggableFeature,
+  [SHAPE_TYPES.CIRCULAR]: DFeatureCirc,
+  [SHAPE_TYPES.RECTANGULAR]: DFeatureRect,
+  [SHAPE_TYPES.POLYGONAL]: DFeaturePoly,
 }
 
 function onNewFeatureClick(vertices?: PointWithBulge[]) {
@@ -344,6 +361,10 @@ function onFeatureDragEnd(feature: Feature, updateParams: Partial<Feature>) {
   isCurrentPointVisible.value = false;
   emit('update:feature', { id: feature.id, ...updateParams });
   state.selectedFeatureId = feature.id;
+}
+
+function getFeatureById(id: string): Feature | undefined {
+  return props.shape.features.find(item => item.id === id);
 }
 
 function updateLocalFeature(shapeType: AvailableShapeTypes | undefined) {

@@ -32,9 +32,13 @@ export default function useDraggablePoint() {
   const currentPointWithPrecision = computed(() => {
     const { x, y } = state.currentPoint;
 
+    // Allow snapping halfway between grid units when the grid size exceeds the given threshold
+    const gridUnitThreshold = 16;
+    const multiplier = state.pxPerGridUnit > gridUnitThreshold ? 2 : 1;
+
     return {
-      x: Big(x).round(precision.value).toNumber(),
-      y: Big(y).round(precision.value).toNumber(),
+      x: Big(x).times(multiplier).round(precision.value).div(multiplier).toNumber(),
+      y: Big(y).times(multiplier).round(precision.value).div(multiplier).toNumber(),
     };
   });
 
@@ -55,7 +59,6 @@ export default function useDraggablePoint() {
   const startPoint = ref<Point>({ x: 0, y: 0 });
 
   function startDrag(point: Point) {
-    console.log('START', point);
     startPoint.value = point;
   }
 
