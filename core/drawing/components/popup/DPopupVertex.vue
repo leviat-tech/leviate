@@ -18,8 +18,6 @@ const props = defineProps({
   vertex: Object,
 });
 
-console.log(props.vertex)
-
 const localVertex = ref({ ...props.vertex });
 
 defineEmits(['update:vertex']);

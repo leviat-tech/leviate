@@ -28,8 +28,6 @@ const props = defineProps<{
   isPreviewEnabled?: boolean;
 }>();
 
-console.log(props);
-
 const isDragging = ref(false);
 
 // Drag threshold in px to avoid drag event firing on click
