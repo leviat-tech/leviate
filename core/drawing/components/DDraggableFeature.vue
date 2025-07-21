@@ -8,13 +8,6 @@
       v-bind="$attrs"
       v-html="html"
     />
-    <template v-if="isSelected">
-      <DDraggablePoint
-        v-for="(point, key) in draggableHandles"
-        :point="point"
-        @dragging="onHandleDrag"
-      />
-    </template>
   </g>
 </template>
 
@@ -27,9 +20,8 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
 import useDraggablePoint from '../composables/useDraggablePoint';
 import { Feature, FeatureDefinition, Point, PointWithBulge, StyleProp } from '../types';
-import DDraggablePoint from './DDraggablePoint.vue';
 import { SHAPE_TYPES } from '../constants';
-import { calculateCentroid, ptDistSq } from '../utils';
+import { calculateCentroid } from '../utils';
 
 const { currentPointWithPrecision, } = useDraggablePoint();
 
@@ -143,20 +135,6 @@ function canDrag(e: DragEvent) {
   const distance = Math.sqrt(dx * dx + dy * dy);
 
   return distance >= dragThreshold;
-}
-
-function onHandleDrag(handle, e: DragEvent) {
-  if (props.params.shapeType === SHAPE_TYPES.CIRCULAR) {
-    const distanceFromCentre = currentPointWithPrecision.value.x - location.value.x;
-    console.log(distanceFromCentre)
-    diameter.value = distanceFromCentre * 2;
-  }
-
-
-}
-
-function updateCircularBox(handle) {
-
 }
 
 watch(
