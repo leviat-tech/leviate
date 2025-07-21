@@ -3,7 +3,7 @@
     :path="sectionPath"
     :strokeWidth="2.5"
     :stroke="'black'"
-    stroke-dasharray="30px 8px 3px 8px"
+    stroke-dasharray="30px 4px 2px 4px"
     :draggable="true"
     :color="'black'"
     @drag-start="startDraggingSection"
@@ -40,7 +40,7 @@ const sectionCutTemp = ref(
     }
 );
 let sectionDragPt = 0;
-const pathOffset = 0.1;
+const pathOffset = 0.2;
 
 const sectionPath = computed(() => {
   const e = shapeExtents.value;
@@ -112,7 +112,8 @@ watch(
     : { 
         a: { x: (shapeExtents.value.xmin + shapeExtents.value.xmax) / 2, y: shapeExtents.value.ymin }, 
         b: { x: (shapeExtents.value.xmin + shapeExtents.value.xmax) / 2, y: shapeExtents.value.ymax }, 
-      }
+      };
+    state.sectionCut = sectionCutTemp.value;
   }
 );
 
