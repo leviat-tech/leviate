@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.0.1](https://github.com/leviat-tech/leviate/compare/v7.0.0...v7.0.1) (2025-07-21)
+
+
+* view direction reactive ([#305](https://github.com/leviat-tech/leviate/issues/305)) ([d7105c9](https://github.com/leviat-tech/leviate/commit/d7105c958757dccf2dcd6773a734c7dfb0543e88))
+
 ## [7.0.0](https://github.com/leviat-tech/leviate/compare/v6.1.0...v7.0.0) (2025-07-18)
 
 
