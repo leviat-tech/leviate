@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.1.0](https://github.com/leviat-tech/leviate/compare/v7.0.1...v7.1.0) (2025-07-21)
+
+
+* draggable anchor points for features ([7907a53](https://github.com/leviat-tech/leviate/commit/7907a53a8a1277ccef4d599c63bdc385f2c5a6df))
+
 ## [7.0.1](https://github.com/leviat-tech/leviate/compare/v7.0.0...v7.0.1) (2025-07-21)
 
 
