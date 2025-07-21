@@ -1,8 +1,8 @@
 import { SHAPE_TYPES } from '../constants';
-import { CircularFeature, PolygonalFeature, RectangularFeature } from "../types/Drawings";
+import { CircularFeature, PointWithBulge, PolygonalFeature, RectangularFeature } from '../types/Drawings';
 import { Sketch, SketchPoint } from '../types/Sketch'
 
-function convertVerticesToPoints(vertices): SketchPoint[] {
+function convertVerticesToPoints(vertices: PointWithBulge[]): SketchPoint[] {
   return vertices.map(({ x, y }) => [x, y]);
 }
 
@@ -45,7 +45,7 @@ export default {
         break;
       }
       case SHAPE_TYPES.RECTANGULAR: {
-        const { vertices, location } = feature;
+        const { vertices } = feature;
 
         if (vertices.length < 3) {
           return sketch;

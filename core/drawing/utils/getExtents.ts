@@ -1,9 +1,11 @@
+import { Extents, PointWithBulge } from '../types';
+
 /**
  * Get edges from a path
  * @param path
  * @return {{ xmin: number, xmax: number, ymin: number, ymax: number }} extents
  */
-export default function getExtents(path) {
+export default function getExtents(path: PointWithBulge[]): Extents {
   const xValues = path.map(p => p.x);
   const yValues = path.map(p => p.y);
 

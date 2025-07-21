@@ -45,3 +45,28 @@ export const DIMENSION_TYPES = {
   FEATURE: 'dimension:feature',
 }
 
+export const ANCHOR_POINTS = {
+  LEFT: 'l',
+  RIGHT: 'r',
+  TOP: 't',
+  BOTTOM: 'b',
+  TOP_LEFT: 'tl',
+  TOP_RIGHT: 'tr',
+  BOTTOM_LEFT: 'bl',
+  BOTTOM_RIGHT: 'br',
+  CENTER: 'c',
+}
+
+export const cursorClassMap = {
+  [ANCHOR_POINTS.LEFT]: '!cursor-ew-resize',
+  [ANCHOR_POINTS.RIGHT]: '!cursor-ew-resize',
+  [ANCHOR_POINTS.TOP]: '!cursor-ns-resize',
+  [ANCHOR_POINTS.BOTTOM]: '!cursor-ns-resize',
+  [ANCHOR_POINTS.TOP_LEFT]: '!cursor-nwse-resize',
+  [ANCHOR_POINTS.TOP_RIGHT]: '!cursor-nesw-resize',
+  [ANCHOR_POINTS.BOTTOM_LEFT]: '!cursor-nesw-resize',
+  [ANCHOR_POINTS.BOTTOM_RIGHT]: '!cursor-nwse-resize',
+}
+
+export type AvailableAnchorPoints = typeof ANCHOR_POINTS[keyof typeof ANCHOR_POINTS];
+

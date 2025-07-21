@@ -2,7 +2,6 @@
   <DDraggablePath
     :path="sectionPath"
     :strokeWidth="2.5"
-    :stroke="'black'"
     stroke-dasharray="30px 4px 2px 4px"
     :draggable="true"
     :color="'black'"
@@ -29,14 +28,14 @@ const { state } = useDrawing();
 const isHorizontal = computed(() => props.viewDirection === 'top' || props.viewDirection === 'bottom');
 const shapeExtents = computed(() => getExtents(props.shape.perimeter));
 const sectionCutTemp = ref(
-  isHorizontal.value 
-  ? { 
-      a: { x: shapeExtents.value.xmin, y: (shapeExtents.value.ymin + shapeExtents.value.ymax) / 2 }, 
-      b: { x: shapeExtents.value.xmax, y: (shapeExtents.value.ymin + shapeExtents.value.ymax) / 2 }, 
+  isHorizontal.value
+  ? {
+      a: { x: shapeExtents.value.xmin, y: (shapeExtents.value.ymin + shapeExtents.value.ymax) / 2 },
+      b: { x: shapeExtents.value.xmax, y: (shapeExtents.value.ymin + shapeExtents.value.ymax) / 2 },
     }
-  : { 
-      a: { x: (shapeExtents.value.xmin + shapeExtents.value.xmax) / 2, y: shapeExtents.value.ymin }, 
-      b: { x: (shapeExtents.value.xmin + shapeExtents.value.xmax) / 2, y: shapeExtents.value.ymax }, 
+  : {
+      a: { x: (shapeExtents.value.xmin + shapeExtents.value.xmax) / 2, y: shapeExtents.value.ymin },
+      b: { x: (shapeExtents.value.xmin + shapeExtents.value.xmax) / 2, y: shapeExtents.value.ymax },
     }
 );
 let sectionDragPt = 0;
@@ -104,14 +103,14 @@ function endDraggingSection(p: Point) {
 watch(
   () => props.viewDirection,
   (direction) => {
-    sectionCutTemp.value =  direction === 'top' || direction === 'bottom' 
-    ? { 
-        a: { x: shapeExtents.value.xmin, y: (shapeExtents.value.ymin + shapeExtents.value.ymax) / 2 }, 
-        b: { x: shapeExtents.value.xmax, y: (shapeExtents.value.ymin + shapeExtents.value.ymax) / 2 }, 
+    sectionCutTemp.value =  direction === 'top' || direction === 'bottom'
+    ? {
+        a: { x: shapeExtents.value.xmin, y: (shapeExtents.value.ymin + shapeExtents.value.ymax) / 2 },
+        b: { x: shapeExtents.value.xmax, y: (shapeExtents.value.ymin + shapeExtents.value.ymax) / 2 },
       }
-    : { 
-        a: { x: (shapeExtents.value.xmin + shapeExtents.value.xmax) / 2, y: shapeExtents.value.ymin }, 
-        b: { x: (shapeExtents.value.xmin + shapeExtents.value.xmax) / 2, y: shapeExtents.value.ymax }, 
+    : {
+        a: { x: (shapeExtents.value.xmin + shapeExtents.value.xmax) / 2, y: shapeExtents.value.ymin },
+        b: { x: (shapeExtents.value.xmin + shapeExtents.value.xmax) / 2, y: shapeExtents.value.ymax },
       };
     state.sectionCut = sectionCutTemp.value;
   }

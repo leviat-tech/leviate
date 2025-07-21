@@ -6,9 +6,14 @@
     :font-size="fontSize"
     :x="x"
     :y="-y"
-    :transform="transformText"
+    :transform="transform === false ?  'scale(1, -1)' : transformText"
   >
-    {{ props.label || defaultLabel }}
+    <template v-if="$slots.default">
+      <slot />
+    </template>
+    <template v-else>
+      {{ props.label || defaultLabel }}
+    </template>
   </text>
 </template>
 <script setup>
@@ -18,6 +23,7 @@ const props = defineProps({
   x: Number,
   y: Number,
   label: String,
+  transform: Boolean,
 });
 
 const { fontSize, transformText, label: defaultLabel } = useDraggablePoint();

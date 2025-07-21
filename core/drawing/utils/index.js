@@ -210,11 +210,17 @@ export function normalizeVector(vector) {
 }
 
 export function addVectors(vector1, vector2) {
-  return { x: vector1.x + vector2.x, y: vector1.y + vector2.y };
+  return {
+    x: Big(vector1.x).plus(vector2.x).toNumber(),
+    y: Big(vector1.y).plus(vector2.y).toNumber(),
+  };
 }
 
 function subtractVectors(vector1, vector2) {
-  return { x: vector1.x - vector2.x, y: vector1.y - vector2.y };
+  return {
+    x: Big(vector1.x).minus(vector2.x).toNumber(),
+    y: Big(vector1.y).minus(vector2.y).toNumber(),
+  };
 }
 
 export function multiplyVector(vector, scalar) {
@@ -419,4 +425,11 @@ export function getCoordinatesFromVecDistance(start, end, distances) {
     x: start.x + distance * ux,
     y: start.y + distance * uy,
   }));
+}
+
+export function translateVertices(vertices, translateBy) {
+    return vertices.map((vertex) => ({
+      ...addVectors(vertex, translateBy),
+      bulge: vertex.bulge,
+    }));
 }

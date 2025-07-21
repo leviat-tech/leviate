@@ -20,7 +20,8 @@ const toolIcons = {
 };
 
 interface ViewportConfig {
-  fontSizePx?: number;
+  fontSizePx: number;
+  unitScaleFactor: number;
   dimFormatter?: (value: number) => string;
   proximityDistance?: number;
   precision?: number;
@@ -37,6 +38,7 @@ interface ViewportState {
   isChildMenuOpen: boolean;
   gridPrecision: number;
   pxToSvg: number;
+  pxPerGridUnit: number;
   currentPoint: Point;
   selectedFeatureId: string | null;
   keyModifiers: {
@@ -49,6 +51,10 @@ interface ViewportState {
     Escape: boolean;
     Backspace: boolean;
     Delete: boolean;
+  },
+  mouseButtons: {
+    left: boolean;
+    right: boolean;
   },
   toolParams: any,
   sectionCut: {
@@ -199,6 +205,7 @@ function createViewport(userConfig: UserViewportConfig): Viewport {
     isPointerActive: false,
     gridPrecision: 1,
     pxToSvg: 1,
+    pxPerGridUnit: 1,
     currentPoint: getOrigin(),
     // activePath: null,
     selectedFeatureId: null,
@@ -213,6 +220,7 @@ function createViewport(userConfig: UserViewportConfig): Viewport {
 }
 
 const popup = reactive({
+  target: null,
   isOpen: true,
   x: 0,
   y: 0,
@@ -241,10 +249,11 @@ interface ViewportExport extends Viewport {
   openPopup: (e: MouseEvent, data: unknown) => void;
   closePopup: () => void;
   popup: Reactive<{
+    target: HTMLElement | null;
     isOpen: boolean;
     x: number;
     y: number;
-    data: unknown,
+    data: any,
   }>
 }
 
