@@ -6,7 +6,6 @@
       :padding="0.5"
       show-grid
     >
-      <g></g>
       <DEditableShape
         :key="entity.id"
         :shape="shapeParams"
@@ -26,7 +25,7 @@
       <!-- drageable path of section cut -->
       <DSectionLine
         :shape="shapeParams"
-        :viewDirection="'top'"
+        :viewDirection="viewDirection"
       />
     </DViewport>
 
@@ -57,13 +56,15 @@ import {
   RectangularFeature
 } from '@crhio/leviate/drawing/types';
 import { cloneDeep } from 'lodash-es';
-import { useDrawing } from '@crhio/leviate/drawing';
+import { useUiStore } from '../../../store/ui';
 
 const props = defineProps({
   entity: Object
 });
 
-const { state } = useDrawing();
+const uiStore = useUiStore();
+
+const viewDirection = computed(() => uiStore.viewDirection);
 
 // Define arbitrary features. In an app, these will likely be in models
 const features: Ref<Array<CircularFeature | RectangularFeature | PolygonalFeature>> = ref([

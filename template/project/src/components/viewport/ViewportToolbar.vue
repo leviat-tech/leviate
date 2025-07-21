@@ -26,6 +26,7 @@ import { useUiStore } from '@/store/ui';
 const uiStore = useUiStore();
 
 const zoomToFit = () => {
+  uiStore.viewDirection = uiStore.viewDirection === 'top' ? 'right' : 'top';
   console.log('Add your implementation here');
 };
 </script>
