@@ -12,6 +12,7 @@ import DNewVertex from './components/DNewVertex.vue';
 import DNewGeometry from './components/DNewGeometry.vue';
 import DEditableShape from './components/DEditableShape.vue';
 import DDraggablePoint from './components/DDraggablePoint.vue';
+import DDraggableSketch from './components/DDraggableSketch.vue';
 import DSectionLine from './components/DSectionLine.vue';
 
 import type {
@@ -38,6 +39,7 @@ export {
   DNewGeometry,
   DEditableShape,
   DDraggablePoint,
+  DDraggableSketch,
   DSectionLine,
 
   useDrawing,
