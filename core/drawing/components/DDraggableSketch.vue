@@ -12,7 +12,7 @@ import Big from 'big.js';
 import { drag as d3Drag } from 'd3-drag';
 import { selectAll } from 'd3-selection';
 import { Sketch, render } from '@crhio/jsdraft';
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 
 import useDraggablePoint from '../composables/useDraggablePoint';
 import { FeatureDefinition, Point, StyleProp } from '../types';

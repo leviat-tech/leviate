@@ -62,8 +62,8 @@ export default {
         color: 'transparent',
       },
       stroke: {
-        width: 2,
-        color: '#0066ff',
+        width: 1,
+        color: '#005de3',
         opacity: 1,
       }
     }

@@ -26,7 +26,7 @@
       <DSectionLine
         :shape="shapeParams"
         :viewDirection="viewDirection"
-      /> 
+      />
     </DViewport>
 
     <DToolbar
@@ -80,23 +80,22 @@ const features: Ref<Array<CircularFeature | RectangularFeature | PolygonalFeatur
     id: 'recessId',
     type: 'recess',
     shapeType: SHAPE_TYPES.RECTANGULAR,
-    location: { x: 1, y: 0 },
     vertices: [
-      { x: 0, y: 0.5 },
-      { x: 0.5, y: 0.5 },
-      { x: 0.5, y: 1 },
-      { x: 0, y: 1 },
+      { x: 0.2, y: 0.4 },
+      { x: 0.8, y: 0.4 },
+      { x: 0.8, y: 1 },
+      { x: 0.2, y: 1 },
     ],
   },
   {
     id: 'upstandId',
     type: 'upstand',
-    shapeType: SHAPE_TYPES.RECTANGULAR,
-    location: { x: 0, y: 0 },
+    shapeType: SHAPE_TYPES.POLYGONAL,
     vertices: [
       { x: 2, y: 1.1 },
       { x: 2.5, y: 1.1 },
       { x: 2.5, y: 1.5 },
+      { x: 2.25, y: 1.7 },
       { x: 2, y: 1.5 },
     ]
   }
@@ -120,12 +119,11 @@ function onUpdateShape({ vertices }) {
   });
 }
 
-function onUpdateFeature({ vertices, location, id }) {
-  console.log(vertices, location);
+function onUpdateFeature({ id, ...params }) {
   const feature = features.value.find(feature => feature.id === id);
 
   return transact(`Update ${feature.type}`, () => {
-    Object.assign(feature, { location, vertices });
+    Object.assign(feature, params);
     props.entity.features = features;
   });
 }

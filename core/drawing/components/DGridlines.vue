@@ -72,6 +72,10 @@ function generateGridlinesPath(multiplier = 1) {
   return path;
 }
 
+watch(() => state.pxToSvg, (val) => {
+  state.pxPerGridUnit = gridSpacing.value / val;
+});
+
 watch(gridSpacing, val => {
   state.gridPrecision = val.toString().split('.')[1]?.length || 0;
 });
