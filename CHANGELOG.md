@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.1.1](https://github.com/leviat-tech/leviate/compare/v7.1.0...v7.1.1) (2025-07-22)
+
+
+* export draggablesketch ([#309](https://github.com/leviat-tech/leviate/issues/309)) ([7c05b6d](https://github.com/leviat-tech/leviate/commit/7c05b6d1ff40ffcb5c860dfc72095c69bb0f5097))
+
 ## [7.1.0](https://github.com/leviat-tech/leviate/compare/v7.0.1...v7.1.0) (2025-07-21)
 
 
