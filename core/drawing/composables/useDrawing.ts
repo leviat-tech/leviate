@@ -238,8 +238,8 @@ function createViewport(userConfig: UserViewportConfig): Viewport {
     const featureAId = featureA.node.dataset.id;
     const featureBId = featureB.node.dataset.id;
     const [ areFeaturesRelated ] = foundRelations;
-    if(!areFeaturesRelated && state.intersectingFeatures[featureAId]) {
-      remove(state.intersectingFeatures[featureAId], (id:string) => id === featureBId as string)
+    if(!areFeaturesRelated) {
+      if(state.intersectingFeatures[featureAId]) remove(state.intersectingFeatures[featureAId], (id:string) => id === featureBId as string)
       if(state.intersectingFeatures[featureBId]) remove(state.intersectingFeatures[featureBId], (id:string) => id === featureAId as string)
     }
     else {

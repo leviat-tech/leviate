@@ -57,12 +57,18 @@ import {
 } from '@crhio/leviate/drawing/types';
 import { cloneDeep } from 'lodash-es';
 import { useUiStore } from '../../../store/ui';
+import { Sketch } from '@crhio/jsdraft';
+import featureDraft from '@crhio/leviate/drawing/drafts/feature';
+import perimeterDraft from '@crhio/leviate/drawing/drafts/perimeter';
+import useDrawing from '@crhio/leviate/drawing/composables/useDrawing';
+
 
 const props = defineProps({
   entity: Object
 });
 
 const uiStore = useUiStore();
+const { validateFeature, state, validateFeaturesIntersection } = useDrawing();
 
 const viewDirection = computed(() => uiStore.viewDirection);
 
@@ -72,7 +78,7 @@ const features: Ref<Array<CircularFeature | RectangularFeature | PolygonalFeatur
     id: 'openingId',
     type: 'opening',
     shapeType: SHAPE_TYPES.CIRCULAR,
-    location: { x: 0.75, y: 1.25 },
+    location: { x: 0.75, y: 1.5 },
     diameter: 0.5,
     cutout: true,
   },
@@ -117,15 +123,48 @@ function onUpdateShape({ vertices }) {
   transact('Update shape', () => {
     props.entity.perimeter = vertices;
   });
+
+  const perimeter = shapeParams.value.perimeter;
+
+  const perimeterSketch = perimeterDraft.func(new Sketch(), perimeter)
+  shapeParams.value.features.forEach(feat => {
+    const featSketch = featureDraft.func(new Sketch(), feat)
+    validateFeature(perimeterSketch, featSketch);
+  })
+  if(state.invalidFeatures.length > 0)window.alert(state.invalidFeatures.join(', '))
 }
 
 function onUpdateFeature({ id, ...params }) {
   const feature = features.value.find(feature => feature.id === id);
 
-  return transact(`Update ${feature.type}`, () => {
+  transact(`Update ${feature.type}`, () => {
     Object.assign(feature, params);
     props.entity.features = features;
   });
+
+  //validate against panel
+  const perimeter = shapeParams.value.perimeter;
+  const selectedFeatSketch = featureDraft.func(new Sketch(), feature);
+  const perimeterSketch = perimeterDraft.func(new Sketch(), perimeter)
+
+  validateFeature(perimeterSketch, selectedFeatSketch);
+  if(state.invalidFeatures.length > 0)window.alert(state.invalidFeatures.join(', '))
+
+  //validate against other features
+  const otherFeatures = features.value.filter(({id: featId}) => featId !== feature.id);
+
+  otherFeatures.forEach(feat => {
+    const featSketch = featureDraft.func(new Sketch(), feat)
+    validateFeaturesIntersection(selectedFeatSketch, featSketch);
+  })
+
+  if(Object.values(state.intersectingFeatures).flat().length > 0){
+    window.alert(
+      Object.keys(state.intersectingFeatures)
+        .filter(key => state.intersectingFeatures[key].length > 0)
+        .map(key => `\n${key} is intersecting feature(s) ${state.intersectingFeatures[key].join(', ')}`) 
+    )
+  }
 }
 
 function onCreateFeature(feature) {
