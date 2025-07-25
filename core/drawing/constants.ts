@@ -68,5 +68,12 @@ export const cursorClassMap = {
   [ANCHOR_POINTS.BOTTOM_RIGHT]: '!cursor-nwse-resize',
 }
 
+export const RELATIONS = {
+  INTERSECTION: 'intersection',
+  A_CONTAINS_B: 'A contains B',
+  B_CONTAINS_A: 'B contains A',
+  A_COVERS_B: 'A covers B',
+}
+
 export type AvailableAnchorPoints = typeof ANCHOR_POINTS[keyof typeof ANCHOR_POINTS];
 

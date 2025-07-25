@@ -1,3 +1,5 @@
+import { Point } from "./Drawings";
+
 type Bulge = number;
 type Segment = [SketchPoint, SketchPoint];
 type FilletPoint = [SketchPoint, number];
@@ -119,4 +121,9 @@ export interface Sketch {
     user: {
         [key: string]: ((params: any) => Sketch)
     };
+    shape: Sketch;
+    intersect: (shape: Sketch) => Point[];
+    contains: (shape: Sketch) => boolean;
+    vertices: Point[];
+    node: {dataset: {id: string; type: string}};
 }

@@ -243,7 +243,7 @@ export function getSegmentRadiusFromVertexList(vertices) {
   });
 }
 
-function almost_equal(a, b, absoluteError = 2.2204460492503131e-16, relativeError = 1.1920929e-7) {
+export function almost_equal(a, b, absoluteError = 2.2204460492503131e-16, relativeError = 1.1920929e-7) {
   const d = Math.abs(a - b);
   if (d <= absoluteError) return true;
 
