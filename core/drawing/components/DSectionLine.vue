@@ -39,7 +39,7 @@ const sectionCutTemp = ref(
     }
 );
 let sectionDragPt = 0;
-const pathOffset = 0.2;
+const pathOffset = 0.1;
 
 const sectionPath = computed(() => {
   const e = shapeExtents.value;
