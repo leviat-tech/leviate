@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.1.2](https://github.com/leviat-tech/leviate/compare/v7.1.1...v7.1.2) (2025-07-25)
+
+
+* section line offset ([#312](https://github.com/leviat-tech/leviate/issues/312)) ([555bff0](https://github.com/leviat-tech/leviate/commit/555bff06167afb9876f6494029e949409f4aee9c))
+
 ## [7.1.1](https://github.com/leviat-tech/leviate/compare/v7.1.0...v7.1.1) (2025-07-22)
 
 
