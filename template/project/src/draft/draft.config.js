@@ -38,6 +38,7 @@ export default {
         hatch_scale: 10,
         hatch_color: 'red',
         hatch_background: 'yellow',
+        hatch_stroke_width: 1
       },
       stroke: { color: 'black', width: 0.5 }
     },

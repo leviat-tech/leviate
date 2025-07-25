@@ -208,6 +208,10 @@ watchEffect(() => {
     shapeSketch = shapeSketch.user[props.userFeature](shape);
   }
 
+  // We don't use this value but it is required in reactive deps to ensure
+  // hatching stroke width remains in sync with current zoom scale
+  const scale = state.pxToSvg;
+
   sketch.value = markRaw(shapeSketch);
   html.value = render(shapeSketch, 'svg', { viewport: null, ...shapeDraft.settings });
   // TODO: inject validators from app
