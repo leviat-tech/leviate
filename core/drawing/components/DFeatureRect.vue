@@ -4,9 +4,9 @@
     <g
       v-if="html"
       ref="el"
-      @click="$emit('click', vertices)"
       v-bind="$attrs"
       v-html="html"
+      @click="$emit('click', $event)"
     />
     <template v-if="isSelected">
       <DDraggablePoint
@@ -24,10 +24,11 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import { render, Sketch } from '@crhio/jsdraft';
+import { isEqual } from 'lodash-es';
+import { render } from '@crhio/jsdraft';
 
 import useDraggablePoint from '../composables/useDraggablePoint';
-import { Extents, FeatureDefinition, Point, PointWithBulge, RectangularFeature, StyleProp } from '../types';
+import { Extents, Point, PointWithBulge, RectangularFeature, StyleProp } from '../types';
 import DDraggablePoint from './DDraggablePoint.vue';
 import { ANCHOR_POINTS, AvailableAnchorPoints, cursorClassMap } from '../constants';
 import { addVectors, calculateCentroid, translateVertices } from '../utils';
@@ -39,7 +40,6 @@ defineOptions({
 });
 
 const props = defineProps<{
-  feature: FeatureDefinition,
   params: RectangularFeature,
   shapeDraft: unknown,
   style: StyleProp,
@@ -48,7 +48,7 @@ const props = defineProps<{
   isPreviewEnabled?: boolean;
 }>();
 
-const emit = defineEmits(['click', 'drag-start', 'dragging', 'drag-end']);
+const emit = defineEmits(['drag-start', 'dragging', 'drag-end']);
 
 const vertices = ref<PointWithBulge[]>(props.params.vertices);
 const isDraggingAnchor = ref(false);
@@ -132,7 +132,6 @@ async function onAnchorDrag(anchor: AvailableAnchorPoints, isDragComplete?: bool
 }
 
 function getPointValuesToModify(anchor: AvailableAnchorPoints, extents: Extents): Partial<Point> | null {
-
   switch (anchor) {
     case ANCHOR_POINTS.BOTTOM:
       return { y: extents.ymin };
@@ -179,8 +178,31 @@ function getModifiedVertices(
   });
 }
 
+/**
+ * location is only used when placing a new rect feature
+ * so translate the rect central to the current pointer position
+ */
+watch(
+  () => props.params.location,
+  (newLocation, prevLocation) => {
+    if (isEqual(prevLocation, newLocation)) return;
+
+    const translateBy = {
+      x: newLocation.x - centre.value.x,
+      y: newLocation.y - centre.value.y,
+    };
+    vertices.value = translateVertices(vertices.value, translateBy);
+  }
+)
+
+/**
+ * feature is rendered using local vertices ref so ensure these
+ * are updated when the params are changed externally e.g. via form inputs
+ */
 watch(
   () => props.params.vertices,
-  (newVertices) => vertices.value = newVertices,
+  (newVertices) => {
+    vertices.value = newVertices;
+  }
 );
 </script>

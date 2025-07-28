@@ -13,6 +13,11 @@ export interface PointWithBulge {
   bulge: number;
 }
 
+export type Dimensions = {
+  width: number;
+  height: number;
+}
+
 export interface ToolItem {
   id: string;
   icon: Component;

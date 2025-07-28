@@ -17,12 +17,13 @@
     v-model="polygonalFeatureModel"
     @close-path="createFeature"
   />
-  <DDraggableFeature
+  <component
     v-if="localFeature?.shapeType && state.isPointerActive"
-    :key="localFeature.shapeType"
+    data-type="feature"
+    :is="featureComponents[localFeature.shapeType]"
     :params="localFeature"
     :style="shapeDraftConfig.styles.activeFeature"
-    :feature="featureDraft"
+    :shape-draft="shapeDraft"
     :is-preview-enabled="localFeature.shapeType !== SHAPE_TYPES.POLYGONAL"
     @click="onNewFeatureClick"
   />
@@ -61,19 +62,23 @@
         v-model:vertices="dimensionsModel"
       />
       <DPopupRadius v-if="isRadiusPopupVisible" v-model:vertex="vertexWithRadiusModel" />
+
+      <DPopupNewFeature v-if="isPlacingFeature" v-model="localFeature" @confirm="createFeature"/>
     </Teleport>
   </foreignObject>
 
   <!-- Current point annotation -->
   <DHoverText
-    v-if="isCurrentPointVisible && state.isPointerActive"
+    v-if="isCurrentPointVisible && state.isPointerActive && !popup.isOpen"
     :x="currentPointWithPrecision.x"
     :y="currentPointWithPrecision.y"
+    transform
   />
 
 </template>
 
 <script setup lang="ts">
+import Big from 'big.js';
 import { cloneDeep } from 'lodash-es';
 import { Draft, render } from '@crhio/jsdraft';
 import { computed, markRaw, onBeforeUnmount, ref, watch, watchEffect } from 'vue';
@@ -98,10 +103,10 @@ import DVertices from './DVertices.vue';
 import DHoverText from './DHoverText.vue';
 import DNewGeometry from './DNewGeometry.vue';
 import DPopupRadius from './popup/DPopupRadius.vue';
-import DDraggableFeature from './DDraggableFeature.vue';
 import DPopupVertex from './popup/DPopupVertex.vue';
 import DPopupDimensionPerimeter from './popup/DPopupDimensionPerimeter.vue';
 import DPopupDimensionAxis from './popup/DPopupDimensionAxis.vue';
+import DPopupNewFeature from './popup/DPopupNewFeature.vue';
 import { Feature, Point, PointWithBulge, ShapeParams, StyleProp } from '../types';
 import DFeatureCirc from './DFeatureCirc.vue';
 import DFeatureRect from './DFeatureRect.vue';
@@ -123,7 +128,7 @@ const props = defineProps<{
   origin: boolean | { xColor: string; yColor: string };
 }>();
 
-const { config, state, sketch, tools, popup } = useDrawing();
+const { config, state, sketch, tools, popup, openPopup } = useDrawing();
 
 const { currentPointWithPrecision } = useDraggablePoint();
 
@@ -316,6 +321,7 @@ const isRadiusPopupVisible = computed(() => {
   return popup.data.type === 'node' && state.currentTool === tools.round_off;
 });
 
+
 /*********************************** FEATURES ***********************************/
 
 const featureComponents = {
@@ -324,20 +330,17 @@ const featureComponents = {
   [SHAPE_TYPES.POLYGONAL]: DFeaturePoly,
 }
 
-function onNewFeatureClick(vertices?: PointWithBulge[]) {
-  switch (localFeature.value.shapeType) {
-    // polygonal feature should have a closed shape, which is handled separately
-    case SHAPE_TYPES.POLYGONAL: return;
-    case SHAPE_TYPES.CIRCULAR: return createFeature();
-    case SHAPE_TYPES.RECTANGULAR: {
-      // Use updated vertices after interaction
-      localFeature.value.vertices = vertices;
-      return createFeature();
-    }
-  }
+const isPlacingFeature = ref<boolean>(false);
+
+function onNewFeatureClick(e: MouseEvent) {
+  isPlacingFeature.value = true;
+  openPopup(e, localFeature.value);
+  // Ensure popup does not cover feature when placing
+  popup.y += 80;
 }
 
 function createFeature() {
+  isPlacingFeature.value = false;
   emit('create:feature', cloneDeep(localFeature.value));
 
   if (localFeature.value.shapeType === SHAPE_TYPES.POLYGONAL) {
@@ -374,6 +377,8 @@ function getFeatureById(id: string): Feature | undefined {
 function updateLocalFeature(shapeType: AvailableShapeTypes | undefined) {
   if (!shapeType) return;
 
+  popup.data.shapeType = shapeType;
+
   const isPolygonal = shapeType === SHAPE_TYPES.POLYGONAL;
 
   const vertices = isPolygonal ? [] : getDefaultVertices();
@@ -409,7 +414,7 @@ watch(
         perimeterModel.value = mirrorPath(perimeterModel.value);
         break;
       default:
-        if (localFeature.value.shapeType === SHAPE_TYPES.POLYGONAL) localFeature.value.shapeType = null;
+        localFeature.value.shapeType = null;
         isCurrentPointVisible.value = false;
     }
   }
@@ -428,7 +433,6 @@ watch(
     state.currentTool = TOOLBAR_OPTIONS.POINTER;
     state.toolParams = {};
     isCurrentPointVisible.value = false;
-    localFeature.value.shapeType = null;
 
     if (localFeature.value?.shapeType === SHAPE_TYPES.POLYGONAL) {
       if (localFeature.value.vertices.length >= 3) {
@@ -437,6 +441,8 @@ watch(
         localFeature.value.vertices = [];
       }
     }
+
+    localFeature.value.shapeType = null;
   }
 );
 
@@ -488,7 +494,7 @@ watch(
   () => currentPointWithPrecision.value,
   (currentPoint) => {
     // setting only if opening has a valid type, i.e. insert opening tool selected
-    if (localFeature.value?.shapeType)
+    if (localFeature.value?.shapeType && !popup.isOpen)
       localFeature.value.location = { x: currentPoint.x, y: currentPoint.y };
   }
 );

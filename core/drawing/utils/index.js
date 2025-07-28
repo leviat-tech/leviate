@@ -1,5 +1,6 @@
 import { Vector } from '@crhio/vector';
 import Big from 'big.js';
+import getExtents from './getExtents';
 
 export const arrayMoveItem = (array, itemToMove, moveToIndex) => {
   if (array[moveToIndex] === itemToMove) return array;
@@ -216,7 +217,7 @@ export function addVectors(vector1, vector2) {
   };
 }
 
-function subtractVectors(vector1, vector2) {
+export function subtractVectors(vector1, vector2) {
   return {
     x: Big(vector1.x).minus(vector2.x).toNumber(),
     y: Big(vector1.y).minus(vector2.y).toNumber(),
@@ -432,4 +433,16 @@ export function translateVertices(vertices, translateBy) {
       ...addVectors(vertex, translateBy),
       bulge: vertex.bulge,
     }));
+}
+
+export function getBoundingBox(vertices, location) {
+  const { xmin, xmax, ymin, ymax } = getExtents(vertices);
+
+  const width = Big(xmax).minus(xmin).toNumber();
+  const height = Big(ymax).minus(ymin).toNumber();
+
+  return {
+    width,
+    height,
+  }
 }

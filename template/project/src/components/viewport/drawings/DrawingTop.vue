@@ -171,7 +171,7 @@ function onUpdateFeature({ id, ...params }) {
 }
 
 function onCreateFeature(feature) {
-  console.log(feature.vertices);
+  console.log(feature);
 
   transact(`Create ${feature.type}`, () => {
 

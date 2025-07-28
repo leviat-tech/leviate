@@ -23,11 +23,12 @@
 </template>
 
 <script setup lang="ts">
-import { render } from '@crhio/jsdraft';
 import { computed, ref, watch } from 'vue';
+import { isEqual } from 'lodash-es';
+import { render } from '@crhio/jsdraft';
 
 import useDraggablePoint from '../composables/useDraggablePoint';
-import { CircularFeature, FeatureDefinition, Point, StyleProp } from '../types';
+import { CircularFeature, Point, StyleProp } from '../types';
 import DDraggablePoint from './DDraggablePoint.vue';
 import { AvailableAnchorPoints, ANCHOR_POINTS, cursorClassMap } from '../constants';
 import useDrag from '../composables/useDrag';
@@ -37,7 +38,6 @@ defineOptions({
 });
 
 const props = defineProps<{
-  feature: FeatureDefinition,
   params: CircularFeature,
   shapeDraft: unknown;
   style: StyleProp,
@@ -118,7 +118,9 @@ function onDragAnchor(anchor: AvailableAnchorPoints | number, isDragComplete?: b
 
 watch(
   () => props.params.location,
-  (newLocation) => {
+  (newLocation, prevLocation) => {
+    if (isEqual(prevLocation, newLocation)) return;
+
     location.value = newLocation;
   }
 );

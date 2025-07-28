@@ -273,7 +273,7 @@ function createViewport(userConfig: UserViewportConfig): Viewport {
 
 const popup = reactive({
   target: null,
-  isOpen: true,
+  isOpen: false,
   x: 0,
   y: 0,
   data: {},
