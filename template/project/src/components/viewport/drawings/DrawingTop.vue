@@ -171,8 +171,6 @@ function onUpdateFeature({ id, ...params }) {
 }
 
 function onCreateFeature(feature) {
-  console.log(feature);
-
   transact(`Create ${feature.type}`, () => {
 
     features.value.push({
