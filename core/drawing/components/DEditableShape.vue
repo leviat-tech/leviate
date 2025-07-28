@@ -11,6 +11,21 @@
     @stop-moving:vertex="handleMovingVertex"
   />
 
+  <!-- Updating existing features   -->
+  <component
+    v-for="feature in shape.features"
+    :is="featureComponents[feature.shapeType]"
+    :key="feature.id"
+    :feature="featureDraft"
+    :shape-draft="shapeDraft"
+    :params="feature"
+    :is-selected="state.selectedFeatureId === feature.id"
+    :style="getFeatureStyle(feature)"
+    @mousedown="selectFeature(feature.id)"
+    @dragging="onFeatureDrag(feature, $event)"
+    @drag-end="onFeatureDragEnd(feature, $event)"
+  />
+
   <!-- Adding a new feature -->
   <DNewGeometry
     v-if="localFeature.shapeType === SHAPE_TYPES.POLYGONAL"
@@ -26,21 +41,6 @@
     :shape-draft="shapeDraft"
     :is-preview-enabled="localFeature.shapeType !== SHAPE_TYPES.POLYGONAL"
     @click="onNewFeatureClick"
-  />
-
-  <!-- Updating existing features   -->
-  <component
-    v-for="feature in shape.features"
-    :is="featureComponents[feature.shapeType]"
-    :key="feature.id"
-    :feature="featureDraft"
-    :shape-draft="shapeDraft"
-    :params="feature"
-    :is-selected="state.selectedFeatureId === feature.id"
-    :style="getFeatureStyle(feature)"
-    @mousedown="state.selectedFeatureId = feature.id"
-    @dragging="onFeatureDrag(feature, $event)"
-    @drag-end="onFeatureDragEnd(feature, $event)"
   />
 
   <!-- Freehand shape -->
@@ -78,7 +78,6 @@
 </template>
 
 <script setup lang="ts">
-import Big from 'big.js';
 import { cloneDeep } from 'lodash-es';
 import { Draft, render } from '@crhio/jsdraft';
 import { computed, markRaw, onBeforeUnmount, ref, watch, watchEffect } from 'vue';
@@ -327,6 +326,12 @@ const featureComponents = {
 }
 
 const isPlacingFeature = ref<boolean>(false);
+
+function selectFeature(featureId: string) {
+  if (state.currentTool === TOOLBAR_OPTIONS.POINTER) {
+    state.selectedFeatureId = featureId;
+  }
+}
 
 function onNewFeatureClick(e: MouseEvent) {
   isPlacingFeature.value = true;
