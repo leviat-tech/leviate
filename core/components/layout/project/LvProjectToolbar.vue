@@ -6,6 +6,7 @@
           name="Undo"
           tool-id="undo"
           icon="undo"
+          size="md"
           @click="revision.undo()"
           :disabled="!undoable"
         />
@@ -13,26 +14,22 @@
           name="Redo"
           tool-id="redo"
           icon="redo"
+          size="md"
           @click="revision.redo()"
           :disabled="!redoable"
         />
       </div>
       <Menu class="relative" as="div">
-        <!-- Button -->
-        <MenuButton
-          :title="$L('help')"
-          class="flex items-center space-x-2 relative"
-        >
-          <slot v-if="$slots.button" name="button"/>
+        <MenuButton :title="$L('help')" class="flex items-center space-x-2 relative">
+          <slot v-if="$slots.button" name="button" />
           <CTool color="info" size="md"><QuestionMarkCircleIcon /></CTool>
         </MenuButton>
 
-        <!-- Content -->
         <Transition enter-from-class="scale-95 opacity-0" leave-to-class="opacity-0">
           <MenuItems
             as="div"
-            class="absolute w-[260px] text-black top-3 right-3 z-20 py-2 bg-white shadow-xl transition duration-150 origin-top-right outline-none">
-
+            class="absolute w-[260px] text-black top-3 right-3 z-20 py-2 bg-white shadow-xl transition duration-150 origin-top-right outline-none"
+          >
             <template v-for="item in $config.helpMenu">
               <hr v-if="item === null" class="my-2" />
 
@@ -43,19 +40,20 @@
                   :data-cy="`toolbar__info_link_${item.name}`"
                   target="_blank"
                 >
-                  <CIcon v-if="item.icon" :type="item.icon" size="sm"/>
+                  <CIcon v-if="item.icon" :type="item.icon" size="sm" />
                   <span>{{ $l(item.name) }}</span>
                 </a>
-
               </MenuItem>
             </template>
 
             <hr v-if="$config.helpMenu.length > 0" class="my-2" />
 
             <MenuItem v-slot="{ active }" :class="menuItemClass">
-              <button @click="openAppInfoModal"
-                      :class="[menuItemClass, active && 'bg-steel-light']">
-                <CIcon type="information-circle" class="!w-5"/>
+              <button
+                @click="openAppInfoModal"
+                :class="[menuItemClass, active && 'bg-steel-light']"
+              >
+                <CIcon type="information-circle" class="!w-5" />
                 <span>{{ $L('about') }} {{ manifest.name }}</span>
               </button>
             </MenuItem>
@@ -66,14 +64,15 @@
   </LvToolbar>
 </template>
 
-<script setup>
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
-import { QuestionMarkCircleIcon } from '@heroicons/vue/20/solid';
+<script setup lang="ts">
 import { useRootStore } from '@crhio/leviate';
+import { computed, onMounted, onUnmounted } from 'vue';
 import useAppInfo from '@crhio/leviate/composables/useAppInfo';
+import { QuestionMarkCircleIcon } from '@heroicons/vue/20/solid';
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
+
 import LvToolbar from '../../ui/LvToolbar.vue';
 import { useLeviateStore } from '../../../store/leviate';
-import { computed, onMounted, onUnmounted } from 'vue';
 
 const { openAppInfoModal, manifest } = useAppInfo();
 
