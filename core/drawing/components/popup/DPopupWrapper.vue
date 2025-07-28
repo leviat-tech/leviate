@@ -14,11 +14,11 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import useDrawing from '../../composables/useDrawing.ts';
 import DPopupButtons from './DPopupButtons.vue';
 
-const { popup, closePopup } = useDrawing();
+const { state, popup, closePopup } = useDrawing();
 
 const emit = defineEmits(['confirm']);
 
@@ -32,4 +32,6 @@ const onConfirm = () => {
 onMounted(() => {
   el.value.querySelector('input')?.select();
 });
+
+watch(() => state.currentTool, closePopup);
 </script>

@@ -3,6 +3,7 @@ import { selectAll } from 'd3-selection';
 import { onBeforeUnmount, onMounted, ref, Ref } from 'vue';
 import { Point } from '../types';
 import useDrawing from './useDrawing';
+import { TOOLBAR_OPTIONS } from '../constants';
 
 type D3DragEvent = DragEvent & { sourceEvent: DragEvent };
 type DragHandler = (e: D3DragEvent) => void;
@@ -55,7 +56,7 @@ export default function useDrag(
   }
 
   function canDrag(e: D3DragEvent) {
-    if (disabledRef?.value === true) return false;
+    if (disabledRef?.value === true || state.currentTool !== TOOLBAR_OPTIONS.POINTER) return false;
 
     const { x, y } = e.sourceEvent;
 

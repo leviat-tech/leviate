@@ -6,7 +6,6 @@
       ref="el"
       v-bind="$attrs"
       v-html="html"
-      @click="$emit('click', $event)"
     />
     <template v-if="isSelected">
       <DDraggablePoint
