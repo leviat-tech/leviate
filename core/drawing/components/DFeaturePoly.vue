@@ -25,7 +25,7 @@ import { computed, ref, watch } from 'vue';
 import { render, Sketch } from '@crhio/jsdraft';
 
 import useDraggablePoint from '../composables/useDraggablePoint';
-import { FeatureDefinition, Point, PointWithBulge, RectangularFeature, StyleProp } from '../types';
+import { PointWithBulge, RectangularFeature, StyleProp } from '../types';
 import { translateVertices } from '../utils';
 import useDrag from '../composables/useDrag';
 import getExtents from '../utils/getExtents';
@@ -36,7 +36,6 @@ defineOptions({
 });
 
 const props = defineProps<{
-  feature: FeatureDefinition,
   params: RectangularFeature,
   shapeDraft: unknown,
   style: StyleProp,

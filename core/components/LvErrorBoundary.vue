@@ -7,6 +7,7 @@
       <div class="bg-white p-2 rounded">
         <div class="cursor-pointer mb-2">Error Details:</div>
         <div v-for="detail in errorDetails" class="text-sm" v-html="detail"/>
+        <CButton color="danger" class="mt-2" @click="resetError">Retry</CButton>
       </div>
     </div>
   </div>
@@ -38,8 +39,10 @@ onErrorCaptured((err, vm, info) => {
   return false;
 });
 
-watch(() => props.instance, () => {
+function resetError() {
   hasError.value = false;
   errorDetails.value = [];
-});
+}
+
+watch(() => props.instance, resetError);
 </script>

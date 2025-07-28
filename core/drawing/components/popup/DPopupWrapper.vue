@@ -3,7 +3,7 @@
     v-if="popup.isOpen"
     id="draw__popup-wrapper"
     ref="el"
-    class="fixed z-10 p-2 bg-gray-50 border border-gray-300 shadow-lg -translate-x-1/2 -translate-y-1/2"
+    class="fixed z-30 p-2 bg-gray-50 border border-gray-400 shadow-lg -translate-x-1/2 -translate-y-1/2 rounded"
     :style="{ left: popup.x + 'px', top: popup.y + 'px' }"
     @keydown.enter="onConfirm"
     @keydown.esc="closePopup"

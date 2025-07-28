@@ -82,11 +82,13 @@ const emit = defineEmits([
   'mouseup',
   'change-tool',
   'keyDown',
+  'deleteKey',
+  'escapeKey',
 ]);
 
 provide('viewportName', props.name);
 
-const { state, sketch, openPopup, closePopup, tools } = useDrawing(props.name);
+const { state, sketch, openPopup, closePopup, popup, tools } = useDrawing(props.name);
 
 let isPanning = false;
 let isZooming = false;
@@ -309,6 +311,8 @@ const handleClick = e => {
 };
 
 const handleMouseLeave = () => {
+  if (popup.isOpen) return;
+
   state.currentPoint = { x: 0, y: 0 };
   state.isPointerActive = false;
 };
@@ -373,7 +377,7 @@ const handleMouseup = e => {
     return;
   }
 
-  emit('mouseup', e);
+  emit('mouseup', e, { ...dataset });
   setMousePt(e);
   svgRef.value.releasePointerCapture(e.pointerId);
   if (isPanning) {
@@ -392,7 +396,18 @@ const handleKeyDown = e => {
     state.keyModifiers[e.key] = true;
   }
   if (actionKeys.includes(e.key)) {
-    if (e.target.tagName !== 'INPUT') state.actionKeys[e.key] = true;
+    if (e.target.tagName !== 'INPUT') {
+      state.actionKeys[e.key] = true;
+      switch (e.key) {
+        case 'Delete':
+        case 'Backspace':
+          emit('deleteKey', e);
+          break;
+        case 'Escape':
+          emit('escapeKey', e);
+          break;
+      }
+    }
   }
 
   if (e.key === 'Escape') {

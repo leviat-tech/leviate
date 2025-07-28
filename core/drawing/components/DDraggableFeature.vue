@@ -3,7 +3,6 @@
   <g
     v-if="html"
     ref="el"
-    @click="onClick"
     v-bind="$attrs"
     v-html="html"
   />
@@ -38,7 +37,7 @@ const html = computed(() => {
   return sketch ? render(sketch, 'svg', { viewport: null }) : null;
 });
 
-const emit = defineEmits(['click', 'drag-start', 'dragging', 'drag-end']);
+const emit = defineEmits(['drag-start', 'dragging', 'drag-end']);
 const el = ref(null);
 
 useDrag(el, {
