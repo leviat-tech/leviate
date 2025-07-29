@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.2.0](https://github.com/leviat-tech/leviate/compare/v7.1.3...v7.2.0) (2025-07-29)
+
+
+* enable placing new feature on top of existing ([6b0527c](https://github.com/leviat-tech/leviate/commit/6b0527c048de416904947dc580256a9bf7fd0fd8))
+* move keyboard key names to constant ([da3ae63](https://github.com/leviat-tech/leviate/commit/da3ae6388200aeea87020592c8ba03b7cba37cc0))
+* remove console.log ([37eb560](https://github.com/leviat-tech/leviate/commit/37eb5603e92c97b07fd442fcc666682ca2b37387))
+* specify dimensions when adding features ([a803700](https://github.com/leviat-tech/leviate/commit/a803700be15be58ef78152ff7dad36d404c78e3b))
+
 ## [7.1.3](https://github.com/leviat-tech/leviate/compare/v7.1.2...v7.1.3) (2025-07-29)
 
 
