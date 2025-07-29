@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.1.3](https://github.com/leviat-tech/leviate/compare/v7.1.2...v7.1.3) (2025-07-29)
+
+
+* hatching stroke width when zooming ([9213553](https://github.com/leviat-tech/leviate/commit/9213553013f4aac8f4dbe73aec10b65b210052a8))
+* warnings ([#315](https://github.com/leviat-tech/leviate/issues/315)) ([292a8f8](https://github.com/leviat-tech/leviate/commit/292a8f8fcdf4e6b4e484aa27082ce11583599e04))
+
 ## [7.1.2](https://github.com/leviat-tech/leviate/compare/v7.1.1...v7.1.2) (2025-07-25)
 
 
