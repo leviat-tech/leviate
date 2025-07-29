@@ -72,7 +72,7 @@ export const RELATIONS = {
   INTERSECTION: 'intersection',
   A_CONTAINS_B: 'A contains B',
   B_CONTAINS_A: 'B contains A',
-  A_COVERS_B: 'A covers B',
+  A_TOUCHES_B: 'A touches B',
 }
 
 export type AvailableAnchorPoints = typeof ANCHOR_POINTS[keyof typeof ANCHOR_POINTS];

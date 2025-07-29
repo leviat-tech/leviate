@@ -131,6 +131,7 @@ function onUpdateShape({ vertices }) {
     const featSketch = featureDraft.func(new Sketch(), feat)
     validateFeature(perimeterSketch, featSketch);
   })
+  //TODO: update with Toast alert's once available
   if(state.invalidFeatures.length > 0)window.alert(state.invalidFeatures.join(', '))
 }
 
@@ -148,7 +149,8 @@ function onUpdateFeature({ id, ...params }) {
   const perimeterSketch = perimeterDraft.func(new Sketch(), perimeter)
 
   validateFeature(perimeterSketch, selectedFeatSketch);
-  if(state.invalidFeatures.length > 0)window.alert(state.invalidFeatures.join(', '))
+  //TODO: update with Toast alert's once available
+  if(state.invalidFeatures.length > 0)window.alert(`Invalid feature(s): ${state.invalidFeatures.join(', ')}`)
 
   //validate against other features
   const otherFeatures = features.value.filter(({id: featId}) => featId !== feature.id);
@@ -159,6 +161,7 @@ function onUpdateFeature({ id, ...params }) {
   })
 
   if(Object.values(state.intersectingFeatures).flat().length > 0){
+   //TODO: update with Toast alert's once available
     window.alert(
       Object.keys(state.intersectingFeatures)
         .filter(key => state.intersectingFeatures[key].length > 0)
@@ -196,6 +199,7 @@ const toolbarItems = [
   {
     id: 'some_tool',
     icon: AreaLoads,
+    //TODO: update with Toast alert's once available
     handler: () => alert('You just clicked area loads')
   },
   {
