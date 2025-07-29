@@ -24,7 +24,7 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, ref } from 'vue';
 import DDraggablePoint from './DDraggablePoint.vue';
 import DAdjustableCross from './DAdjustableCross.vue';
@@ -40,11 +40,11 @@ const { currentPointWithPrecision } = useDraggablePoint();
 
 const MIN_SHAPE_VERTICES = 3;
 
-const props = defineProps({
-  shapeId: String,
-  color: String,
-  modelValue: Array,
-});
+const props = defineProps<{
+  shapeId?: string;
+  modelValue?: Array<unknown>;
+  color?: 'default' | 'selected' | 'danger';
+}>();
 
 const emit = defineEmits(['update:modelValue', 'move:vertex', 'stop-moving:vertex']);
 const currentIndex = ref(0);
@@ -60,14 +60,14 @@ const newVertex = computed(() => ({
 
 const vertices = computed({
   get: () => props.modelValue,
-  set: newVertices => {
+  set: (newVertices) => {
     emit('update:modelValue', newVertices);
   },
 });
 
 const newVertexModel = computed({
   get: () => props.modelValue,
-  set: val => {
+  set: (val) => {
     emit('update:modelValue', val.vertices);
   },
 });
