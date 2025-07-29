@@ -1,5 +1,5 @@
 <template>
-  <DPopupWrapper @confirm="$emit('confirm')" class="w-32">
+  <DPopupWrapper class="w-32">
     <DPopupNewFeatureCirc
       v-if="modelValue.shapeType === SHAPE_TYPES.CIRCULAR"
       v-model:diameter="modelValue.diameter"

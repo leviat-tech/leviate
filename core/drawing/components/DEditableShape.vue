@@ -422,6 +422,10 @@ watch(
         localFeature.value.shapeType = null;
         isCurrentPointVisible.value = false;
     }
+
+    if (tool !== TOOLBAR_OPTIONS.POINTER) {
+      state.selectedFeatureId = null;
+    }
   }
 );
 
