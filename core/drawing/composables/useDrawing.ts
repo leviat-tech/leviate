@@ -58,10 +58,10 @@ interface ViewportState {
   //   right: boolean;
   // };
   toolParams: any,
-  // sectionCut: {
-  //   a: Point,
-  //   b: Point;
-  // };
+  sectionCut?: {
+    a: Point,
+    b: Point;
+  };
   invalidFeatures: string[];
   intersectingFeatures: {[id: string]: string[]};
 }
