@@ -387,8 +387,18 @@ const handleMouseup = e => {
   }
 };
 
-const modifierKeys = ['Control', 'Alt', 'Shift', 'Meta'];
-const actionKeys = ['Escape', 'Backspace', 'Delete'];
+const KEYS = {
+  ESCAPE: 'Escape',
+  BACKSPACE: 'Backspace',
+  DELETE: 'Delete',
+  BACK: 'Backspace',
+  CONTROL: 'Control',
+  ALT: 'Alt',
+  SHIFT: 'Shift',
+  META: 'Meta',
+}
+const modifierKeys = [KEYS.CONTROL, KEYS.ALT, KEYS.SHIFT, KEYS.META];
+const actionKeys = [KEYS.ESCAPE, KEYS.BACKSPACE, KEYS.DELETE];
 
 const handleKeyDown = e => {
   if (e.key === 'Alt') e.preventDefault();
@@ -399,26 +409,23 @@ const handleKeyDown = e => {
     if (e.target.tagName !== 'INPUT') {
       state.actionKeys[e.key] = true;
       switch (e.key) {
-        case 'Delete':
-        case 'Backspace':
+        case KEYS.DELETE:
+        case KEYS.BACKSPACE:
           emit('deleteKey', e);
           break;
-        case 'Escape':
+        case KEYS.ESCAPE:
+          closePopup();
           emit('escapeKey', e);
           break;
       }
     }
   }
 
-  if (e.key === 'Escape') {
-    closePopup();
-  }
-
   emit('keyDown', e);
 };
 
 const handleKeyUp = e => {
-  if (e.key === 'Alt') e.preventDefault();
+  if (e.key === KEYS.ALT) e.preventDefault();
 
   if (modifierKeys.includes(e.key)) {
     state.keyModifiers[e.key] = false;
