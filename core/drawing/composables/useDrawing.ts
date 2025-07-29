@@ -1,7 +1,8 @@
 import { inject, Reactive, reactive, Ref, ref } from 'vue';
+import {remove, intersection, isEqual} from 'lodash-es';
 
 import { Point, Sketch, ToolItem } from '../types';
-import { DEFAULT_TOOLS, TOOLBAR_OPTIONS } from "../constants";
+import { DEFAULT_TOOLS, RELATIONS } from "../constants";
 
 import pointer from '../assets/pointer.svg';
 import new_polygon from '../assets/new_polygon.svg';
@@ -46,27 +47,31 @@ interface ViewportState {
     Control: boolean;
     Shift: boolean;
     Meta: boolean;
-  },
+  };
   actionKeys: {
     Escape: boolean;
     Backspace: boolean;
     Delete: boolean;
-  },
-  mouseButtons: {
-    left: boolean;
-    right: boolean;
-  },
+  };
+  // mouseButtons: {
+  //   left: boolean;
+  //   right: boolean;
+  // };
   toolParams: any,
-  sectionCut: {
+  sectionCut?: {
     a: Point,
     b: Point;
-  },
+  };
+  invalidFeatures: string[];
+  intersectingFeatures: {[id: string]: string[]};
 }
 
 interface Viewport {
   config: ViewportConfig;
   sketch: Ref<Sketch | null>;
   state: ViewportState;
+  validateFeature: (panelDraft: Sketch, featureDraft: Sketch, allowOnEdge: boolean)=>void;
+  validateFeaturesIntersection: (featureA: Sketch, featureB: Sketch)=>void;
 }
 
 interface ViewportsStore {
@@ -210,12 +215,59 @@ function createViewport(userConfig: UserViewportConfig): Viewport {
     // activePath: null,
     selectedFeatureId: null,
     toolParams: ref({}),
+    invalidFeatures: ref([]) as Ref<string[]>,
+    intersectingFeatures: ref({}) as Ref<{[id: string]: string[]}>,
   });
+
+  //validate if a feature's located inside panel
+  function validateFeature(panelDraft: Sketch, featureDraft: Sketch, allowOnEdge = false){
+    const validRelations = allowOnEdge 
+      ? [ [ RELATIONS.A_CONTAINS_B ], [ RELATIONS.A_CONTAINS_B, RELATIONS.INTERSECTION ]] //contains+intersection=covers  
+      : [ [ RELATIONS.A_CONTAINS_B ] ]
+    const foundRelations = getShapesRelations(panelDraft, featureDraft);
+    //if no array returned, there's an error (loged by getShapesRelations)
+    if(!foundRelations) return;
+
+    const featureId = featureDraft.node.dataset.id;
+    const [ , relations ] = foundRelations;
+    const isFeatureValid = validRelations.some(validR => isEqual(validR, relations.sort()))
+    if(isFeatureValid) remove(state.invalidFeatures, (id:string) => id === featureId)
+    else if(!state.invalidFeatures.includes(featureId)) state.invalidFeatures.push(featureId)  
+  }
+  //validate how a feature's located related to another feature - intersecting, covering, containing
+  function validateFeaturesIntersection(featureA: Sketch, featureB: Sketch, allowOnEdge = false){
+    const validRelations = allowOnEdge 
+      ? [ [ /*not related*/ ], [ RELATIONS.A_TOUCHES_B, RELATIONS.INTERSECTION ]]
+      : [ [ /*not related*/ ] ]
+    //checking for any possible relation, i.e. default 'all' relations apply
+    const foundRelations = getShapesRelations(featureA, featureB);
+    //if no array returned, there's an error (loged by getShapesRelations)
+    if(!foundRelations) return;
+    const featureAId = featureA.node.dataset.id;
+    const featureBId = featureB.node.dataset.id;
+    const [ , relations ] = foundRelations;
+    
+    const areFeaturesValidRelated = validRelations.some(validR => isEqual(validR, relations.sort()))
+    
+    if(areFeaturesValidRelated) {
+      if(state.intersectingFeatures[featureAId]) remove(state.intersectingFeatures[featureAId], (id:string) => id === featureBId)
+      if(state.intersectingFeatures[featureBId]) remove(state.intersectingFeatures[featureBId], (id:string) => id === featureAId)
+    }
+    else {
+      if(!state.intersectingFeatures[featureAId]) state.intersectingFeatures[featureAId] = [];
+      if(!state.intersectingFeatures[featureBId]) state.intersectingFeatures[featureBId] = [];
+
+      if(!state.intersectingFeatures[featureAId].includes(featureBId)) state.intersectingFeatures[featureAId].push(featureBId);
+      if(!state.intersectingFeatures[featureBId].includes(featureAId)) state.intersectingFeatures[featureBId].push(featureAId);
+    }  
+  }
 
   return {
     config: { ...config, ...globalConfig },
     sketch: ref(null),
     state,
+    validateFeature,
+    validateFeaturesIntersection
   };
 }
 
@@ -269,4 +321,42 @@ export default function useDrawing(config?: UserViewportConfig | undefined): Vie
     closePopup,
     popup,
   };
+}
+
+//NOTE: relation A_contains_B - shape B lies in the interior of shape A,
+//relation A_contains_B + intersection - every point of B lies or in the interior or on the boundary of shape A = A covers B
+
+export function getShapesRelations(draftA: Sketch, draftB: Sketch, relations = Object.values(RELATIONS)): undefined |[boolean, string[]]{
+  const foundRelations = [];
+
+  if(!draftA?.shape || !draftB?.shape || relations?.length < 1){
+    console.error('Arguments are invalid. Please check expected arguments\' types');
+    return;
+  }
+
+  if(relations.includes(RELATIONS.A_CONTAINS_B)){
+    if(draftA.shape.contains(draftB.shape)) foundRelations.push(RELATIONS.A_CONTAINS_B) 
+  }
+  if(relations.includes(RELATIONS.B_CONTAINS_A)){
+    if(draftB.shape.contains(draftA.shape)) foundRelations.push(RELATIONS.B_CONTAINS_A) 
+  }
+  if(intersection( relations, [RELATIONS.INTERSECTION, RELATIONS.A_TOUCHES_B]).length > 0) {
+    const intersection = draftA.shape.intersect(draftB.shape);
+    if(intersection.length > 0){
+      foundRelations.push(RELATIONS.INTERSECTION) 
+      try{
+          //check if A touches B (or vice versa)
+          const draftAWithoutIntersection = draftA.subtract(draftB);
+          const draftBWithoutIntersection = draftB.subtract(draftA);
+          const intersectionDraftA = draftA.subtract(draftAWithoutIntersection);
+          const intersectionDraftB = draftB.subtract(draftBWithoutIntersection);
+          
+          //if one draft remains 'unchanged' by intersection, the second one should as well. Second check's here just to increase a chance of detection 
+          if(intersectionDraftA.vertices.length === 0 || intersectionDraftB.vertices.length === 0) foundRelations.push(RELATIONS.A_TOUCHES_B) 
+      } catch {
+        console.log("Error while checking drafts' intersection variants.")
+      }
+    }
+  }
+  return [ foundRelations.length > 0, foundRelations ]
 }
