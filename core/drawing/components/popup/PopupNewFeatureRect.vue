@@ -72,6 +72,8 @@ const inputProps = {
 };
 
 onMounted(() => {
+  // Update vertices from default
+  updateVertices({ width: widthModel.value, height: heightModel.value });
   el.value.querySelector('input')?.select();
 });
 </script>

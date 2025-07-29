@@ -165,21 +165,21 @@ function onUpdateFeature({ id, ...params }) {
     window.alert(
       Object.keys(state.intersectingFeatures)
         .filter(key => state.intersectingFeatures[key].length > 0)
-        .map(key => `\n${key} is intersecting feature(s) ${state.intersectingFeatures[key].join(', ')}`) 
+        .map(key => `\n${key} is intersecting feature(s) ${state.intersectingFeatures[key].join(', ')}`)
     )
   }
 }
 
 function onCreateFeature(feature) {
-  transact(`Create ${feature.type}`, () => {
+  transact('Create feature', () => {
 
     features.value.push({
-      id: 'recessId',
-      type: 'recess',
+      id: 'newUpstand',
+      type: 'upstand',
       ...feature
     });
 
-    props.entity.features = features;
+    props.entity.features = features.value;
   });
 }
 
