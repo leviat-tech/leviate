@@ -215,8 +215,8 @@ function createViewport(userConfig: UserViewportConfig): Viewport {
     // activePath: null,
     selectedFeatureId: null,
     toolParams: ref({}),
-    invalidFeatures: ref([]) as Ref<string[]>,
-    intersectingFeatures: ref({}) as Ref<{[id: string]: string[]}>,
+    invalidFeatures: [] as string[],
+    intersectingFeatures: {} as {[id: string]: string[]},
   });
 
   //validate if a feature's located inside panel
