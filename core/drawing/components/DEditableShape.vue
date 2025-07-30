@@ -356,9 +356,10 @@ function createFeature() {
 
 function getFeatureStyle(feature: Feature): StyleProp {
   const isActive = feature.id === state.selectedFeatureId;
+  const isInvalid = state.invalidFeatures.includes(feature.id);
   return isActive || feature === localFeature.value
-    ? shapeDraftConfig.styles.activeFeature
-    : shapeDraftConfig.styles.draggableFeature;
+    ? shapeDraftConfig.styles.activeFeature 
+    : isInvalid ? { ...shapeDraftConfig.styles.draggableFeature, ...shapeDraftConfig.styles.invalidFeature } : shapeDraftConfig.styles.draggableFeature;
 }
 
 function onFeatureDrag(feature: Feature, targetType: 'feature' | 'anchor') {
