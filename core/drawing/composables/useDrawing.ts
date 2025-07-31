@@ -1,4 +1,4 @@
-import { inject, Reactive, reactive, Ref, ref } from 'vue';
+import { computed, ComputedRef, inject, Reactive, reactive, Ref, ref } from 'vue';
 import {remove, intersection, isEqual} from 'lodash-es';
 
 import { Point, Sketch, ToolItem } from '../types';
@@ -72,6 +72,7 @@ interface Viewport {
   state: ViewportState;
   validateFeature: (panelDraft: Sketch, featureDraft: Sketch, allowOnEdge: boolean)=>void;
   validateFeaturesIntersection: (featureA: Sketch, featureB: Sketch)=>void;
+  useValidityCheck: (id: string) => ComputedRef<boolean>
 }
 
 interface ViewportsStore {
@@ -262,12 +263,22 @@ function createViewport(userConfig: UserViewportConfig): Viewport {
     }  
   }
 
+  function useValidityCheck(id: string){
+    const isValid = computed(() => {
+      return !state.invalidFeatures.includes(id) 
+        && !Object.values(state.intersectingFeatures).flat().includes(id)
+      })
+
+    return isValid;
+  }   
+
   return {
     config: { ...config, ...globalConfig },
     sketch: ref(null),
     state,
     validateFeature,
-    validateFeaturesIntersection
+    validateFeaturesIntersection,
+    useValidityCheck
   };
 }
 
