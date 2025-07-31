@@ -11,7 +11,7 @@
     <template v-if="isSelected">
       <DVertices
         v-model="vertices"
-        color="selected"
+        :color="isValid ? 'selected' : 'danger'"
         :shape-id="params.id"
         @move:vertex="onVertexDrag(true)"
         @stop-moving:vertex="onVertexDrag(false)"
@@ -22,9 +22,10 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import { render, Sketch } from '@crhio/jsdraft';
+import { render } from '@crhio/jsdraft';
 
 import useDraggablePoint from '../composables/useDraggablePoint';
+import useDrawing from '../composables/useDrawing';
 import { PointWithBulge, RectangularFeature, StyleProp } from '../types';
 import { translateVertices } from '../utils';
 import useDrag from '../composables/useDrag';
@@ -72,6 +73,9 @@ const html = computed(() => {
 const el = ref<HTMLElement | null>(null);
 
 const { currentPointWithPrecision, startDrag, getDragDistance } = useDraggablePoint();
+const { useValidityCheck } = useDrawing();
+
+const isValid = useValidityCheck(props.params.id)
 
 function onVertexDrag(isDragging: boolean) {
   isDraggingVertex.value = isDragging;

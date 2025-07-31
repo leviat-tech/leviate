@@ -66,6 +66,13 @@ export default {
         color: '#005de3',
         opacity: 1,
       }
+    },
+    invalidFeature: {
+      opacity: 1,
+      fill: {
+        color: 'red',
+        opacity: 0.85,
+      },
     }
   },
 };

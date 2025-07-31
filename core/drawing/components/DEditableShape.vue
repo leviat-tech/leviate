@@ -127,7 +127,7 @@ const props = defineProps<{
   origin: boolean | { xColor: string; yColor: string };
 }>();
 
-const { config, state, sketch, tools, popup, openPopup } = useDrawing();
+const { config, state, sketch, tools, popup, openPopup, useValidityCheck } = useDrawing();
 
 const { currentPointWithPrecision } = useDraggablePoint();
 
@@ -356,9 +356,15 @@ function createFeature() {
 
 function getFeatureStyle(feature: Feature): StyleProp {
   const isActive = feature.id === state.selectedFeatureId;
+  const isValid = useValidityCheck(feature.id);
+
+  const inactiveStyle = isValid.value 
+    ? shapeDraftConfig.styles.draggableFeature
+    : { ...shapeDraftConfig.styles.draggableFeature, ...shapeDraftConfig.styles.invalidFeature };
+     
   return isActive || feature === localFeature.value
-    ? shapeDraftConfig.styles.activeFeature
-    : shapeDraftConfig.styles.draggableFeature;
+    ? shapeDraftConfig.styles.activeFeature 
+    : inactiveStyle;
 }
 
 function onFeatureDrag(feature: Feature, targetType: 'feature' | 'anchor') {

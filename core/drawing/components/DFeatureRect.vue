@@ -11,7 +11,7 @@
       <DDraggablePoint
         v-for="(point, anchor) in draggableAnchors"
         :point="point"
-        color="selected"
+        :color="isValid ? 'selected' : 'danger'"
         :class="cursorClassMap[anchor]"
         @drag-start="startDrag(point)"
         @dragging="onAnchorDrag(anchor)"
@@ -27,11 +27,12 @@ import { isEqual } from 'lodash-es';
 import { render } from '@crhio/jsdraft';
 
 import useDraggablePoint from '../composables/useDraggablePoint';
+import useDrag from '../composables/useDrag';
+import useDrawing from '../composables/useDrawing';
 import { Extents, Point, PointWithBulge, RectangularFeature, StyleProp } from '../types';
 import DDraggablePoint from './DDraggablePoint.vue';
 import { ANCHOR_POINTS, AvailableAnchorPoints, cursorClassMap } from '../constants';
 import { addVectors, calculateCentroid, translateVertices } from '../utils';
-import useDrag from '../composables/useDrag';
 import getExtents from '../utils/getExtents';
 
 defineOptions({
@@ -51,6 +52,10 @@ const emit = defineEmits(['drag-start', 'dragging', 'drag-end']);
 
 const vertices = ref<PointWithBulge[]>(props.params.vertices);
 const isDraggingAnchor = ref(false);
+
+const { useValidityCheck } = useDrawing();
+
+const isValid = useValidityCheck(props.params.id);
 
 const centre = computed<Point>(() => {
   return calculateCentroid(vertices.value);
