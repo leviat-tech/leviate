@@ -2,7 +2,6 @@ import { get, set, snakeCase } from 'lodash-es';
 import { validate } from 'uuid';
 import logger from './extensions/logger';
 import { useRootStore } from './store';
-import { useMessageStore } from './store/message';
 import { transact } from './store';
 import { useLocalize } from './plugins/localize';
 

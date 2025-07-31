@@ -1,4 +1,4 @@
-import manifest from '~/manifest.json';
+import manifest from '@@/manifest.json';
 
 /**
  * Returns features as specified in manifest.json. If the 'level' argument is present
