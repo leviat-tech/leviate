@@ -15,7 +15,7 @@
         @drag-start="startDrag(location)"
         @dragging="onDragAnchor(anchor)"
         @drag-end="onDragAnchor(anchor, true)"
-        color="selected"
+        :color="isValid ? 'selected' : 'danger'"
         :class="cursorClassMap[anchor]" />
       />
     </template>
@@ -32,6 +32,7 @@ import { CircularFeature, Point, StyleProp } from '../types';
 import DDraggablePoint from './DDraggablePoint.vue';
 import { AvailableAnchorPoints, ANCHOR_POINTS, cursorClassMap } from '../constants';
 import useDrag from '../composables/useDrag';
+import useDrawing from '../composables/useDrawing';
 
 defineOptions({
   inheritAttrs: false,
@@ -53,6 +54,9 @@ const diameter = ref<number>(props.params.diameter);
 const isDraggingAnchor = ref<boolean>(false);
 
 const { currentPointWithPrecision, startDrag, getDragDistance } = useDraggablePoint();
+const { useValidityCheck } = useDrawing();
+
+const isValid = useValidityCheck(props.params.id)
 
 const draggableAnchors = computed(() => {
   const { x, y } = location.value;

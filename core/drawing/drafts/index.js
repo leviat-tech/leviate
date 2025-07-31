@@ -71,6 +71,7 @@ export default {
       opacity: 1,
       fill: {
         color: 'red',
+        opacity: 0.85,
       },
     }
   },
