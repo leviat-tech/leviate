@@ -2,7 +2,6 @@ import { nextTick } from 'vue'
 import { defineStore, createPinia } from 'pinia';
 import { normie } from '@crhio/normie';
 import { v4 as uuidv4 } from 'uuid';
-import { useMeta } from '@crhio/leviate';
 import { isEmpty, get, last, range, each, omit, isEqual } from 'lodash-es';
 import Migration from '../extensions/migration';
 import revision from './plugins/revision';
@@ -11,7 +10,7 @@ import { useLocalize } from '../plugins/localize';
 import logger from '../extensions/logger.js';
 import useAppInfo from '../composables/useAppInfo.js';
 import useVersions from '../composables/useVersions';
-import { useHost } from '../plugins/host';
+import { useHost, useMeta } from '../plugins/host';
 import { useLeviateStore } from './leviate';
 import { checkEntitiesIntegrity } from './storeUtils';
 
