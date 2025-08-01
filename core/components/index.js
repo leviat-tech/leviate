@@ -9,6 +9,10 @@ import LvInputTabPanel from './layout/input/LvInputTabPanel.vue';
 import LvProjectInfo from './layout/project/info/LvProjectInfo.vue';
 import LvProjectPanelItem from './layout/project/LvProjectPanelItem.vue';
 
+import LvBulkAddView from './bulk_editor/LvBulkAddView.vue';
+import LvBulkEditorTable from './bulk_editor/LvBulkEditorTable.vue';
+import LvBulkEditor from './bulk_editor/LvBulkEditor.vue';
+
 import LvExportDocument from './export/LvExportDocument.vue';
 import LvExportConfigurator from './export/LvExportConfigurator.vue';
 
@@ -39,6 +43,9 @@ export {
   LvInputContent,
   LvInputTabPanel,
   LvViewportPanel,
+  LvBulkAddView,
+  LvBulkEditorTable,
+  LvBulkEditor,
   LvExportDocument,
   LvValidationPane,
   LvProjectPanelItem,
