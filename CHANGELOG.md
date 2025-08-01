@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.3.1](https://github.com/leviat-tech/leviate/compare/v7.3.0...v7.3.1) (2025-08-01)
+
+
+* deps and enable local dev in plugins ([85a42e1](https://github.com/leviat-tech/leviate/commit/85a42e1a5bfd737c9cfd125266223334471a2358))
+* revert unused changes ([f89613f](https://github.com/leviat-tech/leviate/commit/f89613f813d4412916ca18010f560a126465d455))
+
 ## [7.3.0](https://github.com/leviat-tech/leviate/compare/v7.2.1...v7.3.0) (2025-08-01)
 
 
