@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.3.2](https://github.com/leviat-tech/leviate/compare/v7.3.1...v7.3.2) (2025-08-01)
+
+
+* update package-lock to remove unused dependencies ([0f3cb32](https://github.com/leviat-tech/leviate/commit/0f3cb32426ec6f8cdefb8a55cdcce1f715b14a89))
+
 ## [7.3.1](https://github.com/leviat-tech/leviate/compare/v7.3.0...v7.3.1) (2025-08-01)
 
 
