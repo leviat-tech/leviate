@@ -1,53 +1,80 @@
 <template>
-  <div class="p-6 flex flex-col h-full max-w-7xl mx-auto">
-    <header class="mb-6">
-      <h1 class="text-xl font-medium text-gray-900">Bulk Edit</h1>
-      <p class="text-sm text-gray-500">Edit multiple position values simultaneously</p>
+  <div class="h-full flex flex-col bg-gray-50">
+    <header class="px-8 py-3">
+      <div class="max-w-7xl mx-auto">
+        <h1 class="text-xl font-medium text-gray-900">Bulk Edit</h1>
+      </div>
     </header>
 
-    <div
-      class="border rounded-lg shadow-sm bg-white overflow-auto"
-      style="max-width: 68vw; max-height: calc(100vh - 240px)"
-    >
-      <CTable
-        :rows="entities"
-        :columns="columns"
-        :table-class="tableClasses.table"
-        :cell-class="tableClasses.cell"
-        :header-class="tableClasses.header"
-      >
-        <template v-for="col in columns" :key="col.id" #[col.id]="{ row }">
-          <div class="relative">
-            <component
-              :is="componentTypeMap[col.type]"
-              :id="`${row.id}:${col.id}`"
-              class="w-full text-right pr-2"
-              no-wrap
-              no-spinner
-              no-units
-            />
+    <div class="px-8 flex flex-col">
+      <div class="max-w-7xl mx-auto w-full">
+        <div
+          class="border border-gray-200 shadow-sm overflow-hidden"
+          style="height: calc(100vh - 14rem)"
+        >
+          <div class="overflow-auto h-full">
+            <table class="w-full text-sm">
+              <thead>
+                <tr>
+                  <th
+                    v-for="col in columns"
+                    :key="col.id"
+                    class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider bg-indigo sticky top-0 z-10 min-w-[8rem]"
+                  >
+                    {{ col.id }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200 bg-white">
+                <tr
+                  v-for="row in entities"
+                  :key="row.id"
+                  class="hover:bg-gray-50 transition-colors duration-150"
+                >
+                  <td v-for="col in columns" :key="col.id" class="px-6 py-3 whitespace-nowrap">
+                    <component
+                      :is="componentTypeMap[col.type]"
+                      :id="`${row.id}:${col.id}`"
+                      class="w-full text-right pr-2 focus:ring-2 focus:ring-indigo"
+                      no-wrap
+                      no-spinner
+                      no-units
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-        </template>
-      </CTable>
-    </div>
+        </div>
 
-    <div class="mt-4 flex justify-end gap-3">
-      <button
-        class="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
-        @click="resetChanges"
-        :disabled="!hasChanges"
-      >
-        Reset
-      </button>
-      <button
-        class="px-4 py-2 text-sm font-medium text-white bg-indigo rounded-md hover:bg-indigo-700 disabled:opacity-50"
-        @click="applyChanges"
-        :disabled="!hasChanges"
-      >
-        Apply
-      </button>
+        <div class="h-16 flex items-center justify-between">
+          <div class="text-sm text-gray-500">
+            <span v-if="hasChanges" class="flex items-center">
+              <span class="w-2 h-2 bg-indigo rounded-full mr-2" />
+              Unsaved changes
+            </span>
+          </div>
+          <div class="flex gap-4">
+            <button
+              type="button"
+              class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:ring-2 focus:ring-indigo disabled:opacity-50 disabled:cursor-not-allowed"
+              :disabled="!hasChanges"
+              @click="resetChanges"
+            >
+              Reset Changes
+            </button>
+            <button
+              type="button"
+              class="px-4 py-2 text-sm font-medium text-white bg-indigo rounded-md hover:bg-indigo/90 focus:ring-2 focus:ring-indigo disabled:opacity-50 disabled:cursor-not-allowed"
+              :disabled="!hasChanges"
+              @click="applyChanges"
+            >
+              Apply Changes
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-    {{ pendingChanges }}
   </div>
 </template>
 
