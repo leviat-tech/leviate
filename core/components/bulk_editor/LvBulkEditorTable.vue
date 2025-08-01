@@ -21,7 +21,6 @@
             <component
               :is="componentTypeMap[col.type]"
               :id="`${row.id}:${col.id}`"
-              :model-value="pendingChanges[`${row.id}:${col.id}`] ?? row.data[col.id]"
               class="w-full text-right pr-2"
               no-wrap
               no-spinner
@@ -54,11 +53,10 @@
 
 <script setup lang="ts">
 import { ref, computed, inject, provide } from 'vue';
-import { get, set } from 'lodash-es';
+import { has, get, set } from 'lodash-es';
 import { transact } from '@crhio/leviate';
 import { CTextInput, CNumericInput, CListbox } from '@crhio/concrete';
 import { getFlatObject } from './utils';
-import { has } from 'lodash';
 
 const props = defineProps<{
   entities: Array<Position>;
@@ -114,10 +112,10 @@ function applyChanges() {
   transact('Bulk update', () => {
     Object.entries(pendingChanges.value).forEach(([key, value]) => {
       const [rowId, fieldPath] = key.split(':');
-      const position = props.entities.find(p => p.id === rowId);
-      if (!position) return;
+      const entity = props.entities.find(p => p.id === rowId);
+      if (!entity) return;
 
-      position.data[fieldPath] = value;
+      set(entity, fieldPath, value);
     });
 
     pendingChanges.value = {};
