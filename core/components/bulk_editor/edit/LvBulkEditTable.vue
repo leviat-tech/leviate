@@ -83,7 +83,7 @@ import { ref, computed, inject, provide } from 'vue';
 import { has, get, set } from 'lodash-es';
 import { transact } from '@crhio/leviate';
 import { CTextInput, CNumericInput, CListbox } from '@crhio/concrete';
-import { getFlatObject } from './utils';
+import { getFlatObject } from '../../utils';
 
 const props = defineProps<{
   entities: Array<Position>;

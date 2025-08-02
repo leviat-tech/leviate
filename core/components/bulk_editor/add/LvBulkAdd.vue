@@ -7,10 +7,8 @@
 
 <script setup>
 import { computed } from 'vue';
-// import LvBulkAddModels from '@crhio/leviate/core/components/bulk_editor/LvBulkAddModels.vue';
 import LvBulkAddModels from './LvBulkAddModels.vue';
 import LvBulkAddLayersSelector from './LvBulkAddLayersSelector.vue';
-
 
 const props = defineProps({
   layersLists: Object,
