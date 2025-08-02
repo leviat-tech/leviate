@@ -11,7 +11,7 @@ import LvProjectPanelItem from './layout/project/LvProjectPanelItem.vue';
 
 import LvBulkAdd from './bulk_editor/add/LvBulkAdd.vue';
 import LvBulkEditPropertyTree from './bulk_editor/edit/LvBulkEditPropertyTree.vue';
-import LvBulkEditTable from './bulk_editor/edit_table/LvBulkEditTable.vue';
+import LvBulkEditTable from './bulk_editor/edit/LvBulkEditTable.vue';
 
 import LvExportDocument from './export/LvExportDocument.vue';
 import LvExportConfigurator from './export/LvExportConfigurator.vue';

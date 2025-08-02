@@ -14,7 +14,7 @@
 
 <script setup>
 import LvPropertyTreeView from '../common/LvPropertyTreeView.vue';
-import useSelectedProperties from '../../composables/useSelectedProperties.ts';
+import useSelectedProperties from '../composables/useSelectedProperties.ts';
 
 const props = defineProps({
   config: Object,

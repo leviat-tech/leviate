@@ -26,9 +26,8 @@
 
 <script setup>
 import { computed } from 'vue';
-
 import LvPropertyItem from './LvPropertyItem.vue';
-import useSelectedProperties from '../../composables/useSelectedProperties.ts';
+import useSelectedProperties from '../composables/useSelectedProperties.ts';
 
 const selectedProps = useSelectedProperties();
 
