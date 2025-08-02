@@ -5,7 +5,7 @@
       class="mt-14"
       variant="primary"
       :disabled="propsSelected.length === 0"
-      @click="applyUpdate"
+      @click="updateMethod(propsSelected)"
     >
       {{ $l('update_values__of_selected_positions') }}
     </CButton>
@@ -18,11 +18,8 @@ import useSelectedProperties from '../composables/useSelectedProperties.ts';
 
 const props = defineProps({
   config: Object,
-  layerModel: Object,
-  positionModel: Object,
-  positionModelDefaults: Object,
   propObjs: Object,
-  applyUpdate: Function,
+  updateMethod: Function,
 });
 
 const propsSelected = useSelectedProperties();
