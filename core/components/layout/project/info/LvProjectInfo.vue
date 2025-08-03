@@ -25,7 +25,7 @@
 
 <script setup>
 import { useHost } from '@crhio/leviate';
-import { CHeading } from '@crhio/concrete';
+// import { CHeading } from '@crhio/concrete';
 import LvAddress from './LvAddress.vue';
 import LvClientInfo from './LvClientInfo.vue';
 
