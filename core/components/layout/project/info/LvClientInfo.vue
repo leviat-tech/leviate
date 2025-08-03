@@ -24,7 +24,7 @@
 
 <script setup>
 import LvAddress from './LvAddress.vue';
-// import { CHeading } from '@crhio/concrete';
+import { CHeading } from '@crhio/concrete';
 
 defineProps({
   address: Object,
