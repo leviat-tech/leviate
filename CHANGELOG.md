@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.3.3](https://github.com/leviat-tech/leviate/compare/v7.3.2...v7.3.3) (2025-08-05)
+
+
+* remove redundunt location update check for circ feature ([#327](https://github.com/leviat-tech/leviate/issues/327)) ([0daba8d](https://github.com/leviat-tech/leviate/commit/0daba8d0dfdf3082a1104f46ae31b5294511dde2))
+
 ## [7.3.2](https://github.com/leviat-tech/leviate/compare/v7.3.1...v7.3.2) (2025-08-01)
 
 
