@@ -122,12 +122,8 @@ function onDragAnchor(anchor: AvailableAnchorPoints | number, isDragComplete?: b
 
 watch(
   () => props.params.location,
-  (newLocation, prevLocation) => {
-    if (isEqual(prevLocation, newLocation)) return;
-
-    location.value = newLocation;
-  }
-);
+  (newLocation) => location.value = newLocation
+)
 
 watch(
   () => props.params.diameter,
