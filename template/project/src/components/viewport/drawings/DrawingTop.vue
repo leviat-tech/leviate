@@ -32,7 +32,8 @@
     <DToolbar
       :items="toolbarItems"
       :formatter="tool => $l(`tooltip_${tool}`)"
-    />
+      :position="['top-14', 'left-2']"
+      />
   </LvErrorBoundary>
 </template>
 

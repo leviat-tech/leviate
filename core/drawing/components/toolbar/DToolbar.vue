@@ -1,5 +1,5 @@
 <template>
-  <DToolbarWrapper class="absolute z-10 left-2 top-2">
+  <DToolbarWrapper class="absolute z-10" :class="position">
     <div v-for="tool in tools._raw" class="space-y-">
       <div class="relative flex">
         <DToolbarButton
@@ -34,10 +34,14 @@ import type { Component } from 'vue';
 import DToolbarButton from './DToolbarButton.vue';
 import DToolbarWrapper from './DToolbarWrapper.vue';
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   items: ToolItem[];
   formatter?: (val: string) => string;
-}>();
+  position?: string[];
+}>(),{
+  formatter: (val:string) => val,
+  position: () => ['left-2', 'top-2' ],
+});
 
 const emit = defineEmits(['select']);
 
