@@ -14,6 +14,9 @@ import DEditableShape from './components/DEditableShape.vue';
 import DDraggablePoint from './components/DDraggablePoint.vue';
 import DDraggableSketch from './components/DDraggableSketch.vue';
 import DSectionLine from './components/DSectionLine.vue';
+import DFeatureCirc from './components/DFeatureCirc.vue';
+import DFeatureRect from './components/DFeatureRect.vue';
+import DFeaturePoly from './components/DFeaturePoly.vue';
 
 import type {
   Point,
@@ -41,6 +44,9 @@ export {
   DDraggablePoint,
   DDraggableSketch,
   DSectionLine,
+  DFeatureCirc,
+  DFeatureRect,
+  DFeaturePoly,
 
   useDrawing,
   useDraggablePoint,
