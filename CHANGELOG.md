@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.3.4](https://github.com/leviat-tech/leviate/compare/v7.3.3...v7.3.4) (2025-08-15)
+
+
+* export DFeatureCirc, DFeatureRect, DFeaturePoly ([#330](https://github.com/leviat-tech/leviate/issues/330)) ([ff2c16e](https://github.com/leviat-tech/leviate/commit/ff2c16e747e825af7c4ca5a08a442488d780fa2c))
+
 ## [7.3.3](https://github.com/leviat-tech/leviate/compare/v7.3.2...v7.3.3) (2025-08-05)
 
 
