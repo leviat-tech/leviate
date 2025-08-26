@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch, watchEffect } from 'vue';
 import { isEqual } from 'lodash-es';
 import { render } from '@crhio/jsdraft';
 
@@ -119,16 +119,8 @@ function onDragAnchor(anchor: AvailableAnchorPoints | number, isDragComplete?: b
     emit('drag-end', { diameter: diameter.value });
   }
 }
-
-watch(
-  () => props.params.location,
-  (newLocation) => location.value = newLocation
-)
-
-watch(
-  () => props.params.diameter,
-  (newDiameter) => {
-    diameter.value = newDiameter;
-  }
-);
+watchEffect(() => {
+  location.value = props.params.location;
+  diameter.value = props.params.diameter;
+})
 </script>
