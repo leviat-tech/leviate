@@ -1,7 +1,7 @@
 <template>
   <DToolbarWrapper class="absolute z-10 left-2 top-2">
     <div v-for="tool in tools._raw" class="space-y-">
-      <div class="relative flex">
+      <div v-if="tool.id" class="relative flex">
         <DToolbarButton
           :title="formatter(tool.id)"
           :icon="getIcon(tool)"
@@ -34,16 +34,24 @@ import type { Component } from 'vue';
 import DToolbarButton from './DToolbarButton.vue';
 import DToolbarWrapper from './DToolbarWrapper.vue';
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   items: ToolItem[];
+  isDefaultIcons?: boolean
   formatter?: (val: string) => string;
-}>();
+}>(), {
+  isDefaultIcons: true
+});
 
 const emit = defineEmits(['select']);
 
 const activeParent = ref<string | null>(null);
 
-const { state, tools } = useDrawing();
+const { state, tools} = useDrawing();
+
+if(props.isDefaultIcons) {  
+  tools.addDefaultIcons()
+}
+
 props.items?.forEach(tools._register);
 
 const handleTool = (id: string, parentId: string | null, params?: any) => {
