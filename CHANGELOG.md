@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.3.5](https://github.com/leviat-tech/leviate/compare/v7.3.4...v7.3.5) (2025-08-26)
+
+
+* set both location and diam for circ feat ([#332](https://github.com/leviat-tech/leviate/issues/332)) ([742a072](https://github.com/leviat-tech/leviate/commit/742a072e8a0278c3702382dec075fd9ed28edccd))
+
 ## [7.3.4](https://github.com/leviat-tech/leviate/compare/v7.3.3...v7.3.4) (2025-08-15)
 
 
