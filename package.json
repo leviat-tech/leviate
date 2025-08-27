@@ -11,7 +11,7 @@
   "scripts": {
     "prepare": "husky install",
     "test": "vitest",
-    "watch": "nodemon --exec yalc push"
+    "watch": "nodemon -e js,json,vue --exec yalc push"
   },
   "files": [
     "core",

@@ -1,8 +1,8 @@
 <template>
   <div data-cy="export_property" :class="`ml-${propObj.depth * 4}`">
-    <CAccordion data-cy="export_property__accordion_toggle" size="sm" default-open :title="objName">
+    <CAccordion data-cy="export_property__accordion_toggle overflow-hidden" size="sm" default-open :title="objName">
       <template #customTitle>
-        <div class="flex items-center w-full ml-4 -mt-5 bg-white absolute z-9">
+        <div class="flex items-center w-full ml-4 bg-white z-9">
           <CCheckbox
             :model-value="isSelected"
             size="xs"
@@ -12,7 +12,7 @@
           />
 
           <button
-            class="font-semibold py-1 pl-2 select-none cursor-pointer"
+            class="font-semibold pl-2 select-none cursor-pointer"
             @click="handleLayerSelection"
           >
             {{ objName }}

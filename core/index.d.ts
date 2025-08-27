@@ -36,7 +36,7 @@ import {
     LvBulkEditTable,
     LvBulkAddView,
     LvBulkEditPropertyTreeView,
-    LvBulkEditTableView,
+    LvBulkEditTable,
     LvExportDocument,
     LvProjectPanelItem,
     LvExportConfigurator,
@@ -81,7 +81,7 @@ export {
     LvBulkEditTable,
     LvBulkAddView,
     LvBulkEditPropertyTreeView,
-    LvBulkEditTableView,
+    LvBulkEditTable,
     LvExportDocument,
     LvProjectPanelItem,
     LvExportConfigurator

@@ -1,6 +1,6 @@
 <template>
   <CFormSection :title="$L('bulk_add')" class="p-4">
-    <LvBulkAddLayersSelector v-if="layersLists" :layersLists="layersLists" />
+    <LvBulkAddLayersSelector v-if="layers" :layers="layers" />
     <LvBulkAddModels :defaultQty="1" :parameters="parameters" :method="modelCreateMethod" />
   </CFormSection>
 </template>
@@ -11,7 +11,7 @@ import LvBulkAddModels from './LvBulkAddModels.vue';
 import LvBulkAddLayersSelector from './LvBulkAddLayersSelector.vue';
 
 const props = defineProps({
-  layersLists: Object,
+  layers: Object,
   model: Object,
   modelDataFormatterMethod: Function,
   modelDataFormatterMethodParameters: Object,

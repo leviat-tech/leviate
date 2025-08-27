@@ -14,7 +14,6 @@ import LvBulkEditPropertyTree from './bulk_editor/edit/LvBulkEditPropertyTree.vu
 import LvBulkEditTable from './bulk_editor/edit/LvBulkEditTable.vue';
 import LvBulkAddView from './bulk_editor/LvBulkAddView.vue';
 import LvBulkEditPropertyTreeView from './bulk_editor/LvBulkEditPropertyTreeView.vue';
-import LvBulkEditTableView from './bulk_editor/LvBulkEditTableView.vue';
 
 import LvExportDocument from './export/LvExportDocument.vue';
 import LvExportConfigurator from './export/LvExportConfigurator.vue';
@@ -50,7 +49,6 @@ export {
   LvBulkEditTable,
   LvBulkAddView,
   LvBulkEditPropertyTreeView,
-  LvBulkEditTableView,
   LvExportDocument,
   LvValidationPane,
   LvProjectPanelItem,

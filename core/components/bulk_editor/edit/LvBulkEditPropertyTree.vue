@@ -2,10 +2,10 @@
   <div class="px-4 mt-6 border-r">
     <LvPropertyTreeView v-for="obj in propObjs" :key="obj.name" :prop-obj="obj" class="mb-2" />
     <CButton
-      class="mt-14"
+      class="mt-4"
       variant="primary"
       :disabled="propsSelected.length === 0"
-      @click="updateMethod(propsSelected)"
+      @click="onClick"
     >
       {{ $l('update_values__of_selected_positions') }}
     </CButton>
@@ -22,5 +22,11 @@ const props = defineProps({
   updateMethod: Function,
 });
 
+const emit = defineEmits(['submit']);
+
 const propsSelected = useSelectedProperties();
+
+function onClick() {
+  emit('submit', propsSelected)
+}
 </script>
