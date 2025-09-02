@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "types": ["@crhio/concrete"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "skipLibCheck": true,
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@crhio/leviate/drawing": ["../../core/drawing/"],
+    },
+    "noEmit": true,
+    "allowJs": true,
+    "allowImportingTsExtensions": true,
+    "esModuleInterop": true
+  },
+}

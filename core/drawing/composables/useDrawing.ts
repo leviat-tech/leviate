@@ -1,5 +1,6 @@
 import { computed, ComputedRef, inject, Reactive, reactive, Ref, ref } from 'vue';
 import { remove, intersection, isEqual } from 'lodash-es';
+import { v4 as uuidv4 } from 'uuid';
 
 import { Point, Sketch, ToolItem } from '../types';
 import { DEFAULT_TOOLS, RELATIONS } from "../constants";
@@ -19,6 +20,8 @@ const toolIcons = {
   round_off,
   mirror_geometry,
 };
+
+export const DIVIDER_ID = 'divider'
 
 interface ViewportConfig {
   fontSizePx: number;
@@ -87,7 +90,7 @@ type CurrentTool = { [key: string]: true };
 
 interface Tools {
   current: CurrentTool;
-  _register: (toolConfig: ToolItem) => void;
+  _register: (toolConfig: ToolItem | null) => void;
   _raw: ToolsStore;
   _setCurrent: (toolId: string, parentId?: string | null) => boolean | Promise<boolean> | void;
   addDefaultIcons: () => void
@@ -126,7 +129,14 @@ function createTools(): Tools {
         case 'current':
           return { [currentTool.value]: true };
         case '_register':
-          return (toolConfig: ToolItem) => {
+          return (toolConfig: ToolItem | null) => {
+            if (!toolConfig) {
+              localTools[uuidv4()] = {
+                id: DIVIDER_ID
+              };
+              return
+            }
+
             const { id } = toolConfig;
             if (localTools[id]) {
               Object.assign(localTools[id], toolConfig);
