@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.3.6](https://github.com/leviat-tech/leviate/compare/v7.3.5...v7.3.6) (2025-09-04)
+
+
+* configure default toolbar icons ([b1464d7](https://github.com/leviat-tech/leviate/commit/b1464d72dcdfbc42b13bd2e5874e95d85205eb77))
+* panel flex ([eb13bb2](https://github.com/leviat-tech/leviate/commit/eb13bb27bd045b7e2a2735789b639503f33a019c))
+* toolbar divider ([bf9aca7](https://github.com/leviat-tech/leviate/commit/bf9aca7e4e0580ab2be02a6a7c3459bb24b8f696))
+
 ## [7.3.5](https://github.com/leviat-tech/leviate/compare/v7.3.4...v7.3.5) (2025-08-26)
 
 
