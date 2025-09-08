@@ -1,5 +1,6 @@
 import { computed, ComputedRef, inject, Reactive, reactive, Ref, ref } from 'vue';
-import {remove, intersection, isEqual} from 'lodash-es';
+import { remove, intersection, isEqual } from 'lodash-es';
+import { v4 as uuidv4 } from 'uuid';
 
 import { Point, Sketch, ToolItem } from '../types';
 import { DEFAULT_TOOLS, RELATIONS } from "../constants";
@@ -19,6 +20,8 @@ const toolIcons = {
   round_off,
   mirror_geometry,
 };
+
+export const DIVIDER_ID = 'divider'
 
 interface ViewportConfig {
   fontSizePx: number;
@@ -63,15 +66,15 @@ interface ViewportState {
     b: Point;
   };
   invalidFeatures: string[];
-  intersectingFeatures: {[id: string]: string[]};
+  intersectingFeatures: { [id: string]: string[] };
 }
 
 interface Viewport {
   config: ViewportConfig;
   sketch: Ref<Sketch | null>;
   state: ViewportState;
-  validateFeature: (panelDraft: Sketch, featureDraft: Sketch, allowOnEdge: boolean)=>void;
-  validateFeaturesIntersection: (featureA: Sketch, featureB: Sketch)=>void;
+  validateFeature: (panelDraft: Sketch, featureDraft: Sketch, allowOnEdge: boolean) => void;
+  validateFeaturesIntersection: (featureA: Sketch, featureB: Sketch) => void;
   useValidityCheck: (id: string) => ComputedRef<boolean>
 }
 
@@ -87,9 +90,10 @@ type CurrentTool = { [key: string]: true };
 
 interface Tools {
   current: CurrentTool;
-  _register: (toolConfig: ToolItem) => void;
+  _register: (toolConfig: ToolItem | null) => void;
   _raw: ToolsStore;
   _setCurrent: (toolId: string, parentId?: string | null) => boolean | Promise<boolean> | void;
+  addDefaultIcons: () => void
   [key: string]:
   ToolsStore |
   CurrentTool |
@@ -107,72 +111,96 @@ const setCurrentTool = (tool: string) => {
   currentTool.value = tool;
 };
 const availableTools: ToolsStore = {};
-// @ts-expect-error - Tools is correct interface but error due to Proxy
-const tools: Tools = new Proxy(availableTools, {
-  get(target, prop: string) {
-    switch (prop) {
-      case 'current':
-        return { [currentTool.value]: true };
-      case '_register':
-        return (toolConfig: ToolItem) => {
-          const { id } = toolConfig;
-          if (availableTools[id]) {
-            Object.assign(availableTools[id], toolConfig);
-          } else {
-            availableTools[toolConfig.id] = toolConfig;
-          }
-        };
-      case '_raw':
-        return availableTools;
-      case '_setCurrent':
-        return (toolId: string, parentId?: string) => {
-          let handler;
 
-          if (parentId) {
-            handler = availableTools[parentId]?.children?.find(child => child.id === toolId)?.handler
-          } else {
-            handler = availableTools[toolId]?.handler
-          }
+function createTools(): Tools {
+  const localTools: Tools = {
+    ...availableTools,
+    current: {},
+    _register: () => { },
+    _raw: {},
+    _setCurrent: () => { },
+    addDefaultIcons: () => { },
+    icons: toolIcons,
+  };
 
-          if (!handler) {
-            setCurrentTool(toolId);
-            return;
-          }
+  const proxy = new Proxy(localTools, {
+    get(target, prop: string) {
+      switch (prop) {
+        case 'current':
+          return { [currentTool.value]: true };
+        case '_register':
+          return (toolConfig: ToolItem | null) => {
+            if (!toolConfig) {
+              localTools[uuidv4()] = {
+                id: DIVIDER_ID
+              };
+              return
+            }
 
-          const res = handler(toolId);
+            const { id } = toolConfig;
+            if (localTools[id]) {
+              Object.assign(localTools[id], toolConfig);
+            } else {
+              localTools[id] = toolConfig;
+            }
+          };
+        case '_raw':
+          return localTools;
+        case '_setCurrent':
+          return (toolId: string, parentId?: string) => {
+            let handler;
 
-          if (res === true) {
-            setCurrentTool(toolId);
-            return;
-          }
+            if (parentId) {
+              handler = availableTools[parentId]?.children?.find(child => child.id === toolId)?.handler
+            } else {
+              handler = availableTools[toolId]?.handler
+            }
 
-          if (res instanceof Promise) {
-            res.then(val => {
-              if (val === true) {
-                setCurrentTool(toolId);
-              }
+            if (!handler) {
+              setCurrentTool(toolId);
+              return;
+            }
+
+            const res = handler(toolId);
+
+            if (res === true) {
+              setCurrentTool(toolId);
+              return;
+            }
+
+            if (res instanceof Promise) {
+              res.then(val => {
+                if (val === true) {
+                  setCurrentTool(toolId);
+                }
+              });
+            }
+          };
+        case 'icons':
+          return toolIcons;
+
+        case 'addDefaultIcons':
+          return () => {
+            DEFAULT_TOOLS.forEach(toolId => {
+              proxy._register({
+                id: toolId,
+                icon: toolIcons[toolId],
+              });
             });
+          };
+
+        default:
+          if (localTools[prop]) {
+            return prop;
           }
-        };
-      case 'icons':
-        return toolIcons;
 
-      default:
-        if (availableTools[prop]) {
-          return prop;
-        }
+          return Reflect.get(target, prop);
+      }
+    },
+  });
 
-        return Reflect.get(target, prop);
-    }
-  },
-});
-
-DEFAULT_TOOLS.forEach(toolId => {
-  tools._register({
-    id: toolId,
-    icon: toolIcons[toolId]
-  })
-});
+  return proxy;
+}
 
 function getOrigin() {
   return { x: 0, y: 0 };
@@ -217,60 +245,60 @@ function createViewport(userConfig: UserViewportConfig): Viewport {
     selectedFeatureId: null,
     toolParams: ref({}),
     invalidFeatures: [] as string[],
-    intersectingFeatures: {} as {[id: string]: string[]},
+    intersectingFeatures: {} as { [id: string]: string[] },
   });
 
   //validate if a feature's located inside panel
-  function validateFeature(panelDraft: Sketch, featureDraft: Sketch, allowOnEdge = false){
-    const validRelations = allowOnEdge 
-      ? [ [ RELATIONS.A_CONTAINS_B ], [ RELATIONS.A_CONTAINS_B, RELATIONS.INTERSECTION ]] //contains+intersection=covers  
-      : [ [ RELATIONS.A_CONTAINS_B ] ]
+  function validateFeature(panelDraft: Sketch, featureDraft: Sketch, allowOnEdge = false) {
+    const validRelations = allowOnEdge
+      ? [[RELATIONS.A_CONTAINS_B], [RELATIONS.A_CONTAINS_B, RELATIONS.INTERSECTION]] //contains+intersection=covers
+      : [[RELATIONS.A_CONTAINS_B]]
     const foundRelations = getShapesRelations(panelDraft, featureDraft);
     //if no array returned, there's an error (loged by getShapesRelations)
-    if(!foundRelations) return;
+    if (!foundRelations) return;
 
     const featureId = featureDraft.node.dataset.id;
-    const [ , relations ] = foundRelations;
+    const [, relations] = foundRelations;
     const isFeatureValid = validRelations.some(validR => isEqual(validR, relations.sort()))
-    if(isFeatureValid) remove(state.invalidFeatures, (id:string) => id === featureId)
-    else if(!state.invalidFeatures.includes(featureId)) state.invalidFeatures.push(featureId)  
+    if (isFeatureValid) remove(state.invalidFeatures, (id: string) => id === featureId)
+    else if (!state.invalidFeatures.includes(featureId)) state.invalidFeatures.push(featureId)
   }
   //validate how a feature's located related to another feature - intersecting, covering, containing
-  function validateFeaturesIntersection(featureA: Sketch, featureB: Sketch, allowOnEdge = false){
-    const validRelations = allowOnEdge 
-      ? [ [ /*not related*/ ], [ RELATIONS.A_TOUCHES_B, RELATIONS.INTERSECTION ]]
-      : [ [ /*not related*/ ] ]
+  function validateFeaturesIntersection(featureA: Sketch, featureB: Sketch, allowOnEdge = false) {
+    const validRelations = allowOnEdge
+      ? [[ /*not related*/], [RELATIONS.A_TOUCHES_B, RELATIONS.INTERSECTION]]
+      : [[ /*not related*/]]
     //checking for any possible relation, i.e. default 'all' relations apply
     const foundRelations = getShapesRelations(featureA, featureB);
     //if no array returned, there's an error (loged by getShapesRelations)
-    if(!foundRelations) return;
+    if (!foundRelations) return;
     const featureAId = featureA.node.dataset.id;
     const featureBId = featureB.node.dataset.id;
-    const [ , relations ] = foundRelations;
-    
+    const [, relations] = foundRelations;
+
     const areFeaturesValidRelated = validRelations.some(validR => isEqual(validR, relations.sort()))
-    
-    if(areFeaturesValidRelated) {
-      if(state.intersectingFeatures[featureAId]) remove(state.intersectingFeatures[featureAId], (id:string) => id === featureBId)
-      if(state.intersectingFeatures[featureBId]) remove(state.intersectingFeatures[featureBId], (id:string) => id === featureAId)
+
+    if (areFeaturesValidRelated) {
+      if (state.intersectingFeatures[featureAId]) remove(state.intersectingFeatures[featureAId], (id: string) => id === featureBId)
+      if (state.intersectingFeatures[featureBId]) remove(state.intersectingFeatures[featureBId], (id: string) => id === featureAId)
     }
     else {
-      if(!state.intersectingFeatures[featureAId]) state.intersectingFeatures[featureAId] = [];
-      if(!state.intersectingFeatures[featureBId]) state.intersectingFeatures[featureBId] = [];
+      if (!state.intersectingFeatures[featureAId]) state.intersectingFeatures[featureAId] = [];
+      if (!state.intersectingFeatures[featureBId]) state.intersectingFeatures[featureBId] = [];
 
-      if(!state.intersectingFeatures[featureAId].includes(featureBId)) state.intersectingFeatures[featureAId].push(featureBId);
-      if(!state.intersectingFeatures[featureBId].includes(featureAId)) state.intersectingFeatures[featureBId].push(featureAId);
-    }  
+      if (!state.intersectingFeatures[featureAId].includes(featureBId)) state.intersectingFeatures[featureAId].push(featureBId);
+      if (!state.intersectingFeatures[featureBId].includes(featureAId)) state.intersectingFeatures[featureBId].push(featureAId);
+    }
   }
 
-  function useValidityCheck(id: string){
+  function useValidityCheck(id: string) {
     const isValid = computed(() => {
-      return !state.invalidFeatures.includes(id) 
+      return !state.invalidFeatures.includes(id)
         && !Object.values(state.intersectingFeatures).flat().includes(id)
-      })
+    })
 
     return isValid;
-  }   
+  }
 
   return {
     config: { ...config, ...globalConfig },
@@ -327,7 +355,7 @@ export default function useDrawing(config?: UserViewportConfig | undefined): Vie
 
   return {
     ...viewports[viewportName],
-    tools,
+    tools: createTools(), // fresh instance per call,
     openPopup,
     closePopup,
     popup,
@@ -337,37 +365,37 @@ export default function useDrawing(config?: UserViewportConfig | undefined): Vie
 //NOTE: relation A_contains_B - shape B lies in the interior of shape A,
 //relation A_contains_B + intersection - every point of B lies or in the interior or on the boundary of shape A = A covers B
 
-export function getShapesRelations(draftA: Sketch, draftB: Sketch, relations = Object.values(RELATIONS)): undefined |[boolean, string[]]{
+export function getShapesRelations(draftA: Sketch, draftB: Sketch, relations = Object.values(RELATIONS)): undefined | [boolean, string[]] {
   const foundRelations = [];
 
-  if(!draftA?.shape || !draftB?.shape || relations?.length < 1){
+  if (!draftA?.shape || !draftB?.shape || relations?.length < 1) {
     console.error('Arguments are invalid. Please check expected arguments\' types');
     return;
   }
 
-  if(relations.includes(RELATIONS.A_CONTAINS_B)){
-    if(draftA.shape.contains(draftB.shape)) foundRelations.push(RELATIONS.A_CONTAINS_B) 
+  if (relations.includes(RELATIONS.A_CONTAINS_B)) {
+    if (draftA.shape.contains(draftB.shape)) foundRelations.push(RELATIONS.A_CONTAINS_B)
   }
-  if(relations.includes(RELATIONS.B_CONTAINS_A)){
-    if(draftB.shape.contains(draftA.shape)) foundRelations.push(RELATIONS.B_CONTAINS_A) 
+  if (relations.includes(RELATIONS.B_CONTAINS_A)) {
+    if (draftB.shape.contains(draftA.shape)) foundRelations.push(RELATIONS.B_CONTAINS_A)
   }
-  if(intersection( relations, [RELATIONS.INTERSECTION, RELATIONS.A_TOUCHES_B]).length > 0) {
+  if (intersection(relations, [RELATIONS.INTERSECTION, RELATIONS.A_TOUCHES_B]).length > 0) {
     const intersection = draftA.shape.intersect(draftB.shape);
-    if(intersection.length > 0){
-      foundRelations.push(RELATIONS.INTERSECTION) 
-      try{
-          //check if A touches B (or vice versa)
-          const draftAWithoutIntersection = draftA.subtract(draftB);
-          const draftBWithoutIntersection = draftB.subtract(draftA);
-          const intersectionDraftA = draftA.subtract(draftAWithoutIntersection);
-          const intersectionDraftB = draftB.subtract(draftBWithoutIntersection);
-          
-          //if one draft remains 'unchanged' by intersection, the second one should as well. Second check's here just to increase a chance of detection 
-          if(intersectionDraftA.vertices.length === 0 || intersectionDraftB.vertices.length === 0) foundRelations.push(RELATIONS.A_TOUCHES_B) 
+    if (intersection.length > 0) {
+      foundRelations.push(RELATIONS.INTERSECTION)
+      try {
+        //check if A touches B (or vice versa)
+        const draftAWithoutIntersection = draftA.subtract(draftB);
+        const draftBWithoutIntersection = draftB.subtract(draftA);
+        const intersectionDraftA = draftA.subtract(draftAWithoutIntersection);
+        const intersectionDraftB = draftB.subtract(draftBWithoutIntersection);
+
+        //if one draft remains 'unchanged' by intersection, the second one should as well. Second check's here just to increase a chance of detection 
+        if (intersectionDraftA.vertices.length === 0 || intersectionDraftB.vertices.length === 0) foundRelations.push(RELATIONS.A_TOUCHES_B)
       } catch {
         console.log("Error while checking drafts' intersection variants.")
       }
     }
   }
-  return [ foundRelations.length > 0, foundRelations ]
+  return [foundRelations.length > 0, foundRelations]
 }

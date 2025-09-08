@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.3.6](https://github.com/leviat-tech/leviate/compare/v7.3.5...v7.3.6) (2025-09-04)
+
+
+* configure default toolbar icons ([b1464d7](https://github.com/leviat-tech/leviate/commit/b1464d72dcdfbc42b13bd2e5874e95d85205eb77))
+* panel flex ([eb13bb2](https://github.com/leviat-tech/leviate/commit/eb13bb27bd045b7e2a2735789b639503f33a019c))
+* toolbar divider ([bf9aca7](https://github.com/leviat-tech/leviate/commit/bf9aca7e4e0580ab2be02a6a7c3459bb24b8f696))
+
+## [7.3.5](https://github.com/leviat-tech/leviate/compare/v7.3.4...v7.3.5) (2025-08-26)
+
+
+* set both location and diam for circ feat ([#332](https://github.com/leviat-tech/leviate/issues/332)) ([742a072](https://github.com/leviat-tech/leviate/commit/742a072e8a0278c3702382dec075fd9ed28edccd))
+
+## [7.3.4](https://github.com/leviat-tech/leviate/compare/v7.3.3...v7.3.4) (2025-08-15)
+
+
+* export DFeatureCirc, DFeatureRect, DFeaturePoly ([#330](https://github.com/leviat-tech/leviate/issues/330)) ([ff2c16e](https://github.com/leviat-tech/leviate/commit/ff2c16e747e825af7c4ca5a08a442488d780fa2c))
+
 ## [7.3.3](https://github.com/leviat-tech/leviate/compare/v7.3.2...v7.3.3) (2025-08-05)
 
 

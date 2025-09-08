@@ -1,7 +1,7 @@
 <template>
   <DToolbarWrapper class="absolute z-10 left-2 top-2">
     <div v-for="tool in tools._raw" class="space-y-">
-      <div class="relative flex">
+      <div v-if="tool.id && tool.id !== DIVIDER_ID" class="relative flex">
         <DToolbarButton
           :title="formatter(tool.id)"
           :icon="getIcon(tool)"
@@ -9,16 +9,21 @@
           @click="handleToolClick(tool)"
         />
 
-        <DToolbarWrapper v-if="tool.children && activeParent === tool.id && state.isChildMenuOpen" class="absolute top-[-3px] left-10">
+        <DToolbarWrapper
+          v-if="tool.children && activeParent === tool.id && state.isChildMenuOpen"
+          class="absolute top-[-3px] left-10"
+        >
           <DToolbarButton
             :title="formatter(tool.id)"
             v-for="child in tool.children"
             :icon="child.icon"
             :is-active="state.currentTool === child.id"
             @click="handleChildClick(child, tool.id)"
-
           />
         </DToolbarWrapper>
+      </div>
+      <div v-else-if="tool.id === DIVIDER_ID">
+        <hr class="border-t-1 border-black my-2" />
       </div>
     </div>
   </DToolbarWrapper>
@@ -26,7 +31,7 @@
 
 <script setup lang="ts">
 import { TOOLBAR_OPTIONS } from '../../constants.js';
-import useDrawing from '../../composables/useDrawing';
+import useDrawing, { DIVIDER_ID } from '../../composables/useDrawing';
 import { ToolItem } from '../../types';
 import { ref, watch } from 'vue';
 import type { Component } from 'vue';
@@ -34,17 +39,29 @@ import type { Component } from 'vue';
 import DToolbarButton from './DToolbarButton.vue';
 import DToolbarWrapper from './DToolbarWrapper.vue';
 
-const props = defineProps<{
-  items: ToolItem[];
-  formatter?: (val: string) => string;
-}>();
+const props = withDefaults(
+  defineProps<{
+    items: Array<ToolItem | null>;
+    isDefaultIcons?: boolean;
+    formatter?: (val: string) => string;
+  }>(),
+  {
+    items: () => [],
+    isDefaultIcons: true,
+  }
+);
 
 const emit = defineEmits(['select']);
 
 const activeParent = ref<string | null>(null);
 
 const { state, tools } = useDrawing();
-props.items?.forEach(tools._register);
+
+if (props.isDefaultIcons) {
+  tools.addDefaultIcons();
+}
+
+props.items?.forEach((itemConfig) => tools._register(itemConfig));
 
 const handleTool = (id: string, parentId: string | null, params?: any) => {
   tools._setCurrent(id, parentId);
@@ -84,11 +101,14 @@ const getIcon = (tool: ToolItem): Component | string => {
   }
 
   return icon;
-}
+};
 
-watch(() => state.currentTool, (val) => {
-  if (val === TOOLBAR_OPTIONS.POINTER) {
-    activeParent.value = null;
+watch(
+  () => state.currentTool,
+  (val) => {
+    if (val === TOOLBAR_OPTIONS.POINTER) {
+      activeParent.value = null;
+    }
   }
-});
+);
 </script>

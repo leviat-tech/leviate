@@ -44,9 +44,11 @@ import AreaLoads from '@/assets/area_loads.svg';
 import { computed, Ref, ref } from 'vue';
 import { transact } from '@crhio/leviate';
 import draftConfig from '@/draft/draft.config';
+
+import { DToolbar } from "@crhio/leviate/drawing";
+
 import DViewport from '@crhio/leviate/drawing/components/DViewport.vue';
 import LvErrorBoundary from '@crhio/leviate/components/LvErrorBoundary.vue';
-import DToolbar from '@crhio/leviate/drawing/components/toolbar/DToolbar.vue';
 import DEditableShape from '@crhio/leviate/drawing/components/DEditableShape.vue';
 import DSectionLine from '@crhio/leviate/drawing/components/DSectionLine.vue';
 import { PERIMETER_DIM_TYPES, SHAPE_TYPES } from '@crhio/leviate/drawing/constants';
@@ -200,6 +202,14 @@ const toolbarItems = [
     //TODO: update with Toast alert's once available
     handler: () => alert('You just clicked area loads')
   },
+  null,
+   {
+    id: 'some_tool_2',
+    icon: AreaLoads,
+    //TODO: update with Toast alert's once available
+    handler: () => alert('You just clicked area loads')
+  },
+  null,
   {
     id: 'openings',
     children: [
