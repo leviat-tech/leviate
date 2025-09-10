@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.3.7](https://github.com/leviat-tech/leviate/compare/v7.3.6...v7.3.7) (2025-09-10)
+
+
+* exports ([#338](https://github.com/leviat-tech/leviate/issues/338)) ([1497cde](https://github.com/leviat-tech/leviate/commit/1497cdeba5d69197cb054beafdc49236fcfa6a87))
+* expose zoomTo ([#336](https://github.com/leviat-tech/leviate/issues/336)) ([6d8d4dc](https://github.com/leviat-tech/leviate/commit/6d8d4dcc0005385048252e2b0e09f5ef30c15c27))
+
 ## [7.3.6](https://github.com/leviat-tech/leviate/compare/v7.3.5...v7.3.6) (2025-09-04)
 
 
