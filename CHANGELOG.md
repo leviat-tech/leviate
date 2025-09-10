@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.3.8](https://github.com/leviat-tech/leviate/compare/v7.3.7...v7.3.8) (2025-09-10)
+
+
+* resolver ([#339](https://github.com/leviat-tech/leviate/issues/339)) ([98a6f69](https://github.com/leviat-tech/leviate/commit/98a6f6956afef10d4cfdf36b6cb6d1f1780e78ac))
+
 ## [7.3.7](https://github.com/leviat-tech/leviate/compare/v7.3.6...v7.3.7) (2025-09-10)
 
 
