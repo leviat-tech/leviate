@@ -37,7 +37,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {
   ref,
   reactive,
@@ -52,27 +52,34 @@ import {
 import useDrawing from '../composables/useDrawing.ts';
 import DGridlines from './DGridlines.vue';
 
-const props = defineProps({
-  name: {
-    type: String,
-    default: 'DEFAULT',
-  },
-  padding: {
-    type: Number,
-    default: 0,
-  },
-  extents: {
-    type: Object,
-    default: () => ({
+interface Extends {
+  xmin: number;
+  ymin: number;
+  xmax: number;
+  ymax: number;
+}
+
+const props = withDefaults(
+  defineProps<{
+    name?: string;
+    padding?: number;
+    extents?: Extends;
+    showGrid?: boolean;
+    currentTool?: string;
+  }>(),
+  {
+    name: 'DEFAULT',
+    padding: 0,
+    extents: () => ({
       xmin: -10,
       ymin: -10,
       xmax: 10,
       ymax: 10,
     }),
-  },
-  showGrid: { type: Boolean },
-  currentTool: { type: String, default: 'select' },
-});
+    showGrid: false,
+    currentTool: 'select',
+  }
+);
 
 const emit = defineEmits([
   'input',
@@ -156,7 +163,7 @@ const domToSVGCoords = (el, pt) => {
   return { x, y };
 };
 
-const zoomTo = ({ xmin, ymin, xmax, ymax }) => {
+const zoomTo = ({ xmin, ymin, xmax, ymax }: Extends) => {
   const width = xmax - xmin;
   const height = ymax - ymin;
 
@@ -197,7 +204,7 @@ const zoomToExtents = () => {
   zoomTo(extentsWithPadding);
 };
 
-const setMousePt = e => {
+const setMousePt = (e) => {
   state.isPointerActive = true;
   hoverPt.x = e.clientX;
   hoverPt.y = e.clientY;
@@ -271,7 +278,7 @@ const zoomAtPoint = (point, zoomFactor) => {
   };
 };
 
-const handleMousewheel = e => {
+const handleMousewheel = (e) => {
   const scaleAmount = 1.1;
   const zoomFactor = e.deltaY > 0 ? scaleAmount : 1 / scaleAmount;
 
@@ -306,7 +313,7 @@ const documentMouseleave = () => {
   if (isZooming) zoomend();
 };
 
-const handleClick = e => {
+const handleClick = (e) => {
   emit('click', e);
 };
 
@@ -317,7 +324,7 @@ const handleMouseLeave = () => {
   state.isPointerActive = false;
 };
 
-const handleMousedown = e => {
+const handleMousedown = (e) => {
   state.isChildMenuOpen = false;
   closePopup();
   emit('mousedown', e);
@@ -345,7 +352,7 @@ const handleMousedown = e => {
   }
 };
 
-const handleMousemove = e => {
+const handleMousemove = (e) => {
   emit('mousemove', e);
   setMousePt(e);
   if (isPanning) {
@@ -355,7 +362,7 @@ const handleMousemove = e => {
   }
 };
 
-const handleDoubleClick = e => {
+const handleDoubleClick = (e) => {
   const dataset = e.target.dataset;
 
   if (dataset?.type === 'node' && state.currentTool !== tools.round_off) {
@@ -363,7 +370,7 @@ const handleDoubleClick = e => {
   }
 };
 
-const handleMouseup = e => {
+const handleMouseup = (e) => {
   const dataset = e.target.dataset;
 
   const hasData = Object.keys(dataset).length > 0;
@@ -396,11 +403,11 @@ const KEYS = {
   ALT: 'Alt',
   SHIFT: 'Shift',
   META: 'Meta',
-}
+};
 const modifierKeys = [KEYS.CONTROL, KEYS.ALT, KEYS.SHIFT, KEYS.META];
 const actionKeys = [KEYS.ESCAPE, KEYS.BACKSPACE, KEYS.DELETE];
 
-const handleKeyDown = e => {
+const handleKeyDown = (e) => {
   if (e.key === 'Alt') e.preventDefault();
   if (modifierKeys.includes(e.key)) {
     state.keyModifiers[e.key] = true;
@@ -424,7 +431,7 @@ const handleKeyDown = e => {
   emit('keyDown', e);
 };
 
-const handleKeyUp = e => {
+const handleKeyUp = (e) => {
   if (e.key === KEYS.ALT) e.preventDefault();
 
   if (modifierKeys.includes(e.key)) {
@@ -446,7 +453,7 @@ const resizeObserver = new ResizeObserver(resizeHandler);
 
 onMounted(async () => {
   await nextTick();
-  svgRef.value.addEventListener('contextmenu', e => {
+  svgRef.value.addEventListener('contextmenu', (e) => {
     e.preventDefault();
     state.isChildMenuOpen = false;
   });
@@ -469,14 +476,14 @@ onBeforeUnmount(() => {
   window.removeEventListener('keyup', handleKeyUp);
 });
 
-watch(extents, val => {
+watch(extents, (val) => {
   if (!hasZoomed.value && val) {
     zoomToExtents();
     hasZoomed.value = true;
   }
 });
 
-watch(pxToSvgUnits, val => {
+watch(pxToSvgUnits, (val) => {
   if (val) {
     state.pxToSvg = val;
   }
@@ -484,6 +491,7 @@ watch(pxToSvgUnits, val => {
 
 defineExpose({
   zoomToExtents,
+  zoomTo,
 });
 </script>
 
