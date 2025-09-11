@@ -1,5 +1,6 @@
 import useDrawing from './composables/useDrawing';
 import useDraggablePoint from './composables/useDraggablePoint';
+import useDrag from './composables/useDrag';
 
 import DShape from './components/DShape.vue';
 import DOrigin from './components/DOrigin.vue';
@@ -28,7 +29,7 @@ import type {
   RectangularFeature,
 } from './types/Drawings'
 
-import type { Sketch, StyleProp, SketchPoint } from './types/Sketch'
+import type { Sketch, StyleProp, SketchPoint, Extents } from './types/Sketch'
 
 export {
   DOrigin,
@@ -50,8 +51,10 @@ export {
 
   useDrawing,
   useDraggablePoint,
+  useDrag,
 
   Point,
+  Extents,
   Sketch,
   StyleProp,
   SketchPoint,
