@@ -1,4 +1,4 @@
-import useDrawing from './composables/useDrawing';
+import useDrawing, { getShapesRelations } from './composables/useDrawing';
 import useDraggablePoint from './composables/useDraggablePoint';
 import useDrag from './composables/useDrag';
 
@@ -21,6 +21,7 @@ import DFeaturePoly from './components/DFeaturePoly.vue';
 
 import type {
   Point,
+  Feature,
   ShapeParams,
   BaseFeature,
   PointWithBulge,
@@ -29,7 +30,12 @@ import type {
   RectangularFeature,
 } from './types/Drawings'
 
+import featureDraft from './drafts/feature'
+import perimeterDraft from './drafts/perimeter';
+
 import type { Sketch, StyleProp, SketchPoint, Extents } from './types/Sketch'
+
+import { SHAPE_TYPES, RELATIONS, TOOLBAR_OPTIONS } from './constants'
 
 export {
   DOrigin,
@@ -53,9 +59,19 @@ export {
   useDraggablePoint,
   useDrag,
 
+  featureDraft,
+  perimeterDraft,
+
+  getShapesRelations,
+
+  RELATIONS,
+  SHAPE_TYPES,
+  TOOLBAR_OPTIONS,
+
   Point,
   Extents,
   Sketch,
+  Feature,
   StyleProp,
   SketchPoint,
   ShapeParams,

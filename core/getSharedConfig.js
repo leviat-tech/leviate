@@ -28,6 +28,7 @@ module.exports = function getSharedConfig({ mode, projectConfig = {} }) {
         '~': `${path.resolve(process.cwd())}`,
         '@': `${path.resolve(process.cwd(), 'src')}`,
         '@crhio/leviate': '/node_modules/@crhio/leviate/core',
+        '@crhio/jsdraft': '/node_modules/@crhio/jsdraft/src',
       },
     },
 
@@ -44,7 +45,7 @@ module.exports = function getSharedConfig({ mode, projectConfig = {} }) {
       manifestPlugin(),
       threeReloadPlugin(),
       vue(getDefaultTemplateCompilerOptions(mode)),
-      translationPlugin()
+      translationPlugin(),
     ],
 
     build: {
@@ -59,10 +60,10 @@ module.exports = function getSharedConfig({ mode, projectConfig = {} }) {
           rewrite: (path) => {
             return process.env.SERVICE_URL.includes('leviatdesignstudio.com')
               ? path
-              : path.replace('/api/service', '')
+              : path.replace('/api/service', '');
           },
           headers: {
-            'x-app-id': process.env.npm_package_name + ' (development)'
+            'x-app-id': process.env.npm_package_name + ' (development)',
           },
           changeOrigin: true,
         },
@@ -76,7 +77,7 @@ module.exports = function getSharedConfig({ mode, projectConfig = {} }) {
     test: {
       globals: true,
     },
-  }
+  };
 
-  return merge(sharedConfig, projectConfig)
-}
+  return merge(sharedConfig, projectConfig);
+};
