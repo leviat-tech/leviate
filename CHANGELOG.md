@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.3.9](https://github.com/leviat-tech/leviate/compare/v7.3.8...v7.3.9) (2025-09-11)
+
+
+* export useDrag ([#341](https://github.com/leviat-tech/leviate/issues/341)) ([e36d332](https://github.com/leviat-tech/leviate/commit/e36d33250a433d7b72974876b830f6ef267664a5))
+
 ## [7.3.8](https://github.com/leviat-tech/leviate/compare/v7.3.7...v7.3.8) (2025-09-10)
 
 
