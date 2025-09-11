@@ -1,5 +1,6 @@
 import useDrawing, { getShapesRelations } from './composables/useDrawing';
 import useDraggablePoint from './composables/useDraggablePoint';
+import useDrag from './composables/useDrag';
 
 import DShape from './components/DShape.vue';
 import DOrigin from './components/DOrigin.vue';
@@ -32,7 +33,7 @@ import type {
 import featureDraft from './drafts/feature'
 import perimeterDraft from './drafts/perimeter';
 
-import type { Sketch, StyleProp, SketchPoint } from './types/Sketch'
+import type { Sketch, StyleProp, SketchPoint, Extents } from './types/Sketch'
 
 import { SHAPE_TYPES, RELATIONS, TOOLBAR_OPTIONS } from './constants'
 
@@ -56,6 +57,7 @@ export {
 
   useDrawing,
   useDraggablePoint,
+  useDrag,
 
   featureDraft,
   perimeterDraft,
@@ -67,6 +69,7 @@ export {
   TOOLBAR_OPTIONS,
 
   Point,
+  Extents,
   Sketch,
   Feature,
   StyleProp,
