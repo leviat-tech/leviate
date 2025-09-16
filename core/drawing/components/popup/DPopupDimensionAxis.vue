@@ -41,6 +41,8 @@ function saveValue() {
 
   emit('update:vertices', {
     vertices: newVertices,
+    axis,
+    diffSI
   });
 }
 </script>
