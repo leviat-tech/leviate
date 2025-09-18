@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.4.0](https://github.com/leviat-tech/leviate/compare/v7.3.9...v7.4.0) (2025-09-18)
+
+
+* emit additional info on dims axis update ([#343](https://github.com/leviat-tech/leviate/issues/343)) ([c950efd](https://github.com/leviat-tech/leviate/commit/c950efd30b3fcb4e7fb3e7e0a0a7d6d666a6f71c))
+
 ## [7.3.9](https://github.com/leviat-tech/leviate/compare/v7.3.8...v7.3.9) (2025-09-11)
 
 
