@@ -100,6 +100,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   filterable: true,
+  autoAppear: true,
   messages: () => [],
   defaultMessageCount: 3,
 });
@@ -185,10 +186,13 @@ const openModal = () => {
 
 if (props.autoAppear) {
   watch(
-    () => props.messages.length > 0,
-    (isVisible) => {
-      isExpanded.value = isVisible;
-    }
+    () => props.messages.length,
+    (length) => {
+      isExpanded.value = length > 0;
+
+      loadMore();
+    },
+    { immediate: true }
   );
 }
 </script>
