@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.4.1](https://github.com/leviat-tech/leviate/compare/v7.4.0...v7.4.1) (2025-09-25)
+
+
+* show messages in validation pane ([f334c55](https://github.com/leviat-tech/leviate/commit/f334c55015da69d5bfc54c4cd9aba5cb68608ad8))
+
 ## [7.4.0](https://github.com/leviat-tech/leviate/compare/v7.3.9...v7.4.0) (2025-09-18)
 
 
