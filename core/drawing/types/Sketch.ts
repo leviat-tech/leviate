@@ -125,5 +125,9 @@ export interface Sketch {
     intersect: (shape: Sketch) => Point[];
     contains: (shape: Sketch) => boolean;
     vertices: Point[];
-    node: {dataset: {id: string; type: string}};
+    node: {
+        dataset: {id: string; type: string};
+        feature: string;
+        children: Array<Sketch>
+    };
 }
