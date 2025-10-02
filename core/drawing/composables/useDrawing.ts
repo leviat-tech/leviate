@@ -250,6 +250,7 @@ function createViewport(userConfig: UserViewportConfig): Viewport {
 
   //validate if a feature's located inside panel
   function validateFeature(panelDraft: Sketch, featureDraft: Sketch, allowOnEdge = false) {
+    featureDraft = removeFailingFeatures(featureDraft)!;
     const validRelations = allowOnEdge
       ? [[RELATIONS.A_CONTAINS_B], [RELATIONS.A_CONTAINS_B, RELATIONS.INTERSECTION]] //contains+intersection=covers
       : [[RELATIONS.A_CONTAINS_B]]
@@ -265,6 +266,8 @@ function createViewport(userConfig: UserViewportConfig): Viewport {
   }
   //validate how a feature's located related to another feature - intersecting, covering, containing
   function validateFeaturesIntersection(featureA: Sketch, featureB: Sketch, allowOnEdge = false) {
+    featureA = removeFailingFeatures(featureA)!;
+    featureB = removeFailingFeatures(featureB)!;
     const validRelations = allowOnEdge
       ? [[ /*not related*/], [RELATIONS.A_TOUCHES_B, RELATIONS.INTERSECTION]]
       : [[ /*not related*/]]
@@ -398,4 +401,16 @@ export function getShapesRelations(draftA: Sketch, draftB: Sketch, relations = O
     }
   }
   return [foundRelations.length > 0, foundRelations]
+}
+
+export function removeFailingFeatures(sketch: Sketch, removeTypes = ['text'] ) {
+  if(!sketch) return;
+  
+  remove(sketch.node.children, ({ node }) => removeTypes.includes(node.feature))
+  
+  if(sketch.node.children.length > 0) {
+    sketch.node.children.forEach(child => removeFailingFeatures(child))
+  }
+  
+  return sketch;
 }
