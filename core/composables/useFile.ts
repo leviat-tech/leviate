@@ -36,6 +36,7 @@ export function useFile(extension, content, { filename, appendDate = false, down
 
   if (open) {
     window.open(fileUrl, '_blank');
+    URL.revokeObjectURL(fileUrl);
   }
 
   if (download) {

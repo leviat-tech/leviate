@@ -17,9 +17,9 @@
   </div>
 </template>
 
-<script setup>
-import { computed, onMounted, ref } from 'vue';
-import { useRootStore, useLeviateStore } from '@crhio/leviate';
+<script setup lang="ts">
+import { onMounted, ref } from 'vue';
+import { useRootStore } from '@crhio/leviate';
 
 import ProjectRoot from '@/components/project/ProjectRoot.vue';
 import { LvProjectPanel } from '../';
@@ -27,8 +27,6 @@ import LvReadOnlyBanner from './LvReadOnlyBanner.vue'
 import LvMismatchBanner from './LvMismatchBanner.vue'
 
 const appVersionsHaveMismatch = ref(false);
-
-const globalMessage = computed(() => useLeviateStore().globalMessage);
 
 onMounted(async () => {
   appVersionsHaveMismatch.value = await useRootStore().detectAppVersionMismatch;

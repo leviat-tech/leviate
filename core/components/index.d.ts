@@ -14,6 +14,7 @@ import LvExportConfigurator from './export/LvExportConfigurator.vue';
 
 import LvLogo from './ui/LvLogo.vue';
 import LvPopupMenu from './ui/LvPopupMenu.vue';
+import LvPopupMenu from './ui/LvPopupMenu.vue';
 import LvEditableDiv from './ui/LvEditableDiv.vue';
 
 import LvSlotRenderer from './LvSlotRenderer.vue';

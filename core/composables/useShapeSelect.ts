@@ -1,6 +1,6 @@
-import { computed, ref, watch } from 'vue';
-import { filter } from 'lodash-es';
 import Big from 'big.js';
+import { filter } from 'lodash-es';
+import { computed, ref } from 'vue';
 import { convertToSI } from '@crhio/concrete/src/utils/units';
 import { getColumnsData } from '../extensions/pdfFormatter';
 
@@ -112,24 +112,24 @@ function getVerticesFromString(verticesStr) {
 }
 
 const pdfConverter = {
-  getCutoutCurves(chunk){
+  getCutoutCurves(chunk) {
     const cutoutCurvesStrMatch = chunk.match(/CutoutsCurves\[\[(.*?)\]\]/);
-    
-      if(!cutoutCurvesStrMatch) return;
-    
-      const cutoutCurvesStr = cutoutCurvesStrMatch[1]
-        .split(/\]\[/)
-        .map(c => c.split(' '));
-      
-      const cutoutCurvesToFloat = cutoutCurvesStr.map(curve => curve.filter(Boolean).map(parseFloat))
 
-      return cutoutCurvesToFloat
+    if (!cutoutCurvesStrMatch) return;
+
+    const cutoutCurvesStr = cutoutCurvesStrMatch[1]
+      .split(/\]\[/)
+      .map(c => c.split(' '));
+
+    const cutoutCurvesToFloat = cutoutCurvesStr.map(curve => curve.filter(Boolean).map(parseFloat))
+
+    return cutoutCurvesToFloat
   },
-  getCutoutMatch(chunk){
+  getCutoutMatch(chunk) {
     const cutoutStrMatch = chunk.match(/Cutouts\[\[(.*?)\]\]/)
-    
-    if(!cutoutStrMatch) return;
-      
+
+    if (!cutoutStrMatch) return;
+
     return cutoutStrMatch[1]
       .split(/\]\[/)
       .map(c => c.split(' '));
@@ -140,17 +140,17 @@ const pdfConverter = {
     if (!isShape) {
       return;
     }
-    
+
     const verticesStr = chunk
-    .match(/Vertices\[([^\]]+)]/)[1]
-    .split(' ');
+      .match(/Vertices\[([^\]]+)]/)[1]
+      .split(' ');
     const cutoutStr = this.getCutoutMatch(chunk);
 
     const vertices = getVerticesFromString(verticesStr);
     const openings = cutoutStr?.map(cutout => ({ vertices: getVerticesFromString(cutout) }));
     const cutoutCurves = this.getCutoutCurves(chunk);
     cutoutCurves?.forEach((curve, index) => {
-      if(curve.length > 0) openings[index].curves = { data: [ ...curve ] };  
+      if (curve.length > 0) openings[index].curves = { data: [...curve] };
     })
 
     const annotationHTML = chunk.match(/<body[^>]+>(.+)<\/body>/)?.[1];
@@ -207,7 +207,7 @@ const pdfConverter = {
           const referencePoint = getReferencePoint(vertices);
           const normalizedVertices = getNormalizedVertices(vertices, scale, referencePoint);
           const openings = currentShape.features.openings?.map(cutout => {
-            if(cutout.curves) cutout.curves = {...cutout.curves, scale, referencePoint};
+            if (cutout.curves) cutout.curves = { ...cutout.curves, scale, referencePoint };
             return { ...cutout, vertices: getNormalizedVertices(cutout.vertices, scale, referencePoint) }
           });
           const pdfData = columnData && columnData[i];
@@ -526,7 +526,7 @@ export default function useShapeSelect() {
           ...shape,
           vertices: getFormattedVertices(shape.vertices),
           features: Object.keys(shape.features).reduce((acc, key) => {
-            if (key === 'openings' ) {
+            if (key === 'openings') {
               acc.openings = shape.features[key]?.map((feat) => {
                 if (feat.type === DXF_SHAPE_TYPES.CIRCLE) {
                   return {
