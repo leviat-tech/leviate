@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.5.0](https://github.com/leviat-tech/leviate/compare/v7.4.1...v7.5.0) (2025-10-02)
+
+
+* remove text feature from sketch validation ([#347](https://github.com/leviat-tech/leviate/issues/347)) ([3445234](https://github.com/leviat-tech/leviate/commit/34452340aeb13082ee314d6e8b99bf1e18434c87))
+
 ## [7.4.1](https://github.com/leviat-tech/leviate/compare/v7.4.0...v7.4.1) (2025-09-25)
 
 
