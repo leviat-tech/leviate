@@ -1,4 +1,4 @@
-const LOG_LEVELS = {
+export const LOG_LEVELS = {
   ERROR: 1,
   WARNING: 2,
   DEBUG: 3,
