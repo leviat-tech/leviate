@@ -1,10 +1,9 @@
 import inject from '@crhio/inject';
-import logger from './extensions/logger.js';
+import logger, { LOG_LEVELS } from './extensions/logger.js';
 import { ref } from 'vue';
 import useVersions from './composables/useVersions';
 import { cloneDeep, each, set, unset } from 'lodash-es';
 import axios from 'axios';
-
 
 const data = {
   meta: {},
@@ -16,18 +15,13 @@ const activeVersionId = ref(null);
 
 export function useMock() {
   const mockApi = {
-    log(message, logData = '') {
-      const { meta, configuration } = data;
+    log(level, message, logData = '') {
+      const envLevel = LOG_LEVELS[import.meta.env.VITE_LOG_LEVEL] || LOG_LEVELS.DEBUG;
+      const messageLevel = LOG_LEVELS[level.toUpperCase()];
 
-      const lines = [
-        `[Plugin: ${meta.configurator.name}] ${message}`,
-        `  projectId  =  ${meta.project.id}`,
-        `   designId  =  ${configuration.id}`,
-        `       user  =  ${meta.user.email}`
-      ]
-
-      console.log(lines.join('\n'));
-      if (logData) console.log('       data  = ', logData);
+      if (messageLevel <= envLevel) {
+        logger.log(message, logData);
+      }
     },
     setUrl() {},
     getUrl: () => window.location.hash.replace(/^#/, ''),
@@ -61,9 +55,7 @@ export function useMock() {
       const version = useVersions().getVersionById(versionId);
 
       if (!version) {
-        logger.error(
-          `Error setting name. Could not find version with id: ${versionId}`
-        );
+        logger.error(`Error setting name. Could not find version with id: ${versionId}`);
         return;
       }
 
@@ -84,7 +76,7 @@ export function useMock() {
     async makeApiGatewayRequest({ method, url, data, options }) {
       const fetchUrl = ['/api/service', url].join('/').replace(/\/\//, '/');
 
-      const res = await axios({ url: fetchUrl, method, data, ...options }).catch(e => {
+      const res = await axios({ url: fetchUrl, method, data, ...options }).catch((e) => {
         const { data } = e.response;
         const errorJSON = e.toJSON();
         return {
@@ -93,10 +85,10 @@ export function useMock() {
           code: errorJSON.code,
           message: errorJSON.message,
           status: errorJSON.status,
-        }
+        };
       });
 
-      return (res.isError) ? res : res.data;
+      return res.isError ? res : res.data;
     },
 
     getConfiguration() {
@@ -139,9 +131,7 @@ export function useMock() {
     },
 
     deleteVersion: async (id) => {
-      modifyVersions((versions) =>
-        versions.filter((version) => version.id !== id)
-      );
+      modifyVersions((versions) => versions.filter((version) => version.id !== id));
     },
   };
 
@@ -163,9 +153,7 @@ export function useMock() {
         (version) => version.id === storedData.activeVersionId
       );
       data.configuration.state = activeVersion?.state || state;
-      activeVersionId.value = activeVersion
-        ? storedData.activeVersionId
-        : configuration.id;
+      activeVersionId.value = activeVersion ? storedData.activeVersionId : configuration.id;
     } else {
       const rootVersionId = configuration.id;
       const rootVersion = {
@@ -197,9 +185,7 @@ export function useMock() {
    * @returns {string}
    */
   function getStorageKey() {
-    const appNameSlug = data.meta.configurator.name
-      .replace(/\s/g, '-')
-      .toLowerCase();
+    const appNameSlug = data.meta.configurator.name.replace(/\s/g, '-').toLowerCase();
     return ['leviat', appNameSlug].join(':');
   }
 
@@ -259,9 +245,7 @@ export function useMock() {
     try {
       localStorage.setItem(key, JSON.stringify(dataToStore));
     } catch (error) {
-      logger.error(
-        `UNABLE TO PERSIST TO LOCAL STORAGE, REASON: ${error.message}`
-      );
+      logger.error(`UNABLE TO PERSIST TO LOCAL STORAGE, REASON: ${error.message}`);
     }
   }
 

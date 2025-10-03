@@ -1,4 +1,4 @@
-import { nextTick } from 'vue'
+import { nextTick } from 'vue';
 import { defineStore, createPinia } from 'pinia';
 import { normie } from '@crhio/normie';
 import { v4 as uuidv4 } from 'uuid';
@@ -59,7 +59,9 @@ function transact(nameOrCallback, callback, options = { skipRevision: false }) {
   let name = nameOrCallback;
 
   if (typeof nameOrCallback !== 'string') {
-    logger.warn('legacy transact detected. Transaction will still run but in future you should use `transact(name, callback) for improved logging and debugging`');
+    logger.warn(
+      'legacy transact detected. Transaction will still run but in future you should use `transact(name, callback) for improved logging and debugging`'
+    );
     cb = nameOrCallback;
     name = 'Anonymous transaction';
   }
@@ -99,7 +101,10 @@ function deepDiff(obj1, obj2) {
 
     // Check if both items are arrays
     if (Array.isArray(item1) && Array.isArray(item2)) {
-      if (item1.length !== item2.length || !item1.every((item, index) => isEqual(item, item2[index]))) {
+      if (
+        item1.length !== item2.length ||
+        !item1.every((item, index) => isEqual(item, item2[index]))
+      ) {
         result.oldValue[path] = item1;
         result.newValue[path] = item2;
       }
@@ -122,7 +127,7 @@ function deepDiff(obj1, obj2) {
 
   compare(obj1, obj2);
 
-  return omit(result, ['newValue.transactionDepth','oldValue.transactionDepth']);
+  return omit(result, ['newValue.transactionDepth', 'oldValue.transactionDepth']);
 }
 
 const initialActions = {
@@ -137,7 +142,7 @@ const initialActions = {
     const oldState = this.toJSON();
 
     try {
-      useHost().log?.(`Running transaction "${name}"`);
+      useHost().log?.('DEBUG', `Running transaction "${name}"`);
 
       let res = cb();
 
@@ -170,13 +175,13 @@ const initialActions = {
 
       hostSetState(stateToSave);
 
-      this.transactionDepth --;
+      this.transactionDepth--;
 
       if (this.transactionDepth === 0 && !isEmpty(transactionUpdates.newValue)) {
         this.revision.commit(transactionUpdates, transactionId);
       }
 
-      useHost().log?.(`Transaction "${name}" completed successfully`, updateKeys);
+      useHost().log?.('DEBUG', `Transaction "${name}" completed successfully`, updateKeys);
 
       return res;
     } catch (e) {
@@ -187,7 +192,6 @@ const initialActions = {
 
   _onTransactionError(e, name, transactionId, oldState) {
     if (!(e instanceof TransactionError)) {
-      useHost().log?.(`Transaction "${name}" failed`);
       logger.error('transaction failed -', e);
     }
 
@@ -277,9 +281,7 @@ function getEntryFromId(state) {
     const displayPath = entityPath.map((entity) => entity.name).join(' > ');
 
     const entity = last(entityPath) || instance;
-    const termPath = entitySubpaths
-      ? path.replace(last(entitySubpaths), '')
-      : path;
+    const termPath = entitySubpaths ? path.replace(last(entitySubpaths), '') : path;
 
     let term;
     if (get(instance, path) instanceof BaseModel) {
@@ -382,15 +384,16 @@ async function initializeStore(hostState, migrations, models) {
   const modules = storeConfig.modules.concat(useEntityStore);
   modules.forEach(rootStore._registerModule);
 
-  const initialState = hostState._compressed ? await decompressState(hostState._compressed) : hostState;
+  const initialState = hostState._compressed
+    ? await decompressState(hostState._compressed)
+    : hostState;
 
   performMigration(rootStore, initialState, migrations);
 
   // Initialize each module after migration has taken place
   Object.values(rootStore.modules).forEach((useStore) => {
     const store = useStore();
-    if (useStore.$id !== 'entities' && typeof store.initialize === 'function')
-      store.initialize();
+    if (useStore.$id !== 'entities' && typeof store.initialize === 'function') store.initialize();
   });
 
   rootStore.$patch({ transactionDepth: 0 });
