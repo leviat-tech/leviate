@@ -142,7 +142,7 @@ const initialActions = {
     const oldState = this.toJSON();
 
     try {
-      useHost().log?.(`Running transaction "${name}"`, '', 'DEBUG');
+      useHost().log?.(`Running transaction "${name}"`);
 
       let res = cb();
 
@@ -181,7 +181,7 @@ const initialActions = {
         this.revision.commit(transactionUpdates, transactionId);
       }
 
-      useHost().log?.(`Transaction "${name}" completed successfully`, updateKeys, 'DEBUG');
+      useHost().log?.(`Transaction "${name}" completed successfully`, updateKeys);
 
       return res;
     } catch (e) {
