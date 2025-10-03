@@ -23,21 +23,24 @@
   </Menu>
 </template>
 
-<script setup>
-  import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
-  import { EllipsisVerticalIcon } from '@heroicons/vue/24/outline';
-  import LvSlotRenderer from '../LvSlotRenderer.vue';
+<script setup lang="ts">
+import { EllipsisVerticalIcon } from '@heroicons/vue/24/outline';
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 
-  defineProps({
-    title: String,
-    modelValue: Boolean,
-    menuButtonClasses: {
-      type: String,
-      default: '',
-    },
-    menuContainerClasses: {
-      type: String,
-      default: '',
-    },
-  });
+import LvSlotRenderer from '../LvSlotRenderer.vue';
+
+withDefaults(
+  defineProps<{
+    title?: string;
+    modelValue?: boolean;
+    menuButtonClasses?: string;
+    menuContainerClasses?: string;
+  }>(),
+  {
+    title: '',
+    modelValue: false,
+    menuButtonClasses: '',
+    menuContainerClasses: '',
+  }
+);
 </script>

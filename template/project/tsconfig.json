@@ -8,11 +8,17 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@crhio/leviate/drawing": ["../../core/drawing/"],
+      "@crhio/normie": ["./node_modules/@crhio/normie/dist"],
+      "@crhio/jsdraft": ["./node_modules/@crhio/jsdraft/src"],
+      "@crhio/leviate": ["./node_modules/@crhio/leviate/core"],
+      "@crhio/leviate/models": ["./node_modules/@crhio/leviate/core/models"],
+      "@crhio/leviate/drawing": ["./node_modules/@crhio/leviate/core/drawing"],
+      "@crhio/leviate/components": ["./node_modules/@crhio/leviate/core/components"]
     },
     "noEmit": true,
     "allowJs": true,
     "allowImportingTsExtensions": true,
     "esModuleInterop": true
   },
+  "exclude": ["node_modules/"]
 }
