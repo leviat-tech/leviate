@@ -15,7 +15,7 @@ const activeVersionId = ref(null);
 
 export function useMock() {
   const mockApi = {
-    log(level, message, logData = '') {
+    log(message, logData = '', level) {
       const envLevel = LOG_LEVELS[import.meta.env.VITE_LOG_LEVEL] || LOG_LEVELS.DEBUG;
       const messageLevel = LOG_LEVELS[level.toUpperCase()];
 
