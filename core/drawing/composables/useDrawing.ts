@@ -250,7 +250,7 @@ function createViewport(userConfig: UserViewportConfig): Viewport {
 
   //validate if a feature's located inside panel
   function validateFeature(panelDraft: Sketch, featureDraft: Sketch, allowOnEdge = false) {
-    featureDraft = removeFailingFeatures(featureDraft)!;
+    featureDraft = normalizeFeatures(featureDraft)!;
     const validRelations = allowOnEdge
       ? [[RELATIONS.A_CONTAINS_B], [RELATIONS.A_CONTAINS_B, RELATIONS.INTERSECTION]] //contains+intersection=covers
       : [[RELATIONS.A_CONTAINS_B]]
@@ -266,8 +266,8 @@ function createViewport(userConfig: UserViewportConfig): Viewport {
   }
   //validate how a feature's located related to another feature - intersecting, covering, containing
   function validateFeaturesIntersection(featureA: Sketch, featureB: Sketch, allowOnEdge = false) {
-    featureA = removeFailingFeatures(featureA)!;
-    featureB = removeFailingFeatures(featureB)!;
+    featureA = normalizeFeatures(featureA)!;
+    featureB = normalizeFeatures(featureB)!;
     const validRelations = allowOnEdge
       ? [[ /*not related*/], [RELATIONS.A_TOUCHES_B, RELATIONS.INTERSECTION]]
       : [[ /*not related*/]]
@@ -403,13 +403,19 @@ export function getShapesRelations(draftA: Sketch, draftB: Sketch, relations = O
   return [foundRelations.length > 0, foundRelations]
 }
 
-export function removeFailingFeatures(sketch: Sketch, removeTypes = ['text'] ) {
+// normalize sketch, so it could be validated against other sketches
+// i.e. remove and/or adjust some sketch parts, which break the validation otherwise
+export function normalizeFeatures(sketch: Sketch, removeTypes = ['text'] ) {
   if(!sketch) return;
   
-  remove(sketch.node.children, ({ node }) => removeTypes.includes(node.feature))
+  sketch.node.children = sketch.node.children.reduce((drafts, child) => {
+    if(removeTypes.includes(child.node.feature)) return drafts;
+    if(child.node.feature === 'polycurve') return [ ...drafts, child.close() ];
+    return [ ...drafts, child ]  
+  }, [] as Sketch[])
   
   if(sketch.node.children.length > 0) {
-    sketch.node.children.forEach(child => removeFailingFeatures(child))
+    sketch.node.children.forEach(child => normalizeFeatures(child))
   }
   
   return sketch;

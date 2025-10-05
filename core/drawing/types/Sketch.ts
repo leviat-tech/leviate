@@ -84,6 +84,7 @@ export interface Sketch {
     z: (index: number) => Sketch;
     rotate: (angle: number, units?: string) => Sketch;
     clone: () => Sketch;
+    close: () => Sketch;
     extents: Extents;
     /**
      * Adds a rectangle to a sketch. A rectangle is a "polyface"--a closed chain of segments and arcs.
