@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.5.1](https://github.com/leviat-tech/leviate/compare/v7.5.0...v7.5.1) (2025-10-06)
+
+
+* configure transaction logs based on env var ([#350](https://github.com/leviat-tech/leviate/issues/350)) ([a2e7f53](https://github.com/leviat-tech/leviate/commit/a2e7f5399119190229b26529ac633f4e674673b2))
+* hit-379 ([#349](https://github.com/leviat-tech/leviate/issues/349)) ([acd02aa](https://github.com/leviat-tech/leviate/commit/acd02aaf0e921775b93b56f78968cdccf09a442e))
+* update polycurves to polyfaces before feature validation ([#352](https://github.com/leviat-tech/leviate/issues/352)) ([e449ef5](https://github.com/leviat-tech/leviate/commit/e449ef59812dc433bd24a2b1d6d5714025a6721d))
+
 ## [7.5.0](https://github.com/leviat-tech/leviate/compare/v7.4.1...v7.5.0) (2025-10-02)
 
 
