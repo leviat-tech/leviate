@@ -6,6 +6,7 @@ import { createStore, initializeStore } from './store';
 import { createRouter } from './router';
 import concreteDefaultOptions from './concreteOptions';
 import './assets/styles/index.css';
+import 'vue3-toastify/dist/index.css';
 import { FeaturesPlugin } from './composables/useFeature';
 
 function installPlugins(app, { concreteOptions, endpoints, locales, plugins, globalConfig, store, router }) {
