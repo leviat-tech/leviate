@@ -12,7 +12,7 @@
         </div>
       </div>
 
-      <CButton @click="importShapes" color="sky" :disabled="!selectedShapes?.length">
+      <CButton @click="importShapes" :disabled="!selectedShapes?.length">
         <div>Import</div>
         <div class="w-6">{{ selectedCountText }}</div>
       </CButton>
@@ -20,8 +20,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue';
+
 import useShapeSelect from '../../composables/useShapeSelect';
 
 const emit = defineEmits(['importShapes']);
