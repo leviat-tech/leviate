@@ -8,6 +8,7 @@
       @select="selectFile"
       accept=".dxf,.pdf"
       class="py-2"
+      id="input-dxf-pdf-importer"
       :label="$L('import_select_file')"
     />
     <div :class="error && 'text-danger'">{{ error || filename }}&nbsp;</div>
