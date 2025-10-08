@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.5.3](https://github.com/leviat-tech/leviate/compare/v7.5.2...v7.5.3) (2025-10-08)
+
+
+* add toast composable ([#353](https://github.com/leviat-tech/leviate/issues/353)) ([beea028](https://github.com/leviat-tech/leviate/commit/beea0280c0867fe09a5825e2928dc63a1f7b4716))
+
 ## [7.5.2](https://github.com/leviat-tech/leviate/compare/v7.5.1...v7.5.2) (2025-10-08)
 
 
