@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.5.2](https://github.com/leviat-tech/leviate/compare/v7.5.1...v7.5.2) (2025-10-08)
+
+
+* dynamic id for file importer ([#354](https://github.com/leviat-tech/leviate/issues/354)) ([2678528](https://github.com/leviat-tech/leviate/commit/26785289fd36ec5007e614513effe32b2fe1bef0))
+
 ## [7.5.1](https://github.com/leviat-tech/leviate/compare/v7.5.0...v7.5.1) (2025-10-06)
 
 
