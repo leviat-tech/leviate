@@ -2,6 +2,7 @@ import { useRootStore, transact } from './store';
 import { useMessageStore } from './store/message';
 import { useLeviateStore } from './store/leviate';
 
+import { useToast } from './composables/useToast'
 import { useEnum } from './composables/useEnum';
 import { useResults } from './composables/useResults';
 import { useFile } from './composables/useFile';
@@ -48,6 +49,7 @@ export {
     useFile,
     useEnum,
     useMeta,
+    useToast,
     useResults,
     useFeature,
     useVersions,
