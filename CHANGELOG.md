@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.5.4](https://github.com/leviat-tech/leviate/compare/v7.5.3...v7.5.4) (2025-10-13)
+
+
+* add useToast ([#357](https://github.com/leviat-tech/leviate/issues/357)) ([acfa5a4](https://github.com/leviat-tech/leviate/commit/acfa5a4d734c0374c6b2c3d6302eb538a8da3f7e))
+
 ## [7.5.3](https://github.com/leviat-tech/leviate/compare/v7.5.2...v7.5.3) (2025-10-08)
 
 
