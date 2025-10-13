@@ -3,6 +3,7 @@ import { useMessageStore } from './store/message';
 import { useLeviateStore } from './store/leviate';
 
 import { useEnum } from './composables/useEnum';
+import { useToast } from './composables/useToast';
 import { useFile } from './composables/useFile';
 import useVersions from './composables/useVersions';
 import { useFeature } from './composables/useFeature';
@@ -26,6 +27,7 @@ export {
   useFile,
   useEnum,
   useMeta,
+  useToast,
   useFeature,
   useLocalize,
   useVersions,
