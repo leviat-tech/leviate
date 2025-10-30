@@ -1,19 +1,21 @@
 import { useApiGateway } from "./useApiGateway";
 import { useHost } from "../plugins/host";
-import { reactive } from "vue";
+import { reactive } from 'vue';
+
+type EntityItemResults = Record<string, never>;
 
 interface EntityResults {
   [entityId: string]: EntityItemResults;
 }
 
-interface EntityItemResults {}
-
-const entityResults: EntityResults = reactive({});
+const entityResults = reactive<EntityResults>({});
 
 let api;
 
 function getStorageApi() {
-  if (api) { return api }
+  if (api) {
+    return api;
+  }
 
   const { referenceName } = useHost().meta.configurator;
 
@@ -26,11 +28,15 @@ function getStorageApi() {
   return api;
 }
 
-async function getStoragePath(entityId: string): Promise<string> {
+async function getStoragePath(
+  entityId: string,
+  params: { [param: string]: string } | null = { presign: '1' },
+): Promise<string> {
   const designData = await useHost().getConfiguration();
   const designId = designData.id;
 
-  return `/${designId}/${entityId}`;
+  const queryString = params ? `?${new URLSearchParams(params).toString()}` : '';
+  return `/${designId}/${entityId}${queryString}`;
 }
 
 export default function useResults() {
@@ -57,9 +63,16 @@ export default function useResults() {
      */
     async getResults(entityId: string) {
       const storagePath = await getStoragePath(entityId);
-      const results = await getStorageApi().get(storagePath).catch(handleStorageApiError);
-      entityResults[entityId] = results;
-      return results;
+      const presignedDownloadUrl = await getStorageApi().get(storagePath);
+
+      try {
+        const results = await fetch(presignedDownloadUrl).then(res => res.json());
+        entityResults[entityId] = results;
+        return results;
+      } catch (e) {
+        console.warn(`Could not find results for entity id ${entityId}. Error: ${e}`);
+        return null;
+      }
     },
 
     /**
@@ -67,18 +80,19 @@ export default function useResults() {
      * @param entityId
      * @param results
      */
-    async uploadResults(entityId: string, results: EntityItemResults): Promise<any> {
+    async uploadResults(entityId: string, results: EntityItemResults): Promise<Response | void> {
       entityResults[entityId] = results;
 
-      const formdata = new FormData();
+      const storagePath = await getStoragePath(entityId);
+      const presignedUploadUrl = await getStorageApi().put(storagePath);
       const json = JSON.stringify(results);
       const blob = new Blob([json], { type: 'application/json' });
       const file = new File([blob], 'entityId');
-      formdata.append('file', file);
 
-      const storagePath = await getStoragePath(entityId);
-
-      return getStorageApi().post(storagePath, formdata).catch(handleStorageApiError);
+      return fetch(presignedUploadUrl, {
+        method: 'PUT',
+        body: file,
+      }).catch(handleStorageApiError);
     },
 
     /**
@@ -87,8 +101,8 @@ export default function useResults() {
      */
     async deleteResults(entityId: string) {
       delete entityResults[entityId];
-      const storagePath = await getStoragePath(entityId);
+      const storagePath = await getStoragePath(entityId, null);
       return getStorageApi().delete(storagePath).catch(handleStorageApiError);
-    }
-  }
+    },
+  };
 }
