@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.5.5](https://github.com/leviat-tech/leviate/compare/v7.5.4...v7.5.5) (2025-10-30)
+
+
+* update useResults ([#359](https://github.com/leviat-tech/leviate/issues/359)) ([cc53e27](https://github.com/leviat-tech/leviate/commit/cc53e271c355a3261c2b2e2f4467feaa67fbcf28))
+
 ## [7.5.4](https://github.com/leviat-tech/leviate/compare/v7.5.3...v7.5.4) (2025-10-13)
 
 
