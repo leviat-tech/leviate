@@ -13,14 +13,14 @@ interface LoggerPayload {
     designId: string;
     user: string;
   };
-  payload?: any;
+  data?: any;
 }
 
 export function getLoggerPayload(
   level: LogLevel,
   message: string,
   transactionId: string,
-  payload?: any
+  data?: any
 ): LoggerPayload {
   const designId = useHost().configuration.id;
   const meta = useMeta();
@@ -35,7 +35,7 @@ export function getLoggerPayload(
       designId: designId,
       user: meta.user.email,
     },
-    payload,
+    data,
   };
 }
 
