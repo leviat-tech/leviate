@@ -107,14 +107,11 @@ function logRequest(
   headers: Record<string, string>,
   level: LogLevel,
   message: string,
-  payload?: any
+  data?: any
 ) {
-  const data = getLoggerPayload(level, message, transactionId, payload);
+  const payload = getLoggerPayload(level, message, transactionId, data);
 
-  return axios.post('/service/logger', {
-    headers,
-    data,
-  })
+  return axios.post('/service/logger', payload, { headers });
 }
 
 export function useApiGateway(servicePath: string): ApiGateway {
@@ -153,9 +150,10 @@ export function useApiGateway(servicePath: string): ApiGateway {
 
         const transactionId = uuidv4();
 
-        if (servicePath !== 'logger') {
-          logRequest(transactionId, headers, 'info', `Sending request to ${url}`, data);
-        }
+        console.log(servicePath);
+        const shouldLog = (servicePath !== 'logger');
+
+        shouldLog && logRequest(transactionId, headers, 'info', `Sending request to ${url}`, data);
 
         try {
           const res: AxiosResponse<T> = await axios({
@@ -165,7 +163,7 @@ export function useApiGateway(servicePath: string): ApiGateway {
             headers,
             ...options,
           });
-          logRequest(transactionId, headers, 'error', `Request succeeded`);
+          shouldLog && logRequest(transactionId, headers, 'info', `Request succeeded`);
           return res.data;
         } catch (e: any) {
           if (e.response) {
@@ -177,7 +175,7 @@ export function useApiGateway(servicePath: string): ApiGateway {
               code: statusText,
             };
 
-            logRequest(requestId, headers, 'error', `Request failed`, errorData);
+            shouldLog && logRequest(transactionId, headers, 'error', `Request failed`, errorData);
 
             throw new ApiGatewayRequestError(errorData);
           } else {

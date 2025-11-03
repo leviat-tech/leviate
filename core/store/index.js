@@ -143,7 +143,7 @@ const initialActions = {
     const oldState = this.toJSON();
 
     try {
-      useLoggerApi().sendMessage('info', `Running transaction "${name}"`, transactionId);
+      useLoggerApi().sendMessage('info', `Running transaction [ ${name} ]`, transactionId);
 
       let res = cb();
 
@@ -182,7 +182,7 @@ const initialActions = {
         this.revision.commit(transactionUpdates, transactionId);
       }
 
-      useLoggerApi().sendMessage('info', `Transaction "${name}" completed successfully`, transactionId, updateKeys);
+      useLoggerApi().sendMessage('info', `Transaction [ ${name} ] completed successfully`, transactionId, updateKeys);
 
       return res;
     } catch (e) {
@@ -194,7 +194,7 @@ const initialActions = {
   _onTransactionError(e, name, transactionId, oldState) {
     if (!(e instanceof TransactionError)) {
       logger.error('transaction failed -', e);
-      useLoggerApi().sendMessage('error', `Transaction "${name}" failed`, transactionId, e);
+      useLoggerApi().sendMessage('error', `Transaction [ ${name} ] failed`, transactionId, e);
     }
 
     if (this.transactionDepth > 1) {
