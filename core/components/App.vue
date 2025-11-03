@@ -8,6 +8,10 @@ body {
   #app {
     height: 100%;
   }
+
+  .Toastify--animate {
+    animation-duration: .25s !important;
+  }
 </style>
 
 <template>
@@ -20,6 +24,9 @@ body {
 <script setup>
 import { useLocalize } from '../plugins/localize';
 import LvModalAppInfo from './LvModalAppInfo.vue';
+import { useDesignCopyPaste } from '../composables/useDesignCopyPaste';
 
 const appKey = useLocalize().locale;
+
+useDesignCopyPaste();
 </script>
