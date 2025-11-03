@@ -1,5 +1,7 @@
+import { v4 as uuidv4 } from 'uuid';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { useHost } from '../plugins/host';
+import { getLoggerPayload, type LogLevel } from './useLoggerApi';
 
 interface TokenResponse {
   access_token: string;
@@ -100,6 +102,21 @@ function getSanitizedData(unsanitizedData: any): any | undefined {
   return JSON.parse(JSON.stringify(unsanitizedData));
 }
 
+function logRequest(
+  transactionId: string,
+  headers: Record<string, string>,
+  level: LogLevel,
+  message: string,
+  payload?: any
+) {
+  const data = getLoggerPayload(level, message, transactionId, payload);
+
+  return axios.post('/service/logger', {
+    headers,
+    data,
+  })
+}
+
 export function useApiGateway(servicePath: string): ApiGateway {
   const methods: (keyof ApiGateway)[] = ['get', 'put', 'post', 'delete'];
 
@@ -134,6 +151,12 @@ export function useApiGateway(servicePath: string): ApiGateway {
           'x-app-id': pluginId
         };
 
+        const transactionId = uuidv4();
+
+        if (servicePath !== 'logger') {
+          logRequest(transactionId, headers, 'info', `Sending request to ${url}`, data);
+        }
+
         try {
           const res: AxiosResponse<T> = await axios({
             method,
@@ -142,6 +165,7 @@ export function useApiGateway(servicePath: string): ApiGateway {
             headers,
             ...options,
           });
+          logRequest(transactionId, headers, 'error', `Request succeeded`);
           return res.data;
         } catch (e: any) {
           if (e.response) {
@@ -152,6 +176,9 @@ export function useApiGateway(servicePath: string): ApiGateway {
               status,
               code: statusText,
             };
+
+            logRequest(requestId, headers, 'error', `Request failed`, errorData);
+
             throw new ApiGatewayRequestError(errorData);
           } else {
             throw e;
