@@ -13,6 +13,7 @@ import useVersions from '../composables/useVersions';
 import { useHost, useMeta } from '../plugins/host';
 import { useLeviateStore } from './leviate';
 import { checkEntitiesIntegrity } from './storeUtils';
+import useLoggerApi from '../composables/useLoggerApi';
 
 class TransactionError extends Error {
   constructor() {
@@ -142,7 +143,7 @@ const initialActions = {
     const oldState = this.toJSON();
 
     try {
-      useHost().log?.(`Running transaction "${name}"`);
+      useLoggerApi().sendMessage('info', `Running transaction "${name}"`, transactionId);
 
       let res = cb();
 
@@ -181,7 +182,7 @@ const initialActions = {
         this.revision.commit(transactionUpdates, transactionId);
       }
 
-      useHost().log?.(`Transaction "${name}" completed successfully`, updateKeys);
+      useLoggerApi().sendMessage('info', `Transaction "${name}" completed successfully`, transactionId, updateKeys);
 
       return res;
     } catch (e) {
@@ -193,6 +194,7 @@ const initialActions = {
   _onTransactionError(e, name, transactionId, oldState) {
     if (!(e instanceof TransactionError)) {
       logger.error('transaction failed -', e);
+      useLoggerApi().sendMessage('error', `Transaction "${name}" failed`, transactionId, e);
     }
 
     if (this.transactionDepth > 1) {
