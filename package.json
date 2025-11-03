@@ -68,6 +68,7 @@
     "@types/lodash-es": "^4.17.12",
     "@vue/test-utils": "^2.4.1",
     "husky": "^8.0.1",
-    "vitest": "^0.29.1"
+    "vitest": "^0.29.1",
+    "yup": "^0.32.8"
   }
 }
