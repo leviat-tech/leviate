@@ -44,6 +44,11 @@ export default function useLoggerApi() {
 
   return {
     async sendMessage(level: LogLevel, message: string, transactionId: string, payload: any) {
+      if (import.meta.env.DEV) {
+        // Don't send messages to api when in dev mode
+        return;
+      }
+
       const data = getLoggerPayload(level, message, transactionId, payload);
 
       return api.post(data);
