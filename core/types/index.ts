@@ -1,3 +1,8 @@
+/// <reference types="vite/client" />
+interface ImportMeta {
+  readonly env: ImportMetaEnv
+}
+
 export interface TokenResponse {
   access_token: string;
   type: string;
