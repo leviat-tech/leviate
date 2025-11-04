@@ -1,19 +1,21 @@
+import { Plugin } from 'vue';
 import inject from '@crhio/inject';
 import { useRootStore } from '../store';
 import logger from '../extensions/logger';
 import { useLocalize } from './localize';
+import { HostAPI, HostMeta } from '../types';
 
-const uninitializedWarning = (pluginName) => () => {
+const uninitializedWarning = (pluginName: string) => () => {
   logger.error(`${pluginName} has not been initialized. Did you call app.use(HostPlugin)?`);
 };
 
 export const api = new Proxy({}, {
-  get(target, prop) {
+  get(target: object, prop: keyof typeof target) {
     if (!target[prop]) return uninitializedWarning(`api.${prop}`)();
 
     return target[prop];
   },
-  set(target, prop, value) {
+  set(target: object, prop: keyof typeof target, value: never) {
     if (typeof value !== 'function') {
       throw new TypeError(`Cannot create API key. ${prop} is not a function`);
     }
@@ -30,25 +32,25 @@ const modules = {
   api: uninitializedWarning('api'),
 };
 
-let _resolve;
+let _resolve: (value: any) => void;
 const hostPromise = new Promise(resolve => {
   _resolve = resolve;
 })
 
 export const hostIsConnected = () => hostPromise
 
-export const useHost = () => modules.host
-export const useMeta = () => modules.meta
+export const useHost = () => modules.host as HostAPI
+export const useMeta = () => modules.meta as HostMeta
 
 
-const HostPlugin = {
+const HostPlugin: Plugin = {
   async install(app, { router }) {
-    const setUrl = (url) => {
+    const setUrl = (url: string) => {
       if (router.currentRoute.value.path !== url) {
         router.push(url)
       }
     }
-    const setState = (state) => {
+    const setState = (state: never) => {
       const store = useRootStore()
       store.replaceState(state)
     }

@@ -1,13 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
+import { TokenResponse } from '../types'
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { useHost } from '../plugins/host';
 import { getLoggerPayload, type LogLevel } from './useLoggerApi';
-
-interface TokenResponse {
-  access_token: string;
-  type: string;
-  expires_in: number;
-}
 
 interface ApiGatewayErrorData {
   status: number;
@@ -55,7 +50,7 @@ async function fetchToken(nowSeconds: number) {
   return currentToken;
 }
 
-async function getToken(): Promise<string> {
+async function getToken(): Promise<string | undefined> {
   const nowSeconds = Math.floor(Date.now() / 1000);
 
   if (!currentToken) {
