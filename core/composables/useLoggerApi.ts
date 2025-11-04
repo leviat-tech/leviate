@@ -9,8 +9,8 @@ interface LoggerPayload {
   message: string;
   meta: {
     transactionId: string;
-    projectId: string;
-    designId: string;
+    projectId: string | number;
+    designId: string | number;
     user: string;
   };
   data?: any;
@@ -32,7 +32,7 @@ export function getLoggerPayload(
     meta: {
       transactionId,
       projectId: meta.project.id,
-      designId: designId,
+      designId,
       user: meta.user.email,
     },
     data,

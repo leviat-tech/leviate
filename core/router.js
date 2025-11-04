@@ -2,7 +2,7 @@ import {
   createWebHashHistory,
   createRouter as _createRouter,
 } from 'vue-router'
-import { useHost, hostIsConnected } from './plugins/host';
+import { useHost, hostIsConnected } from 'core/plugins/host';
 import LvPageReleaseNotes from './components/LvPageReleaseNotes.vue';
 
 
