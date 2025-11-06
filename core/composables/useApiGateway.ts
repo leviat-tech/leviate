@@ -135,7 +135,7 @@ export function useApiGateway(servicePath: string): ApiGateway {
         const data = getSanitizedData(unsanitizedData);
         const rxDoubleSlash = /\/+/g;
         const url = '/service/' + fullPath.replace(rxDoubleSlash, '/');
-        const pluginId = await useHost().meta.configurator.referenceName;
+        const pluginId = useHost().meta.configurator.referenceName;
 
         const token = await getToken();
         const headers = {
