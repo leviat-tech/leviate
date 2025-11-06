@@ -1,5 +1,5 @@
 import { computed, ref, watch } from 'vue';
-import { useHost } from 'core/plugins/host';
+import { useHost } from '../plugins/host';
 
 let isInitialized = ref(false);
 

@@ -12,7 +12,7 @@ import { usePdfGenerator } from './composables/usePdfGenerator';
 import useResults from './composables/useResults';
 
 import { useLocalize } from './plugins/localize';
-import { useHost, useMeta } from 'core/plugins/host';
+import { useHost, useMeta } from './plugins/host';
 
 import BaseModel from './BaseModel';
 import CoreLayerModel from './models/CoreLayerModel';
