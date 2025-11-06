@@ -79,7 +79,7 @@ async function getToken(): Promise<string | undefined> {
   return currentToken;
 }
 
-interface ApiGateway {
+export interface ApiGateway {
   get: <T = any>(path: string, options?: AxiosRequestConfig) => Promise<T>;
   put: <T = any>(path: string | object, data?: any, options?: AxiosRequestConfig) => Promise<T>;
   post: <T = any>(path: string | object, data?: any, options?: AxiosRequestConfig) => Promise<T>;

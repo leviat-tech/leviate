@@ -73,14 +73,14 @@ export interface HostAPI {
   meta: HostMeta;
   configuration: HostConfiguration;
   setUrl: (url: string) => void;
-  getUrl: () => string;
-  getMeta: () => HostMeta;
-  getDictionary: () => Record<string, any>;
+  getUrl: () => Promise<string>;
+  getMeta: () => Promise<HostMeta>;
+  getDictionary: () => Promise<Record<string, any>>;
   setState: (patch: any) => void;
   setName: (name: string, versionId: string) => void;
   // setMeta: (meta: Record<string, any>) => void; TODO: remove as obsolete?
   fetchServiceToken: () => Promise<TokenResponse>;
-  getConfiguration: () => HostConfiguration;
+  getConfiguration: () => Promise<HostConfiguration>;
   getVersions: () => Promise<HostConfiguration[]>;
   createVersion: (name: string, fromId: string) => HostConfiguration;
   getActiveVersionId: () => string;
