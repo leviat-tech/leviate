@@ -1,6 +1,7 @@
 import { useToast } from './useToast';
 import { useRootStore } from '../store';
 import { useMeta } from '../plugins/host';
+import useEnvironment from './useEnvironment';
 
 function getAppName() {
   return useMeta().configurator.name;
@@ -56,7 +57,15 @@ export function useDesignCopyPaste() {
 
     switch (e.key) {
       case 'C': return copyDesign();
-      case 'V': return pasteDesign();
+      case 'V': {
+        const { isLdsProd } = useEnvironment();
+
+        if (isLdsProd) {
+          return console.warn('Cannot paste design in production environment.');
+        } else {
+          return pasteDesign();
+        }
+      }
     }
   })
 }

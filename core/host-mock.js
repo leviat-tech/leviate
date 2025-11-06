@@ -24,10 +24,10 @@ export function useMock() {
       }
     },
     setUrl() {},
-    getUrl: () => window.location.hash.replace(/^#/, ''),
-    getState: () => data.configuration.state,
-    getMeta: () => data.meta,
-    getDictionary: () => data.dictionary,
+    getUrl: async () => window.location.hash.replace(/^#/, ''),
+    getState: async () => data.configuration.state,
+    getMeta: async () => data.meta,
+    getDictionary: async () => data.dictionary,
     setState: (patch, versionId) => {
       const { activeVersion } = useVersions();
       const { state } = activeVersion.value;
@@ -91,7 +91,7 @@ export function useMock() {
       return res.isError ? res : res.data;
     },
 
-    getConfiguration() {
+    async getConfiguration() {
       return data.configuration;
     },
 
@@ -103,7 +103,7 @@ export function useMock() {
     async createVersion(name, fromId) {
       const state = cloneDeep(getVersionById(fromId).state);
 
-      const { id } = mockApi.getConfiguration();
+      const { id } = await mockApi.getConfiguration();
       // Generate a random-ish id
       const newId = Date.now().toString(32);
       const newVersion = {

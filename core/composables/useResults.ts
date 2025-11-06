@@ -1,4 +1,4 @@
-import { useApiGateway } from "./useApiGateway";
+import { ApiGateway, useApiGateway } from './useApiGateway';
 import { useHost } from "../plugins/host";
 import { reactive } from 'vue';
 
@@ -10,7 +10,7 @@ interface EntityResults {
 
 const entityResults = reactive<EntityResults>({});
 
-let api;
+let api: ApiGateway;
 
 function getStorageApi() {
   if (api) {
