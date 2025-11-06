@@ -145,7 +145,6 @@ export function useApiGateway(servicePath: string): ApiGateway {
 
         const transactionId = uuidv4();
 
-        console.log(servicePath);
         const shouldLog = (servicePath !== 'logger');
 
         shouldLog && logRequest(transactionId, headers, 'info', `Sending request to ${url}`, data);
