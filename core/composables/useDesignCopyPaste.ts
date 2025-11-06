@@ -26,11 +26,17 @@ async function pasteDesign() {
       throw new Error('Mismatching application name');
     }
 
+    const rootStore = useRootStore();
+
+    if (rootStore.serialization_version !== state.serialization_version) {
+      console.warn('State serialization version does not match the current application version. Unexpected results may occur');
+    }
+
     const isConfirmed = confirm('This will replace the design with the contents of the clipboard and all previous data will be lost. Are you sure?');
 
     if (isConfirmed) {
       const { appName, ...stateToLoad } = state;
-      useRootStore().replaceState(stateToLoad);
+      rootStore.replaceState(stateToLoad);
     }
   } catch (e) {
     console.error(e);
