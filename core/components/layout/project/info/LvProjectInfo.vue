@@ -16,7 +16,7 @@
     <LvClientInfo v-if="customer" v-bind="customer" />
 
     <div class="text-right flex justify-end mt-4">
-      <CButton color="base" size="sm" @click="openProjectSettings">{{
+      <CButton color="base" size="sm" @click="openConfigurationSettings">{{
         $L('edit')
       }}</CButton>
     </div>
@@ -31,11 +31,17 @@ import LvClientInfo from './LvClientInfo.vue';
 
 const $host = useHost();
 
-const { project, customer, origin } = $host.meta;
+const { configurator, project, customer, origin } = $host.meta;
+const configuration = $host.configuration
+
 const { name, number } = project;
 
-function openProjectSettings() {
-  const projectEditUrl = `${origin}/projects/${[project.id]}`;
-  window.open(projectEditUrl);
+function openConfigurationSettings() {
+  const configurationEditUrl = new URL(
+    `/configurators/${configurator.id}/configurations/${configuration.id}/edit`,
+    origin
+  ).toString()
+
+  window.open(configurationEditUrl);
 }
 </script>
