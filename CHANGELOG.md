@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.6.0](https://github.com/leviat-tech/leviate/compare/v7.5.5...v7.6.0) (2025-11-10)
+
+
+* copy and paste design via hotkey ([1b3c463](https://github.com/leviat-tech/leviate/commit/1b3c463f9db9570a4e1a8a6a3ab53bf4700a9ed1))
+* fix imports ([70ec0aa](https://github.com/leviat-tech/leviate/commit/70ec0aa1b6526a66e0375cf2a491b146a0f4881e))
+* more ts fixes ([dc6a7b4](https://github.com/leviat-tech/leviate/commit/dc6a7b48b5bb5b3f5b0f5c07d70200b79925b7d1))
+* prevent paste design in production ([9f14b4b](https://github.com/leviat-tech/leviate/commit/9f14b4b9709fabcd0e2d8b92b48c3b790de73622))
+* refactor logging ([0e5902f](https://github.com/leviat-tech/leviate/commit/0e5902fb750e194ab8762ee627cbf827079ead64))
+* remove console.log ([018991b](https://github.com/leviat-tech/leviate/commit/018991b0e4540568d8e1a52386e705225ce3dbaa))
+* remove redundant await ([a0266e3](https://github.com/leviat-tech/leviate/commit/a0266e3fc1617c49c244b7ee1a1857ee788b7bb0))
+* update project info button to lead to configuration settings ([ff04456](https://github.com/leviat-tech/leviate/commit/ff044566b932fe6f53cf2ac8e31b5fa3b85b2a02))
+* use logger api for transactions and apigw calls ([c0f308a](https://github.com/leviat-tech/leviate/commit/c0f308ac03628c20b73c41bc65e507c3f43dd46d))
+* warn if serialization version mismatch when copying design ([2718ea7](https://github.com/leviat-tech/leviate/commit/2718ea7cc6ab008693467b139eb47e81e8480206))
+
 ## [7.5.5](https://github.com/leviat-tech/leviate/compare/v7.5.4...v7.5.5) (2025-10-30)
 
 
