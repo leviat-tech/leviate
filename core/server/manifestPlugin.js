@@ -13,9 +13,10 @@ function generateManifest(root) {
 }
 
 function stripGitHubReferences(str) {
-  return str.replace(/\(\[.+]\(.+\)\)/, '').trim();
+  return str.replace(/\(\[.+]\(.+\)\)/, '') // links
+            .replace('* ', '') // bullet points
+            .trim();
 }
-
 
 function generateUpdates(root) {
   const markdown = fs.readFileSync(`${root}/CHANGELOG.md`, 'utf8');
@@ -30,8 +31,11 @@ function generateUpdates(root) {
         // Update heading
         if (token.depth === 2) {
 
-          const matches = token.text.match(/(\d+\.\d+\.\d+).+(\d{4}-\d{2}-\d{2})/);
-          const [match, version, date] = matches;
+          const matches = token.text.match(/(\d+\.\d+\.\d+[\w.-]*).+(\d{4}-\d{2}-\d{2})/);
+          const [match, version, dateRaw] = matches;
+          const [year, month, day] = dateRaw.split('-');
+          const dateObj = new Date(year, month - 1, day);
+          const date = dateObj.toLocaleDateString();
 
           currentUpdate = { version, date };
           updates.push(currentUpdate);
