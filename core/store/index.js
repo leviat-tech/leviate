@@ -42,9 +42,11 @@ async function decompressState(state) {
 }
 
 async function hostSetState(newState) {
+  // Strip any Proxy instances from state, otherwise persisting state to LDS will fail
+  const normalizedState = JSON.parse(JSON.stringify(newState));
   const stateToSave = _useStateCompression
     ? await compressState(newState)
-    : { ...newState, _compressed: undefined };
+    : { ...normalizedState, _compressed: undefined };
 
   const { activeVersionId } = useVersions();
   return useHost().setState(stateToSave, activeVersionId.value);
