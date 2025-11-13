@@ -318,11 +318,12 @@ async function detectAppVersionMismatch(state) {
 
   const manifest = await appInfo.fetchManifest();
 
-  if (manifest.version && !rootStore.appVersion) {
-    rootStore.appVersion = manifest.version;
-  }
+  const isMismatch = rootStore.appVersion && rootStore.appVersion !== manifest.version;
 
-  return manifest.version !== rootStore.appVersion;
+  // Update the stored app version to the latest version
+  await hostSetState({ appVersion: manifest.version });
+
+  return isMismatch;
 }
 
 function getEntity(state) {
@@ -402,7 +403,7 @@ async function initializeStore(hostState, migrations, models) {
 
   if (typeof rootStore.initialize === 'function') await rootStore.initialize();
 
-  await detectAppVersionMismatch();
+  return detectAppVersionMismatch();
 }
 
 function performMigration(rootStore, initialState, migrations) {
