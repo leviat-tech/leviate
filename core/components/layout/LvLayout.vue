@@ -4,7 +4,7 @@
       <div class="w-full h-full overflow-hidden flex flex-col">
         <LvReadOnlyBanner v-if="host?.meta.isReadOnly" />
         <LvMismatchBanner v-if="appVersionsHaveMismatch" />
-        <div class="max-h-full flex flex-grow divide-x w-full divide-base-300">
+        <div class="max-h-full flex flex-grow divide-x w-full divide-base-300 overflow-hidden">
           <LvProjectPanel>
             <ProjectRoot />
           </LvProjectPanel>
