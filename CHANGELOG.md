@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.6.1](https://github.com/leviat-tech/leviate/compare/v7.6.0...v7.6.1) (2025-11-13)
+
+
+* ensure app mismatch notification does not persist after initial warning ([8ff578e](https://github.com/leviat-tech/leviate/commit/8ff578e7570a2a2e95030c1ff41665b66c0d8c1c))
+* ensure state persists correctly by stripping proxy instances ([d6dfbbf](https://github.com/leviat-tech/leviate/commit/d6dfbbf4b27d460d76e84d733f2f9955b458b9db))
+* normalise banner styling ([a4fa7bf](https://github.com/leviat-tech/leviate/commit/a4fa7bf38f257af0449e1ade21de3dc2278b5508))
+* overflow when banner visible ([a470905](https://github.com/leviat-tech/leviate/commit/a470905e3128136b659c19c6b23a4e9390388180))
+* release notes format ([0b5649f](https://github.com/leviat-tech/leviate/commit/0b5649fb266512d121cd3dc7b8b6f73eb5e07381))
+* revert temp switch of banner checks ([d8d4714](https://github.com/leviat-tech/leviate/commit/d8d47147790240d3df30cddff98e377a88f3408a))
+
 ## [7.6.0](https://github.com/leviat-tech/leviate/compare/v7.5.5...v7.6.0) (2025-11-10)
 
 
