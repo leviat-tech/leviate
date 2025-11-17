@@ -1,4 +1,4 @@
-import { nextTick } from 'vue';
+import { nextTick, toRaw } from 'vue';
 import { defineStore, createPinia } from 'pinia';
 import { normie } from '@crhio/normie';
 import { v4 as uuidv4 } from 'uuid';
@@ -43,10 +43,10 @@ async function decompressState(state) {
 
 async function hostSetState(newState) {
   // Strip any Proxy instances from state, otherwise persisting state to LDS will fail
-  const normalizedState = JSON.parse(JSON.stringify(newState));
+  const rawState = toRaw(newState);
   const stateToSave = _useStateCompression
     ? await compressState(newState)
-    : { ...normalizedState, _compressed: undefined };
+    : { ...rawState, _compressed: undefined };
 
   const { activeVersionId } = useVersions();
   return useHost().setState(stateToSave, activeVersionId.value);
