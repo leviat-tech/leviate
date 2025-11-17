@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.6.2](https://github.com/leviat-tech/leviate/compare/v7.6.1...v7.6.2) (2025-11-17)
+
+
+* ensure undefined values not stripped when saving state ([6493047](https://github.com/leviat-tech/leviate/commit/64930474adbce7504bd6947391702058981038c1))
+
 ## [7.6.1](https://github.com/leviat-tech/leviate/compare/v7.6.0...v7.6.1) (2025-11-13)
 
 
