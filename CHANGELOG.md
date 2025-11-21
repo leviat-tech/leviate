@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.6.3](https://github.com/leviat-tech/leviate/compare/v7.6.2...v7.6.3) (2025-11-21)
+
+
+* ensure pasted state is persisted ([f691760](https://github.com/leviat-tech/leviate/commit/f691760db2116b4fbda968f927abbd287dec21ed))
+* restore navigation when pasting design ([f691760](https://github.com/leviat-tech/leviate/commit/f691760db2116b4fbda968f927abbd287dec21ed))
+
 ## [7.6.2](https://github.com/leviat-tech/leviate/compare/v7.6.1...v7.6.2) (2025-11-17)
 
 
